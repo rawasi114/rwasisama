@@ -7,19 +7,47 @@
         <field name="model">rwasi.project.closeout</field>
         <field name="arch" type="xml">
             <form string="إغلاق وتسليم المشروع">
+                <header>
+                    <button name="action_done" string="إغلاق المشروع" type="object" class="btn-primary"
+                            invisible="state != 'draft'"/>
+                    <button name="action_cancel" string="إلغاء" type="object"
+                            invisible="state in ('done','cancel')"/>
+                    <button name="action_draft" string="إعادة لمسودة" type="object"
+                            invisible="state == 'draft'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,done"/>
+                </header>
                 <sheet>
                     <div class="oe_title"><h1><field name="name" readonly="1"/></h1></div>
                     <group>
                         <group>
+                            <field name="work_order_id" readonly="1"/>
                             <field name="project_ref"/>
                             <field name="partner_id"/>
-                        </group>
-                        <group>
                             <field name="contract_no"/>
                             <field name="handover_date"/>
                         </group>
+                        <group string="الالتزام بالموعد">
+                            <field name="date_started" readonly="1"/>
+                            <field name="promised_days"/>
+                            <field name="installation_done_date"/>
+                            <field name="delay_days" readonly="1"/>
+                            <field name="commitment_status" readonly="1"/>
+                        </group>
                     </group>
                     <notebook>
+                        <page string="استبيان التقييم والتوقيع" name="survey">
+                            <group>
+                                <group string="التقييم">
+                                    <field name="technician_rating"/>
+                                    <field name="finishing_quality"/>
+                                    <field name="satisfaction"/>
+                                </group>
+                                <group string="توقيع العميل">
+                                    <field name="customer_sign_name"/>
+                                    <field name="customer_signature" widget="signature"/>
+                                </group>
+                            </group>
+                        </page>
                         <page string="قائمة التحقق من الإغلاق">
                             <field name="checklist_ids">
                                 <list editable="bottom">
@@ -72,11 +100,14 @@
         <field name="name">rwasi.project.closeout.list</field>
         <field name="model">rwasi.project.closeout</field>
         <field name="arch" type="xml">
-            <list string="إغلاق المشاريع">
+            <list string="إغلاق المشاريع" decoration-success="state == 'done'" decoration-muted="state == 'cancel'">
                 <field name="name"/>
+                <field name="work_order_id"/>
                 <field name="project_ref"/>
                 <field name="partner_id"/>
+                <field name="commitment_status"/>
                 <field name="handover_date"/>
+                <field name="state" widget="badge"/>
             </list>
         </field>
     </record>

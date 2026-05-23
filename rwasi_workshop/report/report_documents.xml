@@ -836,6 +836,19 @@
                             <td class="lbl">تاريخ التسليم</td><td><span t-field="o.handover_date"/></td>
                         </tr>
                     </table>
+                    <div class="sec-title">استبيان التقييم والالتزام</div>
+                    <table class="info">
+                        <tr>
+                            <td class="lbl">تقييم الفنيين</td><td><span t-field="o.technician_rating"/></td>
+                            <td class="lbl">جودة التشطيب</td><td><span t-field="o.finishing_quality"/></td>
+                            <td class="lbl">رضا العميل</td><td><span t-field="o.satisfaction"/></td>
+                        </tr>
+                        <tr>
+                            <td class="lbl">حالة الالتزام</td><td><span t-field="o.commitment_status"/></td>
+                            <td class="lbl">أيام التأخير</td><td t-out="o.delay_days"/>
+                            <td class="lbl">المدة الموعودة</td><td t-out="o.promised_days"/>
+                        </tr>
+                    </table>
                     <div class="sec-title">قائمة التحقق من الإغلاق</div>
                     <table class="lines">
                         <tr><th style="width:8%">م.</th><th>البند</th><th style="width:16%">النتيجة</th><th style="width:22%">المرجع</th></tr>

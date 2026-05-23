@@ -61,6 +61,9 @@ class WorkOrder(models.Model):
     delivery_note_id = fields.Many2one(
         'rwasi.delivery.note', string='أمر التسليم', readonly=True, copy=False)
     delivery_count = fields.Integer(compute='_compute_counts')
+    closeout_id = fields.Many2one(
+        'rwasi.project.closeout', string='إغلاق المشروع', readonly=True, copy=False)
+    closeout_count = fields.Integer(compute='_compute_counts')
 
     state = fields.Selection([
         ('draft', 'مسودة'),
@@ -87,11 +90,12 @@ class WorkOrder(models.Model):
             wo.materials_available = all(
                 line.is_available for line in wo.material_line_ids)
 
-    @api.depends('purchase_order_ids', 'delivery_note_id')
+    @api.depends('purchase_order_ids', 'delivery_note_id', 'closeout_id')
     def _compute_counts(self):
         for wo in self:
             wo.purchase_order_count = len(wo.purchase_order_ids)
             wo.delivery_count = 1 if wo.delivery_note_id else 0
+            wo.closeout_count = 1 if wo.closeout_id else 0
 
     @api.model
     def _make_name_from_so(self, so_name):
@@ -263,11 +267,32 @@ class WorkOrder(models.Model):
         return True
 
     def action_close(self):
-        for wo in self:
-            if wo.state != 'delivered':
-                raise UserError(_('لا يمكن إغلاق الأمر إلا بعد التسليم للعميل.'))
-            wo.state = 'done'
-        return True
+        self.ensure_one()
+        if self.state != 'delivered':
+            raise UserError(_('لا يمكن إغلاق الأمر إلا بعد التسليم للعميل.'))
+        self.state = 'done'
+        self._create_closeout()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('إغلاق وتسليم المشروع'),
+            'res_model': 'rwasi.project.closeout',
+            'view_mode': 'form',
+            'res_id': self.closeout_id.id,
+        }
+
+    def _create_closeout(self):
+        self.ensure_one()
+        if self.closeout_id:
+            return
+        co = self.env['rwasi.project.closeout'].create({
+            'work_order_id': self.id,
+            'partner_id': self.partner_id.id,
+            'project_ref': self.project_ref,
+            'customer_sign_name': self.customer_sign_name,
+            'handover_date': fields.Date.context_today(self),
+        })
+        self.closeout_id = co.id
+        self.message_post(body=_('تم إنشاء استبيان إغلاق المشروع %s.') % co.name)
 
     def action_cancel(self):
         self.write({'state': 'cancel'})
@@ -294,6 +319,16 @@ class WorkOrder(models.Model):
             'res_model': 'rwasi.delivery.note',
             'view_mode': 'form,list',
             'res_id': self.delivery_note_id.id,
+        }
+
+    def action_view_closeout(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('إغلاق المشروع'),
+            'res_model': 'rwasi.project.closeout',
+            'view_mode': 'form,list',
+            'res_id': self.closeout_id.id,
         }
 
 
