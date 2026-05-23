@@ -13,7 +13,7 @@
     'author': 'Rawasi Sama Contracting',
     'website': 'https://github.com/rawasi114/rwasisama',
     'category': 'Manufacturing',
-    'version': '19.0.1.4.2',
+    'version': '19.0.1.4.3',
     'license': 'LGPL-3',
     'depends': ['mail', 'sale_management', 'purchase', 'stock'],
     'data': [
@@ -40,9 +40,4 @@
     ],
     'application': True,
     'installable': True,
-    'assets': {
-        'web.report_assets_common': [
-            'rwasi_workshop/static/src/css/report_fonts.css',
-        ],
-    },
 }

@@ -17,7 +17,7 @@
     <!-- التنسيق المشترك (CSS) -->
     <template id="report_workshop_style">
         <style>
-            .rwasi-doc { direction: rtl; font-family:'Tajawal', sans-serif; color: #222; font-size: 11px; }
+            .rwasi-doc { direction: rtl; color: #222; font-size: 11px; }
             .rwasi-doc * { box-sizing: border-box; }
             .rwasi-head { width: 100%; border-collapse: collapse; border: 2px solid #1a3c5e; margin-bottom: 6px; }
             .rwasi-head td { vertical-align: middle; padding: 6px 8px; }
@@ -49,23 +49,21 @@
         </style>
     </template>
 
-    <!-- ترويسة المستند -->
+    <!-- شريط عنوان المستند (الشركة والشعار يأتيان من ترويسة أودو القياسية) -->
     <template id="report_workshop_header">
         <table class="rwasi-head">
             <tr>
-                <td class="logo">
-                    <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)"/>
-                </td>
-                <td class="title-cell">
-                    <div class="co-name" t-out="o.company_id.name"/>
-                    <div class="co-sub">شركة رواسي سما للمقاولات — قسم الورشة المركزية</div>
-                    <div class="doc-title"><t t-out="title"/></div>
-                </td>
                 <td class="meta">
                     <div><b>كود النموذج:</b> <t t-out="code"/></div>
+                    <div><b>المراجعة:</b> <t t-out="o.revision or 'R0'"/></div>
+                </td>
+                <td class="title-cell">
+                    <div class="doc-title"><t t-out="title"/></div>
+                    <div class="co-sub">قسم الورشة المركزية — رواسي سما للمقاولات</div>
+                </td>
+                <td class="meta">
                     <div><b>رقم المستند:</b> <t t-out="o.name"/></div>
                     <div><b>التاريخ:</b> <span t-field="o.date_issued"/></div>
-                    <div><b>المراجعة:</b> <t t-out="o.revision or 'R0'"/></div>
                 </td>
             </tr>
         </table>
@@ -100,14 +98,16 @@
         </table>
     </template>
 
-    <!-- التخطيط الكامل: ترويسة + محتوى (0) + توقيعات -->
+    <!-- التخطيط الكامل: ترويسة أودو القياسية (لضمان الخط العربي) + المحتوى -->
     <template id="report_workshop_layout">
-        <div class="page rwasi-doc">
-            <t t-call="rwasi_workshop.report_workshop_style"/>
-            <t t-call="rwasi_workshop.report_workshop_header"/>
-            <t t-out="0"/>
-            <t t-call="rwasi_workshop.report_workshop_signoff"/>
-        </div>
+        <t t-call="web.external_layout">
+            <div class="page rwasi-doc">
+                <t t-call="rwasi_workshop.report_workshop_style"/>
+                <t t-call="rwasi_workshop.report_workshop_header"/>
+                <t t-out="0"/>
+                <t t-call="rwasi_workshop.report_workshop_signoff"/>
+            </div>
+        </t>
     </template>
 
 </odoo>
