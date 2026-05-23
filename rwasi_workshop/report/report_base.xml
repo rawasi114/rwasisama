@@ -17,7 +17,7 @@
     <!-- التنسيق المشترك (CSS) -->
     <template id="report_workshop_style">
         <style>
-            .rwasi-doc { direction: rtl; font-family: "Noto Naskh Arabic", "Amiri", "DejaVu Sans", sans-serif; color: #222; font-size: 11px; }
+            .rwasi-doc { direction: rtl; color: #222; font-size: 11px; }
             .rwasi-doc * { box-sizing: border-box; }
             .rwasi-head { width: 100%; border-collapse: collapse; border: 2px solid #1a3c5e; margin-bottom: 6px; }
             .rwasi-head td { vertical-align: middle; padding: 6px 8px; }
