@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- مقاس الورق الرسمي A4 لنماذج الورشة -->
+    <record id="paperformat_rwasi_a4" model="report.paperformat">
+        <field name="name">Rwasi Workshop A4</field>
+        <field name="format">A4</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">6</field>
+        <field name="margin_bottom">10</field>
+        <field name="margin_left">6</field>
+        <field name="margin_right">6</field>
+        <field name="header_spacing">6</field>
+        <field name="dpi">96</field>
+    </record>
+
+    <!-- التنسيق المشترك (CSS) -->
+    <template id="report_workshop_style">
+        <style>
+            .rwasi-doc { direction: rtl; font-family: "Noto Naskh Arabic", "Amiri", "DejaVu Sans", sans-serif; color: #222; font-size: 11px; }
+            .rwasi-doc * { box-sizing: border-box; }
+            .rwasi-head { width: 100%; border-collapse: collapse; border: 2px solid #1a3c5e; margin-bottom: 6px; }
+            .rwasi-head td { vertical-align: middle; padding: 6px 8px; }
+            .rwasi-head .logo { width: 18%; text-align: center; border-left: 1px solid #1a3c5e; }
+            .rwasi-head .logo img { max-height: 60px; max-width: 100%; }
+            .rwasi-head .title-cell { text-align: center; }
+            .rwasi-head .co-name { font-size: 17px; font-weight: bold; color: #1a3c5e; }
+            .rwasi-head .co-sub { font-size: 10px; color: #555; margin-top: 2px; }
+            .rwasi-head .doc-title { font-size: 14px; font-weight: bold; margin-top: 4px; color: #b8860b; }
+            .rwasi-head .meta { width: 26%; border-right: 1px solid #1a3c5e; font-size: 10px; }
+            .rwasi-head .meta div { padding: 1px 0; }
+            .rwasi-head .meta b { color: #1a3c5e; }
+            .sec-title { background: #1a3c5e; color: #fff; font-weight: bold; padding: 3px 8px; margin: 8px 0 0 0; font-size: 11px; }
+            table.info { width: 100%; border-collapse: collapse; margin-bottom: 4px; }
+            table.info td { border: 1px solid #c9c9c9; padding: 3px 6px; }
+            table.info td.lbl { background: #f0f3f7; font-weight: bold; width: 18%; color: #1a3c5e; }
+            table.lines { width: 100%; border-collapse: collapse; margin: 4px 0; }
+            table.lines th { background: #1a3c5e; color: #fff; border: 1px solid #16324e; padding: 4px 5px; font-size: 10px; }
+            table.lines td { border: 1px solid #c9c9c9; padding: 3px 5px; font-size: 10px; }
+            table.lines tr:nth-child(even) td { background: #f7f9fb; }
+            .chk { display: inline-block; margin: 1px 10px 1px 0; font-size: 10px; }
+            .notes-box { border: 1px solid #c9c9c9; padding: 5px 7px; min-height: 28px; margin-bottom: 4px; white-space: pre-line; }
+            table.rwasi-sign { width: 100%; border-collapse: collapse; margin-top: 10px; }
+            table.rwasi-sign td { border: 1px solid #1a3c5e; width: 33.33%; padding: 5px 8px; vertical-align: top; height: 78px; }
+            .sign-role { font-weight: bold; color: #1a3c5e; border-bottom: 1px solid #1a3c5e; padding-bottom: 2px; margin-bottom: 4px; }
+            .sign-img { height: 34px; }
+            .sign-img img { max-height: 34px; max-width: 90%; }
+            .sign-line { font-size: 10px; padding: 1px 0; }
+        </style>
+    </template>
+
+    <!-- ترويسة المستند -->
+    <template id="report_workshop_header">
+        <table class="rwasi-head">
+            <tr>
+                <td class="logo">
+                    <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)"/>
+                </td>
+                <td class="title-cell">
+                    <div class="co-name" t-out="o.company_id.name"/>
+                    <div class="co-sub">شركة رواسي سما للمقاولات — قسم الورشة المركزية</div>
+                    <div class="doc-title"><t t-out="title"/></div>
+                </td>
+                <td class="meta">
+                    <div><b>كود النموذج:</b> <t t-out="code"/></div>
+                    <div><b>رقم المستند:</b> <t t-out="o.name"/></div>
+                    <div><b>التاريخ:</b> <span t-field="o.date_issued"/></div>
+                    <div><b>المراجعة:</b> <t t-out="o.revision or 'R0'"/></div>
+                </td>
+            </tr>
+        </table>
+    </template>
+
+    <!-- كتل التوقيع والاعتماد القياسية -->
+    <template id="report_workshop_signoff">
+        <table class="rwasi-sign">
+            <tr>
+                <td>
+                    <div class="sign-role">معدّ النموذج</div>
+                    <div class="sign-line">الاسم: <t t-out="o.prepared_name or ''"/></div>
+                    <div class="sign-img"><img t-if="o.prepared_signature" t-att-src="image_data_uri(o.prepared_signature)"/></div>
+                    <div class="sign-line">التاريخ: <span t-field="o.prepared_date"/></div>
+                </td>
+                <td>
+                    <div class="sign-role">مشرف الورشة</div>
+                    <div class="sign-line">الاسم: <t t-out="o.supervisor_name or ''"/></div>
+                    <div class="sign-img"><img t-if="o.supervisor_signature" t-att-src="image_data_uri(o.supervisor_signature)"/></div>
+                    <div class="sign-line">التاريخ: <span t-field="o.supervisor_date"/></div>
+                </td>
+                <td>
+                    <div class="sign-role">مدير العمليات</div>
+                    <div class="sign-line">الاسم: <t t-out="o.manager_name or ''"/></div>
+                    <div class="sign-img">
+                        <img t-if="o.manager_signature" t-att-src="image_data_uri(o.manager_signature)"/>
+                        <img t-if="o.manager_stamp" t-att-src="image_data_uri(o.manager_stamp)" style="max-height:34px;"/>
+                    </div>
+                    <div class="sign-line">التاريخ: <span t-field="o.manager_date"/></div>
+                </td>
+            </tr>
+        </table>
+    </template>
+
+    <!-- التخطيط الكامل: ترويسة + محتوى (0) + توقيعات -->
+    <template id="report_workshop_layout">
+        <div class="page rwasi-doc">
+            <t t-call="rwasi_workshop.report_workshop_style"/>
+            <t t-call="rwasi_workshop.report_workshop_header"/>
+            <t t-out="0"/>
+            <t t-call="rwasi_workshop.report_workshop_signoff"/>
+        </div>
+    </template>
+
+</odoo>
