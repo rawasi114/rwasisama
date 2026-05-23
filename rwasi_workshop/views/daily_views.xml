@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- RS-WS-05 التحضير اليومي -->
+    <record id="view_daily_preparation_form" model="ir.ui.view">
+        <field name="name">rwasi.daily.preparation.form</field>
+        <field name="model">rwasi.daily.preparation</field>
+        <field name="arch" type="xml">
+            <form string="التحضير اليومي للورشة">
+                <sheet>
+                    <div class="oe_title"><h1><field name="name" readonly="1"/></h1></div>
+                    <group>
+                        <group>
+                            <field name="prep_day"/>
+                            <field name="prep_date"/>
+                        </group>
+                        <group>
+                            <field name="workshop"/>
+                            <field name="shift_supervisor"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="الأعمال المخططة لليوم">
+                            <field name="line_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="wo_no"/>
+                                    <field name="task"/>
+                                    <field name="assigned_to"/>
+                                    <field name="hours"/>
+                                    <field name="expected_output"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="الجاهزية اليومية">
+                            <group>
+                                <group>
+                                    <field name="available_crew"/>
+                                    <field name="absent_crew"/>
+                                    <field name="ready_equipment"/>
+                                    <field name="under_maint_equipment"/>
+                                </group>
+                                <group>
+                                    <field name="chk_materials_ready"/>
+                                    <field name="chk_drawings_approved"/>
+                                    <field name="chk_toolbox_talk"/>
+                                    <field name="chk_ppe_verified"/>
+                                    <field name="chk_targets_reviewed"/>
+                                </group>
+                            </group>
+                            <field name="expected_bottlenecks" placeholder="المعوقات المتوقعة..."/>
+                        </page>
+                        <page string="الاعتماد">
+                            <group>
+                                <group string="معد النموذج">
+                                    <field name="prepared_name"/>
+                                    <field name="prepared_date"/>
+                                    <field name="prepared_signature" widget="signature"/>
+                                </group>
+                                <group string="مشرف الورشة">
+                                    <field name="supervisor_name"/>
+                                    <field name="supervisor_date"/>
+                                    <field name="supervisor_signature" widget="signature"/>
+                                </group>
+                                <group string="مدير العمليات">
+                                    <field name="manager_name"/>
+                                    <field name="manager_date"/>
+                                    <field name="manager_signature" widget="signature"/>
+                                    <field name="manager_stamp" widget="image"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="view_daily_preparation_list" model="ir.ui.view">
+        <field name="name">rwasi.daily.preparation.list</field>
+        <field name="model">rwasi.daily.preparation</field>
+        <field name="arch" type="xml">
+            <list string="التحضير اليومي">
+                <field name="name"/>
+                <field name="prep_date"/>
+                <field name="workshop"/>
+                <field name="shift_supervisor"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_daily_preparation" model="ir.actions.act_window">
+        <field name="name">التحضير اليومي للورشة</field>
+        <field name="res_model">rwasi.daily.preparation</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- RS-WS-06 التقرير اليومي -->
+    <record id="view_daily_report_form" model="ir.ui.view">
+        <field name="name">rwasi.daily.report.form</field>
+        <field name="model">rwasi.daily.report</field>
+        <field name="arch" type="xml">
+            <form string="التقرير اليومي للورشة">
+                <sheet>
+                    <div class="oe_title"><h1><field name="name" readonly="1"/></h1></div>
+                    <group>
+                        <group>
+                            <field name="report_date"/>
+                            <field name="workshop"/>
+                        </group>
+                        <group>
+                            <field name="weather"/>
+                            <field name="working_hours"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="الإنجازات اليومية">
+                            <field name="line_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="wo_no"/>
+                                    <field name="description"/>
+                                    <field name="planned"/>
+                                    <field name="done"/>
+                                    <field name="completion"/>
+                                    <field name="remaining"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="الموارد المستخدمة">
+                            <group>
+                                <group>
+                                    <field name="crew_count"/>
+                                    <field name="man_hours"/>
+                                </group>
+                                <group>
+                                    <field name="equipment_used"/>
+                                    <field name="equipment_hours"/>
+                                </group>
+                            </group>
+                            <field name="issues_delays" placeholder="المعوقات والتأخيرات..."/>
+                            <field name="plan_tomorrow" placeholder="خطة الغد..."/>
+                        </page>
+                        <page string="الاعتماد">
+                            <group>
+                                <group string="معد التقرير">
+                                    <field name="prepared_name"/>
+                                    <field name="prepared_date"/>
+                                    <field name="prepared_signature" widget="signature"/>
+                                </group>
+                                <group string="مشرف الورشة">
+                                    <field name="supervisor_name"/>
+                                    <field name="supervisor_date"/>
+                                    <field name="supervisor_signature" widget="signature"/>
+                                </group>
+                                <group string="مدير العمليات">
+                                    <field name="manager_name"/>
+                                    <field name="manager_date"/>
+                                    <field name="manager_signature" widget="signature"/>
+                                    <field name="manager_stamp" widget="image"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="view_daily_report_list" model="ir.ui.view">
+        <field name="name">rwasi.daily.report.list</field>
+        <field name="model">rwasi.daily.report</field>
+        <field name="arch" type="xml">
+            <list string="التقرير اليومي">
+                <field name="name"/>
+                <field name="report_date"/>
+                <field name="workshop"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_daily_report" model="ir.actions.act_window">
+        <field name="name">التقرير اليومي للورشة</field>
+        <field name="res_model">rwasi.daily.report</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>

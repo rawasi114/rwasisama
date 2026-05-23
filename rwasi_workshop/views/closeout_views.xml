@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- RS-WS-20 إغلاق وتسليم المشروع -->
+    <record id="view_project_closeout_form" model="ir.ui.view">
+        <field name="name">rwasi.project.closeout.form</field>
+        <field name="model">rwasi.project.closeout</field>
+        <field name="arch" type="xml">
+            <form string="إغلاق وتسليم المشروع">
+                <sheet>
+                    <div class="oe_title"><h1><field name="name" readonly="1"/></h1></div>
+                    <group>
+                        <group>
+                            <field name="project_ref"/>
+                            <field name="partner_id"/>
+                        </group>
+                        <group>
+                            <field name="contract_no"/>
+                            <field name="handover_date"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="قائمة التحقق من الإغلاق">
+                            <field name="checklist_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="item"/>
+                                    <field name="result"/>
+                                    <field name="reference"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="قائمة الملاحظات المتبقية">
+                            <field name="punch_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="description"/>
+                                    <field name="owner"/>
+                                    <field name="close_date"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="إقرار التسليم النهائي">
+                            <field name="handover_statement" placeholder="إقرار التسليم النهائي..."/>
+                            <group>
+                                <group string="مدير المشروع">
+                                    <field name="pm_name"/>
+                                    <field name="pm_date"/>
+                                    <field name="pm_signature" widget="signature"/>
+                                </group>
+                                <group string="ممثل العميل">
+                                    <field name="client_rep_name"/>
+                                    <field name="client_rep_date"/>
+                                    <field name="client_rep_signature" widget="signature"/>
+                                    <field name="client_stamp" widget="image"/>
+                                </group>
+                                <group string="مدير العمليات">
+                                    <field name="manager_name"/>
+                                    <field name="manager_date"/>
+                                    <field name="manager_signature" widget="signature"/>
+                                    <field name="manager_stamp" widget="image"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="view_project_closeout_list" model="ir.ui.view">
+        <field name="name">rwasi.project.closeout.list</field>
+        <field name="model">rwasi.project.closeout</field>
+        <field name="arch" type="xml">
+            <list string="إغلاق المشاريع">
+                <field name="name"/>
+                <field name="project_ref"/>
+                <field name="partner_id"/>
+                <field name="handover_date"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_project_closeout" model="ir.actions.act_window">
+        <field name="name">إغلاق وتسليم المشروع</field>
+        <field name="res_model">rwasi.project.closeout</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>

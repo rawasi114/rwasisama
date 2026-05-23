@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem id="menu_rwasi_root" name="ورشة رواسي سما"
+              sequence="15"/>
+
+    <!-- العمليات -->
+    <menuitem id="menu_rwasi_operations" name="العمليات"
+              parent="menu_rwasi_root" sequence="10"/>
+    <menuitem id="menu_work_order" name="أوامر التصنيع (RS-WS-01)"
+              parent="menu_rwasi_operations" action="action_work_order" sequence="10"/>
+
+    <!-- المواد -->
+    <menuitem id="menu_rwasi_materials" name="المواد"
+              parent="menu_rwasi_root" sequence="20"/>
+    <menuitem id="menu_material_request" name="طلب مواد - SO (RS-WS-21)"
+              parent="menu_rwasi_materials" action="action_material_request" sequence="5"/>
+    <menuitem id="menu_material_requisition" name="طلب مواد (RS-WS-02)"
+              parent="menu_rwasi_materials" action="action_material_requisition" sequence="10"/>
+    <menuitem id="menu_material_receipt" name="استلام مواد (RS-WS-03)"
+              parent="menu_rwasi_materials" action="action_material_receipt" sequence="20"/>
+    <menuitem id="menu_material_issue" name="صرف مواد للورشة (RS-WS-04)"
+              parent="menu_rwasi_materials" action="action_material_issue" sequence="30"/>
+
+    <!-- أوامر الشغل حسب القسم -->
+    <menuitem id="menu_rwasi_jobs" name="أوامر الشغل"
+              parent="menu_rwasi_root" sequence="30"/>
+    <menuitem id="menu_carpentry_job" name="نجارة (RS-WS-11)"
+              parent="menu_rwasi_jobs" action="action_carpentry_job" sequence="10"/>
+    <menuitem id="menu_steelwork_job" name="حدادة (RS-WS-12)"
+              parent="menu_rwasi_jobs" action="action_steelwork_job" sequence="20"/>
+    <menuitem id="menu_aluminum_job" name="ألمنيوم (RS-WS-13)"
+              parent="menu_rwasi_jobs" action="action_aluminum_job" sequence="30"/>
+    <menuitem id="menu_cnc_job" name="CNC (RS-WS-14)"
+              parent="menu_rwasi_jobs" action="action_cnc_job" sequence="40"/>
+    <menuitem id="menu_measurement_sheet" name="معاينة وتفصيل (RS-WS-10)"
+              parent="menu_rwasi_jobs" action="action_measurement_sheet" sequence="50"/>
+
+    <!-- المتابعة اليومية والعمالة -->
+    <menuitem id="menu_rwasi_daily" name="المتابعة اليومية"
+              parent="menu_rwasi_root" sequence="40"/>
+    <menuitem id="menu_daily_preparation" name="التحضير اليومي (RS-WS-05)"
+              parent="menu_rwasi_daily" action="action_daily_preparation" sequence="10"/>
+    <menuitem id="menu_daily_report" name="التقرير اليومي (RS-WS-06)"
+              parent="menu_rwasi_daily" action="action_daily_report" sequence="20"/>
+    <menuitem id="menu_attendance_sheet" name="كشف الحضور (RS-WS-07)"
+              parent="menu_rwasi_daily" action="action_attendance_sheet" sequence="30"/>
+    <menuitem id="menu_time_card" name="بطاقة وقت العامل (RS-WS-08)"
+              parent="menu_rwasi_daily" action="action_time_card" sequence="40"/>
+    <menuitem id="menu_labor_productivity" name="إنتاجية العمالة (RS-WS-09)"
+              parent="menu_rwasi_daily" action="action_labor_productivity" sequence="50"/>
+
+    <!-- الجودة والسلامة -->
+    <menuitem id="menu_rwasi_quality" name="الجودة والسلامة"
+              parent="menu_rwasi_root" sequence="50"/>
+    <menuitem id="menu_qc_inspection" name="فحص الجودة (RS-WS-15)"
+              parent="menu_rwasi_quality" action="action_qc_inspection" sequence="10"/>
+    <menuitem id="menu_ncr" name="عدم المطابقة (RS-WS-16)"
+              parent="menu_rwasi_quality" action="action_ncr" sequence="20"/>
+    <menuitem id="menu_toolbox_talk" name="اجتماع السلامة (RS-WS-18)"
+              parent="menu_rwasi_quality" action="action_toolbox_talk" sequence="30"/>
+    <menuitem id="menu_maintenance_log" name="صيانة المعدات (RS-WS-17)"
+              parent="menu_rwasi_quality" action="action_maintenance_log" sequence="40"/>
+
+    <!-- التسليم والإغلاق -->
+    <menuitem id="menu_rwasi_delivery" name="التسليم والإغلاق"
+              parent="menu_rwasi_root" sequence="60"/>
+    <menuitem id="menu_delivery_note" name="إذن خروج وتسليم (RS-WS-19)"
+              parent="menu_rwasi_delivery" action="action_delivery_note" sequence="10"/>
+    <menuitem id="menu_project_closeout" name="إغلاق المشروع (RS-WS-20)"
+              parent="menu_rwasi_delivery" action="action_project_closeout" sequence="20"/>
+
+    <!-- المبيعات -->
+    <menuitem id="menu_rwasi_sales" name="المبيعات"
+              parent="menu_rwasi_root" sequence="70"/>
+    <menuitem id="menu_sales_daily_report" name="التقرير اليومي للمبيعات (RS-WS-22)"
+              parent="menu_rwasi_sales" action="action_sales_daily_report" sequence="10"/>
+
+</odoo>

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- RS-WS-18 اجتماع السلامة اليومي -->
+    <record id="view_toolbox_talk_form" model="ir.ui.view">
+        <field name="name">rwasi.toolbox.talk.form</field>
+        <field name="model">rwasi.toolbox.talk</field>
+        <field name="arch" type="xml">
+            <form string="اجتماع السلامة اليومي">
+                <sheet>
+                    <div class="oe_title"><h1><field name="name" readonly="1"/></h1></div>
+                    <group>
+                        <group>
+                            <field name="talk_date"/>
+                            <field name="workshop"/>
+                        </group>
+                        <group>
+                            <field name="topic"/>
+                            <field name="presenter"/>
+                        </group>
+                    </group>
+                    <field name="key_points" placeholder="النقاط الرئيسية للموضوع..."/>
+                    <group string="المخاطر المحددة">
+                        <group>
+                            <field name="hz_cuts"/>
+                            <field name="hz_fire"/>
+                            <field name="hz_electrical"/>
+                            <field name="hz_fall"/>
+                        </group>
+                        <group>
+                            <field name="hz_lifting"/>
+                            <field name="hz_noise"/>
+                            <field name="hz_chemicals"/>
+                            <field name="hz_heat"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="قائمة الحضور">
+                            <field name="attendee_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="name"/>
+                                    <field name="id_no"/>
+                                    <field name="trade"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="الاعتماد">
+                            <group>
+                                <group string="المُلقي">
+                                    <field name="prepared_name"/>
+                                    <field name="prepared_date"/>
+                                    <field name="prepared_signature" widget="signature"/>
+                                </group>
+                                <group string="مسؤول السلامة">
+                                    <field name="hse_officer_name"/>
+                                    <field name="hse_officer_date"/>
+                                    <field name="hse_officer_signature" widget="signature"/>
+                                </group>
+                                <group string="مدير العمليات">
+                                    <field name="manager_name"/>
+                                    <field name="manager_date"/>
+                                    <field name="manager_signature" widget="signature"/>
+                                    <field name="manager_stamp" widget="image"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="view_toolbox_talk_list" model="ir.ui.view">
+        <field name="name">rwasi.toolbox.talk.list</field>
+        <field name="model">rwasi.toolbox.talk</field>
+        <field name="arch" type="xml">
+            <list string="اجتماعات السلامة">
+                <field name="name"/>
+                <field name="talk_date"/>
+                <field name="topic"/>
+                <field name="presenter"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_toolbox_talk" model="ir.actions.act_window">
+        <field name="name">اجتماع السلامة اليومي</field>
+        <field name="res_model">rwasi.toolbox.talk</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>

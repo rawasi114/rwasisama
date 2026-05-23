@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- RS-WS-15 تقرير فحص الجودة -->
+    <record id="view_qc_inspection_form" model="ir.ui.view">
+        <field name="name">rwasi.qc.inspection.form</field>
+        <field name="model">rwasi.qc.inspection</field>
+        <field name="arch" type="xml">
+            <form string="تقرير فحص الجودة">
+                <sheet>
+                    <div class="oe_title"><h1><field name="name" readonly="1"/></h1></div>
+                    <group>
+                        <group>
+                            <field name="project_ref"/>
+                            <field name="item_inspected"/>
+                        </group>
+                        <group>
+                            <field name="work_order_id"/>
+                            <field name="inspection_date"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="قائمة الفحص">
+                            <field name="line_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="check_item"/>
+                                    <field name="acceptance"/>
+                                    <field name="actual"/>
+                                    <field name="result"/>
+                                    <field name="remark"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="القرار النهائي">
+                            <group>
+                                <field name="disposition"/>
+                            </group>
+                            <field name="non_conformity" placeholder="تفاصيل عدم المطابقة..."/>
+                        </page>
+                        <page string="الاعتماد">
+                            <group>
+                                <group string="المفتش الفني">
+                                    <field name="inspector_name"/>
+                                    <field name="inspector_date"/>
+                                    <field name="inspector_cert"/>
+                                    <field name="inspector_signature" widget="signature"/>
+                                </group>
+                                <group string="مشرف الورشة">
+                                    <field name="supervisor_name"/>
+                                    <field name="supervisor_date"/>
+                                    <field name="supervisor_signature" widget="signature"/>
+                                </group>
+                                <group string="مدير العمليات">
+                                    <field name="manager_name"/>
+                                    <field name="manager_date"/>
+                                    <field name="manager_signature" widget="signature"/>
+                                    <field name="manager_stamp" widget="image"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="view_qc_inspection_list" model="ir.ui.view">
+        <field name="name">rwasi.qc.inspection.list</field>
+        <field name="model">rwasi.qc.inspection</field>
+        <field name="arch" type="xml">
+            <list string="تقارير فحص الجودة">
+                <field name="name"/>
+                <field name="item_inspected"/>
+                <field name="work_order_id"/>
+                <field name="inspection_date"/>
+                <field name="disposition"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_qc_inspection" model="ir.actions.act_window">
+        <field name="name">تقرير فحص الجودة</field>
+        <field name="res_model">rwasi.qc.inspection</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- RS-WS-16 تقرير عدم المطابقة -->
+    <record id="view_ncr_form" model="ir.ui.view">
+        <field name="name">rwasi.ncr.form</field>
+        <field name="model">rwasi.ncr</field>
+        <field name="arch" type="xml">
+            <form string="تقرير عدم المطابقة">
+                <sheet>
+                    <div class="oe_title"><h1><field name="name" readonly="1"/></h1></div>
+                    <group>
+                        <group>
+                            <field name="project_ref"/>
+                            <field name="item"/>
+                        </group>
+                        <group>
+                            <field name="detected_on"/>
+                        </group>
+                    </group>
+                    <field name="description" placeholder="وصف عدم المطابقة..."/>
+                    <group string="التصنيف">
+                        <group>
+                            <field name="cls_major"/>
+                            <field name="cls_minor"/>
+                        </group>
+                        <group>
+                            <field name="cls_observation"/>
+                            <field name="cls_repeated"/>
+                        </group>
+                    </group>
+                    <field name="root_cause" placeholder="تحليل السبب الجذري..."/>
+                    <notebook>
+                        <page string="الإجراء التصحيحي والوقائي">
+                            <field name="action_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="action"/>
+                                    <field name="owner"/>
+                                    <field name="due_date"/>
+                                    <field name="status"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="الاعتماد">
+                            <group>
+                                <group string="رصد عدم المطابقة">
+                                    <field name="raised_name"/>
+                                    <field name="raised_date"/>
+                                    <field name="raised_signature" widget="signature"/>
+                                </group>
+                                <group string="مشرف الورشة">
+                                    <field name="supervisor_name"/>
+                                    <field name="supervisor_date"/>
+                                    <field name="supervisor_signature" widget="signature"/>
+                                </group>
+                                <group string="مدير الجودة">
+                                    <field name="qa_manager_name"/>
+                                    <field name="qa_manager_date"/>
+                                    <field name="qa_manager_signature" widget="signature"/>
+                                    <field name="manager_stamp" widget="image"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="view_ncr_list" model="ir.ui.view">
+        <field name="name">rwasi.ncr.list</field>
+        <field name="model">rwasi.ncr</field>
+        <field name="arch" type="xml">
+            <list string="تقارير عدم المطابقة">
+                <field name="name"/>
+                <field name="item"/>
+                <field name="detected_on"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_ncr" model="ir.actions.act_window">
+        <field name="name">تقرير عدم المطابقة</field>
+        <field name="res_model">rwasi.ncr</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>
