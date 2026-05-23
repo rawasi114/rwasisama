@@ -126,8 +126,22 @@ class WorkOrder(models.Model):
         return super().create(vals_list)
 
     # ----- أزرار سير العمل (دورة مغلقة) -----
+    def _get_placeholder_vendor(self):
+        """مورّد مبدئي يُستخدم للمواد التي لم يُحدَّد لها مورّد بعد (يغيّره المشتري)."""
+        Partner = self.env['res.partner'].sudo()
+        vendor = Partner.search(
+            [('name', '=', 'مورّد يُحدَّد لاحقاً')], limit=1)
+        if not vendor:
+            vendor = Partner.create({
+                'name': 'مورّد يُحدَّد لاحقاً',
+                'company_type': 'company',
+                'supplier_rank': 1,
+            })
+        return vendor
+
     def action_request_materials(self):
-        """ينشئ طلب عرض أسعار (RFQ) في موديول الشراء للمواد الناقصة، مجمّعاً حسب المورّد."""
+        """ينشئ طلب عرض أسعار (RFQ) في موديول الشراء للمواد الناقصة.
+        لا يُجبر على تحديد مورّد: المواد بلا مورّد تُجمَّع في طلب بمورّد مبدئي."""
         for wo in self:
             if wo.materials_available:
                 raise UserError(_(
@@ -137,17 +151,16 @@ class WorkOrder(models.Model):
                 raise UserError(_('لا توجد مواد ناقصة لطلبها.'))
 
             by_vendor = {}
-            no_vendor = []
+            no_vendor_lines = []
             for line in shortages:
                 seller = line.material_id.seller_ids[:1]
-                if not seller:
-                    no_vendor.append(line.material_id.display_name)
-                    continue
-                by_vendor.setdefault(seller.partner_id, []).append(line)
-            if no_vendor:
-                raise UserError(_(
-                    'حدّد مورّداً (Vendor) على بطاقة المواد التالية قبل طلبها:\n- %s')
-                    % '\n- '.join(no_vendor))
+                if seller:
+                    by_vendor.setdefault(seller.partner_id, []).append(line)
+                else:
+                    no_vendor_lines.append(line)
+            if no_vendor_lines:
+                by_vendor.setdefault(wo._get_placeholder_vendor(), []).extend(
+                    no_vendor_lines)
 
             PurchaseOrder = self.env['purchase.order'].sudo()
             for vendor, lines in by_vendor.items():
