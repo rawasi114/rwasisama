@@ -13,7 +13,7 @@
     'author': 'Rawasi Sama Contracting',
     'website': 'https://github.com/rawasi114/rwasisama',
     'category': 'Manufacturing',
-    'version': '19.0.1.6.2',
+    'version': '19.0.1.7.0',
     'license': 'LGPL-3',
     'depends': ['mail', 'sale_management', 'purchase', 'stock'],
     'data': [
