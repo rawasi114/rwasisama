@@ -90,7 +90,7 @@ class WorkOrder(models.Model):
     @api.depends('material_line_ids.is_available')
     def _compute_materials_available(self):
         for wo in self:
-            wo.materials_available = all(
+            wo.materials_available = bool(wo.material_line_ids) and all(
                 line.is_available for line in wo.material_line_ids)
 
     @api.depends('purchase_order_ids', 'delivery_note_id', 'closeout_id')
@@ -155,10 +155,26 @@ class WorkOrder(models.Model):
             })
         return vendor
 
+    def _check_materials_storable(self):
+        """تتأكد أن مكوّنات أمر التصنيع قابلة للتخزين حتى يُتتبّع مخزونها."""
+        self.ensure_one()
+        bad = self.material_line_ids.filtered(lambda l: l.material_id and not (
+            l.material_id.is_storable if 'is_storable' in l.material_id._fields
+            else l.material_id.type == 'product'))
+        if bad:
+            names = '\n- '.join(bad.mapped('material_id.display_name'))
+            raise UserError(_(
+                'المواد التالية غير قابلة للتخزين فلا يُتتبّع مخزونها. '
+                'فعّل «تتبّع المخزون» في بطاقة كل منها:\n- %s') % names)
+
     def action_request_materials(self):
         """ينشئ طلب عرض أسعار (RFQ) في موديول الشراء للمواد الناقصة.
         لا يُجبر على تحديد مورّد: المواد بلا مورّد تُجمَّع في طلب بمورّد مبدئي."""
         for wo in self:
+            if not wo.material_line_ids:
+                raise UserError(_(
+                    'أضف قائمة المواد (المكوّنات) أولاً في تبويب «المواد اللازمة».'))
+            wo._check_materials_storable()
             if wo.materials_available:
                 raise UserError(_(
                     'المواد متوفرة بالمخزون، لا يمكن طلب مواد جديدة. يمكنك تأكيد أمر التصنيع مباشرة.'))
@@ -280,12 +296,15 @@ class WorkOrder(models.Model):
         for wo in self:
             if wo.state != 'draft':
                 continue
+            if not wo.material_line_ids:
+                raise UserError(_(
+                    'لا يمكن تأكيد أمر تصنيع بلا قائمة مواد. '
+                    'أضف المكوّنات في تبويب «المواد اللازمة» أولاً.'))
+            wo._check_materials_storable()
             if not wo.materials_available:
                 raise UserError(_(
-                    'لا يمكن تأكيد أمر التصنيع قبل توفّر المواد بالمخزون.\n'
-                    'تأكد من: (1) استلام المواد الناقصة فعلياً، '
-                    '(2) أن المادة من نوع «قابل للتخزين» (فعّل «تتبّع المخزون» في بطاقة المنتج) '
-                    'حتى تُحتسب كميتها بالمخزون.'))
+                    'بعض المواد غير متوفرة بالمخزون. اطلبها عبر «إنشاء طلب عرض سعر» '
+                    'ثم استلمها قبل تأكيد التصنيع.'))
             wo.state = 'confirmed'
         return True
 
@@ -436,15 +455,6 @@ class WorkOrderMaterial(models.Model):
             if not product:
                 line.qty_available = 0.0
                 line.is_available = False
-                continue
-            # المواد غير القابلة للتخزين لا يُتتبَّع مخزونها → تُعتبر متوفرة
-            if 'is_storable' in product._fields:
-                storable = product.is_storable
-            else:
-                storable = product.type == 'product'
-            if not storable:
-                line.qty_available = line.qty_needed
-                line.is_available = True
                 continue
             # عزل مخزون الورشة: احسب التوفر في كامل موقع مستودع الورشة إن حُدّد
             # (يشمل الوارد والمخزون لتغطية الاستلام متعدّد الخطوات)، وإلا المخزون العام

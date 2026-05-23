@@ -26,7 +26,7 @@
                 <header>
                     <button name="action_request_materials" string="إنشاء طلب عرض سعر" type="object"
                             class="btn-primary"
-                            invisible="state != 'draft' or materials_available or purchase_order_count &gt; 0"/>
+                            invisible="state != 'draft' or materials_available or purchase_order_count &gt; 0 or not material_line_ids"/>
                     <button name="action_send_rfq" string="إرسال عرض السعر" type="object"
                             invisible="state != 'draft' or not has_draft_rfq"/>
                     <button name="action_confirm_purchase" string="تأكيد الطلب" type="object"
