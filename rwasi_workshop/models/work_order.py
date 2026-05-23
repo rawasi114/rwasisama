@@ -282,7 +282,10 @@ class WorkOrder(models.Model):
                 continue
             if not wo.materials_available:
                 raise UserError(_(
-                    'لا يمكن تأكيد أمر التصنيع قبل توفّر المواد بالمخزون أو استلامها.'))
+                    'لا يمكن تأكيد أمر التصنيع قبل توفّر المواد بالمخزون.\n'
+                    'تأكد من: (1) استلام المواد الناقصة فعلياً، '
+                    '(2) أن المادة من نوع «قابل للتخزين» (فعّل «تتبّع المخزون» في بطاقة المنتج) '
+                    'حتى تُحتسب كميتها بالمخزون.'))
             wo.state = 'confirmed'
         return True
 
@@ -433,6 +436,15 @@ class WorkOrderMaterial(models.Model):
             if not product:
                 line.qty_available = 0.0
                 line.is_available = False
+                continue
+            # المواد غير القابلة للتخزين لا يُتتبَّع مخزونها → تُعتبر متوفرة
+            if 'is_storable' in product._fields:
+                storable = product.is_storable
+            else:
+                storable = product.type == 'product'
+            if not storable:
+                line.qty_available = line.qty_needed
+                line.is_available = True
                 continue
             # عزل مخزون الورشة: احسب التوفر في كامل موقع مستودع الورشة إن حُدّد
             # (يشمل الوارد والمخزون لتغطية الاستلام متعدّد الخطوات)، وإلا المخزون العام

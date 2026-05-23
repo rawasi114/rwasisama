@@ -37,7 +37,7 @@
                             invisible="state != 'draft' or not has_pending_receipt"/>
                     <button name="action_confirm" string="تأكيد التصنيع" type="object"
                             class="btn-primary"
-                            invisible="state != 'draft' or not materials_available"/>
+                            invisible="state != 'draft'"/>
                     <button name="action_start_production" string="بدء التصنيع" type="object"
                             class="btn-primary" invisible="state != 'confirmed'"/>
                     <button name="action_finish_production" string="إنهاء التصنيع" type="object"
