@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="report_maintenance_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="simple_manufacturing.rawasi_layout">
+                    <t t-set="doc_code">RS-WS-17</t>
+                    <t t-set="doc_title">سجل صيانة المعدات</t>
+                    <t t-set="doc_title_en">Maintenance Log</t>
+                    <t t-call="simple_manufacturing.rs_section">
+                        <t t-set="sec_no">1</t><t t-set="sec_ar">بيانات المعدة</t><t t-set="sec_en">Machine</t>
+                    </t>
+                    <table class="rs-info">
+                        <tr>
+                            <td class="lbl">المعدة</td><td t-out="o.machine or ''"/>
+                            <td class="lbl">رقم الأصل</td><td t-out="o.asset_no or ''"/>
+                        </tr>
+                        <tr>
+                            <td class="lbl">الموقع</td><td t-out="o.location or ''"/>
+                            <td class="lbl">الدورية</td><td><span t-field="o.frequency"/></td>
+                        </tr>
+                    </table>
+                    <t t-call="simple_manufacturing.rs_section">
+                        <t t-set="sec_no">2</t><t t-set="sec_ar">أعمال الصيانة</t><t t-set="sec_en">Works</t>
+                    </t>
+                    <table class="rs-table">
+                        <tr><th style="width:6%">م.</th><th style="width:12%">التاريخ</th><th style="width:10%">النوع</th>
+                            <th>العمل/العطل</th><th style="width:16%">قطع الغيار</th><th style="width:10%">التوقف</th><th style="width:14%">الفني</th></tr>
+                        <tr t-foreach="o.line_ids" t-as="l">
+                            <td t-out="l_index + 1"/><td><span t-field="l.date"/></td><td><span t-field="l.work_type"/></td>
+                            <td t-out="l.work or ''"/><td t-out="l.spares or ''"/><td t-out="l.downtime"/><td t-out="l.technician or ''"/>
+                        </tr>
+                    </table>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <record id="action_report_maintenance" model="ir.actions.report">
+        <field name="name">سجل الصيانة</field>
+        <field name="model">simple.mrp.maintenance</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">simple_manufacturing.report_maintenance_document</field>
+        <field name="report_file">simple_manufacturing.report_maintenance_document</field>
+        <field name="binding_model_id" ref="model_simple_mrp_maintenance"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="paperformat_simple_mrp"/>
+    </record>
+
+</odoo>

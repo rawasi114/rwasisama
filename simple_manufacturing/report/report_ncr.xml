@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="report_ncr_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="simple_manufacturing.rawasi_layout">
+                    <t t-set="doc_code">RS-WS-16</t>
+                    <t t-set="doc_title">تقرير عدم المطابقة</t>
+                    <t t-set="doc_title_en">Non-Conformance Report</t>
+                    <t t-call="simple_manufacturing.rs_section">
+                        <t t-set="sec_no">1</t><t t-set="sec_ar">البيانات</t><t t-set="sec_en">Data</t>
+                    </t>
+                    <table class="rs-info">
+                        <tr>
+                            <td class="lbl">المشروع</td><td t-out="o.project or ''"/>
+                            <td class="lbl">العنصر</td><td t-out="o.item or ''"/>
+                        </tr>
+                        <tr>
+                            <td class="lbl">تاريخ الرصد</td><td><span t-field="o.detected_on"/></td>
+                            <td class="lbl">الخطورة</td><td><span t-field="o.severity"/></td>
+                        </tr>
+                    </table>
+                    <div class="rs-note" t-out="o.description or ''"/>
+                    <div class="rs-note" t-out="o.root_cause or ''"/>
+                    <t t-call="simple_manufacturing.rs_section">
+                        <t t-set="sec_no">2</t><t t-set="sec_ar">الإجراءات التصحيحية</t><t t-set="sec_en">Actions</t>
+                    </t>
+                    <table class="rs-table">
+                        <tr><th style="width:6%">م.</th><th>الإجراء</th><th style="width:18%">المسؤول</th>
+                            <th style="width:16%">تاريخ التنفيذ</th><th style="width:14%">الحالة</th></tr>
+                        <tr t-foreach="o.action_ids" t-as="l">
+                            <td t-out="l_index + 1"/><td t-out="l.name or ''"/><td t-out="l.owner or ''"/>
+                            <td><span t-field="l.due_date"/></td><td><span t-field="l.status"/></td>
+                        </tr>
+                    </table>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <record id="action_report_ncr" model="ir.actions.report">
+        <field name="name">عدم المطابقة</field>
+        <field name="model">simple.mrp.ncr</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">simple_manufacturing.report_ncr_document</field>
+        <field name="report_file">simple_manufacturing.report_ncr_document</field>
+        <field name="binding_model_id" ref="model_simple_mrp_ncr"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="paperformat_simple_mrp"/>
+    </record>
+
+</odoo>

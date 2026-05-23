@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_simple_mrp_srd_list" model="ir.ui.view">
+        <field name="name">simple.mrp.sales.report.list</field>
+        <field name="model">simple.mrp.sales.report</field>
+        <field name="arch" type="xml">
+            <list string="تقارير المبيعات" decoration-success="state == 'done'">
+                <field name="name"/>
+                <field name="sales_rep"/>
+                <field name="territory"/>
+                <field name="date"/>
+                <field name="kpi_visits"/>
+                <field name="state" widget="badge"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_simple_mrp_srd_form" model="ir.ui.view">
+        <field name="name">simple.mrp.sales.report.form</field>
+        <field name="model">simple.mrp.sales.report</field>
+        <field name="arch" type="xml">
+            <form string="تقرير مبيعات يومي">
+                <header>
+                    <button name="action_done" string="إنهاء" type="object" class="btn-primary"
+                            invisible="state != 'draft'"/>
+                    <button name="action_draft" string="إلى مسودة" type="object"
+                            invisible="state == 'draft'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title"><h1><field name="name" readonly="1"/></h1></div>
+                    <group>
+                        <group>
+                            <field name="sales_rep"/>
+                            <field name="territory"/>
+                            <field name="date"/>
+                            <field name="reports_to"/>
+                        </group>
+                        <group string="المؤشرات">
+                            <field name="kpi_visits"/>
+                            <field name="kpi_new_leads"/>
+                            <field name="kpi_quotations"/>
+                            <field name="kpi_po_closed"/>
+                            <field name="kpi_sales_value"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="الزيارات" name="visits">
+                            <field name="visit_ids">
+                                <list editable="bottom">
+                                    <field name="visit_time"/>
+                                    <field name="client"/>
+                                    <field name="contact"/>
+                                    <field name="visit_type"/>
+                                    <field name="outcome"/>
+                                    <field name="follow_up"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="الفرص" name="pipeline">
+                            <field name="pipeline_ids">
+                                <list editable="bottom">
+                                    <field name="lead"/>
+                                    <field name="value"/>
+                                    <field name="close_pct"/>
+                                    <field name="next_step"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="المعوقات" name="issues">
+                            <field name="issues"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_simple_mrp_srd" model="ir.actions.act_window">
+        <field name="name">تقارير المبيعات</field>
+        <field name="res_model">simple.mrp.sales.report</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>

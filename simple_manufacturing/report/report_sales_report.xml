@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="report_sales_report_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="simple_manufacturing.rawasi_layout">
+                    <t t-set="doc_code">RS-WS-22</t>
+                    <t t-set="doc_title">التقرير اليومي لموظف المبيعات</t>
+                    <t t-set="doc_title_en">Sales Daily Report</t>
+                    <t t-call="simple_manufacturing.rs_section">
+                        <t t-set="sec_no">1</t><t t-set="sec_ar">البيانات</t><t t-set="sec_en">Data</t>
+                    </t>
+                    <table class="rs-info">
+                        <tr>
+                            <td class="lbl">المندوب</td><td t-out="o.sales_rep or ''"/>
+                            <td class="lbl">المنطقة</td><td t-out="o.territory or ''"/>
+                        </tr>
+                        <tr>
+                            <td class="lbl">التاريخ</td><td><span t-field="o.date"/></td>
+                            <td class="lbl">المشرف</td><td t-out="o.reports_to or ''"/>
+                        </tr>
+                    </table>
+                    <t t-call="simple_manufacturing.rs_section">
+                        <t t-set="sec_no">2</t><t t-set="sec_ar">المؤشرات</t><t t-set="sec_en">KPIs</t>
+                    </t>
+                    <table class="rs-info">
+                        <tr>
+                            <td class="lbl">الزيارات</td><td t-out="o.kpi_visits"/>
+                            <td class="lbl">عملاء جدد</td><td t-out="o.kpi_new_leads"/>
+                            <td class="lbl">عروض أسعار</td><td t-out="o.kpi_quotations"/>
+                        </tr>
+                        <tr>
+                            <td class="lbl">أوامر شراء</td><td t-out="o.kpi_po_closed"/>
+                            <td class="lbl">قيمة المبيعات</td><td colspan="3" t-out="o.kpi_sales_value"/>
+                        </tr>
+                    </table>
+                    <t t-call="simple_manufacturing.rs_section">
+                        <t t-set="sec_no">3</t><t t-set="sec_ar">الزيارات</t><t t-set="sec_en">Visits</t>
+                    </t>
+                    <table class="rs-table">
+                        <tr><th style="width:6%">م.</th><th style="width:10%">الوقت</th><th>العميل</th>
+                            <th style="width:14%">جهة الاتصال</th><th style="width:12%">النوع</th>
+                            <th style="width:18%">المخرجات</th><th style="width:14%">المتابعة</th></tr>
+                        <tr t-foreach="o.visit_ids" t-as="l">
+                            <td t-out="l_index + 1"/><td t-out="l.visit_time or ''"/><td t-out="l.client or ''"/>
+                            <td t-out="l.contact or ''"/><td t-out="l.visit_type or ''"/>
+                            <td t-out="l.outcome or ''"/><td t-out="l.follow_up or ''"/>
+                        </tr>
+                    </table>
+                    <t t-call="simple_manufacturing.rs_section">
+                        <t t-set="sec_no">4</t><t t-set="sec_ar">الفرص</t><t t-set="sec_en">Pipeline</t>
+                    </t>
+                    <table class="rs-table">
+                        <tr><th style="width:8%">م.</th><th>الفرصة</th><th style="width:16%">القيمة</th>
+                            <th style="width:16%">احتمال %</th><th style="width:22%">الإجراء التالي</th></tr>
+                        <tr t-foreach="o.pipeline_ids" t-as="l">
+                            <td t-out="l_index + 1"/><td t-out="l.lead or ''"/><td t-out="l.value"/>
+                            <td t-out="l.close_pct"/><td t-out="l.next_step or ''"/>
+                        </tr>
+                    </table>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <record id="action_report_sales_report" model="ir.actions.report">
+        <field name="name">تقرير المبيعات اليومي</field>
+        <field name="model">simple.mrp.sales.report</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">simple_manufacturing.report_sales_report_document</field>
+        <field name="report_file">simple_manufacturing.report_sales_report_document</field>
+        <field name="binding_model_id" ref="model_simple_mrp_sales_report"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="paperformat_simple_mrp"/>
+    </record>
+
+</odoo>

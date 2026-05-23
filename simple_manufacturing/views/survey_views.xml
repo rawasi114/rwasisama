@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_simple_mrp_survey_list" model="ir.ui.view">
+        <field name="name">simple.mrp.survey.list</field>
+        <field name="model">simple.mrp.survey</field>
+        <field name="arch" type="xml">
+            <list string="المعاينات" decoration-success="state == 'done'" decoration-muted="state == 'cancel'">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="project"/>
+                <field name="date"/>
+                <field name="total_area"/>
+                <field name="state" widget="badge"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_simple_mrp_survey_form" model="ir.ui.view">
+        <field name="name">simple.mrp.survey.form</field>
+        <field name="model">simple.mrp.survey</field>
+        <field name="arch" type="xml">
+            <form string="معاينة موقع">
+                <header>
+                    <button name="action_done" string="إنهاء" type="object" class="btn-primary"
+                            invisible="state != 'draft'"/>
+                    <button name="action_cancel" string="إلغاء" type="object"
+                            invisible="state in ('done','cancel')"/>
+                    <button name="action_draft" string="إلى مسودة" type="object"
+                            invisible="state == 'draft'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_title"><h1><field name="name" readonly="1"/></h1></div>
+                    <group>
+                        <group>
+                            <field name="partner_id"/>
+                            <field name="phone"/>
+                            <field name="site_address"/>
+                        </group>
+                        <group>
+                            <field name="project"/>
+                            <field name="date"/>
+                            <field name="surveyor_id"/>
+                            <field name="total_area" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="القياسات" name="lines">
+                            <field name="line_ids">
+                                <list editable="bottom">
+                                    <field name="location"/>
+                                    <field name="description"/>
+                                    <field name="width"/>
+                                    <field name="height"/>
+                                    <field name="depth"/>
+                                    <field name="quantity"/>
+                                    <field name="area" readonly="1"/>
+                                    <field name="note"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_simple_mrp_survey" model="ir.actions.act_window">
+        <field name="name">المعاينات</field>
+        <field name="res_model">simple.mrp.survey</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>

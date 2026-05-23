@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_simple_mrp_order_list" model="ir.ui.view">
+        <field name="name">simple.mrp.order.list</field>
+        <field name="model">simple.mrp.order</field>
+        <field name="arch" type="xml">
+            <list string="أوامر التصنيع" create="0"
+                  decoration-info="state == 'confirmed'" decoration-success="state in ('done','delivered','closed')"
+                  decoration-muted="state == 'cancel'">
+                <field name="name"/>
+                <field name="product_id"/>
+                <field name="product_qty"/>
+                <field name="partner_id"/>
+                <field name="sale_order_id"/>
+                <field name="date_planned"/>
+                <field name="availability_ok" widget="boolean_toggle" readonly="1"/>
+                <field name="state" widget="badge"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_simple_mrp_order_form" model="ir.ui.view">
+        <field name="name">simple.mrp.order.form</field>
+        <field name="model">simple.mrp.order</field>
+        <field name="arch" type="xml">
+            <form string="أمر تصنيع" create="0">
+                <header>
+                    <button name="action_explode_bom" string="تفجير قائمة المواد" type="object"
+                            invisible="state != 'draft'"/>
+                    <button name="action_confirm" string="تأكيد" type="object" class="btn-primary"
+                            invisible="state != 'draft'"/>
+                    <button name="action_check_availability" string="فحص التوفر" type="object"
+                            invisible="state not in ('confirmed','progress')"/>
+                    <button name="action_request_purchase" string="طلب شراء الناقص" type="object"
+                            invisible="state not in ('confirmed','progress')"/>
+                    <button name="action_start_production" string="بدء التصنيع" type="object" class="btn-primary"
+                            invisible="state != 'confirmed'"/>
+                    <button name="action_produce" string="إنهاء التصنيع" type="object" class="btn-primary"
+                            invisible="state != 'progress'"/>
+                    <button name="action_deliver" string="تسليم" type="object" class="btn-primary"
+                            invisible="state != 'done'"/>
+                    <button name="action_close_project" string="إغلاق المشروع" type="object" class="btn-primary"
+                            invisible="state != 'delivered'"/>
+                    <button name="action_cancel" string="إلغاء" type="object"
+                            invisible="state in ('delivered','closed','cancel')"/>
+                    <button name="action_draft" string="إلى مسودة" type="object"
+                            invisible="state in ('draft','closed')"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,confirmed,progress,done,delivered,closed"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_sales" type="object" class="oe_stat_button" icon="fa-shopping-cart"
+                                invisible="not sale_order_id">
+                            <div class="o_stat_info"><span class="o_stat_text">أمر البيع</span></div>
+                        </button>
+                        <button name="action_view_purchases" type="object" class="oe_stat_button" icon="fa-truck"
+                                invisible="purchase_request_count == 0">
+                            <field name="purchase_request_count" widget="statinfo" string="طلبات الشراء"/>
+                        </button>
+                        <button name="action_view_quality" type="object" class="oe_stat_button" icon="fa-check-square-o"
+                                invisible="quality_check_count == 0">
+                            <field name="quality_check_count" widget="statinfo" string="فحوص الجودة"/>
+                        </button>
+                        <button name="action_view_deliveries" type="object" class="oe_stat_button" icon="fa-truck"
+                                invisible="delivery_count == 0">
+                            <field name="delivery_count" widget="statinfo" string="التسليمات"/>
+                        </button>
+                        <button name="action_view_closeouts" type="object" class="oe_stat_button" icon="fa-flag-checkered"
+                                invisible="closeout_count == 0">
+                            <field name="closeout_count" widget="statinfo" string="الإغلاق"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="product_id"/>
+                            <field name="bom_id"/>
+                            <field name="product_qty"/>
+                            <field name="uom_name"/>
+                        </group>
+                        <group>
+                            <field name="partner_id"/>
+                            <field name="date_planned"/>
+                            <field name="date_started" readonly="1"/>
+                            <field name="origin"/>
+                            <field name="availability_ok" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="المكوّنات" name="components">
+                            <field name="component_line_ids" readonly="state not in ('draft','confirmed')">
+                                <list editable="bottom" decoration-danger="available_qty &lt; qty">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="component_id"/>
+                                    <field name="qty"/>
+                                    <field name="available_qty" readonly="1"/>
+                                    <field name="uom_name"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_simple_mrp_order_search" model="ir.ui.view">
+        <field name="name">simple.mrp.order.search</field>
+        <field name="model">simple.mrp.order</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="product_id"/>
+                <field name="partner_id"/>
+                <field name="sale_order_id"/>
+                <filter name="draft" string="مسودة" domain="[('state','=','draft')]"/>
+                <filter name="progress" string="قيد التصنيع" domain="[('state','=','progress')]"/>
+                <filter name="done" string="تم التصنيع" domain="[('state','=','done')]"/>
+                <group expand="0" string="تجميع">
+                    <filter name="g_state" string="الحالة" context="{'group_by':'state'}"/>
+                    <filter name="g_product" string="المنتج" context="{'group_by':'product_id'}"/>
+                    <filter name="g_partner" string="العميل" context="{'group_by':'partner_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_simple_mrp_order" model="ir.actions.act_window">
+        <field name="name">أوامر التصنيع</field>
+        <field name="res_model">simple.mrp.order</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_simple_mrp_order_search"/>
+        <field name="context">{'create': False}</field>
+    </record>
+
+</odoo>

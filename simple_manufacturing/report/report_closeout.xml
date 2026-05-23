@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="report_closeout_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="simple_manufacturing.rawasi_layout">
+                    <t t-set="doc_code">RS-WS-20</t>
+                    <t t-set="doc_title">إغلاق وتسليم المشروع</t>
+                    <t t-set="doc_title_en">Project Closeout</t>
+                    <t t-call="simple_manufacturing.rs_section">
+                        <t t-set="sec_no">1</t><t t-set="sec_ar">بيانات المشروع</t><t t-set="sec_en">Project</t>
+                    </t>
+                    <table class="rs-info">
+                        <tr>
+                            <td class="lbl">المشروع</td><td t-out="o.project or ''"/>
+                            <td class="lbl">العميل</td><td t-out="o.client or ''"/>
+                        </tr>
+                        <tr>
+                            <td class="lbl">رقم العقد</td><td t-out="o.contract_no or ''"/>
+                            <td class="lbl">تاريخ التسليم</td><td><span t-field="o.handover_date"/></td>
+                        </tr>
+                        <tr>
+                            <td class="lbl">حالة الالتزام</td><td><span t-field="o.commitment_status"/></td>
+                            <td class="lbl">أيام التأخير</td><td t-out="o.delay_days"/>
+                        </tr>
+                    </table>
+                    <t t-call="simple_manufacturing.rs_section">
+                        <t t-set="sec_no">2</t><t t-set="sec_ar">التقييم</t><t t-set="sec_en">Rating</t>
+                    </t>
+                    <table class="rs-info">
+                        <tr>
+                            <td class="lbl">تقييم الفنيين</td><td><span t-field="o.technician_rating"/></td>
+                            <td class="lbl">جودة التشطيب</td><td><span t-field="o.finishing_quality"/></td>
+                            <td class="lbl">رضا العميل</td><td><span t-field="o.satisfaction"/></td>
+                        </tr>
+                    </table>
+                    <t t-call="simple_manufacturing.rs_section">
+                        <t t-set="sec_no">3</t><t t-set="sec_ar">قائمة التحقق</t><t t-set="sec_en">Checklist</t>
+                    </t>
+                    <table class="rs-table">
+                        <tr><th style="width:8%">م.</th><th>البند</th><th style="width:16%">النتيجة</th><th style="width:22%">المرجع</th></tr>
+                        <tr t-foreach="o.checklist_ids" t-as="l">
+                            <td t-out="l_index + 1"/><td t-out="l.name or ''"/><td><span t-field="l.result"/></td><td t-out="l.reference or ''"/>
+                        </tr>
+                    </table>
+                    <div class="rs-note" t-out="o.handover_statement or ''"/>
+                    <table class="rs-sign">
+                        <tr>
+                            <td><div class="role">مدير المشروع</div></td>
+                            <td>
+                                <div class="role">العميل</div>
+                                <div t-out="o.customer_sign_name or ''"/>
+                                <img t-if="o.customer_signature" t-att-src="image_data_uri(o.customer_signature)"/>
+                            </td>
+                            <td><div class="role">مدير العمليات</div></td>
+                        </tr>
+                    </table>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <record id="action_report_closeout" model="ir.actions.report">
+        <field name="name">إغلاق المشروع</field>
+        <field name="model">simple.mrp.closeout</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">simple_manufacturing.report_closeout_document</field>
+        <field name="report_file">simple_manufacturing.report_closeout_document</field>
+        <field name="binding_model_id" ref="model_simple_mrp_closeout"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="paperformat_simple_mrp"/>
+    </record>
+
+</odoo>

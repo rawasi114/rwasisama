@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="report_quality_check_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="simple_manufacturing.rawasi_layout">
+                    <t t-set="doc_code">RS-WS-15</t>
+                    <t t-set="doc_title">تقرير فحص الجودة</t>
+                    <t t-set="doc_title_en">Quality Inspection</t>
+                    <t t-call="simple_manufacturing.rs_section">
+                        <t t-set="sec_no">1</t><t t-set="sec_ar">بيانات الفحص</t><t t-set="sec_en">Inspection</t>
+                    </t>
+                    <table class="rs-info">
+                        <tr>
+                            <td class="lbl">المنتج</td><td t-out="o.product_id.display_name or ''"/>
+                            <td class="lbl">أمر التصنيع</td><td t-out="o.order_id.name or ''"/>
+                        </tr>
+                        <tr>
+                            <td class="lbl">التاريخ</td><td><span t-field="o.date"/></td>
+                            <td class="lbl">المفتّش</td><td t-out="o.inspector_id.name or ''"/>
+                        </tr>
+                        <tr>
+                            <td class="lbl">الكمية</td><td t-out="o.quantity"/>
+                            <td class="lbl">نسبة النجاح %</td><td t-out="o.pass_rate"/>
+                        </tr>
+                    </table>
+                    <t t-call="simple_manufacturing.rs_section">
+                        <t t-set="sec_no">2</t><t t-set="sec_ar">بنود الفحص</t><t t-set="sec_en">Checklist</t>
+                    </t>
+                    <table class="rs-table">
+                        <tr><th style="width:8%">م.</th><th>البند</th><th style="width:18%">النتيجة</th><th style="width:28%">ملاحظة</th></tr>
+                        <tr t-foreach="o.line_ids" t-as="l">
+                            <td t-out="l_index + 1"/><td t-out="l.name or ''"/>
+                            <td><span t-field="l.result"/></td><td t-out="l.note or ''"/>
+                        </tr>
+                    </table>
+                    <table class="rs-sign">
+                        <tr>
+                            <td><div class="role">المفتّش</div></td>
+                            <td><div class="role">مشرف الجودة</div></td>
+                            <td><div class="role">المدير</div></td>
+                        </tr>
+                    </table>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <record id="action_report_quality_check" model="ir.actions.report">
+        <field name="name">فحص الجودة</field>
+        <field name="model">simple.mrp.quality.check</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">simple_manufacturing.report_quality_check_document</field>
+        <field name="report_file">simple_manufacturing.report_quality_check_document</field>
+        <field name="binding_model_id" ref="model_simple_mrp_quality_check"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="paperformat_simple_mrp"/>
+    </record>
+
+</odoo>

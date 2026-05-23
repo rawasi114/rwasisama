@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="report_job_order_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="simple_manufacturing.rawasi_layout">
+                    <t t-set="doc_code">RS-WS-11</t>
+                    <t t-set="doc_title">أمر شغل</t>
+                    <t t-set="doc_title_en">Job Order</t>
+                    <t t-call="simple_manufacturing.rs_section">
+                        <t t-set="sec_no">1</t><t t-set="sec_ar">بيانات الأمر</t><t t-set="sec_en">Order Data</t>
+                    </t>
+                    <table class="rs-info">
+                        <tr>
+                            <td class="lbl">نوع الورشة</td><td><span t-field="o.workshop_type"/></td>
+                            <td class="lbl">المشروع</td><td t-out="o.project or ''"/>
+                        </tr>
+                        <tr>
+                            <td class="lbl">أمر التصنيع</td><td t-out="o.order_id.name or ''"/>
+                            <td class="lbl">المخطط المعتمد</td><td t-out="o.approved_dwg or ''"/>
+                        </tr>
+                        <tr>
+                            <td class="lbl">العنصر</td><td t-out="o.element or ''"/>
+                            <td class="lbl">المادة</td><td t-out="o.material or ''"/>
+                        </tr>
+                        <tr>
+                            <td class="lbl">المقاسات</td><td t-out="o.dimensions or ''"/>
+                            <td class="lbl">الكمية</td><td t-out="o.qty"/>
+                        </tr>
+                        <tr>
+                            <td class="lbl">التشطيب</td><td t-out="o.finish or ''"/>
+                            <td class="lbl">تاريخ التسليم</td><td><span t-field="o.due_date"/></td>
+                        </tr>
+                    </table>
+                    <t t-call="simple_manufacturing.rs_section">
+                        <t t-set="sec_no">2</t><t t-set="sec_ar">المراحل</t><t t-set="sec_en">Stages</t>
+                    </t>
+                    <table class="rs-table">
+                        <tr><th style="width:6%">م.</th><th>المرحلة</th><th style="width:18%">المسؤول</th>
+                            <th style="width:14%">من</th><th style="width:14%">إلى</th><th style="width:14%">الحالة</th></tr>
+                        <tr t-foreach="o.stage_ids" t-as="l">
+                            <td t-out="l_index + 1"/><td t-out="l.name or ''"/><td t-out="l.responsible or ''"/>
+                            <td><span t-field="l.date_from"/></td><td><span t-field="l.date_to"/></td>
+                            <td><span t-field="l.status"/></td>
+                        </tr>
+                    </table>
+                    <div class="rs-note" t-out="o.spec_notes or ''"/>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <record id="action_report_job_order" model="ir.actions.report">
+        <field name="name">أمر شغل</field>
+        <field name="model">simple.mrp.job.order</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">simple_manufacturing.report_job_order_document</field>
+        <field name="report_file">simple_manufacturing.report_job_order_document</field>
+        <field name="binding_model_id" ref="model_simple_mrp_job_order"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="paperformat_simple_mrp"/>
+    </record>
+
+</odoo>

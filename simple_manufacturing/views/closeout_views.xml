@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_simple_mrp_pco_list" model="ir.ui.view">
+        <field name="name">simple.mrp.closeout.list</field>
+        <field name="model">simple.mrp.closeout</field>
+        <field name="arch" type="xml">
+            <list string="إغلاق المشاريع" decoration-success="state == 'done'" decoration-muted="state == 'cancel'">
+                <field name="name"/>
+                <field name="project"/>
+                <field name="client"/>
+                <field name="order_id"/>
+                <field name="commitment_status"/>
+                <field name="state" widget="badge"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_simple_mrp_pco_form" model="ir.ui.view">
+        <field name="name">simple.mrp.closeout.form</field>
+        <field name="model">simple.mrp.closeout</field>
+        <field name="arch" type="xml">
+            <form string="إغلاق وتسليم المشروع">
+                <header>
+                    <button name="action_done" string="إنهاء وإغلاق" type="object" class="btn-primary"
+                            invisible="state != 'draft'"/>
+                    <button name="action_cancel" string="إلغاء" type="object"
+                            invisible="state in ('done','cancel')"/>
+                    <button name="action_draft" string="إلى مسودة" type="object"
+                            invisible="state == 'draft'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_title"><h1><field name="name" readonly="1"/></h1></div>
+                    <group>
+                        <group>
+                            <field name="project"/>
+                            <field name="client"/>
+                            <field name="contract_no"/>
+                            <field name="order_id"/>
+                            <field name="handover_date"/>
+                        </group>
+                        <group string="الالتزام بالموعد">
+                            <field name="date_started" readonly="1"/>
+                            <field name="promised_days"/>
+                            <field name="installation_done_date"/>
+                            <field name="delay_days" readonly="1"/>
+                            <field name="commitment_status" readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="التقييم">
+                        <field name="technician_rating"/>
+                        <field name="finishing_quality"/>
+                        <field name="satisfaction"/>
+                    </group>
+                    <notebook>
+                        <page string="قائمة التحقق" name="checklist">
+                            <field name="checklist_ids">
+                                <list editable="bottom">
+                                    <field name="name"/>
+                                    <field name="result"/>
+                                    <field name="reference"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="الملاحظات المتبقية" name="punch">
+                            <field name="punch_ids">
+                                <list editable="bottom">
+                                    <field name="name"/>
+                                    <field name="owner"/>
+                                    <field name="close_date"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="الإقرار والتوقيع" name="sign">
+                            <group>
+                                <field name="handover_statement"/>
+                                <field name="customer_sign_name"/>
+                                <field name="customer_signature" widget="finger_signature"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_simple_mrp_pco" model="ir.actions.act_window">
+        <field name="name">إغلاق المشاريع</field>
+        <field name="res_model">simple.mrp.closeout</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>

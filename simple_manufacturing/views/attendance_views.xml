@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_simple_mrp_att_list" model="ir.ui.view">
+        <field name="name">simple.mrp.attendance.list</field>
+        <field name="model">simple.mrp.attendance</field>
+        <field name="arch" type="xml">
+            <list string="الحضور" decoration-success="state == 'done'">
+                <field name="name"/>
+                <field name="date"/>
+                <field name="workshop"/>
+                <field name="shift"/>
+                <field name="total_present"/>
+                <field name="state" widget="badge"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_simple_mrp_att_form" model="ir.ui.view">
+        <field name="name">simple.mrp.attendance.form</field>
+        <field name="model">simple.mrp.attendance</field>
+        <field name="arch" type="xml">
+            <form string="كشف حضور">
+                <header>
+                    <button name="action_done" string="إنهاء" type="object" class="btn-primary"
+                            invisible="state != 'draft'"/>
+                    <button name="action_draft" string="إلى مسودة" type="object"
+                            invisible="state == 'draft'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title"><h1><field name="name" readonly="1"/></h1></div>
+                    <group>
+                        <group>
+                            <field name="date"/>
+                            <field name="workshop"/>
+                        </group>
+                        <group>
+                            <field name="shift"/>
+                            <field name="total_present" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="الحضور" name="lines">
+                            <field name="line_ids">
+                                <list editable="bottom">
+                                    <field name="badge_id"/>
+                                    <field name="worker_name"/>
+                                    <field name="trade"/>
+                                    <field name="time_in"/>
+                                    <field name="time_out"/>
+                                    <field name="overtime"/>
+                                    <field name="total_hours"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_simple_mrp_att" model="ir.actions.act_window">
+        <field name="name">الحضور</field>
+        <field name="res_model">simple.mrp.attendance</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>

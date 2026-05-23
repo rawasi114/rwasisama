@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_simple_mrp_tc_list" model="ir.ui.view">
+        <field name="name">simple.mrp.timecard.list</field>
+        <field name="model">simple.mrp.timecard</field>
+        <field name="arch" type="xml">
+            <list string="بطاقات الوقت" decoration-success="state == 'done'">
+                <field name="name"/>
+                <field name="worker_name"/>
+                <field name="trade"/>
+                <field name="week_ending"/>
+                <field name="week_total"/>
+                <field name="state" widget="badge"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_simple_mrp_tc_form" model="ir.ui.view">
+        <field name="name">simple.mrp.timecard.form</field>
+        <field name="model">simple.mrp.timecard</field>
+        <field name="arch" type="xml">
+            <form string="بطاقة وقت">
+                <header>
+                    <button name="action_done" string="إنهاء" type="object" class="btn-primary"
+                            invisible="state != 'draft'"/>
+                    <button name="action_draft" string="إلى مسودة" type="object"
+                            invisible="state == 'draft'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title"><h1><field name="name" readonly="1"/></h1></div>
+                    <group>
+                        <group>
+                            <field name="worker_name"/>
+                            <field name="badge_id"/>
+                            <field name="trade"/>
+                            <field name="week_ending"/>
+                        </group>
+                        <group>
+                            <field name="regular_hours"/>
+                            <field name="overtime_hours"/>
+                            <field name="leave_days"/>
+                            <field name="week_total" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="توزيع الساعات" name="lines">
+                            <field name="line_ids">
+                                <list editable="bottom">
+                                    <field name="wo_ref"/>
+                                    <field name="task"/>
+                                    <field name="sat"/>
+                                    <field name="sun"/>
+                                    <field name="mon"/>
+                                    <field name="tue"/>
+                                    <field name="wed"/>
+                                    <field name="thu"/>
+                                    <field name="total" readonly="1"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_simple_mrp_tc" model="ir.actions.act_window">
+        <field name="name">بطاقات الوقت</field>
+        <field name="res_model">simple.mrp.timecard</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="report_material_request_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="simple_manufacturing.rawasi_layout">
+                    <t t-set="doc_code">RS-WS-02</t>
+                    <t t-set="doc_title">طلب / صرف مواد</t>
+                    <t t-set="doc_title_en">Material Request</t>
+                    <t t-call="simple_manufacturing.rs_section">
+                        <t t-set="sec_no">1</t><t t-set="sec_ar">بيانات الطلب</t><t t-set="sec_en">Request Data</t>
+                    </t>
+                    <table class="rs-info">
+                        <tr>
+                            <td class="lbl">مقدّم الطلب</td><td t-out="o.requester_id.name or ''"/>
+                            <td class="lbl">القسم</td><td t-out="o.department or ''"/>
+                        </tr>
+                        <tr>
+                            <td class="lbl">التاريخ</td><td><span t-field="o.date"/></td>
+                            <td class="lbl">أمر التصنيع</td><td t-out="o.order_id.name or ''"/>
+                        </tr>
+                        <tr>
+                            <td class="lbl">المشروع</td><td t-out="o.project or ''"/>
+                            <td class="lbl">مركز التكلفة</td><td t-out="o.cost_center or ''"/>
+                        </tr>
+                    </table>
+                    <t t-call="simple_manufacturing.rs_section">
+                        <t t-set="sec_no">2</t><t t-set="sec_ar">البنود</t><t t-set="sec_en">Lines</t>
+                    </t>
+                    <table class="rs-table">
+                        <tr><th style="width:6%">م.</th><th>المنتج</th><th style="width:10%">الكمية</th>
+                            <th style="width:10%">المرتجع</th><th style="width:10%">الصافي</th>
+                            <th style="width:16%">الغرض</th><th style="width:12%">البطاقة</th></tr>
+                        <tr t-foreach="o.line_ids" t-as="l">
+                            <td t-out="l_index + 1"/><td t-out="l.product_id.display_name or ''"/>
+                            <td t-out="l.qty"/><td t-out="l.returned_qty"/><td t-out="l.net_qty"/>
+                            <td t-out="l.purpose or ''"/><td t-out="l.bin_card or ''"/>
+                        </tr>
+                    </table>
+                    <table class="rs-sign">
+                        <tr>
+                            <td><div class="role">الطالب</div></td>
+                            <td><div class="role">المعتمِد</div></td>
+                            <td><div class="role">أمين المستودع</div></td>
+                        </tr>
+                    </table>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <record id="action_report_material_request" model="ir.actions.report">
+        <field name="name">طلب مواد</field>
+        <field name="model">simple.mrp.material.request</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">simple_manufacturing.report_material_request_document</field>
+        <field name="report_file">simple_manufacturing.report_material_request_document</field>
+        <field name="binding_model_id" ref="model_simple_mrp_material_request"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="paperformat_simple_mrp"/>
+    </record>
+
+</odoo>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="simple_manufacturing.FingerSignatureField">
+        <div class="o_finger_signature">
+            <canvas t-ref="canvas" width="320" height="130"
+                    style="border:1px solid #cccccc; background:#ffffff; touch-action:none; border-radius:4px;"
+                    t-on-pointerdown="onPointerDown"
+                    t-on-pointermove="onPointerMove"
+                    t-on-pointerup="onPointerUp"
+                    t-on-pointerleave="onPointerUp"/>
+            <div class="mt-1" t-if="!props.readonly">
+                <button type="button" class="btn btn-secondary btn-sm" t-on-click="clear">
+                    مسح التوقيع
+                </button>
+            </div>
+        </div>
+    </t>
+
+</templates>
