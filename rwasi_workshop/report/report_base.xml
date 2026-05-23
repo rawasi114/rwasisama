@@ -95,21 +95,17 @@
         </style>
     </template>
 
-    <!-- ============ ترويسة المستند ============ -->
+    <!-- ============ شريط عنوان المستند (الشركة تأتي من ترويسة أودو القياسية) ============ -->
     <template id="report_workshop_header">
         <table class="rs-head">
             <tr>
-                <td class="rs-brand">
-                    <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)"/>
-                    <div class="ar" t-out="o.company_id.name"/>
-                </td>
-                <td class="rs-titles">
+                <td class="rs-titles" style="width:68%">
                     <div class="co-ar">شركة رواسي سما للمقاولات</div>
                     <div class="co-en">RAWASI SAMA CONTRACTING CO.</div>
                     <div class="doc-ar"><t t-out="title"/></div>
                     <div class="doc-en"><t t-out="title_en"/></div>
                 </td>
-                <td class="rs-meta">
+                <td class="rs-meta" style="width:32%">
                     <table class="rs-metatbl">
                         <tr><td class="k">FORM</td><td class="v"><t t-out="code"/></td></tr>
                         <tr><td class="k">REF</td><td class="v"><t t-out="o.name"/></td></tr>
@@ -217,13 +213,15 @@
             'RS-WS-21': 'MATERIAL REQUEST',
             'RS-WS-22': 'SALES DAILY REPORT',
         }.get(code, '')"/>
-        <div class="page rs-doc">
-            <t t-call="rwasi_workshop.report_workshop_style"/>
-            <t t-call="rwasi_workshop.report_workshop_header"/>
-            <t t-out="0"/>
-            <t t-call="rwasi_workshop.report_workshop_signoff"/>
-            <t t-call="rwasi_workshop.report_workshop_footer"/>
-        </div>
+        <t t-call="web.external_layout">
+            <div class="page rs-doc">
+                <t t-call="rwasi_workshop.report_workshop_style"/>
+                <t t-call="rwasi_workshop.report_workshop_header"/>
+                <t t-out="0"/>
+                <t t-call="rwasi_workshop.report_workshop_signoff"/>
+                <t t-call="rwasi_workshop.report_workshop_footer"/>
+            </div>
+        </t>
     </template>
 
 </odoo>
