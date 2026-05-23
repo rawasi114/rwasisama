@@ -161,7 +161,7 @@
                 <filter name="filter_draft" string="مسودة" domain="[('state', '=', 'draft')]"/>
                 <filter name="filter_in_production" string="قيد التصنيع" domain="[('state', '=', 'in_production')]"/>
                 <filter name="filter_delivered" string="تم التسليم" domain="[('state', '=', 'delivered')]"/>
-                <group expand="0" string="تجميع حسب">
+                <group>
                     <filter name="group_state" string="الحالة" context="{'group_by': 'state'}"/>
                     <filter name="group_scope" string="القسم" context="{'group_by': 'workshop_scope'}"/>
                     <filter name="group_partner" string="العميل" context="{'group_by': 'partner_id'}"/>
