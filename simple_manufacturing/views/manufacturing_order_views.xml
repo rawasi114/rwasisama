@@ -121,7 +121,7 @@
                 <filter name="draft" string="مسودة" domain="[('state','=','draft')]"/>
                 <filter name="progress" string="قيد التصنيع" domain="[('state','=','progress')]"/>
                 <filter name="done" string="تم التصنيع" domain="[('state','=','done')]"/>
-                <group expand="0" string="تجميع">
+                <group>
                     <filter name="g_state" string="الحالة" context="{'group_by':'state'}"/>
                     <filter name="g_product" string="المنتج" context="{'group_by':'product_id'}"/>
                     <filter name="g_partner" string="العميل" context="{'group_by':'partner_id'}"/>
