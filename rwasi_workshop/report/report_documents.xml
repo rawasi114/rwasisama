@@ -18,8 +18,8 @@
                             <td class="lbl">الكمية</td><td t-out="o.product_qty"/>
                         </tr>
                         <tr>
-                            <td class="lbl">القسم</td><td t-field="o.workshop_scope"/>
-                            <td class="lbl">الأولوية</td><td t-field="o.priority"/>
+                            <td class="lbl">القسم</td><td><span t-field="o.workshop_scope"/></td>
+                            <td class="lbl">الأولوية</td><td><span t-field="o.priority"/></td>
                         </tr>
                         <tr>
                             <td class="lbl">تاريخ البدء</td><td><span t-field="o.start_date"/></td>
@@ -27,7 +27,7 @@
                         </tr>
                         <tr>
                             <td class="lbl">المرجع/المخططات</td><td t-out="o.drawing_ref or ''"/>
-                            <td class="lbl">الحالة</td><td t-field="o.state"/>
+                            <td class="lbl">الحالة</td><td><span t-field="o.state"/></td>
                         </tr>
                     </table>
                     <div class="sec-title">وصف العمل المطلوب</div>
@@ -126,7 +126,7 @@
                         <tr><th style="width:6%">م.</th><th style="width:12%">كود الصنف</th><th>الوصف</th><th style="width:12%">المطلوبة</th><th style="width:12%">المستلمة</th><th style="width:10%">الوحدة</th><th style="width:14%">المطابقة</th></tr>
                         <tr t-foreach="o.line_ids" t-as="l">
                             <td t-out="l_index + 1"/><td t-out="l.item_code or ''"/><td t-out="l.description or ''"/>
-                            <td t-out="l.po_qty"/><td t-out="l.recv_qty"/><td t-out="l.uom or ''"/><td t-field="l.conformance"/>
+                            <td t-out="l.po_qty"/><td t-out="l.recv_qty"/><td t-out="l.uom or ''"/><td><span t-field="l.conformance"/></td>
                         </tr>
                     </table>
                     <div class="sec-title">الفحص الظاهري وحالة الاستلام</div>
@@ -280,7 +280,7 @@
                             <td class="lbl">الورشة</td><td t-out="o.workshop or ''"/>
                         </tr>
                         <tr>
-                            <td class="lbl">الوردية</td><td t-field="o.shift"/>
+                            <td class="lbl">الوردية</td><td><span t-field="o.shift"/></td>
                             <td class="lbl">إجمالي الحضور</td><td t-out="o.total_present"/>
                         </tr>
                     </table>
@@ -385,7 +385,7 @@
                     <table class="info">
                         <tr>
                             <td class="lbl">المشروع / الموقع</td><td t-out="o.site or ''"/>
-                            <td class="lbl">القسم المعني</td><td t-field="o.department"/>
+                            <td class="lbl">القسم المعني</td><td><span t-field="o.department"/></td>
                         </tr>
                         <tr>
                             <td class="lbl">تاريخ المعاينة</td><td><span t-field="o.survey_date"/></td>
@@ -598,7 +598,7 @@
                         <tr><th style="width:6%">م.</th><th>الجزء</th><th style="width:10%">العدد</th><th style="width:14%">بدء</th><th style="width:14%">انتهاء</th><th style="width:14%">زمن الدورة</th><th style="width:12%">قبول/رفض</th></tr>
                         <tr t-foreach="o.run_ids" t-as="l">
                             <td t-out="l_index + 1"/><td t-out="l.part or ''"/><td t-out="l.qty"/>
-                            <td t-out="l.start or ''"/><td t-out="l.end or ''"/><td t-out="l.cycle or ''"/><td t-field="l.accept_reject"/>
+                            <td t-out="l.start or ''"/><td t-out="l.end or ''"/><td t-out="l.cycle or ''"/><td><span t-field="l.accept_reject"/></td>
                         </tr>
                     </table>
                 </t>
@@ -620,7 +620,7 @@
                         </tr>
                         <tr>
                             <td class="lbl">تاريخ الفحص</td><td><span t-field="o.inspection_date"/></td>
-                            <td class="lbl">القرار النهائي</td><td t-field="o.disposition"/>
+                            <td class="lbl">القرار النهائي</td><td><span t-field="o.disposition"/></td>
                         </tr>
                     </table>
                     <div class="sec-title">قائمة الفحص</div>
@@ -628,7 +628,7 @@
                         <tr><th style="width:6%">م.</th><th>بند الفحص</th><th style="width:20%">المعيار</th><th style="width:18%">القراءة الفعلية</th><th style="width:12%">النتيجة</th><th style="width:16%">ملاحظة</th></tr>
                         <tr t-foreach="o.line_ids" t-as="l">
                             <td t-out="l_index + 1"/><td t-out="l.check_item or ''"/><td t-out="l.acceptance or ''"/>
-                            <td t-out="l.actual or ''"/><td t-field="l.result"/><td t-out="l.remark or ''"/>
+                            <td t-out="l.actual or ''"/><td><span t-field="l.result"/></td><td t-out="l.remark or ''"/>
                         </tr>
                     </table>
                     <div class="sec-title">تفاصيل عدم المطابقة</div>
@@ -710,7 +710,7 @@
                     <table class="lines">
                         <tr><th style="width:6%">م.</th><th style="width:12%">التاريخ</th><th style="width:10%">النوع</th><th>وصف العمل / العطل</th><th style="width:16%">قطع الغيار</th><th style="width:10%">التوقف</th><th style="width:14%">الفني</th></tr>
                         <tr t-foreach="o.line_ids" t-as="l">
-                            <td t-out="l_index + 1"/><td><span t-field="l.date"/></td><td t-field="l.maint_type"/>
+                            <td t-out="l_index + 1"/><td><span t-field="l.date"/></td><td><span t-field="l.maint_type"/></td>
                             <td t-out="l.work_fault or ''"/><td t-out="l.spares or ''"/><td t-out="l.downtime"/><td t-out="l.technician or ''"/>
                         </tr>
                     </table>
@@ -840,7 +840,7 @@
                     <table class="lines">
                         <tr><th style="width:8%">م.</th><th>البند</th><th style="width:16%">النتيجة</th><th style="width:22%">المرجع</th></tr>
                         <tr t-foreach="o.checklist_ids" t-as="l">
-                            <td t-out="l_index + 1"/><td t-out="l.item or ''"/><td t-field="l.result"/><td t-out="l.reference or ''"/>
+                            <td t-out="l_index + 1"/><td t-out="l.item or ''"/><td><span t-field="l.result"/></td><td t-out="l.reference or ''"/>
                         </tr>
                     </table>
                     <div class="sec-title">قائمة الملاحظات المتبقية (Punch List)</div>
