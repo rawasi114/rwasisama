@@ -58,6 +58,9 @@ class WorkOrder(models.Model):
     purchase_order_ids = fields.One2many(
         'purchase.order', 'workshop_order_id', string='طلبات الشراء')
     purchase_order_count = fields.Integer(compute='_compute_counts')
+    has_draft_rfq = fields.Boolean(compute='_compute_purchase_flow')
+    has_rfq_to_confirm = fields.Boolean(compute='_compute_purchase_flow')
+    has_pending_receipt = fields.Boolean(compute='_compute_purchase_flow')
     delivery_note_id = fields.Many2one(
         'rwasi.delivery.note', string='أمر التسليم', readonly=True, copy=False)
     delivery_count = fields.Integer(compute='_compute_counts')
@@ -96,6 +99,19 @@ class WorkOrder(models.Model):
             wo.purchase_order_count = len(wo.purchase_order_ids)
             wo.delivery_count = 1 if wo.delivery_note_id else 0
             wo.closeout_count = 1 if wo.closeout_id else 0
+
+    @api.depends('purchase_order_ids', 'purchase_order_ids.state')
+    def _compute_purchase_flow(self):
+        for wo in self:
+            pos = wo.purchase_order_ids
+            wo.has_draft_rfq = any(p.state == 'draft' for p in pos)
+            wo.has_rfq_to_confirm = any(p.state in ('draft', 'sent') for p in pos)
+            pending = False
+            for p in pos.filtered(lambda x: x.state in ('purchase', 'done')):
+                if any(pk.state not in ('done', 'cancel') for pk in p.picking_ids):
+                    pending = True
+                    break
+            wo.has_pending_receipt = pending
 
     @api.model
     def _make_name_from_so(self, so_name):
@@ -153,9 +169,10 @@ class WorkOrder(models.Model):
             by_vendor = {}
             no_vendor_lines = []
             for line in shortages:
-                seller = line.material_id.seller_ids[:1]
-                if seller:
-                    by_vendor.setdefault(seller.partner_id, []).append(line)
+                # الأولوية للمورّد المختار يدوياً في سطر المادة، ثم مورّد المنتج
+                vendor = line.vendor_id or line.material_id.seller_ids[:1].partner_id
+                if vendor:
+                    by_vendor.setdefault(vendor, []).append(line)
                 else:
                     no_vendor_lines.append(line)
             if no_vendor_lines:
@@ -178,7 +195,29 @@ class WorkOrder(models.Model):
                     'workshop_order_id': wo.id,
                     'order_line': order_lines,
                 })
-            wo.message_post(body=_('تم إنشاء طلب/طلبات شراء (RFQ) للمواد الناقصة.'))
+            wo.message_post(body=_('تم إنشاء طلب/طلبات عرض سعر (RFQ) للمواد الناقصة.'))
+        return True
+
+    def action_send_rfq(self):
+        """إرسال طلبات عرض السعر (تحويلها إلى حالة «مُرسَل») من داخل الورشة."""
+        for wo in self:
+            pos = wo.purchase_order_ids.sudo().filtered(lambda p: p.state == 'draft')
+            if not pos:
+                raise UserError(_('لا توجد طلبات عرض سعر بحالة مسودة لإرسالها.'))
+            pos.write({'state': 'sent'})
+            wo.message_post(body=_('تم إرسال طلب/طلبات عرض السعر للمورّدين.'))
+        return True
+
+    def action_confirm_purchase(self):
+        """تأكيد طلبات الشراء (RFQ → أمر شراء) من داخل الورشة، وإنشاء عمليات الاستلام."""
+        for wo in self:
+            pos = wo.purchase_order_ids.sudo().filtered(
+                lambda p: p.state in ('draft', 'sent'))
+            if not pos:
+                raise UserError(_('لا توجد طلبات لتأكيدها.'))
+            for po in pos:
+                po.button_confirm()
+            wo.message_post(body=_('تم تأكيد طلب/طلبات الشراء وإنشاء عمليات الاستلام.'))
         return True
 
     def action_receive_materials(self):
@@ -369,6 +408,9 @@ class WorkOrderMaterial(models.Model):
         'rwasi.work.order', string='أمر التصنيع', required=True, ondelete='cascade')
     material_id = fields.Many2one(
         'product.product', string='المادة الخام', required=True)
+    vendor_id = fields.Many2one(
+        'res.partner', string='المورّد',
+        help='يُستخدم عند إنشاء طلب عرض السعر. اتركه فارغاً ليُحدَّد لاحقاً.')
     qty_needed = fields.Float(string='الكمية المطلوبة', default=1.0)
     qty_available = fields.Float(
         string='المتوفر بالمخزون', compute='_compute_availability')

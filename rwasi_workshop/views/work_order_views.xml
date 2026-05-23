@@ -24,12 +24,17 @@
         <field name="arch" type="xml">
             <form string="أمر تشغيل / تصنيع">
                 <header>
-                    <button name="action_request_materials" string="طلب المواد (شراء)" type="object"
+                    <button name="action_request_materials" string="إنشاء طلب عرض سعر" type="object"
                             class="btn-primary"
                             invisible="state != 'draft' or materials_available or purchase_order_count &gt; 0"/>
+                    <button name="action_send_rfq" string="إرسال عرض السعر" type="object"
+                            invisible="state != 'draft' or not has_draft_rfq"/>
+                    <button name="action_confirm_purchase" string="تأكيد الطلب" type="object"
+                            class="btn-primary"
+                            invisible="state != 'draft' or not has_rfq_to_confirm"/>
                     <button name="action_receive_materials" string="استلام المواد" type="object"
                             class="btn-primary"
-                            invisible="state != 'draft' or materials_available or purchase_order_count == 0"/>
+                            invisible="state != 'draft' or not has_pending_receipt"/>
                     <button name="action_confirm" string="تأكيد التصنيع" type="object"
                             class="btn-primary"
                             invisible="state != 'draft' or not materials_available"/>
@@ -66,6 +71,9 @@
                             <field name="closeout_count" widget="statinfo" string="إغلاق المشروع"/>
                         </button>
                     </div>
+                    <field name="has_draft_rfq" invisible="1"/>
+                    <field name="has_rfq_to_confirm" invisible="1"/>
+                    <field name="has_pending_receipt" invisible="1"/>
                     <div class="oe_title">
                         <h1><field name="name" readonly="1"/></h1>
                     </div>
@@ -95,10 +103,20 @@
                             <field name="material_line_ids" readonly="state != 'draft'">
                                 <list editable="bottom" decoration-danger="not is_available" decoration-success="is_available">
                                     <field name="material_id"/>
+                                    <field name="vendor_id"/>
                                     <field name="qty_needed"/>
                                     <field name="qty_available"/>
                                     <field name="uom_name"/>
                                     <field name="is_available"/>
+                                </list>
+                            </field>
+                            <separator string="طلبات عرض السعر / الشراء"/>
+                            <field name="purchase_order_ids" readonly="1">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="partner_id"/>
+                                    <field name="amount_total"/>
+                                    <field name="state"/>
                                 </list>
                             </field>
                         </page>
