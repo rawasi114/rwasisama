@@ -165,7 +165,8 @@ class WorkOrder(models.Model):
         return True
 
     def action_receive_materials(self):
-        """يستلم المواد من داخل الورشة بتأكيد طلبات الشراء وترحيل عمليات الاستلام."""
+        """يستلم المواد من داخل الورشة بتأكيد طلبات الشراء وترحيل عمليات الاستلام
+        (يُنشئ حركة استلام فعلية في المخزون دون مغادرة الورشة)."""
         for wo in self:
             if wo.materials_available:
                 continue
@@ -176,24 +177,39 @@ class WorkOrder(models.Model):
                 po.button_confirm()
             pickings = pos.mapped('picking_ids').filtered(
                 lambda p: p.state not in ('done', 'cancel'))
+            if not pickings:
+                raise UserError(_(
+                    'لا توجد عمليات استلام للترحيل. تأكد أن المواد المطلوبة من نوع '
+                    '«قابل للتخزين» (Storable) لكي يُنشئ نظام الشراء إيصال استلام لها.'))
             for picking in pickings:
-                picking.action_assign()
-                for move in picking.move_ids:
+                picking.sudo().action_confirm()
+                picking.sudo().action_assign()
+                for move in picking.sudo().move_ids:
                     if 'quantity' in move._fields:
                         move.quantity = move.product_uom_qty
+                    elif 'quantity_done' in move._fields:
+                        move.quantity_done = move.product_uom_qty
                     if 'picked' in move._fields:
                         move.picked = True
-                try:
-                    picking.with_context(
-                        skip_backorder=True, skip_sms=True).button_validate()
-                except Exception:
-                    # في حال تطلّب الترحيل تدخلاً يدوياً يكمله أمين المخزن من تطبيق المخزون
-                    pass
+                res = picking.sudo().with_context(
+                    skip_backorder=True, skip_sms=True).button_validate()
+                # أودو قد يُعيد نافذة تأكيد بدل الترحيل المباشر — نعالجها برمجياً
+                if isinstance(res, dict) and res.get('res_model'):
+                    wiz_model = res['res_model']
+                    wiz_ctx = dict(res.get('context') or {})
+                    wizard = self.env[wiz_model].sudo().with_context(
+                        wiz_ctx).create({})
+                    for method in ('process', 'process_cancel_backorder'):
+                        if hasattr(wizard, method):
+                            getattr(wizard, method)()
+                            break
+            wo.material_line_ids.invalidate_recordset(
+                ['qty_available', 'is_available'])
             if not wo.materials_available:
                 raise UserError(_(
-                    'تعذّر إتمام استلام جميع المواد آلياً. أكمل ترحيل الاستلام من تطبيق المخزون، '
-                    'ثم تأكد من توفّر المواد لتفعيل تأكيد التصنيع.'))
-            wo.message_post(body=_('تم استلام المواد وأصبحت متوفرة بالمخزون.'))
+                    'تم ترحيل الاستلام لكن الكمية المتاحة لا تزال غير كافية. '
+                    'راجع كميات المواد المطلوبة أو إعدادات المخزون لهذه المواد.'))
+            wo.message_post(body=_('تم استلام المواد وترحيلها إلى المخزون.'))
         return True
 
     def action_confirm(self):
