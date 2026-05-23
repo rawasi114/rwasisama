@@ -180,6 +180,7 @@ class WorkOrder(models.Model):
                     no_vendor_lines)
 
             PurchaseOrder = self.env['purchase.order'].sudo()
+            warehouse = wo.company_id.sudo().workshop_warehouse_id
             for vendor, lines in by_vendor.items():
                 order_lines = []
                 for l in lines:
@@ -189,12 +190,16 @@ class WorkOrder(models.Model):
                         'product_id': l.material_id.id,
                         'product_qty': qty,
                     }))
-                PurchaseOrder.create({
+                po_vals = {
                     'partner_id': vendor.id,
                     'origin': wo.name,
                     'workshop_order_id': wo.id,
                     'order_line': order_lines,
-                })
+                }
+                # عزل مخزون الورشة: توجيه الاستلام لمستودع الورشة إن حُدّد
+                if warehouse and warehouse.in_type_id:
+                    po_vals['picking_type_id'] = warehouse.in_type_id.id
+                PurchaseOrder.create(po_vals)
             wo.message_post(body=_('تم إنشاء طلب/طلبات عرض سعر (RFQ) للمواد الناقصة.'))
         return True
 
@@ -421,6 +426,16 @@ class WorkOrderMaterial(models.Model):
     @api.depends('material_id', 'qty_needed')
     def _compute_availability(self):
         for line in self:
-            avail = line.material_id.qty_available if line.material_id else 0.0
+            product = line.material_id
+            if not product:
+                line.qty_available = 0.0
+                line.is_available = False
+                continue
+            # عزل مخزون الورشة: احسب التوفر في مستودع الورشة إن حُدّد، وإلا المخزون العام
+            location = line.order_id.company_id.sudo().workshop_warehouse_id.lot_stock_id
+            if location:
+                avail = product.with_context(location=location.id).qty_available
+            else:
+                avail = product.qty_available
             line.qty_available = avail
             line.is_available = avail >= line.qty_needed

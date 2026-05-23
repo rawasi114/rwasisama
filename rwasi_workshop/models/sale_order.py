@@ -49,6 +49,8 @@ class SaleOrder(models.Model):
     def _create_workshop_work_orders(self):
         """ينشئ أمر تصنيع لكل بند منتج يُصنّع في الورشة (تلقائياً وبصلاحية النظام)."""
         self.ensure_one()
+        if not self.company_id.workshop_auto_mo:
+            return
         WorkOrder = self.env['rwasi.work.order'].sudo().with_context(from_sale_order=True)
         for line in self.order_line:
             product = line.product_id
