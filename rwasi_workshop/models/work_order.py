@@ -266,11 +266,14 @@ class WorkOrder(models.Model):
                             break
             wo.material_line_ids.invalidate_recordset(
                 ['qty_available', 'is_available'])
-            if not wo.materials_available:
-                raise UserError(_(
-                    'تم ترحيل الاستلام لكن الكمية المتاحة لا تزال غير كافية. '
-                    'راجع كميات المواد المطلوبة أو إعدادات المخزون لهذه المواد.'))
-            wo.message_post(body=_('تم استلام المواد وترحيلها إلى المخزون.'))
+            wo.invalidate_recordset(['materials_available'])
+            # لا نرفع خطأ بعد الترحيل (وإلا أُلغيت عملية الاستلام بالكامل)
+            if wo.materials_available:
+                wo.message_post(body=_('تم استلام المواد وأصبحت متوفرة بالمخزون.'))
+            else:
+                wo.message_post(body=_(
+                    'تم ترحيل الاستلام. إن لم يظهر زر «تأكيد التصنيع» فقد تكون بعض '
+                    'المواد ما زالت في موقع «الوارد» (استلام متعدّد الخطوات) أو الكمية ناقصة.'))
         return True
 
     def action_confirm(self):
@@ -431,8 +434,9 @@ class WorkOrderMaterial(models.Model):
                 line.qty_available = 0.0
                 line.is_available = False
                 continue
-            # عزل مخزون الورشة: احسب التوفر في مستودع الورشة إن حُدّد، وإلا المخزون العام
-            location = line.order_id.company_id.sudo().workshop_warehouse_id.lot_stock_id
+            # عزل مخزون الورشة: احسب التوفر في كامل موقع مستودع الورشة إن حُدّد
+            # (يشمل الوارد والمخزون لتغطية الاستلام متعدّد الخطوات)، وإلا المخزون العام
+            location = line.order_id.company_id.sudo().workshop_warehouse_id.view_location_id
             if location:
                 avail = product.with_context(location=location.id).qty_available
             else:
