@@ -98,6 +98,11 @@ class WorkOrder(models.Model):
 
     @api.model_create_multi
     def create(self, vals_list):
+        # لا يُنشأ أمر التصنيع إلا تلقائياً عند تأكيد عرض السعر (أمر البيع)
+        if not self.env.context.get('from_sale_order'):
+            raise UserError(_(
+                'لا يمكن إنشاء أمر تصنيع يدوياً. '
+                'يُنشأ أمر التصنيع تلقائياً فقط عند تأكيد عرض السعر للمنتجات المعلَّمة بأنها تُصنّع في الورشة.'))
         for vals in vals_list:
             if vals.get('name', 'New') in (False, 'New'):
                 if vals.get('sale_order_id'):

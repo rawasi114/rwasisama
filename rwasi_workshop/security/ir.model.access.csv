@@ -1,6 +1,6 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_work_order_user,work.order.user,model_rwasi_work_order,group_workshop_user,1,1,0,0
-access_work_order_manager,work.order.manager,model_rwasi_work_order,group_workshop_manager,1,1,1,1
+access_work_order_manager,work.order.manager,model_rwasi_work_order,group_workshop_manager,1,1,0,1
 access_work_order_line_user,work.order.line.user,model_rwasi_work_order_line,group_workshop_user,1,1,1,1
 access_work_order_line_manager,work.order.line.manager,model_rwasi_work_order_line,group_workshop_manager,1,1,1,1
 access_material_requisition_user,material.requisition.user,model_rwasi_material_requisition,group_workshop_user,1,1,1,1
