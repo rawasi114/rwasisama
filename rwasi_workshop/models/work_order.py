@@ -6,7 +6,7 @@ from .base import WORKSHOP_SCOPE
 
 
 class WorkOrder(models.Model):
-    """RS-WS-01 — أمر تشغيل / أمر تصنيع (النموذج المركزي لدورة حياة العمل)."""
+    """RS-WS-01 — أمر تشغيل / أمر تصنيع (النموذج المركزي لدورة الحياة المغلقة)."""
     _name = 'rwasi.work.order'
     _description = 'أمر تشغيل / تصنيع (RS-WS-01)'
     _inherit = ['rwasi.workshop.mixin', 'rwasi.signoff.mixin']
@@ -47,30 +47,30 @@ class WorkOrder(models.Model):
     req_site_install = fields.Boolean(string='تركيب بالموقع')
     req_special_packing = fields.Boolean(string='تغليف خاص')
 
-    # ضبط العمليات
+    # المواد وفحص التوفر بالمخزون
+    material_line_ids = fields.One2many(
+        'rwasi.work.order.material', 'order_id', string='المواد اللازمة')
     materials_available = fields.Boolean(
-        string='المواد متوفرة بالمخزون',
-        help='عند تفعيله لا يمكن طلب مواد جديدة لأنها متوفرة، ويتم الانتقال مباشرة لاستلام المواد.')
+        string='المواد متوفرة بالمخزون', compute='_compute_materials_available',
+        help='يُحتسب تلقائياً من الكمية المتاحة بالمخزون لكل مادة.')
+
+    # الشراء والتسليم (دورة مغلقة)
+    purchase_order_ids = fields.One2many(
+        'purchase.order', 'workshop_order_id', string='طلبات الشراء')
+    purchase_order_count = fields.Integer(compute='_compute_counts')
+    delivery_note_id = fields.Many2one(
+        'rwasi.delivery.note', string='أمر التسليم', readonly=True, copy=False)
+    delivery_count = fields.Integer(compute='_compute_counts')
 
     state = fields.Selection([
         ('draft', 'مسودة'),
         ('confirmed', 'مؤكد'),
-        ('material_requested', 'تم طلب المواد'),
-        ('material_received', 'تم استلام المواد'),
         ('in_production', 'قيد التصنيع'),
         ('finished', 'انتهى التصنيع'),
         ('delivered', 'تم التسليم'),
         ('done', 'مغلق'),
         ('cancel', 'ملغي'),
     ], string='الحالة', default='draft', tracking=True, group_expand='_group_expand_state')
-
-    # المستندات المرتبطة
-    requisition_ids = fields.One2many(
-        'rwasi.material.requisition', 'work_order_id', string='طلبات المواد')
-    receipt_ids = fields.One2many(
-        'rwasi.material.receipt', 'work_order_id', string='استلام المواد')
-    requisition_count = fields.Integer(compute='_compute_doc_counts')
-    receipt_count = fields.Integer(compute='_compute_doc_counts')
 
     # تسليم العميل
     customer_sign_name = fields.Char(string='اسم مستلم العميل')
@@ -81,11 +81,17 @@ class WorkOrder(models.Model):
     def _group_expand_state(self, *args, **kwargs):
         return [s[0] for s in self._fields['state'].selection]
 
-    @api.depends('requisition_ids', 'receipt_ids')
-    def _compute_doc_counts(self):
+    @api.depends('material_line_ids.is_available')
+    def _compute_materials_available(self):
         for wo in self:
-            wo.requisition_count = len(wo.requisition_ids)
-            wo.receipt_count = len(wo.receipt_ids)
+            wo.materials_available = all(
+                line.is_available for line in wo.material_line_ids)
+
+    @api.depends('purchase_order_ids', 'delivery_note_id')
+    def _compute_counts(self):
+        for wo in self:
+            wo.purchase_order_count = len(wo.purchase_order_ids)
+            wo.delivery_count = 1 if wo.delivery_note_id else 0
 
     @api.model
     def _make_name_from_so(self, so_name):
@@ -108,7 +114,6 @@ class WorkOrder(models.Model):
                 if vals.get('sale_order_id'):
                     so = self.env['sale.order'].browse(vals['sale_order_id'])
                     base = self._make_name_from_so(so.name)
-                    # تفادي تكرار الرقم عند وجود أكثر من منتج مُصنّع في نفس أمر البيع
                     taken = self.search_count([('name', '=like', base + '%')])
                     vals['name'] = base if not taken else '%s-%d' % (base, taken + 1)
                 else:
@@ -116,55 +121,95 @@ class WorkOrder(models.Model):
                         self._sequence_code) or 'New'
         return super().create(vals_list)
 
-    # ----- أزرار سير العمل -----
-    def action_confirm(self):
-        for wo in self:
-            if wo.state == 'draft':
-                wo.state = 'confirmed'
-
+    # ----- أزرار سير العمل (دورة مغلقة) -----
     def action_request_materials(self):
+        """ينشئ طلب عرض أسعار (RFQ) في موديول الشراء للمواد الناقصة، مجمّعاً حسب المورّد."""
         for wo in self:
             if wo.materials_available:
                 raise UserError(_(
-                    'المواد متوفرة بالمخزون، لا يمكن طلب مواد جديدة. انتقل مباشرة لاستلام المواد.'))
-            if wo.state not in ('draft', 'confirmed'):
-                raise UserError(_('لا يمكن طلب المواد في الحالة الحالية.'))
-            req = self.env['rwasi.material.requisition'].create({
-                'work_order_id': wo.id,
-                'partner_id': wo.partner_id.id,
-                'project_ref': wo.project_ref,
-                'just_work_order': True,
-            })
-            for line in wo.line_ids:
-                self.env['rwasi.material.requisition.line'].create({
-                    'requisition_id': req.id,
-                    'description': line.description,
-                    'qty': line.qty,
-                    'uom': line.uom,
+                    'المواد متوفرة بالمخزون، لا يمكن طلب مواد جديدة. يمكنك تأكيد أمر التصنيع مباشرة.'))
+            shortages = wo.material_line_ids.filtered(lambda l: not l.is_available)
+            if not shortages:
+                raise UserError(_('لا توجد مواد ناقصة لطلبها.'))
+
+            by_vendor = {}
+            no_vendor = []
+            for line in shortages:
+                seller = line.material_id.seller_ids[:1]
+                if not seller:
+                    no_vendor.append(line.material_id.display_name)
+                    continue
+                by_vendor.setdefault(seller.partner_id, []).append(line)
+            if no_vendor:
+                raise UserError(_(
+                    'حدّد مورّداً (Vendor) على بطاقة المواد التالية قبل طلبها:\n- %s')
+                    % '\n- '.join(no_vendor))
+
+            PurchaseOrder = self.env['purchase.order'].sudo()
+            for vendor, lines in by_vendor.items():
+                order_lines = []
+                for l in lines:
+                    deficit = l.qty_needed - l.qty_available
+                    qty = deficit if deficit > 0 else l.qty_needed
+                    order_lines.append((0, 0, {
+                        'product_id': l.material_id.id,
+                        'product_qty': qty,
+                    }))
+                PurchaseOrder.create({
+                    'partner_id': vendor.id,
+                    'origin': wo.name,
+                    'workshop_order_id': wo.id,
+                    'order_line': order_lines,
                 })
-            wo.state = 'material_requested'
+            wo.message_post(body=_('تم إنشاء طلب/طلبات شراء (RFQ) للمواد الناقصة.'))
         return True
 
     def action_receive_materials(self):
+        """يستلم المواد من داخل الورشة بتأكيد طلبات الشراء وترحيل عمليات الاستلام."""
         for wo in self:
-            if wo.state == 'material_received':
+            if wo.materials_available:
                 continue
-            if not wo.materials_available and wo.state != 'material_requested':
-                raise UserError(_('يجب طلب المواد أولاً قبل استلامها.'))
-            if wo.state not in ('confirmed', 'material_requested'):
-                raise UserError(_('لا يمكن استلام المواد في الحالة الحالية.'))
-            self.env['rwasi.material.receipt'].create({
-                'work_order_id': wo.id,
-                'partner_id': wo.partner_id.id,
-                'project_ref': wo.project_ref,
-            })
-            wo.state = 'material_received'
+            pos = wo.purchase_order_ids.sudo()
+            if not pos:
+                raise UserError(_('اطلب المواد أولاً عبر زر «طلب المواد (شراء)».'))
+            for po in pos.filtered(lambda p: p.state in ('draft', 'sent')):
+                po.button_confirm()
+            pickings = pos.mapped('picking_ids').filtered(
+                lambda p: p.state not in ('done', 'cancel'))
+            for picking in pickings:
+                picking.action_assign()
+                for move in picking.move_ids:
+                    if 'quantity' in move._fields:
+                        move.quantity = move.product_uom_qty
+                    if 'picked' in move._fields:
+                        move.picked = True
+                try:
+                    picking.with_context(
+                        skip_backorder=True, skip_sms=True).button_validate()
+                except Exception:
+                    # في حال تطلّب الترحيل تدخلاً يدوياً يكمله أمين المخزن من تطبيق المخزون
+                    pass
+            if not wo.materials_available:
+                raise UserError(_(
+                    'تعذّر إتمام استلام جميع المواد آلياً. أكمل ترحيل الاستلام من تطبيق المخزون، '
+                    'ثم تأكد من توفّر المواد لتفعيل تأكيد التصنيع.'))
+            wo.message_post(body=_('تم استلام المواد وأصبحت متوفرة بالمخزون.'))
+        return True
+
+    def action_confirm(self):
+        for wo in self:
+            if wo.state != 'draft':
+                continue
+            if not wo.materials_available:
+                raise UserError(_(
+                    'لا يمكن تأكيد أمر التصنيع قبل توفّر المواد بالمخزون أو استلامها.'))
+            wo.state = 'confirmed'
         return True
 
     def action_start_production(self):
         for wo in self:
-            if wo.state != 'material_received':
-                raise UserError(_('لا يمكن بدء التصنيع إلا بعد استلام المواد.'))
+            if wo.state != 'confirmed':
+                raise UserError(_('يجب تأكيد أمر التصنيع أولاً قبل بدء التصنيع.'))
             wo.state = 'in_production'
             if not wo.start_date:
                 wo.start_date = fields.Date.context_today(wo)
@@ -175,7 +220,22 @@ class WorkOrder(models.Model):
             if wo.state != 'in_production':
                 raise UserError(_('لا يمكن إنهاء التصنيع إلا أثناء التصنيع.'))
             wo.state = 'finished'
+            wo._create_delivery_note()
         return True
+
+    def _create_delivery_note(self):
+        self.ensure_one()
+        if self.delivery_note_id:
+            return
+        note = self.env['rwasi.delivery.note'].sudo().with_context(
+            from_work_order=True).create({
+                'work_order_id': self.id,
+                'partner_id': self.partner_id.id,
+                'site': self.project_ref,
+                'consignee': self.partner_id.name,
+            })
+        self.delivery_note_id = note.id
+        self.message_post(body=_('تم إنشاء أمر التسليم %s عند إنهاء التصنيع.') % note.name)
 
     def action_deliver(self):
         for wo in self:
@@ -199,26 +259,25 @@ class WorkOrder(models.Model):
     def action_draft(self):
         self.write({'state': 'draft'})
 
-    def action_view_requisitions(self):
+    # ----- أزرار ذكية -----
+    def action_view_purchase_orders(self):
         self.ensure_one()
         return {
             'type': 'ir.actions.act_window',
-            'name': _('طلبات المواد'),
-            'res_model': 'rwasi.material.requisition',
+            'name': _('طلبات الشراء'),
+            'res_model': 'purchase.order',
             'view_mode': 'list,form',
-            'domain': [('work_order_id', '=', self.id)],
-            'context': {'default_work_order_id': self.id},
+            'domain': [('workshop_order_id', '=', self.id)],
         }
 
-    def action_view_receipts(self):
+    def action_view_delivery(self):
         self.ensure_one()
         return {
             'type': 'ir.actions.act_window',
-            'name': _('استلام المواد'),
-            'res_model': 'rwasi.material.receipt',
-            'view_mode': 'list,form',
-            'domain': [('work_order_id', '=', self.id)],
-            'context': {'default_work_order_id': self.id},
+            'name': _('أمر التسليم'),
+            'res_model': 'rwasi.delivery.note',
+            'view_mode': 'form,list',
+            'res_id': self.delivery_note_id.id,
         }
 
 
@@ -235,3 +294,27 @@ class WorkOrderLine(models.Model):
     uom = fields.Char(string='الوحدة')
     item_ref = fields.Char(string='مرجع البند')
     status = fields.Char(string='الحالة')
+
+
+class WorkOrderMaterial(models.Model):
+    _name = 'rwasi.work.order.material'
+    _description = 'مادة لازمة لأمر التصنيع'
+    _order = 'id'
+
+    order_id = fields.Many2one(
+        'rwasi.work.order', string='أمر التصنيع', required=True, ondelete='cascade')
+    material_id = fields.Many2one(
+        'product.product', string='المادة الخام', required=True)
+    qty_needed = fields.Float(string='الكمية المطلوبة', default=1.0)
+    qty_available = fields.Float(
+        string='المتوفر بالمخزون', compute='_compute_availability')
+    is_available = fields.Boolean(
+        string='متوفرة', compute='_compute_availability')
+    uom_name = fields.Char(related='material_id.uom_id.name', string='الوحدة')
+
+    @api.depends('material_id', 'qty_needed')
+    def _compute_availability(self):
+        for line in self:
+            avail = line.material_id.qty_available if line.material_id else 0.0
+            line.qty_available = avail
+            line.is_available = avail >= line.qty_needed

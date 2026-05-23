@@ -1,4 +1,5 @@
-from odoo import models, fields
+from odoo import models, fields, api, _
+from odoo.exceptions import UserError
 
 
 # ============================================================
@@ -10,6 +11,14 @@ class DeliveryNote(models.Model):
     _inherit = ['rwasi.workshop.mixin', 'rwasi.signoff.mixin']
     _order = 'id desc'
     _sequence_code = 'rwasi.delivery.note'
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        # دورة مغلقة: يُنشأ أمر التسليم تلقائياً عند إنهاء التصنيع فقط
+        if not self.env.context.get('from_work_order'):
+            raise UserError(_(
+                'لا يمكن إنشاء أمر تسليم يدوياً. يُنشأ تلقائياً عند إنهاء التصنيع في أمر التصنيع.'))
+        return super().create(vals_list)
 
     work_order_id = fields.Many2one('rwasi.work.order', string='أمر التشغيل')
     site = fields.Char(string='المشروع / الموقع')

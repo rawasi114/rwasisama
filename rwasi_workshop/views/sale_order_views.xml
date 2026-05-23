@@ -34,10 +34,20 @@
                         <group>
                             <div colspan="2" class="text-muted">
                                 عند تفعيل «يُصنّع في الورشة» يُنشأ أمر تصنيع تلقائياً لهذا المنتج
-                                عند تأكيد أي عرض سعر (أمر بيع) يحتوي عليه.
+                                عند تأكيد أي عرض سعر (أمر بيع) يحتوي عليه. وتُنسخ قائمة المواد أدناه
+                                إلى أمر التصنيع لفحص توفّرها بالمخزون.
                             </div>
                         </group>
                     </group>
+                    <separator string="مواد التصنيع (المواد الخام اللازمة لكل وحدة)"
+                               invisible="not is_workshop_product"/>
+                    <field name="workshop_material_ids" invisible="not is_workshop_product">
+                        <list editable="bottom">
+                            <field name="material_id"/>
+                            <field name="qty"/>
+                            <field name="uom_name"/>
+                        </list>
+                    </field>
                 </page>
             </xpath>
         </field>

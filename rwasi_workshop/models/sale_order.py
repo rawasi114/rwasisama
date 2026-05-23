@@ -10,6 +10,21 @@ class ProductTemplate(models.Model):
         help='عند تفعيله يُنشأ أمر تصنيع تلقائياً عند تأكيد أمر بيع يحتوي هذا المنتج.')
     workshop_scope = fields.Selection(
         WORKSHOP_SCOPE, string='قسم التصنيع')
+    workshop_material_ids = fields.One2many(
+        'rwasi.product.material', 'product_tmpl_id', string='مواد التصنيع')
+
+
+class ProductWorkshopMaterial(models.Model):
+    _name = 'rwasi.product.material'
+    _description = 'مادة خام لتصنيع المنتج'
+
+    product_tmpl_id = fields.Many2one(
+        'product.template', string='المنتج', required=True, ondelete='cascade')
+    material_id = fields.Many2one(
+        'product.product', string='المادة الخام', required=True)
+    qty = fields.Float(string='الكمية لكل وحدة', default=1.0)
+    uom_name = fields.Char(
+        related='material_id.uom_id.name', string='الوحدة')
 
 
 class SaleOrder(models.Model):
@@ -45,6 +60,13 @@ class SaleOrder(models.Model):
                 lambda w: w.sale_line_id.id == line.id)
             if existing:
                 continue
+            material_vals = [
+                (0, 0, {
+                    'material_id': m.material_id.id,
+                    'qty_needed': m.qty * line.product_uom_qty,
+                })
+                for m in product.product_tmpl_id.workshop_material_ids
+            ]
             WorkOrder.create({
                 'sale_order_id': self.id,
                 'sale_line_id': line.id,
@@ -54,6 +76,7 @@ class SaleOrder(models.Model):
                 'scope_of_work': line.name,
                 'workshop_scope': product.product_tmpl_id.workshop_scope,
                 'project_ref': self.name,
+                'material_line_ids': material_vals,
             })
 
     def action_view_work_orders(self):

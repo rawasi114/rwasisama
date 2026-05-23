@@ -75,8 +75,8 @@ access_toolbox_talk_user,toolbox.talk.user,model_rwasi_toolbox_talk,group_worksh
 access_toolbox_talk_manager,toolbox.talk.manager,model_rwasi_toolbox_talk,group_workshop_manager,1,1,1,1
 access_toolbox_attendee_user,toolbox.attendee.user,model_rwasi_toolbox_attendee,group_workshop_user,1,1,1,1
 access_toolbox_attendee_manager,toolbox.attendee.manager,model_rwasi_toolbox_attendee,group_workshop_manager,1,1,1,1
-access_delivery_note_user,delivery.note.user,model_rwasi_delivery_note,group_workshop_user,1,1,1,1
-access_delivery_note_manager,delivery.note.manager,model_rwasi_delivery_note,group_workshop_manager,1,1,1,1
+access_delivery_note_user,delivery.note.user,model_rwasi_delivery_note,group_workshop_user,1,1,0,0
+access_delivery_note_manager,delivery.note.manager,model_rwasi_delivery_note,group_workshop_manager,1,1,0,1
 access_delivery_line_user,delivery.line.user,model_rwasi_delivery_line,group_workshop_user,1,1,1,1
 access_delivery_line_manager,delivery.line.manager,model_rwasi_delivery_line,group_workshop_manager,1,1,1,1
 access_project_closeout_user,project.closeout.user,model_rwasi_project_closeout,group_workshop_user,1,1,1,1
@@ -91,3 +91,9 @@ access_sales_visit_line_user,sales.visit.line.user,model_rwasi_sales_visit_line,
 access_sales_visit_line_manager,sales.visit.line.manager,model_rwasi_sales_visit_line,group_workshop_manager,1,1,1,1
 access_sales_pipeline_line_user,sales.pipeline.line.user,model_rwasi_sales_pipeline_line,group_workshop_user,1,1,1,1
 access_sales_pipeline_line_manager,sales.pipeline.line.manager,model_rwasi_sales_pipeline_line,group_workshop_manager,1,1,1,1
+access_product_material_user,product.material.user,model_rwasi_product_material,group_workshop_user,1,1,1,1
+access_product_material_manager,product.material.manager,model_rwasi_product_material,group_workshop_manager,1,1,1,1
+access_work_order_material_user,work.order.material.user,model_rwasi_work_order_material,group_workshop_user,1,1,1,1
+access_work_order_material_manager,work.order.material.manager,model_rwasi_work_order_material,group_workshop_manager,1,1,1,1
+access_purchase_order_workshop_read,purchase.order.workshop.read,purchase.model_purchase_order,group_workshop_user,1,0,0,0
+access_purchase_order_line_workshop_read,purchase.order.line.workshop.read,purchase.model_purchase_order_line,group_workshop_user,1,0,0,0
