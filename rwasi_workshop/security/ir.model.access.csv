@@ -99,8 +99,8 @@ access_delivery_note_manager,delivery.note.manager,model_rwasi_delivery_note,gro
 access_delivery_note_admin,delivery.note.admin,model_rwasi_delivery_note,base.group_system,1,1,1,1
 access_delivery_line_user,delivery.line.user,model_rwasi_delivery_line,group_workshop_user,1,1,1,1
 access_delivery_line_manager,delivery.line.manager,model_rwasi_delivery_line,group_workshop_manager,1,1,1,1
-access_project_closeout_user,project.closeout.user,model_rwasi_project_closeout,group_workshop_user,1,1,1,0
-access_project_closeout_manager,project.closeout.manager,model_rwasi_project_closeout,group_workshop_manager,1,1,1,0
+access_project_closeout_user,project.closeout.user,model_rwasi_project_closeout,group_workshop_user,1,1,0,0
+access_project_closeout_manager,project.closeout.manager,model_rwasi_project_closeout,group_workshop_manager,1,1,0,0
 access_project_closeout_admin,project.closeout.admin,model_rwasi_project_closeout,base.group_system,1,1,1,1
 access_closeout_line_user,closeout.line.user,model_rwasi_closeout_line,group_workshop_user,1,1,1,1
 access_closeout_line_manager,closeout.line.manager,model_rwasi_closeout_line,group_workshop_manager,1,1,1,1

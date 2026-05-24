@@ -366,13 +366,14 @@ class WorkOrder(models.Model):
         self.ensure_one()
         if self.closeout_id:
             return
-        co = self.env['rwasi.project.closeout'].create({
-            'work_order_id': self.id,
-            'partner_id': self.partner_id.id,
-            'project_ref': self.project_ref,
-            'customer_sign_name': self.customer_sign_name,
-            'handover_date': fields.Date.context_today(self),
-        })
+        co = self.env['rwasi.project.closeout'].sudo().with_context(
+            from_work_order=True).create({
+                'work_order_id': self.id,
+                'partner_id': self.partner_id.id,
+                'project_ref': self.project_ref,
+                'customer_sign_name': self.customer_sign_name,
+                'handover_date': fields.Date.context_today(self),
+            })
         self.closeout_id = co.id
         self.message_post(body=_('تم إنشاء استبيان إغلاق المشروع %s.') % co.name)
 

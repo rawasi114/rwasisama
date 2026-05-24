@@ -6,7 +6,7 @@
         <field name="name">rwasi.project.closeout.form</field>
         <field name="model">rwasi.project.closeout</field>
         <field name="arch" type="xml">
-            <form string="إغلاق وتسليم المشروع">
+            <form string="إغلاق وتسليم المشروع" create="0">
                 <header>
                     <button name="action_done" string="إغلاق المشروع" type="object" class="btn-primary"
                             invisible="state != 'draft'"/>
@@ -100,7 +100,7 @@
         <field name="name">rwasi.project.closeout.list</field>
         <field name="model">rwasi.project.closeout</field>
         <field name="arch" type="xml">
-            <list string="إغلاق المشاريع" decoration-success="state == 'done'" decoration-muted="state == 'cancel'">
+            <list string="المشاريع المغلقة" create="0" decoration-success="state == 'done'" decoration-muted="state == 'cancel'">
                 <field name="name"/>
                 <field name="work_order_id"/>
                 <field name="project_ref"/>
@@ -112,9 +112,10 @@
         </field>
     </record>
     <record id="action_project_closeout" model="ir.actions.act_window">
-        <field name="name">إغلاق وتسليم المشروع</field>
+        <field name="name">المشاريع المغلقة</field>
         <field name="res_model">rwasi.project.closeout</field>
         <field name="view_mode">list,form</field>
+        <field name="context">{'create': False}</field>
     </record>
 
 </odoo>

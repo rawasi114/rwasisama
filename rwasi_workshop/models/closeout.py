@@ -71,6 +71,15 @@ class ProjectCloseout(models.Model):
     client_rep_signature = fields.Binary(string='ممثل العميل - التوقيع')
     client_stamp = fields.Binary(string='ختم العميل')
 
+    @api.model_create_multi
+    def create(self, vals_list):
+        # لا يُنشأ الإغلاق يدوياً: فقط كآخر خطوة في دورة أمر التصنيع
+        if not self.env.context.get('from_work_order'):
+            raise UserError(_(
+                'لا يمكن إنشاء إغلاق مشروع يدوياً. يُنشأ تلقائياً كآخر خطوة في دورة '
+                'أمر التصنيع عند الضغط على «إغلاق».'))
+        return super().create(vals_list)
+
     @api.depends('date_started', 'promised_days', 'installation_done_date')
     def _compute_commitment(self):
         for co in self:

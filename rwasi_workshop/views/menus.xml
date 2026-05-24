@@ -14,7 +14,7 @@
     <menuitem id="menu_delivery_note" name="التسليمات"
               parent="menu_rwasi_root" action="action_delivery_note" sequence="20"/>
 
-    <menuitem id="menu_project_closeout" name="إغلاق المشاريع"
+    <menuitem id="menu_project_closeout" name="المشاريع المغلقة"
               parent="menu_rwasi_root" action="action_project_closeout" sequence="30"/>
 
 </odoo>
