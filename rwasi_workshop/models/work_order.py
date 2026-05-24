@@ -61,6 +61,17 @@ class WorkOrder(models.Model):
     has_draft_rfq = fields.Boolean(compute='_compute_purchase_flow')
     has_rfq_to_confirm = fields.Boolean(compute='_compute_purchase_flow')
     has_pending_receipt = fields.Boolean(compute='_compute_purchase_flow')
+    # اعتماد طلب المواد من مدير المبيعات والورش
+    material_approval_state = fields.Selection([
+        ('draft', 'لم يُطلب'),
+        ('to_approve', 'بانتظار الاعتماد'),
+        ('approved', 'معتمد'),
+        ('rejected', 'مرفوض'),
+        ('to_revise', 'يحتاج تعديل'),
+    ], string='اعتماد طلب المواد', default='draft', tracking=True, copy=False)
+    material_approval_reason = fields.Text(string='سبب الرفض / الإعادة', copy=False)
+    material_approver_id = fields.Many2one(
+        'res.users', string='معتمِد المواد', readonly=True, copy=False)
     delivery_note_id = fields.Many2one(
         'rwasi.delivery.note', string='أمر التسليم', readonly=True, copy=False)
     delivery_count = fields.Integer(compute='_compute_counts')
@@ -170,6 +181,62 @@ class WorkOrder(models.Model):
         return super().create(vals_list)
 
     # ----- أزرار سير العمل (دورة مغلقة) -----
+    def _ensure_materials_manager(self):
+        if not (self.env.user.has_group('rwasi_workshop.group_workshop_manager')
+                or self.env.is_superuser()):
+            raise UserError(_('اعتماد طلب المواد متاح لمدير المبيعات والورش فقط.'))
+
+    def action_submit_materials(self):
+        """يرفع موظف الورشة طلب المواد لاعتماد المدير."""
+        for wo in self:
+            if not wo.material_line_ids:
+                raise UserError(_('أضف قائمة المواد (المكوّنات) أولاً.'))
+            if wo.paid_ratio < 0.5:
+                raise UserError(_(
+                    'لا يمكن طلب المواد قبل سداد دفعة لا تقل عن 50% من قيمة الطلب.'))
+            wo._check_materials_storable()
+            wo.material_approval_state = 'to_approve'
+            wo.material_approval_reason = False
+            wo.message_post(body=_('تم رفع طلب المواد لاعتماد مدير المبيعات والورش.'))
+        return True
+
+    def action_approve_materials(self):
+        for wo in self:
+            wo._ensure_materials_manager()
+            if wo.material_approval_state != 'to_approve':
+                continue
+            wo.material_approval_state = 'approved'
+            wo.material_approver_id = self.env.user
+            wo.material_approval_reason = False
+            wo.message_post(body=_('تم اعتماد طلب المواد.'))
+        return True
+
+    def action_reject_materials(self):
+        for wo in self:
+            wo._ensure_materials_manager()
+            if wo.material_approval_state != 'to_approve':
+                continue
+            if not wo.material_approval_reason:
+                raise UserError(_('اكتب سبب الرفض في حقل «سبب الرفض / الإعادة» أولاً.'))
+            wo.material_approval_state = 'rejected'
+            wo.material_approver_id = self.env.user
+            wo.message_post(body=_('تم رفض طلب المواد. السبب: %s')
+                            % wo.material_approval_reason)
+        return True
+
+    def action_revise_materials(self):
+        for wo in self:
+            wo._ensure_materials_manager()
+            if wo.material_approval_state != 'to_approve':
+                continue
+            if not wo.material_approval_reason:
+                raise UserError(_('اكتب سبب الإعادة في حقل «سبب الرفض / الإعادة» أولاً.'))
+            wo.material_approval_state = 'to_revise'
+            wo.material_approver_id = self.env.user
+            wo.message_post(body=_('أُعيد طلب المواد للتعديل. السبب: %s')
+                            % wo.material_approval_reason)
+        return True
+
     def _get_placeholder_vendor(self):
         """مورّد مبدئي يُستخدم للمواد التي لم يُحدَّد لها مورّد بعد (يغيّره المشتري)."""
         Partner = self.env['res.partner'].sudo()
@@ -205,6 +272,9 @@ class WorkOrder(models.Model):
             if wo.paid_ratio < 0.5:
                 raise UserError(_(
                     'لا يمكن طلب المواد قبل سداد دفعة لا تقل عن 50% من قيمة الطلب.'))
+            if wo.material_approval_state != 'approved':
+                raise UserError(_(
+                    'طلب المواد يحتاج اعتماد مدير المبيعات والورش أولاً.'))
             wo._check_materials_storable()
             if wo.materials_available:
                 raise UserError(_(

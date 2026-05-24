@@ -28,9 +28,21 @@
         <field name="arch" type="xml">
             <form string="أمر تشغيل / تصنيع">
                 <header>
+                    <button name="action_submit_materials" string="طلب اعتماد المواد" type="object"
+                            class="btn-primary"
+                            invisible="state != 'draft' or materials_available or purchase_order_count &gt; 0 or not material_line_ids or paid_ratio &lt; 0.5 or material_approval_state in ('to_approve','approved')"/>
+                    <button name="action_approve_materials" string="اعتماد المواد" type="object"
+                            class="btn-primary" groups="rwasi_workshop.group_workshop_manager"
+                            invisible="material_approval_state != 'to_approve'"/>
+                    <button name="action_reject_materials" string="رفض" type="object"
+                            groups="rwasi_workshop.group_workshop_manager"
+                            invisible="material_approval_state != 'to_approve'"/>
+                    <button name="action_revise_materials" string="إعادة للتعديل" type="object"
+                            groups="rwasi_workshop.group_workshop_manager"
+                            invisible="material_approval_state != 'to_approve'"/>
                     <button name="action_request_materials" string="إنشاء طلب عرض سعر" type="object"
                             class="btn-primary"
-                            invisible="state != 'draft' or materials_available or purchase_order_count &gt; 0 or not material_line_ids or paid_ratio &lt; 0.5"/>
+                            invisible="state != 'draft' or materials_available or purchase_order_count &gt; 0 or not material_line_ids or paid_ratio &lt; 0.5 or material_approval_state != 'approved'"/>
                     <button name="action_send_rfq" string="إرسال عرض السعر" type="object"
                             invisible="state != 'draft' or not has_draft_rfq"/>
                     <button name="action_confirm_purchase" string="تأكيد الطلب" type="object"
@@ -81,10 +93,30 @@
                     <field name="has_rfq_to_confirm" invisible="1"/>
                     <field name="has_pending_receipt" invisible="1"/>
                     <field name="paid_ratio" invisible="1"/>
+                    <field name="material_approval_state" invisible="1"/>
                     <div class="alert alert-info" role="alert"
                          invisible="state != 'draft' or paid_ratio &gt;= 0.5">
                         بانتظار سداد دفعة لا تقل عن 50% من قيمة الطلب لتتمكّن من طلب شراء المواد.
                     </div>
+                    <div class="alert alert-info" role="alert"
+                         invisible="material_approval_state != 'to_approve'">
+                        طلب المواد بانتظار اعتماد مدير المبيعات والورش.
+                    </div>
+                    <div class="alert alert-danger" role="alert"
+                         invisible="material_approval_state != 'rejected'">
+                        تم رفض طلب المواد (انظر سبب الرفض / الإعادة أدناه).
+                    </div>
+                    <div class="alert alert-warning" role="alert"
+                         invisible="material_approval_state != 'to_revise'">
+                        أُعيد طلب المواد للتعديل (انظر سبب الرفض / الإعادة أدناه).
+                    </div>
+                    <group invisible="material_approval_state not in ('to_approve','rejected','to_revise')">
+                        <field name="material_approval_reason"
+                               readonly="material_approval_state != 'to_approve'"
+                               placeholder="يكتبه المدير عند الرفض أو الإعادة..."/>
+                        <field name="material_approver_id" readonly="1"
+                               invisible="material_approval_state in ('draft','to_approve')"/>
+                    </group>
                     <div class="alert alert-warning" role="alert"
                          invisible="state != 'confirmed' or paid_ratio &gt;= 0.5">
                         لا يمكن بدء التصنيع قبل سداد دفعة أولى لا تقل عن 50% من قيمة الفاتورة.
