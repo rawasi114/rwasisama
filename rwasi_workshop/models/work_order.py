@@ -88,9 +88,6 @@ class WorkOrder(models.Model):
     material_received_by = fields.Char(string='مستلم المواد (الورشة)', copy=False)
     material_handover_signature = fields.Binary(
         string='توقيع مستلم المواد', copy=False)
-    delivery_note_id = fields.Many2one(
-        'rwasi.delivery.note', string='أمر التسليم', readonly=True, copy=False)
-    delivery_count = fields.Integer(compute='_compute_counts')
     closeout_id = fields.Many2one(
         'rwasi.project.closeout', string='إغلاق المشروع', readonly=True, copy=False)
     closeout_count = fields.Integer(compute='_compute_counts')
@@ -148,11 +145,10 @@ class WorkOrder(models.Model):
             wo.materials_available = bool(wo.material_line_ids) and all(
                 line.is_available for line in wo.material_line_ids)
 
-    @api.depends('purchase_order_ids', 'delivery_note_id', 'closeout_id')
+    @api.depends('purchase_order_ids', 'closeout_id')
     def _compute_counts(self):
         for wo in self:
             wo.purchase_order_count = len(wo.purchase_order_ids)
-            wo.delivery_count = 1 if wo.delivery_note_id else 0
             wo.closeout_count = 1 if wo.closeout_id else 0
 
     @api.depends('purchase_order_ids', 'purchase_order_ids.state')
@@ -571,22 +567,7 @@ class WorkOrder(models.Model):
             if wo.state != 'in_production':
                 raise UserError(_('لا يمكن إنهاء التصنيع إلا أثناء التصنيع.'))
             wo.state = 'finished'
-            wo._create_delivery_note()
         return True
-
-    def _create_delivery_note(self):
-        self.ensure_one()
-        if self.delivery_note_id:
-            return
-        note = self.env['rwasi.delivery.note'].sudo().with_context(
-            from_work_order=True).create({
-                'work_order_id': self.id,
-                'partner_id': self.partner_id.id,
-                'site': self.project_ref,
-                'consignee': self.partner_id.name,
-            })
-        self.delivery_note_id = note.id
-        self.message_post(body=_('تم إنشاء أمر التسليم %s عند إنهاء التصنيع.') % note.name)
 
     def action_deliver(self):
         for wo in self:
@@ -631,10 +612,18 @@ class WorkOrder(models.Model):
         self.message_post(body=_('تم إنشاء استبيان إغلاق المشروع %s.') % co.name)
 
     def action_cancel(self):
-        self.write({'state': 'cancel'})
+        for wo in self:
+            if wo.state in ('delivered', 'done'):
+                raise UserError(_(
+                    'لا يمكن إلغاء أمر بعد التسليم للعميل أو الإغلاق.'))
+            wo.state = 'cancel'
 
     def action_draft(self):
-        self.write({'state': 'draft'})
+        for wo in self:
+            if wo.state in ('delivered', 'done'):
+                raise UserError(_(
+                    'لا يمكن إعادة أمر مُسلَّم أو مغلق إلى مسودة.'))
+            wo.state = 'draft'
 
     # ----- أزرار ذكية -----
     def action_view_purchase_orders(self):
@@ -645,16 +634,6 @@ class WorkOrder(models.Model):
             'res_model': 'purchase.order',
             'view_mode': 'list,form',
             'domain': [('workshop_order_id', '=', self.id)],
-        }
-
-    def action_view_delivery(self):
-        self.ensure_one()
-        return {
-            'type': 'ir.actions.act_window',
-            'name': _('أمر التسليم'),
-            'res_model': 'rwasi.delivery.note',
-            'view_mode': 'form,list',
-            'res_id': self.delivery_note_id.id,
         }
 
     def action_view_closeout(self):

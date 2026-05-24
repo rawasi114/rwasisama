@@ -8,27 +8,6 @@
         <field name="padding">4</field>
     </record>
 
-    <record id="seq_material_requisition" model="ir.sequence">
-        <field name="name">طلب مواد</field>
-        <field name="code">rwasi.material.requisition</field>
-        <field name="prefix">26-RS-WS-02/</field>
-        <field name="padding">4</field>
-    </record>
-
-    <record id="seq_material_receipt" model="ir.sequence">
-        <field name="name">استلام مواد</field>
-        <field name="code">rwasi.material.receipt</field>
-        <field name="prefix">26-RS-WS-03/</field>
-        <field name="padding">4</field>
-    </record>
-
-    <record id="seq_material_issue" model="ir.sequence">
-        <field name="name">صرف مواد</field>
-        <field name="code">rwasi.material.issue</field>
-        <field name="prefix">26-RS-WS-04/</field>
-        <field name="padding">4</field>
-    </record>
-
     <record id="seq_rework" model="ir.sequence">
         <field name="name">إعادة أعمال</field>
         <field name="code">rwasi.rework</field>
@@ -85,34 +64,6 @@
         <field name="padding">4</field>
     </record>
 
-    <record id="seq_carpentry_job" model="ir.sequence">
-        <field name="name">أمر شغل نجارة</field>
-        <field name="code">rwasi.carpentry.job</field>
-        <field name="prefix">26-RS-WS-11/</field>
-        <field name="padding">4</field>
-    </record>
-
-    <record id="seq_steelwork_job" model="ir.sequence">
-        <field name="name">أمر شغل حدادة</field>
-        <field name="code">rwasi.steelwork.job</field>
-        <field name="prefix">26-RS-WS-12/</field>
-        <field name="padding">4</field>
-    </record>
-
-    <record id="seq_aluminum_job" model="ir.sequence">
-        <field name="name">أمر شغل ألمنيوم</field>
-        <field name="code">rwasi.aluminum.job</field>
-        <field name="prefix">26-RS-WS-13/</field>
-        <field name="padding">4</field>
-    </record>
-
-    <record id="seq_cnc_job" model="ir.sequence">
-        <field name="name">أمر شغل CNC</field>
-        <field name="code">rwasi.cnc.job</field>
-        <field name="prefix">26-RS-WS-14/</field>
-        <field name="padding">4</field>
-    </record>
-
     <record id="seq_qc_inspection" model="ir.sequence">
         <field name="name">فحص الجودة</field>
         <field name="code">rwasi.qc.inspection</field>
@@ -141,13 +92,6 @@
         <field name="padding">4</field>
     </record>
 
-    <record id="seq_delivery_note" model="ir.sequence">
-        <field name="name">إذن خروج وتسليم</field>
-        <field name="code">rwasi.delivery.note</field>
-        <field name="prefix">26-GP/</field>
-        <field name="padding">4</field>
-    </record>
-
     <record id="seq_project_closeout" model="ir.sequence">
         <field name="name">إغلاق وتسليم المشروع</field>
         <field name="code">rwasi.project.closeout</field>
@@ -155,18 +99,5 @@
         <field name="padding">4</field>
     </record>
 
-    <record id="seq_material_request" model="ir.sequence">
-        <field name="name">طلب مواد (SO)</field>
-        <field name="code">rwasi.material.request</field>
-        <field name="prefix">26-MR/</field>
-        <field name="padding">4</field>
-    </record>
-
-    <record id="seq_sales_daily_report" model="ir.sequence">
-        <field name="name">التقرير اليومي للمبيعات</field>
-        <field name="code">rwasi.sales.daily.report</field>
-        <field name="prefix">26-RS-WS-22/</field>
-        <field name="padding">4</field>
-    </record>
 
 </odoo>

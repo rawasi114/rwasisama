@@ -8,12 +8,6 @@
               parent="menu_rwasi_root" sequence="10"/>
     <menuitem id="menu_work_order" name="أوامر التصنيع"
               parent="menu_rwasi_operations" action="action_work_order" sequence="10"/>
-    <menuitem id="menu_delivery_note" name="أوامر التسليم"
-              parent="menu_rwasi_operations" action="action_delivery_note" sequence="20"/>
-    <menuitem id="menu_material_request" name="طلبات المواد"
-              parent="menu_rwasi_operations" action="action_material_request" sequence="30"/>
-    <menuitem id="menu_qc_operations" name="فحوصات الجودة"
-              parent="menu_rwasi_operations" action="action_qc_inspection" sequence="40"/>
     <menuitem id="menu_measurement_sheet" name="المعاينات"
               parent="menu_rwasi_operations" action="action_measurement_sheet" sequence="50"/>
     <menuitem id="menu_workshop_bom" name="قوائم المواد"

@@ -51,11 +51,6 @@ class SignoffMixin(models.AbstractModel):
     prepared_phone = fields.Char(string='معد النموذج - الهاتف')
     prepared_signature = fields.Binary(string='معد النموذج - التوقيع')
 
-    supervisor_name = fields.Char(string='مشرف الورشة - الاسم')
-    supervisor_date = fields.Date(string='مشرف الورشة - التاريخ')
-    supervisor_section = fields.Char(string='مشرف الورشة - القسم')
-    supervisor_signature = fields.Binary(string='مشرف الورشة - التوقيع')
-
     manager_name = fields.Char(string='مدير العمليات - الاسم')
     manager_date = fields.Date(string='مدير العمليات - التاريخ')
     manager_signature = fields.Binary(string='مدير العمليات - التوقيع')
