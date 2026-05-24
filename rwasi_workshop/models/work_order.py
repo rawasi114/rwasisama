@@ -72,6 +72,22 @@ class WorkOrder(models.Model):
     material_approval_reason = fields.Text(string='سبب الرفض / الإعادة', copy=False)
     material_approver_id = fields.Many2one(
         'res.users', string='معتمِد المواد', readonly=True, copy=False)
+    # الإسناد والإشعارات والتسليم
+    material_approver_assignee_id = fields.Many2one(
+        'res.users', string='المسؤول عن الاعتماد', copy=False,
+        help='يُسنده مشرف الورشة عند رفع الطلب؛ يصله إشعار ليقرّر.')
+    purchase_user_id = fields.Many2one(
+        'res.users', string='موظف المشتريات', copy=False,
+        help='يُسنده المعتمِد؛ يصله إشعار وينفّذ الشراء من تطبيق المشتريات.')
+    can_approve_materials = fields.Boolean(compute='_compute_user_flags')
+    can_handle_purchase = fields.Boolean(compute='_compute_user_flags')
+    material_handover_done = fields.Boolean(
+        string='تم تسليم المواد للورشة', readonly=True, copy=False)
+    material_handover_date = fields.Date(
+        string='تاريخ تسليم المواد', readonly=True, copy=False)
+    material_received_by = fields.Char(string='مستلم المواد (الورشة)', copy=False)
+    material_handover_signature = fields.Binary(
+        string='توقيع مستلم المواد', copy=False)
     delivery_note_id = fields.Many2one(
         'rwasi.delivery.note', string='أمر التسليم', readonly=True, copy=False)
     delivery_count = fields.Integer(compute='_compute_counts')
@@ -181,13 +197,25 @@ class WorkOrder(models.Model):
         return super().create(vals_list)
 
     # ----- أزرار سير العمل (دورة مغلقة) -----
-    def _ensure_materials_manager(self):
-        if not (self.env.user.has_group('rwasi_workshop.group_workshop_manager')
-                or self.env.is_superuser()):
-            raise UserError(_('اعتماد طلب المواد متاح لمدير المبيعات والورش فقط.'))
+    @api.depends_context('uid')
+    @api.depends('material_approver_assignee_id', 'purchase_user_id')
+    def _compute_user_flags(self):
+        user = self.env.user
+        is_mgr = (user.has_group('rwasi_workshop.group_workshop_manager')
+                  or self.env.is_superuser())
+        for wo in self:
+            wo.can_approve_materials = is_mgr or (
+                wo.material_approver_assignee_id.id == user.id)
+            wo.can_handle_purchase = is_mgr or (
+                wo.purchase_user_id.id == user.id)
+
+    def _ensure_can_approve(self):
+        if not self.can_approve_materials:
+            raise UserError(_(
+                'الاعتماد متاح للمسؤول المُسنَد إليه أو المدير فقط.'))
 
     def action_submit_materials(self):
-        """يرفع موظف الورشة طلب المواد لاعتماد المدير."""
+        """يرفع مشرف الورشة طلب المواد لاعتماد المسؤول المُسنَد إليه."""
         for wo in self:
             if not wo.material_line_ids:
                 raise UserError(_('أضف قائمة المواد (المكوّنات) أولاً.'))
@@ -195,25 +223,46 @@ class WorkOrder(models.Model):
                 raise UserError(_(
                     'لا يمكن طلب المواد قبل سداد دفعة لا تقل عن 50% من قيمة الطلب.'))
             wo._check_materials_storable()
+            if not wo.material_approver_assignee_id:
+                raise UserError(_(
+                    'أسند الطلب إلى مستخدم مسؤول (للاعتماد) قبل رفعه.'))
             wo.material_approval_state = 'to_approve'
             wo.material_approval_reason = False
-            wo.message_post(body=_('تم رفع طلب المواد لاعتماد المسؤول.'))
+            wo.activity_schedule(
+                'mail.mail_activity_data_todo',
+                user_id=wo.material_approver_assignee_id.id,
+                summary=_('اعتماد طلب مواد'),
+                note=_('طلب مواد بانتظار اعتمادك لأمر التصنيع %s.') % wo.name)
+            wo.message_post(body=_('تم رفع طلب المواد لاعتماد المسؤول (%s).')
+                            % wo.material_approver_assignee_id.name)
         return True
 
     def action_approve_materials(self):
         for wo in self:
-            wo._ensure_materials_manager()
+            wo._ensure_can_approve()
             if wo.material_approval_state != 'to_approve':
                 continue
+            if not wo.purchase_user_id:
+                raise UserError(_(
+                    'حدّد موظف المشتريات (المُسنَد إليه) قبل الاعتماد.'))
             wo.material_approval_state = 'approved'
             wo.material_approver_id = self.env.user
             wo.material_approval_reason = False
-            wo.message_post(body=_('تم اعتماد طلب المواد.'))
+            wo._create_material_rfq()
+            wo.activity_schedule(
+                'mail.mail_activity_data_todo',
+                user_id=wo.purchase_user_id.id,
+                summary=_('تنفيذ شراء مواد'),
+                note=_('تم اعتماد طلب المواد لأمر التصنيع %s. '
+                       'أكمل طلب الشراء من تطبيق المشتريات ثم سلّم المواد للورشة.')
+                % wo.name)
+            wo.message_post(body=_('تم اعتماد طلب المواد وإسناده إلى %s.')
+                            % wo.purchase_user_id.name)
         return True
 
     def action_reject_materials(self):
         for wo in self:
-            wo._ensure_materials_manager()
+            wo._ensure_can_approve()
             if wo.material_approval_state != 'to_approve':
                 continue
             if not wo.material_approval_reason:
@@ -226,7 +275,7 @@ class WorkOrder(models.Model):
 
     def action_revise_materials(self):
         for wo in self:
-            wo._ensure_materials_manager()
+            wo._ensure_can_approve()
             if wo.material_approval_state != 'to_approve':
                 continue
             if not wo.material_approval_reason:
@@ -235,6 +284,62 @@ class WorkOrder(models.Model):
             wo.material_approver_id = self.env.user
             wo.message_post(body=_('أُعيد طلب المواد للتعديل. السبب: %s')
                             % wo.material_approval_reason)
+        return True
+
+    def _create_material_rfq(self):
+        """ينشئ طلب شراء مسودة مربوطاً بأمر التصنيع باسم موظف المشتريات
+        (يكمله ويستلمه من تطبيق المشتريات الرئيسي)."""
+        self.ensure_one()
+        shortages = self.material_line_ids.filtered(lambda l: not l.is_available)
+        if not shortages:
+            return
+        by_vendor = {}
+        no_vendor = []
+        for line in shortages:
+            vendor = line.vendor_id or line.material_id.seller_ids[:1].partner_id
+            if vendor:
+                by_vendor.setdefault(vendor, []).append(line)
+            else:
+                no_vendor.append(line)
+        if no_vendor:
+            by_vendor.setdefault(self._get_placeholder_vendor(), []).extend(no_vendor)
+        PurchaseOrder = self.env['purchase.order'].sudo()
+        warehouse = self.company_id.sudo().workshop_warehouse_id
+        for vendor, lines in by_vendor.items():
+            order_lines = []
+            for l in lines:
+                deficit = l.qty_needed - l.qty_available
+                qty = deficit if deficit > 0 else l.qty_needed
+                order_lines.append((0, 0, {
+                    'product_id': l.material_id.id,
+                    'product_qty': qty,
+                }))
+            vals = {
+                'partner_id': vendor.id,
+                'origin': self.name,
+                'workshop_order_id': self.id,
+                'order_line': order_lines,
+            }
+            if self.purchase_user_id:
+                vals['user_id'] = self.purchase_user_id.id
+            if warehouse and warehouse.in_type_id:
+                vals['picking_type_id'] = warehouse.in_type_id.id
+            PurchaseOrder.create(vals)
+
+    def action_handover_materials(self):
+        """موظف المشتريات يسلّم المواد للورشة ويأخذ توقيع المستلم."""
+        for wo in self:
+            if not (wo.can_handle_purchase or self.env.is_superuser()):
+                raise UserError(_(
+                    'تسليم المواد للورشة متاح لموظف المشتريات المُسنَد أو المدير فقط.'))
+            if not wo.material_received_by:
+                raise UserError(_('اكتب اسم مستلم المواد من الورشة.'))
+            if not wo.material_handover_signature:
+                raise UserError(_('التقط توقيع مستلم المواد.'))
+            wo.material_handover_done = True
+            wo.material_handover_date = fields.Date.context_today(wo)
+            wo.message_post(body=_('تم تسليم المواد للورشة واستلامها بواسطة %s.')
+                            % wo.material_received_by)
         return True
 
     def _get_placeholder_vendor(self):
