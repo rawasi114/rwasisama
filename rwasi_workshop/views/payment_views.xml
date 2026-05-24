@@ -5,7 +5,7 @@
         <field name="name">rwasi.customer.payment.list</field>
         <field name="model">rwasi.customer.payment</field>
         <field name="arch" type="xml">
-            <list string="دفعات العميل" editable="bottom">
+            <list string="دفعات العميل">
                 <field name="date"/>
                 <field name="name"/>
                 <field name="sale_order_id"/>
