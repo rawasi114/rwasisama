@@ -97,27 +97,32 @@ class WorkOrder(models.Model):
     def _group_expand_state(self, *args, **kwargs):
         return [s[0] for s in self._fields['state'].selection]
 
-    @api.depends('sale_order_id', 'sale_order_id.invoice_ids.payment_state',
+    @api.depends('sale_order_id', 'sale_order_id.amount_total',
+                 'sale_order_id.invoice_ids.payment_state',
                  'sale_order_id.invoice_ids.state',
                  'sale_order_id.invoice_ids.amount_total',
                  'sale_order_id.invoice_ids.amount_residual')
     def _compute_payment_status(self):
         for wo in self:
-            so = wo.sale_order_id
-            invoices = so.sudo().invoice_ids.filtered(
-                lambda m: m.move_type == 'out_invoice' and m.state == 'posted'
-            ) if so else False
-            if not invoices:
+            so = wo.sale_order_id.sudo() if wo.sale_order_id else False
+            order_total = so.amount_total if so else 0.0
+            if not so or order_total <= 0:
                 wo.payment_status = 'not_paid'
                 wo.paid_ratio = 0.0
                 continue
-            total = sum(invoices.mapped('amount_total'))
-            residual = sum(invoices.mapped('amount_residual'))
-            wo.paid_ratio = ((total - residual) / total) if total else 0.0
-            pstates = invoices.mapped('payment_state')
-            if all(s in ('paid', 'in_payment', 'reversed') for s in pstates):
+            invoices = so.invoice_ids.filtered(
+                lambda m: m.move_type in ('out_invoice', 'out_refund')
+                and m.state == 'posted')
+            # المُحصَّل فعلياً (الفواتير ناقص المتبقّي، مع خصم الإشعارات الدائنة)
+            collected = 0.0
+            for inv in invoices:
+                sign = 1.0 if inv.move_type == 'out_invoice' else -1.0
+                collected += sign * (inv.amount_total - inv.amount_residual)
+            ratio = collected / order_total if order_total else 0.0
+            wo.paid_ratio = ratio
+            if ratio >= 0.999:
                 wo.payment_status = 'paid'
-            elif any(s in ('partial', 'paid', 'in_payment') for s in pstates):
+            elif ratio > 0.0:
                 wo.payment_status = 'partial'
             else:
                 wo.payment_status = 'not_paid'
