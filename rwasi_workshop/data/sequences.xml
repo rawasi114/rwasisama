@@ -29,6 +29,13 @@
         <field name="padding">4</field>
     </record>
 
+    <record id="seq_rework" model="ir.sequence">
+        <field name="name">إعادة أعمال</field>
+        <field name="code">rwasi.rework</field>
+        <field name="prefix">26-RS-WS-23/</field>
+        <field name="padding">4</field>
+    </record>
+
     <record id="seq_daily_preparation" model="ir.sequence">
         <field name="name">التحضير اليومي</field>
         <field name="code">rwasi.daily.preparation</field>

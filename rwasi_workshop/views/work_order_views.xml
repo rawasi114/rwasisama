@@ -218,4 +218,35 @@
         </field>
     </record>
 
+    <!-- ===== تحليلات أوامر التصنيع (Pivot / Graph) ===== -->
+    <record id="view_work_order_pivot" model="ir.ui.view">
+        <field name="name">rwasi.work.order.pivot</field>
+        <field name="model">rwasi.work.order</field>
+        <field name="arch" type="xml">
+            <pivot string="تحليل أوامر التصنيع">
+                <field name="workshop_scope" type="row"/>
+                <field name="state" type="col"/>
+                <field name="product_qty" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="view_work_order_graph" model="ir.ui.view">
+        <field name="name">rwasi.work.order.graph</field>
+        <field name="model">rwasi.work.order</field>
+        <field name="arch" type="xml">
+            <graph string="تحليل أوامر التصنيع" type="bar">
+                <field name="workshop_scope"/>
+                <field name="product_qty" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="action_work_order_analysis" model="ir.actions.act_window">
+        <field name="name">تحليل أوامر التصنيع</field>
+        <field name="res_model">rwasi.work.order</field>
+        <field name="view_mode">graph,pivot,list</field>
+        <field name="search_view_id" ref="view_work_order_search"/>
+    </record>
+
 </odoo>

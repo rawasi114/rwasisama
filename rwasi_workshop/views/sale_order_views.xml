@@ -53,4 +53,30 @@
         </field>
     </record>
 
+    <!-- قوائم المواد: المنتجات المُعلَّمة بأنها تُصنّع في الورشة -->
+    <record id="view_workshop_bom_list" model="ir.ui.view">
+        <field name="name">product.template.workshop.bom.list</field>
+        <field name="model">product.template</field>
+        <field name="arch" type="xml">
+            <list string="قوائم المواد">
+                <field name="default_code"/>
+                <field name="name"/>
+                <field name="workshop_scope"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_workshop_bom" model="ir.actions.act_window">
+        <field name="name">قوائم المواد</field>
+        <field name="res_model">product.template</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('is_workshop_product', '=', True)]</field>
+        <field name="context">{'default_is_workshop_product': True}</field>
+        <field name="view_id" ref="view_workshop_bom_list"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">لا توجد منتجات ورشة بعد</p>
+            <p>علّم المنتج بأنه «يُصنّع في الورشة» وأضف مواده في تبويب «تصنيع الورشة».</p>
+        </field>
+    </record>
+
 </odoo>

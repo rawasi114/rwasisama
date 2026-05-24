@@ -9,6 +9,7 @@ from . import labor
 from . import measurement
 from . import job_orders
 from . import quality
+from . import rework
 from . import maintenance
 from . import hse
 from . import delivery
