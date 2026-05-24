@@ -100,7 +100,7 @@
                     </div>
                     <div class="alert alert-info" role="alert"
                          invisible="material_approval_state != 'to_approve'">
-                        طلب المواد بانتظار اعتماد مدير المبيعات والورش.
+                        طلب المواد بانتظار اعتماد المسؤول.
                     </div>
                     <div class="alert alert-danger" role="alert"
                          invisible="material_approval_state != 'rejected'">

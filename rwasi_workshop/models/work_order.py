@@ -197,7 +197,7 @@ class WorkOrder(models.Model):
             wo._check_materials_storable()
             wo.material_approval_state = 'to_approve'
             wo.material_approval_reason = False
-            wo.message_post(body=_('تم رفع طلب المواد لاعتماد مدير المبيعات والورش.'))
+            wo.message_post(body=_('تم رفع طلب المواد لاعتماد المسؤول.'))
         return True
 
     def action_approve_materials(self):
