@@ -50,8 +50,10 @@
               parent="menu_rwasi_root" sequence="40"/>
     <menuitem id="menu_work_order_analysis" name="تحليل أوامر التصنيع"
               parent="menu_rwasi_reports" action="action_work_order_analysis" sequence="10"/>
-    <menuitem id="menu_labor_productivity" name="إنتاجية العمالة"
-              parent="menu_rwasi_reports" action="action_labor_productivity" sequence="20"/>
+    <menuitem id="menu_daily_worker_productivity" name="إنتاجية الفنيين والعمال"
+              parent="menu_rwasi_reports" action="action_daily_worker_productivity" sequence="20"/>
+    <menuitem id="menu_labor_productivity" name="إنتاجية العمالة (نموذج)"
+              parent="menu_rwasi_reports" action="action_labor_productivity" sequence="30"/>
 
     <!-- المشاريع المغلقة (متابعة) -->
     <menuitem id="menu_project_closeout" name="المشاريع المغلقة"
