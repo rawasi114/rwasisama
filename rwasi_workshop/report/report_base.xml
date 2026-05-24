@@ -106,6 +106,8 @@
             'RS-WS-21': 'MATERIAL REQUEST',
             'RS-WS-22': 'SALES DAILY REPORT',
         }.get(code, '')"/>
+        <!-- بعض تخطيطات الترويسة (مثل Bubble) تتطلب متغيّر doc في السياق -->
+        <t t-set="doc" t-value="o"/>
         <t t-call="web.external_layout">
             <div class="page rs-doc">
                 <t t-call="rwasi_workshop.report_workshop_style"/>
