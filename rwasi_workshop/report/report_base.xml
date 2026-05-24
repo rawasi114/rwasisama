@@ -14,136 +14,67 @@
         <field name="dpi">96</field>
     </record>
 
-    <!-- ============ الهوية البصرية (CSS) ============ -->
+    <!-- ============ تنسيق قياسي نظيف (ستايل أودو) ============ -->
     <template id="report_workshop_style">
         <style>
-            /* لا نفرض أي خط: يُترك الخط الافتراضي ليعمل بديل النظام العربي بصورة صحيحة */
-            .rs-doc { direction: rtl; color: #33373b; font-size: 10px; line-height: 1.45; }
-            .rs-doc * { box-sizing: border-box; }
-            .rs-navy { color: #2f3a48; }
-            .rs-gold { color: #b8860b; }
-
-            /* ===== الترويسة ===== */
-            .rs-head { width: 100%; border-collapse: collapse; }
-            .rs-head > tbody > tr > td { vertical-align: middle; padding: 2px 6px; }
-            .rs-head .rs-brand { width: 27%; text-align: right; }
-            .rs-head .rs-brand img { max-height: 54px; max-width: 100%; }
-            .rs-head .rs-brand .ar { font-size: 12px; font-weight: bold; color: #2f3a48; }
-            .rs-head .rs-brand .en { font-size: 7px; letter-spacing: 1.5px; color: #b8860b; }
-            .rs-head .rs-titles { text-align: center; }
-            .rs-head .co-ar { font-size: 17px; font-weight: bold; color: #2f3a48; }
-            .rs-head .co-en { font-size: 8px; letter-spacing: 2.5px; color: #b8860b; margin-bottom: 4px; }
-            .rs-head .doc-ar { font-size: 14px; font-weight: bold; color: #2f3a48; }
-            .rs-head .doc-en { font-size: 7.5px; letter-spacing: 2.5px; color: #8a8f96; }
-            .rs-head .rs-meta { width: 27%; }
-            table.rs-metatbl { width: 100%; border-collapse: collapse; }
-            table.rs-metatbl td { padding: 1px 4px; font-size: 8px; border-bottom: 1px dotted #c7ccd2; }
-            table.rs-metatbl td.k { color: #8a8f96; letter-spacing: 1px; width: 38%; }
-            table.rs-metatbl td.v { color: #2f3a48; font-weight: bold; text-align: left; direction: ltr; }
-            .rs-rule { height: 2px; background: #b8860b; margin: 5px 0 8px 0; }
-            .rs-rule-soft { height: 1px; background: #2f3a48; opacity: .15; margin: 3px 0; }
-
-            /* ===== شريط القسم ===== */
-            .sec-title, .rs-sec {
-                background: #2f3a48; color: #fff; font-weight: bold; font-size: 10px;
-                padding: 4px 10px; margin: 9px 0 5px 0; border-right: 3px solid #b8860b;
-                display: flex; justify-content: space-between; align-items: center; }
-            .rs-sec .en { color: #c7a24a; font-weight: normal; font-size: 8px; letter-spacing: 1.5px; }
-            .rs-sec .no { color: #c7a24a; font-size: 8px; letter-spacing: 1px; }
-
-            /* ===== جداول البيانات (حقول) ===== */
-            table.info { width: 100%; border-collapse: collapse; margin-bottom: 4px; }
-            table.info td { border: 1px solid #e2e0da; padding: 4px 7px; font-size: 9.5px; }
-            table.info td.lbl { background: #f6f3ec; font-weight: bold; width: 18%; color: #2f3a48; }
-
-            /* ===== جداول البنود ===== */
-            table.lines { width: 100%; border-collapse: collapse; margin: 4px 0; }
-            table.lines th {
-                background: #2f3a48; color: #fff; border: 1px solid #2a333f;
-                padding: 5px 5px; font-size: 9px; font-weight: bold; }
-            table.lines td { border: 1px solid #e2e0da; padding: 4px 5px; font-size: 9px; }
-            table.lines tbody tr:nth-child(odd) td { background: #faf7f0; }
-            table.lines tbody tr:nth-child(even) td { background: #ffffff; }
-
-            /* ===== صناديق ومربعات اختيار ===== */
-            .chk { display: inline-block; margin: 2px 14px 2px 0; font-size: 9.5px; }
-            .notes-box { border: 1px solid #e2e0da; background: #fcfbf8; padding: 6px 8px;
-                         min-height: 28px; margin-bottom: 4px; white-space: pre-line; font-size: 9.5px; }
-
-            /* ===== التواقيع ===== */
-            table.rwasi-sign { width: 100%; border-collapse: collapse; margin-top: 10px; }
-            table.rwasi-sign td { border: 1px solid #d7d4cc; width: 33.33%; padding: 6px 8px;
-                                  vertical-align: top; height: 74px; }
-            .sign-role { font-weight: bold; color: #2f3a48; border-bottom: 1px solid #b8860b;
-                         padding-bottom: 3px; margin-bottom: 5px; font-size: 9.5px; }
+            .rs-doc { direction: rtl; color: #222222; font-size: 12px; }
+            .rs-doc h2.rs-title { text-align: center; font-size: 18px; margin: 6px 0 2px 0; }
+            .rs-doc .rs-sub { text-align: center; color: #888888; font-size: 10px;
+                              letter-spacing: 1px; margin-bottom: 10px; }
+            .sec-title { font-size: 13px; font-weight: bold; color: #333333;
+                         background: #f5f5f5; border-bottom: 1px solid #cccccc;
+                         padding: 4px 8px; margin: 14px 0 6px 0; }
+            table.info { width: 100%; border-collapse: collapse; margin-bottom: 6px; }
+            table.info td { border: 1px solid #e0e0e0; padding: 4px 8px; font-size: 11px; }
+            table.info td.lbl { background: #f7f7f7; font-weight: bold; width: 18%; color: #444444; }
+            table.lines { width: 100%; border-collapse: collapse; margin: 6px 0; }
+            table.lines th { border-bottom: 2px solid #666666; padding: 5px 6px;
+                             font-size: 11px; text-align: right; color: #333333; }
+            table.lines td { border-bottom: 1px solid #e6e6e6; padding: 4px 6px; font-size: 11px; }
+            .chk { display: inline-block; margin: 2px 16px 2px 0; font-size: 11px; }
+            .notes-box { border: 1px solid #e0e0e0; padding: 6px 8px; min-height: 30px;
+                         margin-bottom: 6px; white-space: pre-line; font-size: 11px; }
+            table.rwasi-sign { width: 100%; border-collapse: collapse; margin-top: 16px; }
+            table.rwasi-sign td { border: 1px solid #cccccc; width: 33.33%; padding: 6px 8px;
+                                  vertical-align: top; height: 70px; }
+            .sign-role { font-weight: bold; color: #333333; margin-bottom: 6px; font-size: 11px; }
             .sign-img { height: 32px; }
             .sign-img img { max-height: 32px; max-width: 90%; }
-            .sign-line { font-size: 8.5px; color: #6b7178; padding: 1px 0; }
-
-            /* ===== التذييل ===== */
-            .rs-foot { margin-top: 14px; border-top: 2px solid #b8860b; padding-top: 6px; }
-            table.rs-foottbl { width: 100%; border-collapse: collapse; }
-            table.rs-foottbl td { vertical-align: top; font-size: 7.5px; color: #6b7178; padding: 0 6px; }
-            .rs-foot .h { color: #2f3a48; font-weight: bold; letter-spacing: 1px; font-size: 8px;
-                          margin-bottom: 2px; }
-            .rs-foot .rs-qr { width: 64px; height: 64px; }
-            .rs-foot .center { text-align: center; }
-            .rs-foot .left { text-align: left; direction: ltr; }
-            .rs-strip { margin-top: 5px; border-top: 1px dotted #c7ccd2; padding-top: 3px;
-                        display: flex; justify-content: space-between; font-size: 7px;
-                        color: #9aa0a6; letter-spacing: 1px; direction: ltr; }
+            .sign-line { font-size: 10px; color: #666666; padding: 1px 0; }
         </style>
     </template>
 
-    <!-- ============ شريط عنوان المستند (الشركة تأتي من ترويسة أودو القياسية) ============ -->
+    <!-- ترويسة بسيطة: عنوان المستند + سطر بيانات (الشركة من ترويسة أودو) -->
     <template id="report_workshop_header">
-        <table class="rs-head">
+        <h2 class="rs-title"><t t-out="title"/></h2>
+        <div class="rs-sub"><t t-out="title_en"/></div>
+        <table class="info">
             <tr>
-                <td class="rs-titles" style="width:68%">
-                    <div class="co-ar">شركة رواسي سما للمقاولات</div>
-                    <div class="co-en">RAWASI SAMA CONTRACTING CO.</div>
-                    <div class="doc-ar"><t t-out="title"/></div>
-                    <div class="doc-en"><t t-out="title_en"/></div>
-                </td>
-                <td class="rs-meta" style="width:32%">
-                    <table class="rs-metatbl">
-                        <tr><td class="k">FORM</td><td class="v"><t t-out="code"/></td></tr>
-                        <tr><td class="k">REF</td><td class="v"><t t-out="o.name"/></td></tr>
-                        <tr><td class="k">ISSUE DATE</td><td class="v"><span t-field="o.date_issued"/></td></tr>
-                        <tr><td class="k">REV.</td><td class="v"><t t-out="o.revision or '00'"/></td></tr>
-                    </table>
-                </td>
+                <td class="lbl">رقم المستند</td><td><t t-out="o.name"/></td>
+                <td class="lbl">التاريخ</td><td><span t-field="o.date_issued"/></td>
+                <td class="lbl">الكود</td><td><t t-out="code"/></td>
             </tr>
         </table>
-        <div class="rs-rule"/>
     </template>
 
-    <!-- شريط قسم ثنائي اللغة (للاستخدام الاختياري) -->
-    <template id="rs_section">
-        <div class="rs-sec">
-            <span><span t-if="sec_no" class="no">SEC · <t t-out="sec_no"/>  </span><t t-out="sec_ar"/></span>
-            <span class="en"><t t-out="sec_en"/></span>
-        </div>
-    </template>
-
-    <!-- ============ كتل التوقيع ============ -->
+    <!-- كتل التوقيع -->
     <template id="report_workshop_signoff">
         <table class="rwasi-sign">
             <tr>
                 <td>
-                    <div class="sign-role">معدّ النموذج · ISSUED BY</div>
+                    <div class="sign-role">معدّ النموذج</div>
                     <div class="sign-line">الاسم: <t t-out="o.prepared_name or ''"/></div>
                     <div class="sign-img"><img t-if="o.prepared_signature" t-att-src="image_data_uri(o.prepared_signature)"/></div>
                     <div class="sign-line">التاريخ: <span t-field="o.prepared_date"/></div>
                 </td>
                 <td>
-                    <div class="sign-role">مشرف الورشة · SUPERVISOR</div>
+                    <div class="sign-role">مشرف الورشة</div>
                     <div class="sign-line">الاسم: <t t-out="o.supervisor_name or ''"/></div>
                     <div class="sign-img"><img t-if="o.supervisor_signature" t-att-src="image_data_uri(o.supervisor_signature)"/></div>
                     <div class="sign-line">التاريخ: <span t-field="o.supervisor_date"/></div>
                 </td>
                 <td>
-                    <div class="sign-role">مدير العمليات · OPERATIONS</div>
+                    <div class="sign-role">مدير العمليات</div>
                     <div class="sign-line">الاسم: <t t-out="o.manager_name or ''"/></div>
                     <div class="sign-img">
                         <img t-if="o.manager_signature" t-att-src="image_data_uri(o.manager_signature)"/>
@@ -155,39 +86,7 @@
         </table>
     </template>
 
-    <!-- ============ تذييل المستند ============ -->
-    <template id="report_workshop_footer">
-        <div class="rs-foot">
-            <table class="rs-foottbl">
-                <tr>
-                    <td style="width:34%">
-                        <div class="h">المقر الرئيسي · HEAD OFFICE</div>
-                        <div t-out="o.company_id.street or 'حفر الباطن — حي المصياف'"/>
-                        <div t-out="o.company_id.street2 or 'شارع الوليد بن عبدالملك، الرياض'"/>
-                        <div t-if="o.company_id.phone" t-out="o.company_id.phone"/>
-                    </td>
-                    <td style="width:32%" class="center">
-                        <img class="rs-qr"
-                             t-att-src="'/report/barcode/QR/%s' % ((o.company_id.website or 'rawasisama.com').replace('https://','').replace('http://','').strip('/') or 'rawasisama.com')"/>
-                        <div class="h" style="margin-top:2px;">للتحقق · VERIFY</div>
-                        <div t-out="(o.company_id.website or 'rawasisama.com')"/>
-                        <div t-out="(o.company_id.email or 'info@rawasisama.com')"/>
-                    </td>
-                    <td style="width:34%" class="left">
-                        <div class="h">REGISTRY · السجلات</div>
-                        <div t-if="o.company_id.company_registry">C.R. <t t-out="o.company_id.company_registry"/></div>
-                        <div t-if="o.company_id.vat">TAX <t t-out="o.company_id.vat"/></div>
-                    </td>
-                </tr>
-            </table>
-            <div class="rs-strip">
-                <span>RAWASI SAMA · INTERNAL USE</span>
-                <span><t t-out="code"/> · REV <t t-out="o.revision or '00'"/></span>
-            </div>
-        </div>
-    </template>
-
-    <!-- ============ التخطيط الكامل ============ -->
+    <!-- التخطيط: ترويسة أودو القياسية + المحتوى -->
     <template id="report_workshop_layout">
         <t t-set="title_en" t-value="{
             'RS-WS-01': 'WORK ORDER',
@@ -219,7 +118,6 @@
                 <t t-call="rwasi_workshop.report_workshop_header"/>
                 <t t-out="0"/>
                 <t t-call="rwasi_workshop.report_workshop_signoff"/>
-                <t t-call="rwasi_workshop.report_workshop_footer"/>
             </div>
         </t>
     </template>
