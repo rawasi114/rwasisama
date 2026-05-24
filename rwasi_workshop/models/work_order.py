@@ -285,6 +285,9 @@ class WorkOrder(models.Model):
             wo.material_approval_state = 'approved'
             wo.material_approver_id = self.env.user
             wo.material_approval_reason = False
+            # المستلِم للمواد عند تسليمها للورشة = المعتمِد (يُعدَّل عند الحاجة)
+            if not wo.material_received_by:
+                wo.material_received_by = self.env.user.name
             wo._create_material_rfq()
             wo.activity_schedule(
                 'mail.mail_activity_data_todo',

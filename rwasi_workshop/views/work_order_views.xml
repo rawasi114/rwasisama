@@ -40,7 +40,7 @@
                             invisible="material_approval_state != 'to_approve' or not can_approve_materials"/>
                     <button name="action_handover_materials" string="تسليم المواد للورشة" type="object"
                             class="btn-primary"
-                            invisible="material_approval_state != 'approved' or material_handover_done or not can_handle_purchase"/>
+                            invisible="material_approval_state != 'approved' or material_handover_done or not materials_available or not can_handle_purchase"/>
                     <button name="action_confirm" string="تأكيد التصنيع" type="object"
                             class="btn-primary"
                             invisible="state != 'draft'"/>
