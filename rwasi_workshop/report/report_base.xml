@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <!-- مقاس الورق A4 — هوامش قياسية تترك مساحة لترويسة/تذييل أودو -->
+    <!-- مقاس الورق A4 — هامش علوي أوسع ليتسع لترويسة الشركة (العنوان الطويل) دون تداخل -->
     <record id="paperformat_rwasi_a4" model="report.paperformat">
         <field name="name">Rwasi Workshop A4</field>
         <field name="format">A4</field>
         <field name="orientation">Portrait</field>
-        <field name="margin_top">40</field>
-        <field name="margin_bottom">28</field>
+        <field name="margin_top">60</field>
+        <field name="margin_bottom">30</field>
         <field name="margin_left">7</field>
         <field name="margin_right">7</field>
-        <field name="header_spacing">35</field>
+        <field name="header_spacing">52</field>
         <field name="dpi">90</field>
     </record>
 
