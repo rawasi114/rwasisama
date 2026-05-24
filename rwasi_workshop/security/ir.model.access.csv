@@ -122,5 +122,8 @@ access_rework_manager,rework.manager,model_rwasi_rework,group_workshop_manager,1
 access_rework_admin,rework.admin,model_rwasi_rework,base.group_system,1,1,1,1
 access_daily_worker_user,daily.worker.user,model_rwasi_daily_worker,group_workshop_user,1,1,1,1
 access_daily_worker_manager,daily.worker.manager,model_rwasi_daily_worker,group_workshop_manager,1,1,1,1
+access_performance_score_user,performance.score.user,model_rwasi_performance_score,group_workshop_user,1,1,1,0
+access_performance_score_manager,performance.score.manager,model_rwasi_performance_score,group_workshop_manager,1,1,1,0
+access_performance_score_admin,performance.score.admin,model_rwasi_performance_score,base.group_system,1,1,1,1
 access_purchase_order_workshop_read,purchase.order.workshop.read,purchase.model_purchase_order,group_workshop_user,1,0,0,0
 access_purchase_order_line_workshop_read,purchase.order.line.workshop.read,purchase.model_purchase_order_line,group_workshop_user,1,0,0,0

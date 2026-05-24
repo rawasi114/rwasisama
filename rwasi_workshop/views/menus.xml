@@ -48,6 +48,8 @@
     <!-- 4) التقارير وقياس الأداء -->
     <menuitem id="menu_rwasi_reports" name="التقارير"
               parent="menu_rwasi_root" sequence="40"/>
+    <menuitem id="menu_performance_score" name="لوحة الأداء"
+              parent="menu_rwasi_reports" action="action_performance_score" sequence="5"/>
     <menuitem id="menu_work_order_analysis" name="تحليل أوامر التصنيع"
               parent="menu_rwasi_reports" action="action_work_order_analysis" sequence="10"/>
     <menuitem id="menu_daily_worker_productivity" name="إنتاجية الفنيين والعمال"

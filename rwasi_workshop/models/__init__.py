@@ -15,3 +15,4 @@ from . import hse
 from . import delivery
 from . import closeout
 from . import sales_report
+from . import performance

@@ -13,7 +13,7 @@
     'author': 'Rawasi Sama Contracting',
     'website': 'https://github.com/rawasi114/rwasisama',
     'category': 'Manufacturing',
-    'version': '19.0.2.2.0',
+    'version': '19.0.2.3.0',
     'license': 'LGPL-3',
     'depends': ['mail', 'sale_management', 'purchase', 'stock'],
     'data': [
@@ -33,6 +33,7 @@
         'views/delivery_views.xml',
         'views/closeout_views.xml',
         'views/sales_report_views.xml',
+        'views/performance_views.xml',
         'views/sale_order_views.xml',
         'views/company_views.xml',
         'report/report_base.xml',
