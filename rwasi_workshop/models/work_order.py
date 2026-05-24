@@ -84,6 +84,9 @@ class WorkOrder(models.Model):
         ('partial', 'مدفوع جزئي'),
         ('paid', 'مدفوع بالكامل'),
     ], string='حالة السداد', compute='_compute_payment_status')
+    paid_ratio = fields.Float(
+        string='نسبة السداد', compute='_compute_payment_status',
+        help='نسبة المسدَّد من قيمة الفاتورة (للتحكّم الداخلي).')
 
     # تسليم العميل
     customer_sign_name = fields.Char(string='اسم مستلم العميل')
@@ -95,7 +98,9 @@ class WorkOrder(models.Model):
         return [s[0] for s in self._fields['state'].selection]
 
     @api.depends('sale_order_id', 'sale_order_id.invoice_ids.payment_state',
-                 'sale_order_id.invoice_ids.state')
+                 'sale_order_id.invoice_ids.state',
+                 'sale_order_id.invoice_ids.amount_total',
+                 'sale_order_id.invoice_ids.amount_residual')
     def _compute_payment_status(self):
         for wo in self:
             so = wo.sale_order_id
@@ -104,7 +109,11 @@ class WorkOrder(models.Model):
             ) if so else False
             if not invoices:
                 wo.payment_status = 'not_paid'
+                wo.paid_ratio = 0.0
                 continue
+            total = sum(invoices.mapped('amount_total'))
+            residual = sum(invoices.mapped('amount_residual'))
+            wo.paid_ratio = ((total - residual) / total) if total else 0.0
             pstates = invoices.mapped('payment_state')
             if all(s in ('paid', 'in_payment', 'reversed') for s in pstates):
                 wo.payment_status = 'paid'
@@ -342,6 +351,9 @@ class WorkOrder(models.Model):
         for wo in self:
             if wo.state != 'confirmed':
                 raise UserError(_('يجب تأكيد أمر التصنيع أولاً قبل بدء التصنيع.'))
+            if wo.paid_ratio < 0.5:
+                raise UserError(_(
+                    'لا يمكن بدء التصنيع قبل سداد دفعة أولى لا تقل عن 50% من قيمة الفاتورة.'))
             wo.state = 'in_production'
             if not wo.start_date:
                 wo.start_date = fields.Date.context_today(wo)

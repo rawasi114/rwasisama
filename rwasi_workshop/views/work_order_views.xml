@@ -43,7 +43,8 @@
                             class="btn-primary"
                             invisible="state != 'draft'"/>
                     <button name="action_start_production" string="بدء التصنيع" type="object"
-                            class="btn-primary" invisible="state != 'confirmed'"/>
+                            class="btn-primary"
+                            invisible="state != 'confirmed' or paid_ratio &lt; 0.5"/>
                     <button name="action_finish_production" string="إنهاء التصنيع" type="object"
                             class="btn-primary" invisible="state != 'in_production'"/>
                     <button name="action_deliver" string="التسليم للعميل" type="object"
@@ -79,10 +80,15 @@
                     <field name="has_draft_rfq" invisible="1"/>
                     <field name="has_rfq_to_confirm" invisible="1"/>
                     <field name="has_pending_receipt" invisible="1"/>
+                    <field name="paid_ratio" invisible="1"/>
                     <div class="alert alert-info" role="alert"
                          invisible="state != 'draft' or payment_status != 'not_paid'">
                         بانتظار استلام دفعة من العميل لتتمكّن من طلب شراء المواد
                         (تُشترى مواد العميل من دفعته لا من سيولة الشركة).
+                    </div>
+                    <div class="alert alert-warning" role="alert"
+                         invisible="state != 'confirmed' or paid_ratio &gt;= 0.5">
+                        لا يمكن بدء التصنيع قبل سداد دفعة أولى لا تقل عن 50% من قيمة الفاتورة.
                     </div>
                     <div class="alert alert-warning" role="alert"
                          invisible="state != 'finished' or payment_status == 'paid'">
