@@ -83,8 +83,7 @@
                     <field name="paid_ratio" invisible="1"/>
                     <div class="alert alert-info" role="alert"
                          invisible="state != 'draft' or paid_ratio &gt;= 0.5">
-                        بانتظار سداد دفعة لا تقل عن 50% من قيمة الطلب لتتمكّن من طلب شراء المواد
-                        (تُشترى مواد العميل من دفعته لا من سيولة الشركة).
+                        بانتظار سداد دفعة لا تقل عن 50% من قيمة الطلب لتتمكّن من طلب شراء المواد.
                     </div>
                     <div class="alert alert-warning" role="alert"
                          invisible="state != 'confirmed' or paid_ratio &gt;= 0.5">

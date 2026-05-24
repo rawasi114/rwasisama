@@ -204,8 +204,7 @@ class WorkOrder(models.Model):
                     'أضف قائمة المواد (المكوّنات) أولاً في تبويب «المواد اللازمة».'))
             if wo.paid_ratio < 0.5:
                 raise UserError(_(
-                    'لا يمكن طلب المواد قبل سداد دفعة لا تقل عن 50% من قيمة الطلب. '
-                    'تُشترى مواد العميل من دفعته لا من سيولة الشركة.'))
+                    'لا يمكن طلب المواد قبل سداد دفعة لا تقل عن 50% من قيمة الطلب.'))
             wo._check_materials_storable()
             if wo.materials_available:
                 raise UserError(_(
