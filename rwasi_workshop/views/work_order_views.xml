@@ -107,7 +107,7 @@
                          invisible="material_approval_state != 'to_revise'">
                         أُعيد طلب المواد للتعديل (انظر سبب الرفض / الإعادة أدناه).
                     </div>
-                    <group invisible="material_approval_state == 'draft' and not material_handover_done">
+                    <group invisible="materials_available and material_approval_state == 'draft'">
                         <group string="إسناد طلب المواد">
                             <field name="material_approver_assignee_id"
                                    readonly="material_approval_state not in ('draft','to_revise','rejected')"/>
