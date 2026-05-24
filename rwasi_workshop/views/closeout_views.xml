@@ -35,16 +35,39 @@
                         </group>
                     </group>
                     <notebook>
-                        <page string="استبيان التقييم والتوقيع" name="survey">
+                        <page string="الإقرار والاستبيان والتسليم" name="handover">
+                            <separator string="١) إقرار التسليم النهائي (يكتبه العميل)"/>
+                            <field name="handover_statement" nolabel="1"
+                                   placeholder="أقر أنا المستلم باستلام الأعمال المنفذة كاملةً ومطابقةً للمتفق عليه..."/>
+                            <separator string="٢) استبيان تقييم العميل"/>
                             <group>
-                                <group string="التقييم">
+                                <group>
                                     <field name="technician_rating"/>
                                     <field name="finishing_quality"/>
                                     <field name="satisfaction"/>
                                 </group>
-                                <group string="توقيع العميل">
+                            </group>
+                            <separator string="٣) المستلم والتوقيع (توقيع واحد للإقرار والاستبيان)"/>
+                            <group>
+                                <group>
+                                    <field name="partner_id" string="العميل (صاحب أمر البيع)" readonly="1"/>
+                                    <field name="receiver_is_other"/>
                                     <field name="customer_sign_name"/>
+                                    <field name="receiver_relation"
+                                           invisible="not receiver_is_other"
+                                           required="receiver_is_other"/>
+                                </group>
+                                <group>
                                     <field name="customer_signature" widget="signature"/>
+                                </group>
+                            </group>
+                            <separator string="اعتماد مدير العمليات"/>
+                            <group>
+                                <group>
+                                    <field name="manager_name"/>
+                                    <field name="manager_date"/>
+                                    <field name="manager_signature" widget="signature"/>
+                                    <field name="manager_stamp" widget="image"/>
                                 </group>
                             </group>
                         </page>
@@ -67,28 +90,6 @@
                                     <field name="close_date"/>
                                 </list>
                             </field>
-                        </page>
-                        <page string="إقرار التسليم النهائي">
-                            <field name="handover_statement" placeholder="إقرار التسليم النهائي..."/>
-                            <group>
-                                <group string="مدير المشروع">
-                                    <field name="pm_name"/>
-                                    <field name="pm_date"/>
-                                    <field name="pm_signature" widget="signature"/>
-                                </group>
-                                <group string="ممثل العميل">
-                                    <field name="client_rep_name"/>
-                                    <field name="client_rep_date"/>
-                                    <field name="client_rep_signature" widget="signature"/>
-                                    <field name="client_stamp" widget="image"/>
-                                </group>
-                                <group string="مدير العمليات">
-                                    <field name="manager_name"/>
-                                    <field name="manager_date"/>
-                                    <field name="manager_signature" widget="signature"/>
-                                    <field name="manager_stamp" widget="image"/>
-                                </group>
-                            </group>
                         </page>
                     </notebook>
                 </sheet>

@@ -605,7 +605,7 @@ class WorkOrder(models.Model):
                 'work_order_id': self.id,
                 'partner_id': self.partner_id.id,
                 'project_ref': self.project_ref,
-                'customer_sign_name': self.customer_sign_name,
+                'customer_sign_name': self.customer_sign_name or self.partner_id.name,
                 'handover_date': fields.Date.context_today(self),
             })
         self.closeout_id = co.id

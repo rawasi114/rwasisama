@@ -492,20 +492,20 @@
                     <table class="rwasi-sign">
                         <tr>
                             <td>
-                                <div class="sign-role">مدير المشروع</div>
-                                <div class="sign-line">الاسم: <t t-out="o.pm_name or ''"/></div>
-                                <div class="sign-img"><img t-if="o.pm_signature" t-att-src="image_data_uri(o.pm_signature)"/></div>
-                                <div class="sign-line">التاريخ: <span t-field="o.pm_date"/></div>
+                                <div class="sign-role">المستلم (إقرار واستبيان)</div>
+                                <div class="sign-line">الاسم: <t t-out="o.customer_sign_name or o.partner_id.name or ''"/></div>
+                                <div class="sign-line" t-if="o.receiver_is_other">صلة القرابة بالعميل: <t t-out="o.receiver_relation or ''"/></div>
+                                <div class="sign-img"><img t-if="o.customer_signature" t-att-src="image_data_uri(o.customer_signature)"/></div>
+                                <div class="sign-line">التاريخ: <span t-field="o.handover_date"/></div>
                             </td>
                             <td>
-                                <div class="sign-role">ممثل العميل</div>
-                                <div class="sign-line">الاسم: <t t-out="o.client_rep_name or ''"/></div>
-                                <div class="sign-img"><img t-if="o.client_rep_signature" t-att-src="image_data_uri(o.client_rep_signature)"/></div>
-                                <div class="sign-line">التاريخ: <span t-field="o.client_rep_date"/></div>
-                            </td>
-                            <td>
-                                <div class="sign-role">ختم العميل</div>
-                                <div class="sign-img"><img t-if="o.client_stamp" t-att-src="image_data_uri(o.client_stamp)" style="max-height:60px;"/></div>
+                                <div class="sign-role">مدير العمليات</div>
+                                <div class="sign-line">الاسم: <t t-out="o.manager_name or ''"/></div>
+                                <div class="sign-img">
+                                    <img t-if="o.manager_signature" t-att-src="image_data_uri(o.manager_signature)"/>
+                                    <img t-if="o.manager_stamp" t-att-src="image_data_uri(o.manager_stamp)" style="max-height:32px;"/>
+                                </div>
+                                <div class="sign-line">التاريخ: <span t-field="o.manager_date"/></div>
                             </td>
                         </tr>
                     </table>

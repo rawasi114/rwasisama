@@ -52,9 +52,14 @@ class ProjectCloseout(models.Model):
         ('late', 'متأخر'),
     ], string='حالة الالتزام', compute='_compute_commitment', store=True)
 
-    # توقيع العميل
-    customer_sign_name = fields.Char(string='اسم مستلم العميل')
-    customer_signature = fields.Binary(string='توقيع العميل')
+    # المستلم وتوقيعه (توقيع واحد يغطّي الإقرار والاستبيان معاً)
+    customer_sign_name = fields.Char(
+        string='اسم المستلم',
+        help='يُعبّأ تلقائياً باسم العميل من أمر البيع، ويُعدّل إن كان المستلم شخصاً آخر.')
+    receiver_is_other = fields.Boolean(
+        string='المستلم غير العميل صاحب الدفع')
+    receiver_relation = fields.Char(string='صلة القرابة بالعميل')
+    customer_signature = fields.Binary(string='توقيع المستلم')
 
     state = fields.Selection([
         ('draft', 'مسودة'),
@@ -62,14 +67,12 @@ class ProjectCloseout(models.Model):
         ('cancel', 'ملغي'),
     ], string='الحالة', default='draft', tracking=True)
 
-    # مدير المشروع / ممثل العميل
-    pm_name = fields.Char(string='مدير المشروع - الاسم')
-    pm_date = fields.Date(string='مدير المشروع - التاريخ')
-    pm_signature = fields.Binary(string='مدير المشروع - التوقيع')
-    client_rep_name = fields.Char(string='ممثل العميل - الاسم')
-    client_rep_date = fields.Date(string='ممثل العميل - التاريخ')
-    client_rep_signature = fields.Binary(string='ممثل العميل - التوقيع')
-    client_stamp = fields.Binary(string='ختم العميل')
+    @api.onchange('partner_id', 'receiver_is_other')
+    def _onchange_receiver(self):
+        for co in self:
+            if not co.receiver_is_other:
+                co.customer_sign_name = co.partner_id.name or False
+                co.receiver_relation = False
 
     @api.model_create_multi
     def create(self, vals_list):
@@ -94,9 +97,16 @@ class ProjectCloseout(models.Model):
 
     def action_done(self):
         for co in self:
+            if not co.handover_statement:
+                raise UserError(_('يجب كتابة إقرار التسليم النهائي قبل الإغلاق.'))
             if not (co.technician_rating and co.finishing_quality and co.satisfaction):
                 raise UserError(_(
                     'يجب تعبئة استبيان التقييم (الفنيين / جودة التشطيب / رضا العميل) قبل الإغلاق.'))
+            if not (co.customer_sign_name and co.customer_signature):
+                raise UserError(_('يجب إدخال اسم المستلم وتوقيعه قبل الإغلاق.'))
+            if co.receiver_is_other and not co.receiver_relation:
+                raise UserError(_(
+                    'حدّد صلة قرابة المستلم بالعميل (المستلم غير العميل صاحب الدفع).'))
             co.state = 'done'
             if not co.handover_date:
                 co.handover_date = fields.Date.context_today(co)
