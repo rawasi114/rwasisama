@@ -30,7 +30,7 @@
                 <header>
                     <button name="action_request_materials" string="إنشاء طلب عرض سعر" type="object"
                             class="btn-primary"
-                            invisible="state != 'draft' or materials_available or purchase_order_count &gt; 0 or not material_line_ids"/>
+                            invisible="state != 'draft' or materials_available or purchase_order_count &gt; 0 or not material_line_ids or payment_status == 'not_paid'"/>
                     <button name="action_send_rfq" string="إرسال عرض السعر" type="object"
                             invisible="state != 'draft' or not has_draft_rfq"/>
                     <button name="action_confirm_purchase" string="تأكيد الطلب" type="object"
@@ -79,6 +79,11 @@
                     <field name="has_draft_rfq" invisible="1"/>
                     <field name="has_rfq_to_confirm" invisible="1"/>
                     <field name="has_pending_receipt" invisible="1"/>
+                    <div class="alert alert-info" role="alert"
+                         invisible="state != 'draft' or payment_status != 'not_paid'">
+                        بانتظار استلام دفعة من العميل لتتمكّن من طلب شراء المواد
+                        (تُشترى مواد العميل من دفعته لا من سيولة الشركة).
+                    </div>
                     <div class="alert alert-warning" role="alert"
                          invisible="state != 'finished' or payment_status == 'paid'">
                         بانتظار سداد كامل قيمة العمل قبل الانتقال لمرحلة التسليم.
