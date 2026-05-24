@@ -202,9 +202,9 @@ class WorkOrder(models.Model):
             if not wo.material_line_ids:
                 raise UserError(_(
                     'أضف قائمة المواد (المكوّنات) أولاً في تبويب «المواد اللازمة».'))
-            if wo.payment_status == 'not_paid':
+            if wo.paid_ratio < 0.5:
                 raise UserError(_(
-                    'لا يمكن طلب المواد قبل استلام دفعة من العميل. '
+                    'لا يمكن طلب المواد قبل سداد دفعة لا تقل عن 50% من قيمة الطلب. '
                     'تُشترى مواد العميل من دفعته لا من سيولة الشركة.'))
             wo._check_materials_storable()
             if wo.materials_available:
