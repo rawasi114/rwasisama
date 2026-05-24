@@ -78,6 +78,13 @@ class WorkOrder(models.Model):
         ('cancel', 'ملغي'),
     ], string='الحالة', default='draft', tracking=True, group_expand='_group_expand_state')
 
+    # حالة السداد (تتحدّث تلقائياً من فواتير أمر البيع — بلا أرقام مالية)
+    payment_status = fields.Selection([
+        ('not_paid', 'غير مدفوع'),
+        ('partial', 'مدفوع جزئي'),
+        ('paid', 'مدفوع بالكامل'),
+    ], string='حالة السداد', compute='_compute_payment_status')
+
     # تسليم العميل
     customer_sign_name = fields.Char(string='اسم مستلم العميل')
     customer_sign_date = fields.Date(string='تاريخ التسليم للعميل')
@@ -86,6 +93,25 @@ class WorkOrder(models.Model):
     @api.model
     def _group_expand_state(self, *args, **kwargs):
         return [s[0] for s in self._fields['state'].selection]
+
+    @api.depends('sale_order_id', 'sale_order_id.invoice_ids.payment_state',
+                 'sale_order_id.invoice_ids.state')
+    def _compute_payment_status(self):
+        for wo in self:
+            so = wo.sale_order_id
+            invoices = so.sudo().invoice_ids.filtered(
+                lambda m: m.move_type == 'out_invoice' and m.state == 'posted'
+            ) if so else False
+            if not invoices:
+                wo.payment_status = 'not_paid'
+                continue
+            pstates = invoices.mapped('payment_state')
+            if all(s in ('paid', 'in_payment', 'reversed') for s in pstates):
+                wo.payment_status = 'paid'
+            elif any(s in ('partial', 'paid', 'in_payment') for s in pstates):
+                wo.payment_status = 'partial'
+            else:
+                wo.payment_status = 'not_paid'
 
     @api.depends('material_line_ids.is_available')
     def _compute_materials_available(self):
@@ -343,6 +369,10 @@ class WorkOrder(models.Model):
         for wo in self:
             if wo.state != 'finished':
                 raise UserError(_('لا يمكن التسليم إلا بعد إنهاء التصنيع.'))
+            if wo.payment_status != 'paid':
+                raise UserError(_(
+                    'لا يمكن الانتقال لمرحلة التسليم قبل سداد كامل قيمة العمل. '
+                    'الحالة الحالية للسداد: غير مكتملة — بانتظار إغلاق الفاتورة من المحاسبة.'))
             wo.state = 'delivered'
             if not wo.customer_sign_date:
                 wo.customer_sign_date = fields.Date.context_today(wo)

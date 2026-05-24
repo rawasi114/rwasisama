@@ -13,6 +13,10 @@
                 <field name="product_qty"/>
                 <field name="workshop_scope"/>
                 <field name="required_date"/>
+                <field name="payment_status" widget="badge"
+                       decoration-success="payment_status == 'paid'"
+                       decoration-warning="payment_status == 'partial'"
+                       decoration-danger="payment_status == 'not_paid'"/>
                 <field name="state" widget="badge"/>
             </list>
         </field>
@@ -43,7 +47,8 @@
                     <button name="action_finish_production" string="إنهاء التصنيع" type="object"
                             class="btn-primary" invisible="state != 'in_production'"/>
                     <button name="action_deliver" string="التسليم للعميل" type="object"
-                            class="btn-primary" invisible="state != 'finished'"/>
+                            class="btn-primary"
+                            invisible="state != 'finished' or payment_status != 'paid'"/>
                     <button name="action_close" string="إغلاق" type="object"
                             invisible="state != 'delivered'"/>
                     <button name="action_draft" string="إعادة لمسودة" type="object"
@@ -74,6 +79,11 @@
                     <field name="has_draft_rfq" invisible="1"/>
                     <field name="has_rfq_to_confirm" invisible="1"/>
                     <field name="has_pending_receipt" invisible="1"/>
+                    <div class="alert alert-warning" role="alert"
+                         invisible="state != 'finished' or payment_status == 'paid'">
+                        بانتظار سداد كامل قيمة العمل قبل الانتقال لمرحلة التسليم.
+                        تتغيّر الحالة تلقائياً عند إغلاق الفاتورة من المحاسبة.
+                    </div>
                     <div class="oe_title">
                         <h1><field name="name" readonly="1"/></h1>
                     </div>
@@ -95,6 +105,10 @@
                             <field name="est_duration"/>
                             <field name="drawing_ref"/>
                             <field name="materials_available" readonly="1"/>
+                            <field name="payment_status" widget="badge"
+                                   decoration-success="payment_status == 'paid'"
+                                   decoration-warning="payment_status == 'partial'"
+                                   decoration-danger="payment_status == 'not_paid'"/>
                         </group>
                     </group>
                     <field name="scope_of_work" placeholder="وصف العمل المطلوب..."/>
