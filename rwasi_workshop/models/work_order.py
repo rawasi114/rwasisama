@@ -192,6 +192,16 @@ class WorkOrder(models.Model):
                         self._sequence_code) or 'New'
         return super().create(vals_list)
 
+    def write(self, vals):
+        # أمر التصنيع المغلق نهائي: لا يُعاد فتحه أو تغيير حالته بأي مسار
+        if 'state' in vals and vals['state'] != 'done':
+            locked = self.filtered(lambda w: w.state == 'done')
+            if locked:
+                raise UserError(_(
+                    'لا يمكن تغيير حالة أمر تصنيع مغلق. '
+                    'أنشئ أمراً جديداً إن لزم الأمر.'))
+        return super().write(vals)
+
     # ----- أزرار سير العمل (دورة مغلقة) -----
     @api.depends_context('uid')
     @api.depends('material_approver_assignee_id', 'purchase_user_id')

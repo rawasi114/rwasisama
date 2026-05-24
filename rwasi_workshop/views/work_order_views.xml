@@ -55,10 +55,10 @@
                     <button name="action_close" string="إغلاق" type="object"
                             invisible="state != 'delivered'"/>
                     <button name="action_draft" string="إعادة لمسودة" type="object"
-                            invisible="state in ('draft', 'cancel')"/>
+                            invisible="state in ('draft', 'cancel', 'delivered', 'done')"/>
                     <button name="action_cancel" string="إلغاء" type="object"
-                            invisible="state in ('done', 'cancel')"/>
-                    <field name="state" widget="statusbar"
+                            invisible="state in ('delivered', 'done', 'cancel')"/>
+                    <field name="state" widget="statusbar" readonly="1"
                            statusbar_visible="draft,confirmed,in_production,finished,delivered,done"/>
                 </header>
                 <sheet>
