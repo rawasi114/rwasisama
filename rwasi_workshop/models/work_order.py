@@ -214,6 +214,43 @@ class WorkOrder(models.Model):
             raise UserError(_(
                 'الاعتماد متاح للمسؤول المُسنَد إليه أو المدير فقط.'))
 
+    def action_open_submit_wizard(self):
+        self.ensure_one()
+        if not self.material_line_ids:
+            raise UserError(_('أضف قائمة المواد (المكوّنات) أولاً.'))
+        if self.paid_ratio < 0.5:
+            raise UserError(_(
+                'لا يمكن طلب المواد قبل سداد دفعة لا تقل عن 50% من قيمة الطلب.'))
+        self._check_materials_storable()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('إسناد طلب اعتماد المواد'),
+            'res_model': 'rwasi.wo.assign.wizard',
+            'view_mode': 'form',
+            'target': 'new',
+            'context': {
+                'default_work_order_id': self.id,
+                'default_mode': 'submit',
+                'default_user_id': self.material_approver_assignee_id.id or False,
+            },
+        }
+
+    def action_open_approve_wizard(self):
+        self.ensure_one()
+        self._ensure_can_approve()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('إسناد موظف المشتريات والاعتماد'),
+            'res_model': 'rwasi.wo.assign.wizard',
+            'view_mode': 'form',
+            'target': 'new',
+            'context': {
+                'default_work_order_id': self.id,
+                'default_mode': 'approve',
+                'default_user_id': self.purchase_user_id.id or False,
+            },
+        }
+
     def action_submit_materials(self):
         """يرفع مشرف الورشة طلب المواد لاعتماد المسؤول المُسنَد إليه."""
         for wo in self:
@@ -679,3 +716,36 @@ class WorkOrderMaterial(models.Model):
                 avail = product.qty_available
             line.qty_available = avail
             line.is_available = avail >= line.qty_needed
+
+
+class WorkOrderAssignWizard(models.TransientModel):
+    _name = 'rwasi.wo.assign.wizard'
+    _description = 'إسناد طلب المواد'
+
+    work_order_id = fields.Many2one('rwasi.work.order', required=True)
+    mode = fields.Selection([
+        ('submit', 'اعتماد'),
+        ('approve', 'مشتريات'),
+    ], required=True)
+    user_id = fields.Many2one(
+        'res.users', string='المُسنَد إليه', required=True,
+        domain="[('share', '=', False)]")
+    note = fields.Char(compute='_compute_note')
+
+    @api.depends('mode')
+    def _compute_note(self):
+        for w in self:
+            w.note = ('اختر المسؤول عن اعتماد طلب المواد (يصله إشعار).'
+                      if w.mode == 'submit'
+                      else 'اختر موظف المشتريات الذي سينفّذ الشراء (يصله إشعار).')
+
+    def action_confirm(self):
+        self.ensure_one()
+        wo = self.work_order_id
+        if self.mode == 'submit':
+            wo.material_approver_assignee_id = self.user_id
+            wo.action_submit_materials()
+        else:
+            wo.purchase_user_id = self.user_id
+            wo.action_approve_materials()
+        return {'type': 'ir.actions.act_window_close'}

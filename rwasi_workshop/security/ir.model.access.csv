@@ -127,5 +127,7 @@ access_performance_score_manager,performance.score.manager,model_rwasi_performan
 access_performance_score_admin,performance.score.admin,model_rwasi_performance_score,base.group_system,1,1,1,1
 access_customer_payment_user,customer.payment.user,model_rwasi_customer_payment,base.group_user,1,0,1,0
 access_customer_payment_admin,customer.payment.admin,model_rwasi_customer_payment,base.group_system,1,1,1,1
+access_wo_assign_wizard_user,wo.assign.wizard.user,model_rwasi_wo_assign_wizard,group_workshop_user,1,1,1,1
+access_wo_assign_wizard_manager,wo.assign.wizard.manager,model_rwasi_wo_assign_wizard,group_workshop_manager,1,1,1,1
 access_purchase_order_workshop_read,purchase.order.workshop.read,purchase.model_purchase_order,group_workshop_user,1,0,0,0
 access_purchase_order_line_workshop_read,purchase.order.line.workshop.read,purchase.model_purchase_order_line,group_workshop_user,1,0,0,0

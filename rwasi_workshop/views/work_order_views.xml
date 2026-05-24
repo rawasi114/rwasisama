@@ -28,10 +28,10 @@
         <field name="arch" type="xml">
             <form string="أمر تشغيل / تصنيع">
                 <header>
-                    <button name="action_submit_materials" string="طلب اعتماد المواد" type="object"
+                    <button name="action_open_submit_wizard" string="طلب اعتماد المواد" type="object"
                             class="btn-primary"
                             invisible="state != 'draft' or materials_available or not material_line_ids or paid_ratio &lt; 0.5 or material_approval_state in ('to_approve','approved')"/>
-                    <button name="action_approve_materials" string="اعتماد المواد" type="object"
+                    <button name="action_open_approve_wizard" string="اعتماد المواد" type="object"
                             class="btn-primary"
                             invisible="material_approval_state != 'to_approve' or not can_approve_materials"/>
                     <button name="action_reject_materials" string="رفض" type="object"
@@ -109,10 +109,8 @@
                     </div>
                     <group invisible="materials_available and material_approval_state == 'draft'">
                         <group string="إسناد طلب المواد">
-                            <field name="material_approver_assignee_id"
-                                   readonly="material_approval_state not in ('draft','to_revise','rejected')"/>
-                            <field name="purchase_user_id"
-                                   readonly="material_approval_state not in ('to_approve',)"/>
+                            <field name="material_approver_assignee_id" readonly="1"/>
+                            <field name="purchase_user_id" readonly="1"/>
                             <field name="material_approver_id" readonly="1"
                                    invisible="material_approval_state in ('draft','to_approve')"/>
                         </group>
@@ -310,6 +308,25 @@
                 <field name="workshop_scope"/>
                 <field name="product_qty" type="measure"/>
             </graph>
+        </field>
+    </record>
+
+    <record id="view_wo_assign_wizard_form" model="ir.ui.view">
+        <field name="name">rwasi.wo.assign.wizard.form</field>
+        <field name="model">rwasi.wo.assign.wizard</field>
+        <field name="arch" type="xml">
+            <form string="إسناد">
+                <group>
+                    <field name="work_order_id" invisible="1"/>
+                    <field name="mode" invisible="1"/>
+                    <field name="note" readonly="1" nolabel="1"/>
+                    <field name="user_id"/>
+                </group>
+                <footer>
+                    <button name="action_confirm" string="تأكيد" type="object" class="btn-primary"/>
+                    <button string="إلغاء" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
         </field>
     </record>
 
