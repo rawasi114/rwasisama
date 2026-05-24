@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <!-- مقاس الورق A4 لنماذج الورشة -->
+    <!-- مقاس الورق A4 — هوامش قياسية تترك مساحة لترويسة/تذييل أودو -->
     <record id="paperformat_rwasi_a4" model="report.paperformat">
         <field name="name">Rwasi Workshop A4</field>
         <field name="format">A4</field>
         <field name="orientation">Portrait</field>
-        <field name="margin_top">7</field>
-        <field name="margin_bottom">7</field>
+        <field name="margin_top">40</field>
+        <field name="margin_bottom">28</field>
         <field name="margin_left">7</field>
         <field name="margin_right">7</field>
-        <field name="header_spacing">5</field>
-        <field name="dpi">96</field>
+        <field name="header_spacing">35</field>
+        <field name="dpi">90</field>
     </record>
 
     <!-- ============ تنسيق قياسي نظيف (ستايل أودو) ============ -->
