@@ -691,7 +691,8 @@ class WorkOrderMaterial(models.Model):
     order_id = fields.Many2one(
         'rwasi.work.order', string='أمر التصنيع', required=True, ondelete='cascade')
     material_id = fields.Many2one(
-        'product.product', string='المادة الخام', required=True)
+        'product.product', string='المادة الخام', required=True,
+        domain=[('purchase_ok', '=', True), ('sale_ok', '=', False)])
     vendor_id = fields.Many2one(
         'res.partner', string='المورّد',
         help='يُستخدم عند إنشاء طلب عرض السعر. اتركه فارغاً ليُحدَّد لاحقاً.')

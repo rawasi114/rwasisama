@@ -21,7 +21,8 @@ class ProductWorkshopMaterial(models.Model):
     product_tmpl_id = fields.Many2one(
         'product.template', string='المنتج', required=True, ondelete='cascade')
     material_id = fields.Many2one(
-        'product.product', string='المادة الخام', required=True)
+        'product.product', string='المادة الخام', required=True,
+        domain=[('purchase_ok', '=', True), ('sale_ok', '=', False)])
     qty = fields.Float(string='الكمية لكل وحدة', default=1.0)
     uom_name = fields.Char(
         related='material_id.uom_id.name', string='الوحدة')
