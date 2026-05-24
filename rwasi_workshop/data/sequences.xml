@@ -36,6 +36,13 @@
         <field name="padding">4</field>
     </record>
 
+    <record id="seq_customer_payment" model="ir.sequence">
+        <field name="name">دفعة عميل</field>
+        <field name="code">rwasi.customer.payment</field>
+        <field name="prefix">26-PAY/</field>
+        <field name="padding">4</field>
+    </record>
+
     <record id="seq_daily_preparation" model="ir.sequence">
         <field name="name">التحضير اليومي</field>
         <field name="code">rwasi.daily.preparation</field>

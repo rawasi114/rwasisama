@@ -35,10 +35,38 @@ class SaleOrder(models.Model):
     work_order_count = fields.Integer(
         string='عدد أوامر التصنيع', compute='_compute_work_order_count')
 
+    workshop_payment_ids = fields.One2many(
+        'rwasi.customer.payment', 'sale_order_id', string='دفعات العميل')
+    workshop_payment_count = fields.Integer(compute='_compute_workshop_payment')
+    amount_paid = fields.Monetary(
+        string='المُحصَّل', compute='_compute_workshop_payment',
+        currency_field='currency_id')
+    payment_ratio = fields.Float(
+        string='نسبة السداد', compute='_compute_workshop_payment')
+
     @api.depends('work_order_ids')
     def _compute_work_order_count(self):
         for order in self:
             order.work_order_count = len(order.work_order_ids)
+
+    @api.depends('workshop_payment_ids.amount', 'amount_total')
+    def _compute_workshop_payment(self):
+        for order in self:
+            order.amount_paid = sum(order.workshop_payment_ids.mapped('amount'))
+            order.workshop_payment_count = len(order.workshop_payment_ids)
+            order.payment_ratio = (order.amount_paid / order.amount_total) \
+                if order.amount_total else 0.0
+
+    def action_view_workshop_payments(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('دفعات العميل'),
+            'res_model': 'rwasi.customer.payment',
+            'view_mode': 'list,form',
+            'domain': [('sale_order_id', '=', self.id)],
+            'context': {'default_sale_order_id': self.id},
+        }
 
     def action_confirm(self):
         res = super().action_confirm()

@@ -98,29 +98,17 @@ class WorkOrder(models.Model):
         return [s[0] for s in self._fields['state'].selection]
 
     @api.depends('sale_order_id', 'sale_order_id.amount_total',
-                 'sale_order_id.invoice_ids.payment_state',
-                 'sale_order_id.invoice_ids.state',
-                 'sale_order_id.invoice_ids.amount_total',
-                 'sale_order_id.invoice_ids.amount_residual')
+                 'sale_order_id.workshop_payment_ids.amount')
     def _compute_payment_status(self):
         for wo in self:
             so = wo.sale_order_id.sudo() if wo.sale_order_id else False
             order_total = so.amount_total if so else 0.0
-            if not so or order_total <= 0:
-                wo.payment_status = 'not_paid'
-                wo.paid_ratio = 0.0
-                continue
-            invoices = so.invoice_ids.filtered(
-                lambda m: m.move_type in ('out_invoice', 'out_refund')
-                and m.state == 'posted')
-            # المُحصَّل فعلياً (الفواتير ناقص المتبقّي، مع خصم الإشعارات الدائنة)
-            collected = 0.0
-            for inv in invoices:
-                sign = 1.0 if inv.move_type == 'out_invoice' else -1.0
-                collected += sign * (inv.amount_total - inv.amount_residual)
-            ratio = collected / order_total if order_total else 0.0
+            collected = sum(so.workshop_payment_ids.mapped('amount')) if so else 0.0
+            ratio = (collected / order_total) if order_total else 0.0
             wo.paid_ratio = ratio
-            if ratio >= 0.999:
+            if order_total <= 0:
+                wo.payment_status = 'not_paid'
+            elif ratio >= 0.999:
                 wo.payment_status = 'paid'
             elif ratio > 0.0:
                 wo.payment_status = 'partial'

@@ -13,6 +13,14 @@
                         invisible="work_order_count == 0">
                     <field name="work_order_count" widget="statinfo" string="أوامر التصنيع"/>
                 </button>
+                <button name="action_view_workshop_payments" type="object"
+                        class="oe_stat_button" icon="fa-money">
+                    <field name="workshop_payment_count" widget="statinfo" string="دفعات العميل"/>
+                </button>
+            </xpath>
+            <xpath expr="//header" position="inside">
+                <button name="action_view_workshop_payments" type="object"
+                        string="استلام دفعة" class="btn-secondary"/>
             </xpath>
         </field>
     </record>
