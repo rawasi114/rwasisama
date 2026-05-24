@@ -46,11 +46,6 @@
                                     <field name="inspector_cert"/>
                                     <field name="inspector_signature" widget="signature"/>
                                 </group>
-                                <group string="مشرف الورشة">
-                                    <field name="supervisor_name"/>
-                                    <field name="supervisor_date"/>
-                                    <field name="supervisor_signature" widget="signature"/>
-                                </group>
                                 <group string="مدير العمليات">
                                     <field name="manager_name"/>
                                     <field name="manager_date"/>
@@ -131,11 +126,6 @@
                                     <field name="raised_name"/>
                                     <field name="raised_date"/>
                                     <field name="raised_signature" widget="signature"/>
-                                </group>
-                                <group string="مشرف الورشة">
-                                    <field name="supervisor_name"/>
-                                    <field name="supervisor_date"/>
-                                    <field name="supervisor_signature" widget="signature"/>
                                 </group>
                                 <group string="مدير الجودة">
                                     <field name="qa_manager_name"/>

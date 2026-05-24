@@ -56,11 +56,6 @@
                                     <field name="supervisor_section"/>
                                     <field name="prepared_signature" widget="signature"/>
                                 </group>
-                                <group string="مشرف الورشة">
-                                    <field name="supervisor_name"/>
-                                    <field name="supervisor_date"/>
-                                    <field name="supervisor_signature" widget="signature"/>
-                                </group>
                                 <group string="مدير العمليات">
                                     <field name="manager_name"/>
                                     <field name="manager_date"/>
@@ -152,12 +147,6 @@
                                     <field name="storekeeper_id_no"/>
                                     <field name="prepared_signature" widget="signature"/>
                                 </group>
-                                <group string="مهندس الجودة">
-                                    <field name="supervisor_name"/>
-                                    <field name="supervisor_date"/>
-                                    <field name="qc_ref"/>
-                                    <field name="supervisor_signature" widget="signature"/>
-                                </group>
                                 <group string="مدير العمليات">
                                     <field name="manager_name"/>
                                     <field name="manager_date"/>
@@ -241,12 +230,6 @@
                                     <field name="prepared_name"/>
                                     <field name="prepared_date"/>
                                     <field name="prepared_signature" widget="signature"/>
-                                </group>
-                                <group string="المستلم - مشرف الورشة">
-                                    <field name="supervisor_name"/>
-                                    <field name="supervisor_date"/>
-                                    <field name="receiver_id_no"/>
-                                    <field name="supervisor_signature" widget="signature"/>
                                 </group>
                                 <group string="مدير العمليات">
                                     <field name="manager_name"/>

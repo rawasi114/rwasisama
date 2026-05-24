@@ -54,11 +54,6 @@
                                     <field name="prepared_date"/>
                                     <field name="prepared_signature" widget="signature"/>
                                 </group>
-                                <group string="مشرف ورشة النجارة">
-                                    <field name="supervisor_name"/>
-                                    <field name="supervisor_date"/>
-                                    <field name="supervisor_signature" widget="signature"/>
-                                </group>
                                 <group string="مدير العمليات">
                                     <field name="manager_name"/>
                                     <field name="manager_date"/>
@@ -157,11 +152,6 @@
                                     <field name="prepared_date"/>
                                     <field name="prepared_signature" widget="signature"/>
                                 </group>
-                                <group string="مشرف ورشة الحدادة">
-                                    <field name="supervisor_name"/>
-                                    <field name="supervisor_date"/>
-                                    <field name="supervisor_signature" widget="signature"/>
-                                </group>
                                 <group string="مدير العمليات">
                                     <field name="manager_name"/>
                                     <field name="manager_date"/>
@@ -258,11 +248,6 @@
                                     <field name="prepared_date"/>
                                     <field name="prepared_signature" widget="signature"/>
                                 </group>
-                                <group string="مشرف ورشة الألمنيوم">
-                                    <field name="supervisor_name"/>
-                                    <field name="supervisor_date"/>
-                                    <field name="supervisor_signature" widget="signature"/>
-                                </group>
                                 <group string="مدير العمليات">
                                     <field name="manager_name"/>
                                     <field name="manager_date"/>
@@ -350,11 +335,6 @@
                                     <field name="prepared_name"/>
                                     <field name="prepared_date"/>
                                     <field name="prepared_signature" widget="signature"/>
-                                </group>
-                                <group string="مشرف الورشة">
-                                    <field name="supervisor_name"/>
-                                    <field name="supervisor_date"/>
-                                    <field name="supervisor_signature" widget="signature"/>
                                 </group>
                                 <group string="مدير العمليات">
                                     <field name="manager_name"/>

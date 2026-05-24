@@ -65,11 +65,6 @@
                                     <field name="prepared_date"/>
                                     <field name="prepared_signature" widget="signature"/>
                                 </group>
-                                <group string="مشرف المبيعات">
-                                    <field name="sales_supervisor_name"/>
-                                    <field name="sales_supervisor_date"/>
-                                    <field name="sales_supervisor_signature" widget="signature"/>
-                                </group>
                                 <group string="مدير المبيعات">
                                     <field name="sales_manager_name"/>
                                     <field name="sales_manager_date"/>

@@ -234,12 +234,6 @@
                                     <field name="prepared_phone"/>
                                     <field name="prepared_signature" widget="signature"/>
                                 </group>
-                                <group string="مشرف الورشة">
-                                    <field name="supervisor_name"/>
-                                    <field name="supervisor_date"/>
-                                    <field name="supervisor_section"/>
-                                    <field name="supervisor_signature" widget="signature"/>
-                                </group>
                                 <group string="مدير العمليات">
                                     <field name="manager_name"/>
                                     <field name="manager_date"/>
