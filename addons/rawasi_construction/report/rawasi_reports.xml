@@ -13,6 +13,7 @@
     <template id="report_competition">
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="o">
+                <t t-set="doc" t-value="o"/>
                 <t t-call="web.external_layout">
                     <div class="page">
                         <h2 class="text-center">تقرير المنافسة</h2>
@@ -71,6 +72,7 @@
     <template id="report_material_request">
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="o">
+                <t t-set="doc" t-value="o"/>
                 <t t-call="web.external_layout">
                     <div class="page">
                         <h2 class="text-center">طلب مواد</h2>
@@ -119,6 +121,7 @@
     <template id="report_purchase_order">
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="o">
+                <t t-set="doc" t-value="o"/>
                 <t t-call="web.external_layout">
                     <div class="page">
                         <h2 class="text-center">أمر شراء</h2>
@@ -168,6 +171,7 @@
     <template id="report_goods_receipt">
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="o">
+                <t t-set="doc" t-value="o"/>
                 <t t-call="web.external_layout">
                     <div class="page">
                         <h2 class="text-center">سند استلام مواد</h2>
@@ -211,6 +215,7 @@
     <template id="report_document">
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="o">
+                <t t-set="doc" t-value="o"/>
                 <t t-call="web.external_layout">
                     <div class="page">
                         <h2 class="text-center">مستند المشروع</h2>
@@ -245,6 +250,7 @@
     <template id="report_dsr">
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="o">
+                <t t-set="doc" t-value="o"/>
                 <t t-call="web.external_layout">
                     <div class="page">
                         <h2 class="text-center">التقرير اليومي للموقع</h2>
@@ -292,6 +298,7 @@
     <template id="report_ncr">
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="o">
+                <t t-set="doc" t-value="o"/>
                 <t t-call="web.external_layout">
                     <div class="page">
                         <h2 class="text-center">تقرير عدم مطابقة</h2>
@@ -330,6 +337,7 @@
     <template id="report_rfi">
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="o">
+                <t t-set="doc" t-value="o"/>
                 <t t-call="web.external_layout">
                     <div class="page">
                         <h2 class="text-center">طلب معلومات</h2>
@@ -367,6 +375,7 @@
     <template id="report_variation_order">
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="o">
+                <t t-set="doc" t-value="o"/>
                 <t t-call="web.external_layout">
                     <div class="page">
                         <h2 class="text-center">أمر تغيير</h2>
@@ -415,6 +424,7 @@
     <template id="report_payment_certificate">
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="o">
+                <t t-set="doc" t-value="o"/>
                 <t t-call="web.external_layout">
                     <div class="page">
                         <h2 class="text-center">مستخلص دفع</h2>
@@ -487,6 +497,7 @@
     <template id="report_bank_guarantee">
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="o">
+                <t t-set="doc" t-value="o"/>
                 <t t-call="web.external_layout">
                     <div class="page">
                         <h2 class="text-center">ضمان بنكي</h2>
