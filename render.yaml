@@ -45,9 +45,13 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
-      # عنوان الـ API العام (يُمرَّر إليه /api/* عبر proxy). عدّله إن اختلف اسم الخدمة.
+      # عنوان الـ API العام (يُمرَّر إليه /api/* عبر proxy) — يُشتق آلياً من خدمة الـ API
+      # (يبقى صحيحاً حتى لو أضافت Render لاحقة للاسم). الواجهة تضيف https تلقائياً.
       - key: API_INTERNAL_URL
-        value: https://rawasi-api.onrender.com
+        fromService:
+          type: web
+          name: rawasi-api
+          property: host
 
 databases:
   - name: rawasi-db

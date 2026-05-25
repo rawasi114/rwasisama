@@ -1,6 +1,10 @@
 // عنوان الـ API الداخلي الذي تُمرَّر إليه طلبات "/api/*" (proxy).
 // محلياً: http://localhost:4000 — في الإنتاج: يُضبط عبر متغير البيئة API_INTERNAL_URL.
-const API_INTERNAL_URL = process.env.API_INTERNAL_URL ?? 'http://localhost:4000';
+// إن جاء بدون بروتوكول (مثل host من Render) نُضيف https تلقائياً.
+let API_INTERNAL_URL = process.env.API_INTERNAL_URL ?? 'http://localhost:4000';
+if (!/^https?:\/\//.test(API_INTERNAL_URL)) {
+  API_INTERNAL_URL = `https://${API_INTERNAL_URL}`;
+}
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
