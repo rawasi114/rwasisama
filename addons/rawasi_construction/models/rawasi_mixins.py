@@ -36,10 +36,8 @@ class RawasiPrintableMixin(models.AbstractModel):
     def action_print_with_attachments(self):
         """يولّد تقرير النموذج ويدمجه مع مرفقات الـ PDF في ملف واحد قابل للتنزيل."""
         self.ensure_one()
-        report_obj = self.env["ir.actions.report"]
         report_xmlid = self._report_xmlid()
-        # نولّد التقرير بلا ختم ثم نختم الملف المدموج كاملاً (التقرير + المرفقات)
-        pdf, _dummy = report_obj.with_context(rawasi_skip_stamp=True)._render_qweb_pdf(
+        pdf, _dummy = self.env["ir.actions.report"]._render_qweb_pdf(
             report_xmlid, res_ids=self.ids
         )
         streams = [pdf]
@@ -47,12 +45,6 @@ class RawasiPrintableMixin(models.AbstractModel):
             if att.mimetype == "application/pdf" and att.datas:
                 streams.append(base64.b64decode(att.datas))
         merged = merge_pdf(streams)
-        stamp_bytes = report_obj._rawasi_company_stamp()
-        if stamp_bytes:
-            try:
-                merged = report_obj._rawasi_overlay_stamp(merged, stamp_bytes)
-            except Exception:
-                pass
         fname = (self.display_name or "document").replace("/", "-")
         attachment = self.env["ir.attachment"].create({
             "name": "%s.pdf" % fname,
