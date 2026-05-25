@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- لوحة التحكم: client action تعرض مكوّن OWL -->
+        <record id="action_rawasi_dashboard" model="ir.actions.client">
+            <field name="name">لوحة التحكم</field>
+            <field name="tag">rawasi_dashboard</field>
+        </record>
+
+        <!-- قائمة التطبيق الرئيسية (تظهر في "التطبيقات") -->
+        <menuitem id="menu_rawasi_root"
+                  name="رواسي سما"
+                  web_icon="rawasi_construction,static/description/icon.png"
+                  sequence="10"
+                  groups="group_site_engineer,group_accountant,group_planning_engineer,group_tech_office_manager,group_projects_director,group_external_consultant,group_ceo"/>
+
+        <menuitem id="menu_rawasi_dashboard"
+                  name="لوحة التحكم"
+                  parent="menu_rawasi_root"
+                  action="action_rawasi_dashboard"
+                  sequence="10"/>
+
+        <menuitem id="menu_rawasi_competitions"
+                  name="المنافسات"
+                  parent="menu_rawasi_root"
+                  action="action_rawasi_competition"
+                  sequence="20"/>
+
+        <menuitem id="menu_rawasi_price_intelligence"
+                  name="ذاكرة الأسعار"
+                  parent="menu_rawasi_root"
+                  action="action_price_intelligence"
+                  sequence="25"/>
+
+        <!-- لوحات وتحليلات (تنفيذية / مشاريع / مخاطر) -->
+        <menuitem id="menu_rawasi_analytics"
+                  name="لوحات وتحليلات"
+                  parent="menu_rawasi_root"
+                  sequence="15"/>
+        <menuitem id="menu_rawasi_dash_exec"
+                  name="تنفيذية"
+                  parent="menu_rawasi_analytics"
+                  sequence="10"/>
+        <menuitem id="menu_dash_competition"
+                  name="تحليل المنافسات"
+                  parent="menu_rawasi_dash_exec"
+                  action="action_dash_competition"
+                  sequence="10"/>
+        <menuitem id="menu_dash_ipc"
+                  name="تحليل المستخلصات"
+                  parent="menu_rawasi_dash_exec"
+                  action="action_dash_ipc"
+                  sequence="20"/>
+        <menuitem id="menu_rawasi_dash_project"
+                  name="المشاريع"
+                  parent="menu_rawasi_analytics"
+                  sequence="20"/>
+        <menuitem id="menu_dash_budget"
+                  name="تحليل الميزانية"
+                  parent="menu_rawasi_dash_project"
+                  action="action_dash_budget"
+                  sequence="10"/>
+        <menuitem id="menu_rawasi_dash_risk"
+                  name="المخاطر"
+                  parent="menu_rawasi_analytics"
+                  sequence="30"/>
+        <menuitem id="menu_dash_ncr"
+                  name="تحليل عدم المطابقة"
+                  parent="menu_rawasi_dash_risk"
+                  action="action_dash_ncr"
+                  sequence="10"/>
+        <menuitem id="menu_dash_rfi"
+                  name="تحليل طلبات المعلومات"
+                  parent="menu_rawasi_dash_risk"
+                  action="action_dash_rfi"
+                  sequence="20"/>
+        <menuitem id="menu_dash_bg"
+                  name="تحليل الضمانات البنكية"
+                  parent="menu_rawasi_dash_risk"
+                  action="action_dash_bg"
+                  sequence="30"/>
+
+        <menuitem id="menu_rawasi_wbs"
+                  name="الجداول الزمنية (WBS)"
+                  parent="menu_rawasi_root"
+                  action="action_wbs_activity"
+                  sequence="30"/>
+
+        <!-- المشتريات والميزانية -->
+        <menuitem id="menu_rawasi_procurement"
+                  name="المشتريات والميزانية"
+                  parent="menu_rawasi_root"
+                  sequence="40"/>
+        <menuitem id="menu_rawasi_mr"
+                  name="طلبات المواد"
+                  parent="menu_rawasi_procurement"
+                  action="action_material_request"
+                  sequence="10"/>
+        <menuitem id="menu_rawasi_po"
+                  name="أوامر الشراء"
+                  parent="menu_rawasi_procurement"
+                  action="action_purchase_order"
+                  sequence="20"/>
+        <menuitem id="menu_rawasi_grn"
+                  name="سندات الاستلام"
+                  parent="menu_rawasi_procurement"
+                  action="action_goods_receipt"
+                  sequence="30"/>
+        <menuitem id="menu_rawasi_budget"
+                  name="لوحة الميزانية"
+                  parent="menu_rawasi_procurement"
+                  action="action_boq_budget"
+                  sequence="40"/>
+
+        <!-- المستندات والجودة والموقع -->
+        <menuitem id="menu_rawasi_field"
+                  name="المستندات والموقع"
+                  parent="menu_rawasi_root"
+                  sequence="50"/>
+        <menuitem id="menu_rawasi_documents"
+                  name="المستندات (DMS)"
+                  parent="menu_rawasi_field"
+                  action="action_document"
+                  sequence="10"/>
+        <menuitem id="menu_rawasi_mas"
+                  name="اعتماد المواد (MAS)"
+                  parent="menu_rawasi_field"
+                  action="action_material_approval"
+                  sequence="20"/>
+        <menuitem id="menu_rawasi_dsr"
+                  name="التقارير اليومية (DSR)"
+                  parent="menu_rawasi_field"
+                  action="action_daily_report"
+                  sequence="30"/>
+        <menuitem id="menu_rawasi_ncr"
+                  name="عدم المطابقة (NCR)"
+                  parent="menu_rawasi_field"
+                  action="action_ncr"
+                  sequence="40"/>
+        <menuitem id="menu_rawasi_rfi"
+                  name="طلبات المعلومات (RFI)"
+                  parent="menu_rawasi_field"
+                  action="action_rfi"
+                  sequence="50"/>
+
+        <!-- العقود والمستحقات -->
+        <menuitem id="menu_rawasi_contracts"
+                  name="العقود والمستحقات"
+                  parent="menu_rawasi_root"
+                  sequence="55"/>
+        <menuitem id="menu_rawasi_vo"
+                  name="أوامر التغيير (VO)"
+                  parent="menu_rawasi_contracts"
+                  action="action_variation_order"
+                  sequence="10"/>
+        <menuitem id="menu_rawasi_ipc"
+                  name="المستخلصات (IPC)"
+                  parent="menu_rawasi_contracts"
+                  action="action_payment_certificate"
+                  sequence="20"/>
+        <menuitem id="menu_rawasi_bg"
+                  name="الضمانات البنكية (BG)"
+                  parent="menu_rawasi_contracts"
+                  action="action_bank_guarantee"
+                  sequence="30"/>
+
+        <!-- الإعدادات -->
+        <menuitem id="menu_rawasi_config"
+                  name="الإعدادات"
+                  parent="menu_rawasi_root"
+                  sequence="90"
+                  groups="group_tech_office_manager,group_projects_director,group_ceo"/>
+        <menuitem id="menu_rawasi_units"
+                  name="وحدات القياس"
+                  parent="menu_rawasi_config"
+                  action="action_rawasi_unit"
+                  sequence="10"/>
+        <menuitem id="menu_rawasi_sbc"
+                  name="رموز كود البناء (SBC)"
+                  parent="menu_rawasi_config"
+                  action="action_rawasi_sbc"
+                  sequence="20"/>
+        <menuitem id="menu_rawasi_wbs_phase"
+                  name="المراحل القياسية (WBS)"
+                  parent="menu_rawasi_config"
+                  action="action_wbs_phase"
+                  sequence="30"/>
+    </data>
+</odoo>

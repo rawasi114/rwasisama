@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- فئة الصلاحيات -->
+        <record id="module_category_rawasi" model="ir.module.category">
+            <field name="name">رواسي سما</field>
+            <field name="description">صلاحيات موديول إدارة الإنشاءات والمقاولات</field>
+            <field name="sequence">20</field>
+        </record>
+
+        <!-- Privilege يجمع الأدوار في حقل اختيار واحد بنموذج المستخدم (Odoo 19) -->
+        <record id="privilege_rawasi_role" model="res.groups.privilege">
+            <field name="name">الدور الوظيفي</field>
+            <field name="category_id" ref="module_category_rawasi"/>
+            <field name="sequence">10</field>
+        </record>
+
+        <!-- الأدوار السبعة (Personas). كلها مستخدمون داخليون في المرحلة صفر؛
+             قواعد السجلات وتقييد الاستشاري الخارجي تأتي في مرحلة الأمان لاحقاً. -->
+
+        <record id="group_site_engineer" model="res.groups">
+            <field name="name">مهندس الموقع</field>
+            <field name="privilege_id" ref="privilege_rawasi_role"/>
+            <field name="implied_ids" eval="[Command.link(ref('base.group_user'))]"/>
+        </record>
+
+        <record id="group_accountant" model="res.groups">
+            <field name="name">المحاسب</field>
+            <field name="privilege_id" ref="privilege_rawasi_role"/>
+            <field name="implied_ids" eval="[Command.link(ref('base.group_user'))]"/>
+        </record>
+
+        <record id="group_planning_engineer" model="res.groups">
+            <field name="name">مهندس التخطيط</field>
+            <field name="privilege_id" ref="privilege_rawasi_role"/>
+            <field name="implied_ids" eval="[Command.link(ref('base.group_user'))]"/>
+        </record>
+
+        <record id="group_tech_office_manager" model="res.groups">
+            <field name="name">مدير المكتب الفني</field>
+            <field name="privilege_id" ref="privilege_rawasi_role"/>
+            <field name="implied_ids" eval="[Command.link(ref('base.group_user'))]"/>
+        </record>
+
+        <record id="group_projects_director" model="res.groups">
+            <field name="name">مدير المشاريع</field>
+            <field name="privilege_id" ref="privilege_rawasi_role"/>
+            <field name="implied_ids" eval="[Command.link(ref('base.group_user'))]"/>
+        </record>
+
+        <record id="group_external_consultant" model="res.groups">
+            <field name="name">استشاري خارجي</field>
+            <field name="privilege_id" ref="privilege_rawasi_role"/>
+            <field name="implied_ids" eval="[Command.link(ref('base.group_user'))]"/>
+        </record>
+
+        <!-- المدير العام يرث كل الأدوار الأخرى (superset)، ويُمنح لمستخدم
+             المدير (admin) عند التثبيت ليظهر التطبيق ويكون قابلاً للاستخدام فوراً. -->
+        <record id="group_ceo" model="res.groups">
+            <field name="name">المدير العام</field>
+            <field name="privilege_id" ref="privilege_rawasi_role"/>
+            <field name="user_ids" eval="[Command.link(ref('base.user_admin'))]"/>
+            <field name="implied_ids" eval="[Command.link(ref('group_site_engineer')),
+                                             Command.link(ref('group_accountant')),
+                                             Command.link(ref('group_planning_engineer')),
+                                             Command.link(ref('group_tech_office_manager')),
+                                             Command.link(ref('group_projects_director')),
+                                             Command.link(ref('group_external_consultant'))]"/>
+        </record>
+    </data>
+</odoo>

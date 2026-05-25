@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- المراحل الخمس القياسية (قوالب قابلة للتعديل) -->
+    <data noupdate="1">
+        <record id="wbs_phase_mobilization" model="rawasi.wbs.phase">
+            <field name="name">التعبئة والأعمال التمهيدية</field>
+            <field name="code">MOB</field>
+            <field name="sequence">10</field>
+            <field name="color">4</field>
+        </record>
+        <record id="wbs_phase_structure" model="rawasi.wbs.phase">
+            <field name="name">الأعمال الإنشائية</field>
+            <field name="code">STR</field>
+            <field name="sequence">20</field>
+            <field name="color">1</field>
+        </record>
+        <record id="wbs_phase_architecture" model="rawasi.wbs.phase">
+            <field name="name">أعمال العمارة والتشطيبات</field>
+            <field name="code">ARC</field>
+            <field name="sequence">30</field>
+            <field name="color">3</field>
+        </record>
+        <record id="wbs_phase_mep" model="rawasi.wbs.phase">
+            <field name="name">الأعمال الكهروميكانيكية</field>
+            <field name="code">MEP</field>
+            <field name="sequence">40</field>
+            <field name="color">5</field>
+        </record>
+        <record id="wbs_phase_handover" model="rawasi.wbs.phase">
+            <field name="name">الاختبار والتشغيل والتسليم</field>
+            <field name="code">HND</field>
+            <field name="sequence">50</field>
+            <field name="color">10</field>
+        </record>
+    </data>
+</odoo>
