@@ -54,10 +54,12 @@
             <field name="implied_ids" eval="[Command.link(ref('base.group_user'))]"/>
         </record>
 
-        <!-- المدير العام يرث كل الأدوار الأخرى (superset) -->
+        <!-- المدير العام يرث كل الأدوار الأخرى (superset)، ويُمنح لمستخدم
+             المدير (admin) عند التثبيت ليظهر التطبيق ويكون قابلاً للاستخدام فوراً. -->
         <record id="group_ceo" model="res.groups">
             <field name="name">المدير العام</field>
             <field name="privilege_id" ref="privilege_rawasi_role"/>
+            <field name="user_ids" eval="[Command.link(ref('base.user_admin'))]"/>
             <field name="implied_ids" eval="[Command.link(ref('group_site_engineer')),
                                              Command.link(ref('group_accountant')),
                                              Command.link(ref('group_planning_engineer')),

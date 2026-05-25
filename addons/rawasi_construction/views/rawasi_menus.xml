@@ -10,6 +10,7 @@
         <!-- قائمة التطبيق الرئيسية (تظهر في "التطبيقات") -->
         <menuitem id="menu_rawasi_root"
                   name="رواسي سما"
+                  web_icon="rawasi_construction,static/description/icon.png"
                   sequence="10"
                   groups="group_site_engineer,group_accountant,group_planning_engineer,group_tech_office_manager,group_projects_director,group_external_consultant,group_ceo"/>
 
