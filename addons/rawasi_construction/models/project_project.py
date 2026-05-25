@@ -10,17 +10,19 @@ class ProjectProject(models.Model):
     )
     wbs_count = fields.Integer(string="عدد الأنشطة", compute="_compute_wbs_count")
 
-    document_ids = fields.One2many("rawasi.document", "project_id", string="المستندات")
-    mas_ids = fields.One2many("rawasi.material.approval", "project_id", string="اعتمادات المواد")
-    dsr_ids = fields.One2many("rawasi.daily.report", "project_id", string="التقارير اليومية")
-    ncr_ids = fields.One2many("rawasi.ncr", "project_id", string="تقارير عدم المطابقة")
-    rfi_ids = fields.One2many("rawasi.rfi", "project_id", string="طلبات المعلومات")
+    # ملاحظة: نستخدم بادئة rawasi_ لتفادي التعارض مع حقول موديولات أخرى
+    # (مثل documents_project الذي يعرّف document_ids/document_count على المشروع).
+    rawasi_document_ids = fields.One2many("rawasi.document", "project_id", string="المستندات")
+    rawasi_mas_ids = fields.One2many("rawasi.material.approval", "project_id", string="اعتمادات المواد")
+    rawasi_dsr_ids = fields.One2many("rawasi.daily.report", "project_id", string="التقارير اليومية")
+    rawasi_ncr_ids = fields.One2many("rawasi.ncr", "project_id", string="تقارير عدم المطابقة")
+    rawasi_rfi_ids = fields.One2many("rawasi.rfi", "project_id", string="طلبات المعلومات")
 
-    document_count = fields.Integer(compute="_compute_rawasi_phase4_counts")
-    mas_count = fields.Integer(compute="_compute_rawasi_phase4_counts")
-    dsr_count = fields.Integer(compute="_compute_rawasi_phase4_counts")
-    ncr_count = fields.Integer(compute="_compute_rawasi_phase4_counts")
-    rfi_count = fields.Integer(compute="_compute_rawasi_phase4_counts")
+    rawasi_document_count = fields.Integer(compute="_compute_rawasi_phase4_counts")
+    rawasi_mas_count = fields.Integer(compute="_compute_rawasi_phase4_counts")
+    rawasi_dsr_count = fields.Integer(compute="_compute_rawasi_phase4_counts")
+    rawasi_ncr_count = fields.Integer(compute="_compute_rawasi_phase4_counts")
+    rawasi_rfi_count = fields.Integer(compute="_compute_rawasi_phase4_counts")
 
     def _compute_wbs_count(self):
         for project in self:
@@ -28,11 +30,11 @@ class ProjectProject(models.Model):
 
     def _compute_rawasi_phase4_counts(self):
         for project in self:
-            project.document_count = len(project.document_ids)
-            project.mas_count = len(project.mas_ids)
-            project.dsr_count = len(project.dsr_ids)
-            project.ncr_count = len(project.ncr_ids)
-            project.rfi_count = len(project.rfi_ids)
+            project.rawasi_document_count = len(project.rawasi_document_ids)
+            project.rawasi_mas_count = len(project.rawasi_mas_ids)
+            project.rawasi_dsr_count = len(project.rawasi_dsr_ids)
+            project.rawasi_ncr_count = len(project.rawasi_ncr_ids)
+            project.rawasi_rfi_count = len(project.rawasi_rfi_ids)
 
     def _rawasi_open_related(self, name, model):
         self.ensure_one()
