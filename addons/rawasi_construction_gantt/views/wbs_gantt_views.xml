@@ -9,7 +9,6 @@
                    date_stop="date_end"
                    default_group_by="phase_id"
                    progress="progress"
-                   dependency_field="predecessor_ids"
                    string="الجدول الزمني">
                 <field name="name"/>
                 <field name="phase_id"/>
