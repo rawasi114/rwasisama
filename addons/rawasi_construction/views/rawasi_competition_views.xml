@@ -11,7 +11,7 @@
                 <field name="submission_deadline"/>
                 <field name="boq_item_count"/>
                 <field name="amount_total_price"/>
-                <field name="margin_pct" widget="percentage" optional="show"/>
+                <field name="margin_pct" optional="show"/>
                 <field name="currency_id" column_invisible="1"/>
                 <field name="state" widget="badge"
                        decoration-success="state == 'won'"
@@ -91,7 +91,7 @@
                                     <field name="total_cost" optional="show"/>
                                     <field name="unit_price"/>
                                     <field name="total_price" optional="show"/>
-                                    <field name="margin_pct" widget="percentage" optional="hide"/>
+                                    <field name="margin_pct" optional="hide"/>
                                     <field name="sbc_code_id" optional="hide"/>
                                     <field name="mandatory_local" optional="hide"/>
                                     <field name="currency_id" column_invisible="1"/>
@@ -122,7 +122,7 @@
                         <field name="amount_indirect_cost"/>
                         <field name="amount_total_cost"/>
                         <field name="margin_amount"/>
-                        <field name="margin_pct" widget="percentage"/>
+                        <field name="margin_pct"/>
                     </group>
                     <group>
                         <field name="amount_total_price"/>

@@ -11,7 +11,7 @@
                 <field name="quantity" optional="hide"/>
                 <field name="unit_cost"/>
                 <field name="unit_price"/>
-                <field name="margin_pct" widget="percentage" optional="show"/>
+                <field name="margin_pct" optional="show"/>
                 <field name="sbc_code_id" optional="hide"/>
                 <field name="competition_id" optional="show"/>
                 <field name="currency_id" column_invisible="1"/>
@@ -40,7 +40,7 @@
                         <group>
                             <field name="unit_cost"/>
                             <field name="unit_price"/>
-                            <field name="margin_pct" widget="percentage"/>
+                            <field name="margin_pct"/>
                             <field name="price_date"/>
                             <field name="outcome"/>
                             <field name="competition_id"/>

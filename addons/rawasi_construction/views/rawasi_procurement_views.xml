@@ -252,7 +252,7 @@
                 <field name="amount_committed"/>
                 <field name="amount_spent"/>
                 <field name="amount_remaining"/>
-                <field name="consumption_pct" widget="percentage"/>
+                <field name="consumption_pct"/>
                 <field name="is_locked" widget="boolean_toggle"/>
                 <field name="budget_state" widget="badge"
                        decoration-success="budget_state == 'ok'"

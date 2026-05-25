@@ -12,7 +12,7 @@
                 <field name="date_start"/>
                 <field name="date_end"/>
                 <field name="duration" optional="show"/>
-                <field name="progress" widget="percentage" optional="show"/>
+                <field name="progress" optional="show"/>
                 <field name="planned_cost" optional="show"/>
                 <field name="is_milestone" optional="hide"/>
                 <field name="project_id" column_invisible="1"/>
@@ -39,7 +39,7 @@
                             <field name="parent_id"
                                    domain="[('project_id','=',project_id),('id','!=',id)]"/>
                             <field name="is_milestone"/>
-                            <field name="progress" widget="percentage"/>
+                            <field name="progress"/>
                         </group>
                         <group>
                             <field name="date_start"/>
@@ -80,7 +80,7 @@
                                     <field name="name"/>
                                     <field name="date_start"/>
                                     <field name="date_end"/>
-                                    <field name="progress" widget="percentage"/>
+                                    <field name="progress"/>
                                     <field name="project_id" column_invisible="1"/>
                                 </list>
                             </field>

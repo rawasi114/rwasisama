@@ -158,7 +158,7 @@
                             <field name="prev_qty"/>
                             <field name="work_qty"/>
                             <field name="cumulative_qty"/>
-                            <field name="cumulative_pct" widget="percentage"/>
+                            <field name="cumulative_pct"/>
                             <field name="amount_work"/>
                             <field name="amount_cumulative" optional="show"/>
                             <field name="currency_id" column_invisible="1"/>
