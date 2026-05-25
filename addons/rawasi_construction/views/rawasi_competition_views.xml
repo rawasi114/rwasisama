@@ -95,6 +95,10 @@
                                     <field name="sbc_code_id" optional="hide"/>
                                     <field name="mandatory_local" optional="hide"/>
                                     <field name="currency_id" column_invisible="1"/>
+                                    <button name="action_show_price_suggestions" type="object"
+                                            icon="fa-lightbulb-o" title="اقتراحات الأسعار التاريخية"/>
+                                    <button name="action_apply_best_price" type="object"
+                                            icon="fa-magic" title="تطبيق أفضل سعر مطابق"/>
                                 </list>
                             </field>
                         </page>

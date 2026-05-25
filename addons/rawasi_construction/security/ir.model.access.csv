@@ -99,3 +99,8 @@ access_rfi_director,rfi.director,model_rawasi_rfi,group_projects_director,1,1,1,
 access_rfi_planning,rfi.planning,model_rawasi_rfi,group_planning_engineer,1,0,0,0
 access_rfi_accountant,rfi.accountant,model_rawasi_rfi,group_accountant,1,0,0,0
 access_rfi_consultant,rfi.consultant,model_rawasi_rfi,group_external_consultant,1,1,0,0
+access_pi_planning,pi.planning,model_rawasi_price_intelligence,group_planning_engineer,1,1,1,1
+access_pi_tech,pi.tech,model_rawasi_price_intelligence,group_tech_office_manager,1,1,1,1
+access_pi_director,pi.director,model_rawasi_price_intelligence,group_projects_director,1,1,1,1
+access_pi_site,pi.site,model_rawasi_price_intelligence,group_site_engineer,1,0,0,0
+access_pi_accountant,pi.accountant,model_rawasi_price_intelligence,group_accountant,1,0,0,0

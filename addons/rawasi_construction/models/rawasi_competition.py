@@ -2,6 +2,8 @@
 from odoo import api, fields, models, _
 from odoo.exceptions import UserError
 
+from .arabic_utils import normalize_match
+
 
 class RawasiCompetition(models.Model):
     _name = "rawasi.competition"
@@ -50,6 +52,9 @@ class RawasiCompetition(models.Model):
     )
     indirect_cost_ids = fields.One2many(
         "rawasi.indirect.cost", "competition_id", string="التكاليف غير المباشرة"
+    )
+    price_intelligence_ids = fields.One2many(
+        "rawasi.price.intelligence", "competition_id", string="لقطات ذاكرة الأسعار"
     )
 
     default_margin_pct = fields.Float(
@@ -130,15 +135,51 @@ class RawasiCompetition(models.Model):
             if not comp.boq_item_ids:
                 raise UserError(_("لا يمكن تقديم منافسة بدون بنود جدول كميات."))
         self.write({"state": "submitted"})
+        # حفظ الأسعار في ذاكرة المؤسسة تلقائياً عند التقديم
+        self._snapshot_prices()
 
     def action_won(self):
         self.write({"state": "won"})
+        self.price_intelligence_ids.write({"outcome": "won"})
 
     def action_lost(self):
         self.write({"state": "lost"})
+        self.price_intelligence_ids.write({"outcome": "lost"})
 
     def action_reset_to_draft(self):
+        self.price_intelligence_ids.unlink()
         self.write({"state": "draft"})
+
+    def _snapshot_prices(self):
+        """يلتقط أسعار البنود المسعّرة في ذاكرة الأسعار (تحديث لقطة المنافسة)."""
+        PI = self.env["rawasi.price.intelligence"]
+        today = fields.Date.context_today(self)
+        for comp in self:
+            comp.price_intelligence_ids.unlink()
+            rows = []
+            for item in comp.boq_item_ids:
+                if not item.unit_price:
+                    continue
+                rows.append({
+                    "competition_id": comp.id,
+                    "boq_item_id": item.id,
+                    "name": item.name,
+                    "name_normalized": normalize_match(item.name),
+                    "category": item.category,
+                    "unit_id": item.unit_id.id,
+                    "unit_text": item.unit_text,
+                    "sbc_code_id": item.sbc_code_id.id,
+                    "quantity": item.quantity,
+                    "unit_cost": item.unit_cost,
+                    "unit_price": item.unit_price,
+                    "margin_pct": item.margin_pct,
+                    "price_date": today,
+                    "currency_id": comp.currency_id.id,
+                    "company_id": comp.company_id.id,
+                    "outcome": "submitted",
+                })
+            if rows:
+                PI.create(rows)
 
     def action_apply_margin(self):
         """يطبّق هامش الربح الافتراضي على كل البنود: سعر الوحدة = التكلفة × (1+هامش)."""

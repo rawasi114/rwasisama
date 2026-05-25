@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-from odoo import api, fields, models
+from odoo import api, fields, models, _
+from odoo.exceptions import UserError
 
 
 class RawasiBoqItem(models.Model):
@@ -131,3 +132,38 @@ class RawasiBoqItem(models.Model):
                 item.budget_state = "warning"
             else:
                 item.budget_state = "ok"
+
+    # ── الذكاء التسعيري: اقتراحات من ذاكرة الأسعار ───────────────
+    def _price_matches(self, limit=20):
+        self.ensure_one()
+        return self.env["rawasi.price.intelligence"].search_matches(
+            self.name or "",
+            unit_id=self.unit_id.id,
+            exclude_competition_id=self.competition_id.id,
+            limit=limit,
+        )
+
+    def action_show_price_suggestions(self):
+        """يفتح لوحة الأسعار التاريخية المطابقة لهذا البند (Side Panel)."""
+        self.ensure_one()
+        matches = self._price_matches()
+        match_ids = [rec.id for _score, rec in matches]
+        return {
+            "type": "ir.actions.act_window",
+            "name": _("اقتراحات الأسعار — %s") % (self.name or ""),
+            "res_model": "rawasi.price.intelligence",
+            "view_mode": "list,form",
+            "domain": [("id", "in", match_ids)],
+            "context": {"create": False, "edit": False},
+        }
+
+    def action_apply_best_price(self):
+        """يطبّق أفضل سعر تاريخي مطابق على تكلفة/سعر الوحدة."""
+        self.ensure_one()
+        matches = self._price_matches(limit=1)
+        if not matches:
+            raise UserError(_("لا توجد أسعار تاريخية مطابقة لهذا البند."))
+        _score, best = matches[0]
+        self.unit_cost = best.unit_cost
+        self.unit_price = best.unit_price
+        return True

@@ -26,6 +26,12 @@
                   action="action_rawasi_competition"
                   sequence="20"/>
 
+        <menuitem id="menu_rawasi_price_intelligence"
+                  name="ذاكرة الأسعار"
+                  parent="menu_rawasi_root"
+                  action="action_price_intelligence"
+                  sequence="25"/>
+
         <menuitem id="menu_rawasi_wbs"
                   name="الجداول الزمنية (WBS)"
                   parent="menu_rawasi_root"
