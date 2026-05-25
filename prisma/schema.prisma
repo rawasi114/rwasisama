@@ -1,0 +1,162 @@
+// Rawasi ERP — Prisma schema
+// Phase 0 (Foundation): RBAC, users, auth tokens, files, audit logs.
+// Domain tables (opportunities, boq_items, ...) are added in later phases.
+// Architectural rule: every future transactional table links to a BOQ item.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ──────────────────────────────────────────────────────────────
+// RBAC
+// ──────────────────────────────────────────────────────────────
+
+/// A role grouping a set of permissions. Seeded with the 7 personas.
+model Role {
+  id          String           @id @default(uuid()) @db.Uuid
+  /// Stable machine key, e.g. "CEO", "SITE_ENGINEER".
+  key         String           @unique
+  nameAr      String           @map("name_ar")
+  nameEn      String           @map("name_en")
+  /// System roles cannot be deleted from the UI.
+  isSystem    Boolean          @default(false) @map("is_system")
+  permissions RolePermission[]
+  users       User[]
+  createdAt   DateTime         @default(now()) @map("created_at")
+  updatedAt   DateTime         @updatedAt @map("updated_at")
+
+  @@map("roles")
+}
+
+/// A single CASL-style (action, subject) permission.
+model Permission {
+  id          String           @id @default(uuid()) @db.Uuid
+  /// CRUD-ish verb: "create" | "read" | "update" | "delete" | "manage".
+  action      String
+  /// Resource name, e.g. "User", "Project", "BoqItem", or "all".
+  subject     String
+  description String?
+  roles       RolePermission[]
+  createdAt   DateTime         @default(now()) @map("created_at")
+
+  @@unique([action, subject])
+  @@map("permissions")
+}
+
+model RolePermission {
+  roleId       String     @map("role_id") @db.Uuid
+  permissionId String     @map("permission_id") @db.Uuid
+  role         Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission   Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@id([roleId, permissionId])
+  @@map("role_permissions")
+}
+
+// ──────────────────────────────────────────────────────────────
+// Users & Auth
+// ──────────────────────────────────────────────────────────────
+
+model User {
+  id           String         @id @default(uuid()) @db.Uuid
+  email        String         @unique
+  passwordHash String         @map("password_hash")
+  fullNameAr   String         @map("full_name_ar")
+  fullNameEn   String?        @map("full_name_en")
+  phone        String?
+  roleId       String         @map("role_id") @db.Uuid
+  role         Role           @relation(fields: [roleId], references: [id])
+  isActive     Boolean        @default(true) @map("is_active")
+  lastLoginAt  DateTime?      @map("last_login_at")
+  refreshTokens RefreshToken[]
+  uploadedFiles File[]        @relation("UploadedBy")
+  auditLogs    AuditLog[]
+  createdAt    DateTime       @default(now()) @map("created_at")
+  updatedAt    DateTime       @updatedAt @map("updated_at")
+
+  @@index([roleId])
+  @@map("users")
+}
+
+/// Hashed refresh tokens for rotation + revocation.
+model RefreshToken {
+  id        String    @id @default(uuid()) @db.Uuid
+  userId    String    @map("user_id") @db.Uuid
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  /// SHA-256 of the issued refresh token (never store the raw token).
+  tokenHash String    @unique @map("token_hash")
+  expiresAt DateTime  @map("expires_at")
+  revokedAt DateTime? @map("revoked_at")
+  userAgent String?   @map("user_agent")
+  ip        String?
+  createdAt DateTime  @default(now()) @map("created_at")
+
+  @@index([userId])
+  @@map("refresh_tokens")
+}
+
+// ──────────────────────────────────────────────────────────────
+// Files (unified attachments with polymorphic links)
+// ──────────────────────────────────────────────────────────────
+
+model File {
+  id           String     @id @default(uuid()) @db.Uuid
+  originalName String     @map("original_name")
+  /// Key/path within the storage driver (local path or S3 object key).
+  storageKey   String     @map("storage_key")
+  driver       String     @default("local")
+  mimeType     String     @map("mime_type")
+  sizeBytes    Int        @map("size_bytes")
+  /// SHA-256 checksum for integrity / dedupe.
+  checksum     String?
+  uploadedById String?    @map("uploaded_by_id") @db.Uuid
+  uploadedBy   User?      @relation("UploadedBy", fields: [uploadedById], references: [id])
+  links        FileLink[]
+  createdAt    DateTime   @default(now()) @map("created_at")
+
+  @@index([uploadedById])
+  @@map("files")
+}
+
+/// Polymorphic association: link a file to any entity by (type, id).
+model FileLink {
+  id         String   @id @default(uuid()) @db.Uuid
+  fileId     String   @map("file_id") @db.Uuid
+  file       File     @relation(fields: [fileId], references: [id], onDelete: Cascade)
+  entityType String   @map("entity_type")
+  entityId   String   @map("entity_id")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  @@unique([fileId, entityType, entityId])
+  @@index([entityType, entityId])
+  @@map("file_links")
+}
+
+// ──────────────────────────────────────────────────────────────
+// Audit
+// ──────────────────────────────────────────────────────────────
+
+model AuditLog {
+  id          String   @id @default(uuid()) @db.Uuid
+  userId      String?  @map("user_id") @db.Uuid
+  user        User?    @relation(fields: [userId], references: [id])
+  /// e.g. "CREATE" | "UPDATE" | "DELETE" | "LOGIN" | "BUDGET_OVERRIDE".
+  action      String
+  entityType  String   @map("entity_type")
+  entityId    String?  @map("entity_id")
+  beforeState Json?    @map("before_state")
+  afterState  Json?    @map("after_state")
+  ip          String?
+  userAgent   String?  @map("user_agent")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@index([entityType, entityId])
+  @@index([userId])
+  @@index([action])
+  @@map("audit_logs")
+}

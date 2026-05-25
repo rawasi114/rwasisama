@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-arabic: 'Tahoma', 'Arial', sans-serif;
+}
+
+html {
+  direction: rtl;
+}
+
+body {
+  background-color: #f5f6f8;
+  color: #253747;
+}

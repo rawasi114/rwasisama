@@ -1,0 +1,41 @@
+# dependencies
+node_modules/
+.pnpm-store/
+
+# builds
+dist/
+build/
+.next/
+out/
+*.tsbuildinfo
+next-env.d.ts
+
+# turbo
+.turbo/
+
+# env
+.env
+.env.local
+.env.*.local
+
+# prisma
+prisma/*.db
+prisma/*.db-journal
+
+# logs
+logs/
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# coverage
+coverage/
+
+# editor / os
+.vscode/
+.idea/
+.DS_Store
+
+# uploads (local file storage during dev)
+storage/
+uploads/
