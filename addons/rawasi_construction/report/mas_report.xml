@@ -49,7 +49,7 @@
                             </tr>
                             <tr>
                                 <th>الحالة</th>
-                                <td t-field="o.state"/>
+                                <td><span t-field="o.state"/></td>
                             </tr>
                         </table>
                         <div t-if="o.consultant_remarks" class="mt-3">
