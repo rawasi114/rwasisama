@@ -37,6 +37,14 @@ HEADER_ALIASES = {
     "الرمز الإنشائي": "construction_code", "رمز sbc": "construction_code",
     "كود البناء": "construction_code", "الرمز": "construction_code",
     "مرفقات": "attachments", "المرفقات": "attachments",
+    # الأسعار (لاستيراد جدول كميات مُسعّر مسبقاً)
+    "سعر الوحدة": "unit_price", "السعر الافرادي": "unit_price",
+    "السعر الإفرادي": "unit_price", "سعر البند": "unit_price",
+    "السعر": "unit_price", "سعر": "unit_price",
+    "إجمالي السعر": "total_price", "اجمالي السعر": "total_price",
+    "الإجمالي": "total_price", "الاجمالي": "total_price", "القيمة": "total_price",
+    "تكلفة الوحدة": "unit_cost", "سعر التكلفة": "unit_cost", "التكلفة": "unit_cost",
+    "إجمالي التكلفة": "total_cost", "اجمالي التكلفة": "total_cost",
 }
 
 HEADER_SCAN_ROWS = 20  # عدد الصفوف الأولى التي نبحث فيها عن صف العناوين
@@ -140,6 +148,7 @@ class BoqImportWizard(models.TransientModel):
 
         vals_list = []
         warnings = {"unit": 0, "qty": 0, "mandatory_blank": 0, "sbc": 0}
+        priced_count = 0
         last_category = False
         last_group = False
         seq = 10
@@ -184,6 +193,19 @@ class BoqImportWizard(models.TransientModel):
             if construction_code and str(construction_code).strip() not in ("", "غير محدد") and not sbc:
                 warnings["sbc"] += 1
 
+            # الأسعار: تُرفع كما لو سُعّر البند يدوياً في أودو. لو توفّر الإجمالي
+            # فقط (دون سعر الوحدة) يُشتقّ سعر الوحدة = الإجمالي ÷ الكمية.
+            unit_price, _up_ok = self._to_float(data.get("unit_price"))
+            total_price, _tp_ok = self._to_float(data.get("total_price"))
+            if not unit_price and total_price and qty:
+                unit_price = total_price / qty
+            unit_cost, _uc_ok = self._to_float(data.get("unit_cost"))
+            total_cost, _tc_ok = self._to_float(data.get("total_cost"))
+            if not unit_cost and total_cost and qty:
+                unit_cost = total_cost / qty
+            if unit_price:
+                priced_count += 1
+
             vals_list.append({
                 "competition_id": comp.id,
                 "sequence": seq,
@@ -198,6 +220,8 @@ class BoqImportWizard(models.TransientModel):
                 "mandatory_local": mandatory,
                 "construction_code": str(construction_code) if construction_code not in (None, "") else False,
                 "sbc_code_id": sbc.id if sbc else False,
+                "unit_price": unit_price,
+                "unit_cost": unit_cost,
             })
             seq += 10
 
@@ -209,11 +233,12 @@ class BoqImportWizard(models.TransientModel):
             comp.state = "pricing"
 
         summary = _(
-            "تم استيراد %(count)s بنداً.\n"
+            "تم استيراد %(count)s بنداً (منها %(priced)s مُسعّرة).\n"
             "تحذيرات: وحدات غير معروفة %(unit)s، كميات غير صالحة %(qty)s، "
             "محتوى محلي فارغ %(mand)s، رموز SBC غير مطابقة %(sbc)s."
         ) % {
             "count": len(vals_list),
+            "priced": priced_count,
             "unit": warnings["unit"],
             "qty": warnings["qty"],
             "mand": warnings["mandatory_blank"],
