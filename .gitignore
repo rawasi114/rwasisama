@@ -1,0 +1,40 @@
+# dependencies
+node_modules/
+.pnpm-store/
+
+# builds
+dist/
+build/
+.next/
+out/
+*.tsbuildinfo
+
+# turbo
+.turbo/
+
+# prisma generated client
+**/generated/client/
+
+# env
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# local data (dev databases / storage)
+.localdb/
+.localstorage/
+storage/
+
+# logs
+*.log
+logs/
+npm-debug.log*
+pnpm-debug.log*
+
+# os / editor
+.DS_Store
+.idea/
+.vscode/*
+!.vscode/extensions.json
+coverage/
