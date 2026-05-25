@@ -36,6 +36,7 @@ coverage/
 .idea/
 .DS_Store
 
-# uploads (local file storage during dev)
-storage/
-uploads/
+# uploads (local file storage during dev) — root-anchored so we don't
+# accidentally ignore source dirs named "storage" (e.g. files/storage).
+/storage/
+/uploads/
