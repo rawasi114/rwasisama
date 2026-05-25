@@ -102,23 +102,23 @@
             <div name="button_box" position="inside">
                 <button name="action_open_documents" type="object" class="oe_stat_button"
                         icon="fa-folder-open">
-                    <field name="document_count" widget="statinfo" string="المستندات"/>
+                    <field name="rawasi_document_count" widget="statinfo" string="المستندات"/>
                 </button>
                 <button name="action_open_mas" type="object" class="oe_stat_button"
                         icon="fa-check-square-o">
-                    <field name="mas_count" widget="statinfo" string="اعتماد المواد"/>
+                    <field name="rawasi_mas_count" widget="statinfo" string="اعتماد المواد"/>
                 </button>
                 <button name="action_open_dsr" type="object" class="oe_stat_button"
                         icon="fa-calendar">
-                    <field name="dsr_count" widget="statinfo" string="تقارير يومية"/>
+                    <field name="rawasi_dsr_count" widget="statinfo" string="تقارير يومية"/>
                 </button>
                 <button name="action_open_ncr" type="object" class="oe_stat_button"
                         icon="fa-exclamation-triangle">
-                    <field name="ncr_count" widget="statinfo" string="عدم مطابقة"/>
+                    <field name="rawasi_ncr_count" widget="statinfo" string="عدم مطابقة"/>
                 </button>
                 <button name="action_open_rfi" type="object" class="oe_stat_button"
                         icon="fa-question-circle">
-                    <field name="rfi_count" widget="statinfo" string="طلبات معلومات"/>
+                    <field name="rawasi_rfi_count" widget="statinfo" string="طلبات معلومات"/>
                 </button>
             </div>
         </field>
