@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- لوحة التحكم: client action تعرض مكوّن OWL -->
+        <record id="action_rawasi_dashboard" model="ir.actions.client">
+            <field name="name">لوحة التحكم</field>
+            <field name="tag">rawasi_dashboard</field>
+        </record>
+
+        <!-- قائمة التطبيق الرئيسية (تظهر في "التطبيقات") -->
+        <menuitem id="menu_rawasi_root"
+                  name="رواسي سما"
+                  sequence="10"
+                  groups="group_site_engineer,group_accountant,group_planning_engineer,group_tech_office_manager,group_projects_director,group_external_consultant,group_ceo"/>
+
+        <menuitem id="menu_rawasi_dashboard"
+                  name="لوحة التحكم"
+                  parent="menu_rawasi_root"
+                  action="action_rawasi_dashboard"
+                  sequence="10"/>
+    </data>
+</odoo>

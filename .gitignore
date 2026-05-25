@@ -1,42 +1,30 @@
-# dependencies
-node_modules/
-.pnpm-store/
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
 
-# builds
-dist/
-build/
-.next/
-out/
-*.tsbuildinfo
-next-env.d.ts
-
-# turbo
-.turbo/
-
-# env
-.env
-.env.local
-.env.*.local
-
-# prisma
-prisma/*.db
-prisma/*.db-journal
-
-# logs
-logs/
+# Odoo runtime
 *.log
-npm-debug.log*
-pnpm-debug.log*
+.odoorc
+odoo.conf
+filestore/
+sessions/
+data_dir/
 
-# coverage
-coverage/
+# local Odoo source + venv used only for testing (do not commit)
+/.odoo-src/
 
-# editor / os
-.vscode/
-.idea/
+# OS / editor
 .DS_Store
+.idea/
+.vscode/
 
-# uploads (local file storage during dev) — root-anchored so we don't
-# accidentally ignore source dirs named "storage" (e.g. files/storage).
-/storage/
-/uploads/
+# stray artifacts from the previous (removed) JS stack — keep them out
+node_modules/
+.turbo/
+dist/
+.next/
+.env
+*.tsbuildinfo

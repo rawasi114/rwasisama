@@ -1,9 +1,17 @@
 # خطة تنفيذ موديول الإنشاءات والمقاولات — رواسي سما
-## PLAN.md — وثيقة الخطة والفهم (للاعتماد قبل البدء)
+## PLAN.md — وثيقة الخطة والفهم
 
-> **هذه الوثيقة هي استجابة للقسم ٩ من `SPEC.md` (الخطوات الفورية).**
-> **لن أكتب أي سطر برمجي لموديولات النظام حتى تعتمد هذه الخطة.**
-> **اللغة:** عربية مع مصطلحات تقنية إنجليزية، حسب التعليمة الإلزامية رقم ٧.
+> ## ⚠️ تحديث جوهري (٢٠٢٦-٠٥-٢٥): تغيير المنصّة إلى Odoo 19 Enterprise
+> بناءً على توجيهك، تقرّر أن يكون النظام **موديول أودو أصلياً** يُحمَّل من
+> «تطبيقات أودو» ويعمل على قاعدة بيانات أودو، **وليس** تطبيق NestJS/Next.js
+> المستقل الذي وُصف أصلاً في القسم ٣ أدناه.
+>
+> **ما تغيّر:** المكدّس التقني فقط (انظر القسم ٣ المُحدَّث). **ما بقي كما هو:**
+> كامل فهم النطاق (المبدأ المعماري «بند BOQ هو النواة»، الذكاء التسعيري،
+> الاستيراد الذكي لقوالب اعتماد، الأدوار السبعة، التسليم على مراحل ببوابات).
+> بنود القسم ٣ القديمة (NestJS/Prisma/Next) **مُلغاة** ومستبدَلة بمكدّس أودو.
+
+> **اللغة:** عربية مع مصطلحات تقنية إنجليزية.
 
 ---
 
@@ -57,79 +65,56 @@
 
 ---
 
-## ٣. المكدّس التقني (Tech Stack) — تأكيد مع تعديلات مبرَّرة
+## ٣. المكدّس التقني (Tech Stack) — مُحدَّث إلى Odoo 19 Enterprise
 
-المكدّس المقترح في القسم ٢ ممتاز ومناسب لنظام ERP. **أؤكده بالكامل** مع الملاحظات التالية:
+> أُعيد كتابة هذا القسم بالكامل بعد قرار التحول إلى موديول أودو أصلي.
+> البنود القديمة (NestJS / Prisma / Next.js / CASL / BullMQ / SheetJS / pdf-lib /
+> shadcn / frappe-gantt) **مُلغاة** ويحلّ محلها مكدّس أودو أدناه.
 
-### Backend — مؤكَّد
-| المكوّن | الاختيار | ملاحظة |
+| الطبقة | الاختيار في أودو | يحل محل |
 |---|---|---|
-| Runtime | Node.js 20 LTS | مؤكَّد |
-| Framework | **NestJS** | مؤكَّد — المعمارية المودولرية و DI مثاليان لـ ERP |
-| ORM | **Prisma 5+** | مؤكَّد — يحمي من SQL Injection افتراضياً |
-| Validation | class-validator + class-transformer | مؤكَّد |
-| Auth | Passport + JWT + Refresh Tokens | مؤكَّد (access ١٥د) |
-| Authorization | **CASL** | مؤكَّد — أفضل تكاملاً مع NestJS من casbin |
-| Jobs | BullMQ + Redis | مؤكَّد — للاستيراد ودمج PDF |
-| Excel | **SheetJS (xlsx)** | مؤكَّد — أساس الاستيراد الذكي |
-| PDF | **pdf-lib** | مؤكَّد — لدمج وتوليد أغلفة MAS |
-| Logging | Pino + correlation IDs | مؤكَّد |
+| المنصّة | **Odoo 19 Enterprise** | كامل المكدّس السابق |
+| اللغة | Python 3.11+ | Node.js/TypeScript |
+| ORM | Odoo ORM (`models.Model`) على PostgreSQL | Prisma |
+| المصادقة | نظام أودو (`res.users`) | Passport + JWT |
+| الصلاحيات | `res.groups` + `res.groups.privilege` + record rules | CASL |
+| الملفات | `ir.attachment` | تخزين S3/local |
+| التدقيق (Audit) | `mail.thread` / chatter | Audit Logs يدوية |
+| الواجهة | OWL 2 + XML Views (List/Form/Kanban) + RTL تلقائي | Next.js + shadcn |
+| المهام الخلفية | `ir.cron` / `queue_job` | BullMQ + Redis |
+| Excel | `openpyxl` | SheetJS |
+| PDF | QWeb Reports + `pypdf` | pdf-lib |
+| Gantt | **`web_gantt`** (ضمن Enterprise) | frappe/dhtmlx |
 
-### قرار يحتاج اعتمادك: نمط الـ API
-- **توصيتي: REST + OpenAPI/Swagger auto-docs.**
-- السبب: التعليمة الإلزامية رقم ١٠ تطلب توثيق OpenAPI تلقائي، ووجود دور
-  "الاستشاري الخارجي" قد يحتاج واجهة API موثّقة. tRPC ممتاز لكنه يربط الـ Frontend
-  والـ Backend بإحكام ولا يولّد OpenAPI بسهولة.
-- (إن فضّلت tRPC رغم ذلك، أخبرني.)
-
-### Frontend — مؤكَّد مع نقطة قرار واحدة
-| المكوّن | الاختيار | ملاحظة |
-|---|---|---|
-| Framework | Next.js 14+ (App Router) + TS | مؤكَّد |
-| UI | TailwindCSS + shadcn/ui (RTL) | مؤكَّد |
-| State | Zustand + TanStack Query | مؤكَّد |
-| Forms | React Hook Form + Zod | مؤكَّد |
-| Tables | TanStack Table v8 | مؤكَّد — مع Virtual Scrolling لجداول الـ ١٠٠٠ بند |
-| Charts | Recharts | مؤكَّد |
-| Dates | dayjs + plugin هجري | مؤكَّد |
-| i18n | next-intl | مؤكَّد |
-
-### قرار يحتاج اعتمادك: مكتبة Gantt
-| الخيار | الميزة | العيب |
-|---|---|---|
-| **frappe-gantt** (مجاني) | بدون تكلفة، مفتوح المصدر | المسار الحرج (Critical Path) و Baseline vs Actual يحتاجان تطويراً يدوياً |
-| **dhtmlx-gantt** (تجاري) | Critical Path و Baseline و علاقات FS/SS/FF/SF جاهزة | يحتاج **ترخيص مدفوع** |
-- متطلبات القسم ٢ (الموديول الثاني) تشمل Critical Path و Baseline vs Actual وعلاقات
-  متقدمة — وهي جاهزة في dhtmlx فقط.
-- **توصيتي:** نبدأ بـ frappe-gantt في المرحلة الثانية لإثبات المفهوم، ونرفّع إلى
-  dhtmlx لاحقاً إذا اعتمدت ميزانية الترخيص. أحتاج قرارك بشأن الترخيص.
-
-### Database & DevOps — مؤكَّد
-PostgreSQL 16 (مع `pg_trgm` للبحث العربي و GIN index للـ full-text)، Redis 7،
-تخزين S3-compatible (MinIO للتطوير)، Docker Compose، GitHub Actions.
+**أثر التحول على القرارات المعلّقة سابقاً:**
+- **نمط API:** أودو يوفّر JSON-RPC، ويمكن إضافة REST controllers لدور «الاستشاري
+  الخارجي» عند الحاجة — لا حاجة لبناء OpenAPI يدوياً من الصفر.
+- **مكتبة Gantt:** `web_gantt` من Enterprise يغطّي العرض؛ يسقط سؤال ترخيص dhtmlx.
+- **منطق التطبيع العربي / وحدات القياس / رموز SBC / الذكاء التسعيري:** نفس المنطق
+  يُنفَّذ كـ Python services & models داخل الموديول ويُغطّى باختبارات أودو
+  (`TransactionCase`). ملفّات الـ fixtures تبقى صالحة لاختبار الاستيراد.
 
 ---
 
-## ٤. هيكل المستودع (Monorepo)
-
-سأتبع الهيكل المقترح في القسم ٧ بالضبط، باستخدام **pnpm workspaces + Turborepo**
-لإدارة الـ monorepo (أخف وأسرع من Nx لهذا الحجم):
+## ٤. هيكل المستودع (موديول أودو)
 
 ```
-rawasi-erp/
-├── apps/web/      (Next.js)
-├── apps/api/      (NestJS)
-├── packages/shared-types/   (DTOs + enums مشتركة)
-├── packages/ui/             (مكونات RTL مشتركة)
-├── packages/utils/          (تطبيع عربي، تواريخ هجرية، تنسيق عملة)
-├── prisma/
-├── docker-compose.yml
-└── ...
+rwasisama/
+└── addons/
+    └── rawasi_construction/
+        ├── __manifest__.py
+        ├── models/          (موديلات الأعمال — تُضاف في المراحل القادمة)
+        ├── security/        (الفئة + الأدوار السبعة + ir.model.access + record rules)
+        ├── views/           (List/Form/Kanban + القوائم + client actions)
+        ├── wizards/         (معالجات الاستيراد الذكي لاحقاً)
+        ├── report/          (QWeb reports — أغلفة MAS لاحقاً)
+        ├── static/src/       (مكوّنات OWL + SCSS)
+        └── tests/            (اختبارات أودو + ملفّات اعتماد fixtures)
 ```
 
-**ملاحظة:** خدمات التطبيع (Arabic normalization, Units, SBC) ستوضع في
-`packages/utils` أو `apps/api/src/common` لتكون قابلة لإعادة الاستخدام والاختبار
-المعزول، لأنها قلب الاستيراد الذكي والذكاء التسعيري.
+**ملاحظة:** خدمات التطبيع (Arabic normalization, Units, SBC) والذكاء التسعيري
+ستوضع كـ Python services/models داخل `rawasi_construction` لتكون قابلة لإعادة
+الاستخدام والاختبار المعزول، لأنها قلب الاستيراد الذكي والذكاء التسعيري.
 
 ---
 
