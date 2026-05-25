@@ -58,6 +58,37 @@
                   action="action_boq_budget"
                   sequence="40"/>
 
+        <!-- المستندات والجودة والموقع -->
+        <menuitem id="menu_rawasi_field"
+                  name="المستندات والموقع"
+                  parent="menu_rawasi_root"
+                  sequence="50"/>
+        <menuitem id="menu_rawasi_documents"
+                  name="المستندات (DMS)"
+                  parent="menu_rawasi_field"
+                  action="action_document"
+                  sequence="10"/>
+        <menuitem id="menu_rawasi_mas"
+                  name="اعتماد المواد (MAS)"
+                  parent="menu_rawasi_field"
+                  action="action_material_approval"
+                  sequence="20"/>
+        <menuitem id="menu_rawasi_dsr"
+                  name="التقارير اليومية (DSR)"
+                  parent="menu_rawasi_field"
+                  action="action_daily_report"
+                  sequence="30"/>
+        <menuitem id="menu_rawasi_ncr"
+                  name="عدم المطابقة (NCR)"
+                  parent="menu_rawasi_field"
+                  action="action_ncr"
+                  sequence="40"/>
+        <menuitem id="menu_rawasi_rfi"
+                  name="طلبات المعلومات (RFI)"
+                  parent="menu_rawasi_field"
+                  action="action_rfi"
+                  sequence="50"/>
+
         <!-- الإعدادات -->
         <menuitem id="menu_rawasi_config"
                   name="الإعدادات"

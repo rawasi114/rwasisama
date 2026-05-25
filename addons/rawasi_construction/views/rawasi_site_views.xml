@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ════════ التقرير اليومي للموقع (DSR) ════════ -->
+    <record id="view_dsr_list" model="ir.ui.view">
+        <field name="name">rawasi.daily.report.list</field>
+        <field name="model">rawasi.daily.report</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="project_id"/>
+                <field name="report_date"/>
+                <field name="weather"/>
+                <field name="total_workers"/>
+                <field name="prepared_by_id"/>
+                <field name="state" widget="badge" decoration-success="state == 'confirmed'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_dsr_form" model="ir.ui.view">
+        <field name="name">rawasi.daily.report.form</field>
+        <field name="model">rawasi.daily.report</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_confirm" type="object" string="اعتماد"
+                            class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_reset_to_draft" type="object" string="إعادة لمسودة"
+                            invisible="state != 'confirmed'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="project_id"/>
+                            <field name="report_date"/>
+                            <field name="prepared_by_id"/>
+                        </group>
+                        <group>
+                            <field name="weather"/>
+                            <field name="temperature"/>
+                            <field name="total_workers"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="العمالة" name="labor">
+                            <field name="labor_ids">
+                                <list editable="bottom">
+                                    <field name="trade"/>
+                                    <field name="worker_count"/>
+                                    <field name="note"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="الأعمال والمعوقات" name="work">
+                            <group>
+                                <field name="work_done" placeholder="الأعمال المنفّذة اليوم..."/>
+                                <field name="delays" placeholder="المعوقات/التأخيرات..."/>
+                                <field name="equipment" placeholder="المعدات في الموقع..."/>
+                                <field name="visitors"/>
+                            </group>
+                        </page>
+                        <page string="الصور/المرفقات" name="attachments">
+                            <field name="attachment_ids" widget="many2many_binary"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_daily_report" model="ir.actions.act_window">
+        <field name="name">التقارير اليومية</field>
+        <field name="res_model">rawasi.daily.report</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- ════════ تقرير عدم المطابقة (NCR) ════════ -->
+    <record id="view_ncr_list" model="ir.ui.view">
+        <field name="name">rawasi.ncr.list</field>
+        <field name="model">rawasi.ncr</field>
+        <field name="arch" type="xml">
+            <list decoration-danger="severity == 'critical'"
+                  decoration-warning="severity == 'major'">
+                <field name="name"/>
+                <field name="project_id"/>
+                <field name="subject"/>
+                <field name="severity"/>
+                <field name="issue_date"/>
+                <field name="due_date"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'closed'"
+                       decoration-info="state == 'in_progress'"
+                       decoration-muted="state == 'void'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_ncr_form" model="ir.ui.view">
+        <field name="name">rawasi.ncr.form</field>
+        <field name="model">rawasi.ncr</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_start" type="object" string="بدء المعالجة"
+                            class="btn-primary" invisible="state != 'open'"/>
+                    <button name="action_close" type="object" string="إغلاق"
+                            class="btn-primary" invisible="state not in ('open','in_progress')"/>
+                    <button name="action_void" type="object" string="إلغاء"
+                            invisible="state in ('closed','void')"/>
+                    <button name="action_reopen" type="object" string="إعادة فتح"
+                            invisible="state not in ('closed','void')"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="open,in_progress,closed"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="project_id"/>
+                            <field name="boq_item_id"/>
+                            <field name="subject"/>
+                            <field name="severity"/>
+                        </group>
+                        <group>
+                            <field name="raised_by_id"/>
+                            <field name="issue_date"/>
+                            <field name="responsible_id"/>
+                            <field name="due_date"/>
+                            <field name="closed_date"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="الوصف" name="desc">
+                            <field name="description" placeholder="وصف عدم المطابقة..."/>
+                        </page>
+                        <page string="السبب والإجراء التصحيحي" name="capa">
+                            <group>
+                                <field name="root_cause" placeholder="السبب الجذري..."/>
+                                <field name="corrective_action" placeholder="الإجراء التصحيحي..."/>
+                            </group>
+                        </page>
+                        <page string="المرفقات" name="attachments">
+                            <field name="attachment_ids" widget="many2many_binary"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_ncr" model="ir.actions.act_window">
+        <field name="name">تقارير عدم المطابقة</field>
+        <field name="res_model">rawasi.ncr</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- ════════ طلب المعلومات (RFI) ════════ -->
+    <record id="view_rfi_list" model="ir.ui.view">
+        <field name="name">rawasi.rfi.list</field>
+        <field name="model">rawasi.rfi</field>
+        <field name="arch" type="xml">
+            <list decoration-danger="priority == 'high' and state in ('draft','submitted')">
+                <field name="name"/>
+                <field name="project_id"/>
+                <field name="subject"/>
+                <field name="priority"/>
+                <field name="submitted_date"/>
+                <field name="date_required"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'answered'"
+                       decoration-info="state == 'submitted'"
+                       decoration-muted="state == 'closed'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_rfi_form" model="ir.ui.view">
+        <field name="name">rawasi.rfi.form</field>
+        <field name="model">rawasi.rfi</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_submit" type="object" string="إرسال"
+                            class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_answer" type="object" string="تسجيل الرد"
+                            class="btn-primary" invisible="state != 'submitted'"/>
+                    <button name="action_close" type="object" string="إغلاق"
+                            invisible="state != 'answered'"/>
+                    <button name="action_reset_to_draft" type="object" string="إعادة لمسودة"
+                            invisible="state in ('draft','closed')"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,submitted,answered,closed"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="project_id"/>
+                            <field name="boq_item_id"/>
+                            <field name="subject"/>
+                            <field name="priority"/>
+                        </group>
+                        <group>
+                            <field name="raised_by_id"/>
+                            <field name="assigned_to_id"/>
+                            <field name="submitted_date"/>
+                            <field name="date_required"/>
+                            <field name="date_answered"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="الاستفسار" name="question">
+                            <field name="question" placeholder="نص الاستفسار..."/>
+                        </page>
+                        <page string="الرد" name="answer">
+                            <field name="answer" placeholder="نص الرد..."/>
+                        </page>
+                        <page string="المرفقات" name="attachments">
+                            <field name="attachment_ids" widget="many2many_binary"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_rfi" model="ir.actions.act_window">
+        <field name="name">طلبات المعلومات</field>
+        <field name="res_model">rawasi.rfi</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

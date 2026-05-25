@@ -10,3 +10,8 @@ from . import project_project
 from . import rawasi_material_request
 from . import rawasi_purchase_order
 from . import rawasi_goods_receipt
+from . import rawasi_document
+from . import rawasi_material_approval
+from . import rawasi_daily_report
+from . import rawasi_ncr
+from . import rawasi_rfi
