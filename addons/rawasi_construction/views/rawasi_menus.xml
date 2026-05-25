@@ -18,5 +18,28 @@
                   parent="menu_rawasi_root"
                   action="action_rawasi_dashboard"
                   sequence="10"/>
+
+        <menuitem id="menu_rawasi_competitions"
+                  name="المنافسات"
+                  parent="menu_rawasi_root"
+                  action="action_rawasi_competition"
+                  sequence="20"/>
+
+        <!-- الإعدادات -->
+        <menuitem id="menu_rawasi_config"
+                  name="الإعدادات"
+                  parent="menu_rawasi_root"
+                  sequence="90"
+                  groups="group_tech_office_manager,group_projects_director,group_ceo"/>
+        <menuitem id="menu_rawasi_units"
+                  name="وحدات القياس"
+                  parent="menu_rawasi_config"
+                  action="action_rawasi_unit"
+                  sequence="10"/>
+        <menuitem id="menu_rawasi_sbc"
+                  name="رموز كود البناء (SBC)"
+                  parent="menu_rawasi_config"
+                  action="action_rawasi_sbc"
+                  sequence="20"/>
     </data>
 </odoo>

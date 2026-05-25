@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="unit_lm" model="rawasi.unit">
+            <field name="name">متر طولي</field>
+            <field name="code">lm</field>
+            <field name="uom_category">length</field>
+            <field name="alias_raw">م.ط
+م ط
+م/ط
+م . ط
+متر طولي
+lm</field>
+        </record>
+
+        <record id="unit_sqm" model="rawasi.unit">
+            <field name="name">متر مربع</field>
+            <field name="code">sqm</field>
+            <field name="uom_category">area</field>
+            <field name="alias_raw">م²
+م2
+متر مربع
+sqm
+m2</field>
+        </record>
+
+        <record id="unit_cum" model="rawasi.unit">
+            <field name="name">متر مكعب</field>
+            <field name="code">cum</field>
+            <field name="uom_category">volume</field>
+            <field name="alias_raw">م³
+م3
+متر مكعب
+cum
+m3</field>
+        </record>
+
+        <record id="unit_m" model="rawasi.unit">
+            <field name="name">متر</field>
+            <field name="code">m</field>
+            <field name="uom_category">length</field>
+            <field name="alias_raw">م
+متر
+m</field>
+        </record>
+
+        <record id="unit_no" model="rawasi.unit">
+            <field name="name">عدد</field>
+            <field name="code">no</field>
+            <field name="uom_category">count</field>
+            <field name="alias_raw">عدد
+حبة
+no
+pcs</field>
+        </record>
+
+        <record id="unit_set" model="rawasi.unit">
+            <field name="name">مجموعة</field>
+            <field name="code">set</field>
+            <field name="uom_category">system</field>
+            <field name="alias_raw">مجموعة
+طقم
+set</field>
+        </record>
+
+        <record id="unit_sys" model="rawasi.unit">
+            <field name="name">نظام</field>
+            <field name="code">sys</field>
+            <field name="uom_category">system</field>
+            <field name="alias_raw">نظام
+مقطوعية
+مقطوع
+sys</field>
+        </record>
+
+        <record id="unit_kg" model="rawasi.unit">
+            <field name="name">كيلوجرام</field>
+            <field name="code">kg</field>
+            <field name="uom_category">mass</field>
+            <field name="alias_raw">كجم
+كيلوجرام
+كيلو
+kg</field>
+        </record>
+
+        <record id="unit_ton" model="rawasi.unit">
+            <field name="name">طن</field>
+            <field name="code">ton</field>
+            <field name="uom_category">mass</field>
+            <field name="alias_raw">طن
+ton
+t</field>
+        </record>
+
+        <record id="unit_l" model="rawasi.unit">
+            <field name="name">لتر</field>
+            <field name="code">l</field>
+            <field name="uom_category">volume</field>
+            <field name="alias_raw">لتر
+l
+ltr</field>
+        </record>
+    </data>
+</odoo>
