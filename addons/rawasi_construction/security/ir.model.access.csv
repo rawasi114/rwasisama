@@ -25,3 +25,15 @@ access_unit_director,unit.director,model_rawasi_unit,group_projects_director,1,1
 access_sbc_user,sbc.user,model_rawasi_sbc_code,base.group_user,1,0,0,0
 access_sbc_tech,sbc.tech,model_rawasi_sbc_code,group_tech_office_manager,1,1,1,1
 access_sbc_director,sbc.director,model_rawasi_sbc_code,group_projects_director,1,1,1,1
+access_wbs_phase_user,wbs.phase.user,model_rawasi_wbs_phase,base.group_user,1,0,0,0
+access_wbs_phase_tech,wbs.phase.tech,model_rawasi_wbs_phase,group_tech_office_manager,1,1,1,1
+access_wbs_phase_director,wbs.phase.director,model_rawasi_wbs_phase,group_projects_director,1,1,1,1
+access_wbs_activity_planning,wbs.activity.planning,model_rawasi_wbs_activity,group_planning_engineer,1,1,1,1
+access_wbs_activity_tech,wbs.activity.tech,model_rawasi_wbs_activity,group_tech_office_manager,1,1,1,1
+access_wbs_activity_director,wbs.activity.director,model_rawasi_wbs_activity,group_projects_director,1,1,1,1
+access_wbs_activity_site,wbs.activity.site,model_rawasi_wbs_activity,group_site_engineer,1,1,1,0
+access_wbs_activity_accountant,wbs.activity.accountant,model_rawasi_wbs_activity,group_accountant,1,0,0,0
+access_wbs_activity_consultant,wbs.activity.consultant,model_rawasi_wbs_activity,group_external_consultant,1,0,0,0
+access_sched_wizard_planning,sched.wizard.planning,model_rawasi_schedule_import_wizard,group_planning_engineer,1,1,1,1
+access_sched_wizard_tech,sched.wizard.tech,model_rawasi_schedule_import_wizard,group_tech_office_manager,1,1,1,1
+access_sched_wizard_director,sched.wizard.director,model_rawasi_schedule_import_wizard,group_projects_director,1,1,1,1

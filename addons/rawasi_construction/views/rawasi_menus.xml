@@ -26,6 +26,12 @@
                   action="action_rawasi_competition"
                   sequence="20"/>
 
+        <menuitem id="menu_rawasi_wbs"
+                  name="الجداول الزمنية (WBS)"
+                  parent="menu_rawasi_root"
+                  action="action_wbs_activity"
+                  sequence="30"/>
+
         <!-- الإعدادات -->
         <menuitem id="menu_rawasi_config"
                   name="الإعدادات"
@@ -42,5 +48,10 @@
                   parent="menu_rawasi_config"
                   action="action_rawasi_sbc"
                   sequence="20"/>
+        <menuitem id="menu_rawasi_wbs_phase"
+                  name="المراحل القياسية (WBS)"
+                  parent="menu_rawasi_config"
+                  action="action_wbs_phase"
+                  sequence="30"/>
     </data>
 </odoo>

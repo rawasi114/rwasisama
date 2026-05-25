@@ -172,6 +172,8 @@ class RawasiCompetition(models.Model):
             }
         )
         self.project_id = project.id
+        # توليد المراحل الخمس (WBS) تلقائياً للمشروع الجديد
+        project.action_generate_wbs_phases()
         self.message_post(body=_("تم تحويل المنافسة إلى مشروع: %s") % project.name)
         return self.action_open_project()
 

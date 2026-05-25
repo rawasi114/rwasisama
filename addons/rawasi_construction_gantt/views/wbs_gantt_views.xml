@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- عرض Gantt لأنشطة WBS (Enterprise) -->
+    <record id="view_wbs_activity_gantt" model="ir.ui.view">
+        <field name="name">rawasi.wbs.activity.gantt</field>
+        <field name="model">rawasi.wbs.activity</field>
+        <field name="arch" type="xml">
+            <gantt date_start="date_start"
+                   date_stop="date_end"
+                   default_group_by="phase_id"
+                   progress="progress"
+                   dependency_field="predecessor_ids"
+                   string="الجدول الزمني">
+                <field name="name"/>
+                <field name="phase_id"/>
+                <field name="project_id"/>
+                <field name="progress"/>
+            </gantt>
+        </field>
+    </record>
+
+    <!-- إضافة وضع Gantt إلى إجراء أنشطة WBS -->
+    <record id="rawasi_construction.action_wbs_activity" model="ir.actions.act_window">
+        <field name="view_mode">gantt,list,form</field>
+    </record>
+</odoo>
