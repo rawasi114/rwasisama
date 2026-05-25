@@ -95,6 +95,27 @@
                   action="action_rfi"
                   sequence="50"/>
 
+        <!-- العقود والمستحقات -->
+        <menuitem id="menu_rawasi_contracts"
+                  name="العقود والمستحقات"
+                  parent="menu_rawasi_root"
+                  sequence="55"/>
+        <menuitem id="menu_rawasi_vo"
+                  name="أوامر التغيير (VO)"
+                  parent="menu_rawasi_contracts"
+                  action="action_variation_order"
+                  sequence="10"/>
+        <menuitem id="menu_rawasi_ipc"
+                  name="المستخلصات (IPC)"
+                  parent="menu_rawasi_contracts"
+                  action="action_payment_certificate"
+                  sequence="20"/>
+        <menuitem id="menu_rawasi_bg"
+                  name="الضمانات البنكية (BG)"
+                  parent="menu_rawasi_contracts"
+                  action="action_bank_guarantee"
+                  sequence="30"/>
+
         <!-- الإعدادات -->
         <menuitem id="menu_rawasi_config"
                   name="الإعدادات"

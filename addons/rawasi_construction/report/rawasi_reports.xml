@@ -353,4 +353,148 @@
             </t>
         </t>
     </template>
+
+    <!-- ════════════════ أمر تغيير (VO) ════════════════ -->
+    <record id="action_report_variation_order" model="ir.actions.report">
+        <field name="name">تقرير أمر التغيير</field>
+        <field name="model">rawasi.variation.order</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">rawasi_construction.report_variation_order</field>
+        <field name="report_file">rawasi_construction.report_variation_order</field>
+        <field name="binding_model_id" ref="model_rawasi_variation_order"/>
+        <field name="binding_type">report</field>
+    </record>
+    <template id="report_variation_order">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h2 class="text-center">أمر تغيير</h2>
+                        <h4 class="text-center"><span t-field="o.name"/></h4>
+                        <table class="table table-sm">
+                            <tr><th style="width:30%">المشروع</th><td><span t-field="o.project_id"/></td></tr>
+                            <tr><th>الموضوع</th><td><span t-field="o.subject"/></td></tr>
+                            <tr><th>النوع</th><td><span t-field="o.vo_type"/></td></tr>
+                            <tr><th>التاريخ</th><td><span t-field="o.vo_date"/></td></tr>
+                            <tr><th>الحالة</th><td><span t-field="o.state"/></td></tr>
+                        </table>
+                        <table class="table table-sm">
+                            <thead>
+                                <tr><th>نوع التغيير</th><th>البند</th><th class="text-end">الكمية</th><th class="text-end">سعر الوحدة</th><th class="text-end">الأثر</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="o.line_ids" t-as="l">
+                                    <td><span t-field="l.change_type"/></td>
+                                    <td><span t-field="l.description"/></td>
+                                    <td class="text-end"><span t-field="l.quantity"/></td>
+                                    <td class="text-end"><span t-field="l.unit_price"/></td>
+                                    <td class="text-end"><span t-field="l.amount_subtotal"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <table class="table table-sm">
+                            <tr><th style="width:70%" class="text-end">صافي أثر التغيير</th><td class="text-end"><span t-field="o.amount_total"/></td></tr>
+                        </table>
+                        <p t-if="o.reason"><strong>المبرّر: </strong><span t-field="o.reason"/></p>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- ════════════════ مستخلص دفع (IPC) ════════════════ -->
+    <record id="action_report_payment_certificate" model="ir.actions.report">
+        <field name="name">تقرير المستخلص</field>
+        <field name="model">rawasi.payment.certificate</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">rawasi_construction.report_payment_certificate</field>
+        <field name="report_file">rawasi_construction.report_payment_certificate</field>
+        <field name="binding_model_id" ref="model_rawasi_payment_certificate"/>
+        <field name="binding_type">report</field>
+    </record>
+    <template id="report_payment_certificate">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h2 class="text-center">مستخلص دفع</h2>
+                        <h4 class="text-center"><span t-field="o.name"/> (رقم <span t-field="o.sequence_no"/>)</h4>
+                        <table class="table table-sm">
+                            <tr><th style="width:30%">المشروع</th><td><span t-field="o.project_id"/></td></tr>
+                            <tr><th>الفترة</th><td><span t-field="o.period_from"/> - <span t-field="o.period_to"/></td></tr>
+                            <tr><th>الحالة</th><td><span t-field="o.state"/></td></tr>
+                        </table>
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>البند</th><th>الوحدة</th>
+                                    <th class="text-end">تعاقدي</th>
+                                    <th class="text-end">سابق</th>
+                                    <th class="text-end">الفترة</th>
+                                    <th class="text-end">تراكمي</th>
+                                    <th class="text-end">% الإنجاز</th>
+                                    <th class="text-end">قيمة الفترة</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="o.line_ids" t-as="l">
+                                    <td><span t-field="l.boq_item_id"/></td>
+                                    <td><span t-field="l.unit_id"/></td>
+                                    <td class="text-end"><span t-field="l.contract_qty"/></td>
+                                    <td class="text-end"><span t-field="l.prev_qty"/></td>
+                                    <td class="text-end"><span t-field="l.work_qty"/></td>
+                                    <td class="text-end"><span t-field="l.cumulative_qty"/></td>
+                                    <td class="text-end"><span t-field="l.cumulative_pct"/></td>
+                                    <td class="text-end"><span t-field="l.amount_work"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <table class="table table-sm">
+                            <tr><th style="width:70%" class="text-end">قيمة أعمال الفترة</th><td class="text-end"><span t-field="o.amount_work_period"/></td></tr>
+                            <tr><th class="text-end">محتجز الضمان</th><td class="text-end"><span t-field="o.retention_amount"/></td></tr>
+                            <tr><th class="text-end">استرداد الدفعة المقدمة</th><td class="text-end"><span t-field="o.advance_recovery"/></td></tr>
+                            <tr><th class="text-end">الصافي قبل الضريبة</th><td class="text-end"><span t-field="o.amount_net"/></td></tr>
+                            <tr><th class="text-end">الضريبة</th><td class="text-end"><span t-field="o.amount_tax"/></td></tr>
+                            <tr><th class="text-end">الإجمالي المستحق</th><td class="text-end"><span t-field="o.amount_total"/></td></tr>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- ════════════════ ضمان بنكي (BG) ════════════════ -->
+    <record id="action_report_bank_guarantee" model="ir.actions.report">
+        <field name="name">تقرير الضمان البنكي</field>
+        <field name="model">rawasi.bank.guarantee</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">rawasi_construction.report_bank_guarantee</field>
+        <field name="report_file">rawasi_construction.report_bank_guarantee</field>
+        <field name="binding_model_id" ref="model_rawasi_bank_guarantee"/>
+        <field name="binding_type">report</field>
+    </record>
+    <template id="report_bank_guarantee">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h2 class="text-center">ضمان بنكي</h2>
+                        <h4 class="text-center"><span t-field="o.name"/></h4>
+                        <table class="table table-sm">
+                            <tr><th style="width:30%">المشروع</th><td><span t-field="o.project_id"/></td></tr>
+                            <tr><th>نوع الضمان</th><td><span t-field="o.guarantee_type"/></td></tr>
+                            <tr><th>البنك</th><td><span t-field="o.bank_name"/></td></tr>
+                            <tr><th>رقم الضمان</th><td><span t-field="o.reference_no"/></td></tr>
+                            <tr><th>المستفيد</th><td><span t-field="o.beneficiary"/></td></tr>
+                            <tr><th>المبلغ</th><td><span t-field="o.amount"/></td></tr>
+                            <tr><th>تاريخ الإصدار</th><td><span t-field="o.issue_date"/></td></tr>
+                            <tr><th>تاريخ الانتهاء</th><td><span t-field="o.expiry_date"/></td></tr>
+                            <tr><th>أيام حتى الانتهاء</th><td><span t-field="o.days_to_expiry"/></td></tr>
+                            <tr><th>الحالة</th><td><span t-field="o.state"/></td></tr>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
 </odoo>

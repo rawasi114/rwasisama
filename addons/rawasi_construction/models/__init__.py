@@ -17,3 +17,6 @@ from . import rawasi_material_approval
 from . import rawasi_daily_report
 from . import rawasi_ncr
 from . import rawasi_rfi
+from . import rawasi_variation_order
+from . import rawasi_payment_certificate
+from . import rawasi_bank_guarantee

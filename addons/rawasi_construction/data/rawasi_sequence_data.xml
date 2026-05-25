@@ -57,5 +57,26 @@
             <field name="padding">4</field>
             <field name="company_id" eval="False"/>
         </record>
+        <record id="seq_variation_order" model="ir.sequence">
+            <field name="name">أمر تغيير</field>
+            <field name="code">rawasi.variation.order</field>
+            <field name="prefix">VO/%(year)s/</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        <record id="seq_payment_certificate" model="ir.sequence">
+            <field name="name">مستخلص دفع</field>
+            <field name="code">rawasi.payment.certificate</field>
+            <field name="prefix">IPC/%(year)s/</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        <record id="seq_bank_guarantee" model="ir.sequence">
+            <field name="name">ضمان بنكي</field>
+            <field name="code">rawasi.bank.guarantee</field>
+            <field name="prefix">BG/%(year)s/</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
     </data>
 </odoo>
