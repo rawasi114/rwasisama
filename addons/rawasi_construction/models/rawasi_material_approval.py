@@ -103,11 +103,18 @@ class RawasiMaterialApproval(models.Model):
     def action_generate_submittal_pdf(self):
         """يولّد غلاف الاعتماد (QWeb) ويدمجه مع مرفقات PDF في ملف واحد."""
         self.ensure_one()
-        cover, _dummy = self.env["ir.actions.report"]._render_qweb_pdf(
+        report_obj = self.env["ir.actions.report"]
+        cover, _dummy = report_obj.with_context(rawasi_skip_stamp=True)._render_qweb_pdf(
             "rawasi_construction.action_report_mas_cover", res_ids=self.ids
         )
         streams = [cover] + self._attachment_pdf_streams()
         merged = merge_pdf(streams)
+        stamp_bytes = report_obj._rawasi_company_stamp()
+        if stamp_bytes:
+            try:
+                merged = report_obj._rawasi_overlay_stamp(merged, stamp_bytes)
+            except Exception:
+                pass
         self.merged_pdf = base64.b64encode(merged)
         self.merged_pdf_name = "MAS-%s.pdf" % (self.name or "submittal").replace("/", "-")
         self.message_post(body=_("تم توليد ملف الاعتماد المدموج (PDF)."))

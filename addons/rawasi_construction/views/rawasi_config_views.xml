@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <!-- ختم الشركة على نموذج الشركة (يُطبع على كل صفحة) -->
+    <record id="view_company_form_rawasi_stamp" model="ir.ui.view">
+        <field name="name">res.company.form.rawasi.stamp</field>
+        <field name="model">res.company</field>
+        <field name="inherit_id" ref="base.view_company_form"/>
+        <field name="arch" type="xml">
+            <field name="logo" position="after">
+                <field name="rawasi_stamp_image" widget="image"
+                       class="oe_avatar" options="{'size': [100, 100]}"/>
+            </field>
+        </field>
+    </record>
+
     <!-- وحدات القياس -->
     <record id="view_rawasi_unit_list" model="ir.ui.view">
         <field name="name">rawasi.unit.list</field>
