@@ -1,4 +1,6 @@
-export const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000';
+// افتراضياً نفس المصدر (same-origin): تطلب الواجهة "/api/..." ويعيد Next توجيهها
+// إلى الـ API عبر rewrites (انظر next.config.mjs) — يتجنّب مشاكل CORS في الإنتاج.
+export const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? '';
 
 export interface Permission {
   resource: string;

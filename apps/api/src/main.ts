@@ -31,8 +31,9 @@ async function bootstrap(): Promise<void> {
   const document = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('api/docs', app, document);
 
-  const port = Number(config.get('API_PORT', 4000));
-  await app.listen(port);
+  // منصات الاستضافة (Render…) تحقن المنفذ عبر PORT؛ محلياً نستخدم API_PORT.
+  const port = Number(process.env.PORT ?? config.get('API_PORT', 4000));
+  await app.listen(port, '0.0.0.0');
   app.get(Logger).log(`🚀 API listening on http://localhost:${port}/api (docs: /api/docs)`);
 }
 

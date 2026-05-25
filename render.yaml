@@ -1,0 +1,55 @@
+# Render Blueprint — معاينة تجريبية لرواسي سما ERP
+# للنشر: ادخل https://dashboard.render.com → New → Blueprint → اربط هذا المستودع.
+# ينشئ: خدمة API + خدمة الواجهة + قاعدة بيانات PostgreSQL مُدارة.
+# ⚠️ هذه معاينة ببيانات وهمية فقط — ليست للإنتاج (سيادة بيانات العملاء الحكوميين تُحسم لاحقاً).
+services:
+  - type: web
+    name: rawasi-api
+    runtime: node
+    plan: free
+    region: frankfurt
+    buildCommand: corepack enable && pnpm install --frozen-lockfile && pnpm --filter @rawasi/api db:generate && pnpm --filter @rawasi/api build
+    startCommand: pnpm --filter @rawasi/api db:deploy && pnpm --filter @rawasi/api db:seed && node apps/api/dist/main.js
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: rawasi-db
+          property: connectionString
+      - key: JWT_ACCESS_SECRET
+        generateValue: true
+      - key: JWT_REFRESH_SECRET
+        generateValue: true
+      - key: JWT_ACCESS_TTL
+        value: 15m
+      - key: JWT_REFRESH_TTL
+        value: 7d
+      - key: BCRYPT_SALT_ROUNDS
+        value: "12"
+      - key: CORS_ORIGIN
+        value: "*"
+      - key: SEED_ADMIN_EMAIL
+        value: admin@rawasi-sama.sa
+      - key: SEED_ADMIN_PASSWORD
+        value: Admin@12345
+
+  - type: web
+    name: rawasi-web
+    runtime: node
+    plan: free
+    region: frankfurt
+    buildCommand: corepack enable && pnpm install --frozen-lockfile && pnpm --filter @rawasi/web build
+    startCommand: pnpm --filter @rawasi/web start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      # عنوان الـ API العام (يُمرَّر إليه /api/* عبر proxy). عدّله إن اختلف اسم الخدمة.
+      - key: API_INTERNAL_URL
+        value: https://rawasi-api.onrender.com
+
+databases:
+  - name: rawasi-db
+    plan: free
+    region: frankfurt
