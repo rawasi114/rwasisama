@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_boq_import_wizard_form" model="ir.ui.view">
+        <field name="name">rawasi.boq.import.wizard.form</field>
+        <field name="model">rawasi.boq.import.wizard</field>
+        <field name="arch" type="xml">
+            <form string="استيراد جدول الكميات">
+                <field name="competition_id" invisible="1"/>
+                <group>
+                    <field name="file" filename="filename" widget="binary"/>
+                    <field name="filename" invisible="1"/>
+                    <field name="replace_existing"/>
+                </group>
+                <div class="alert alert-info" role="alert">
+                    يدعم النظام قوالب اعتماد المختلفة عبر مطابقة عناوين الأعمدة
+                    (لا يعتمد على ترتيب الأعمدة)، مع تعبئة الفئة تلقائياً وتطبيع
+                    وحدات القياس. الملفات غير المطابقة لجدول الكميات تُرفض.
+                </div>
+                <footer>
+                    <button name="action_import" type="object" string="استيراد"
+                            class="btn-primary"/>
+                    <button string="إلغاء" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

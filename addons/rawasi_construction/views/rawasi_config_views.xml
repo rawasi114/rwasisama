@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- وحدات القياس -->
+    <record id="view_rawasi_unit_list" model="ir.ui.view">
+        <field name="name">rawasi.unit.list</field>
+        <field name="model">rawasi.unit</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="uom_category"/>
+                <field name="alias_raw"/>
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_rawasi_unit" model="ir.actions.act_window">
+        <field name="name">وحدات القياس</field>
+        <field name="res_model">rawasi.unit</field>
+        <field name="view_mode">list</field>
+    </record>
+
+    <!-- رموز SBC -->
+    <record id="view_rawasi_sbc_list" model="ir.ui.view">
+        <field name="name">rawasi.sbc.code.list</field>
+        <field name="model">rawasi.sbc.code</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_rawasi_sbc" model="ir.actions.act_window">
+        <field name="name">رموز كود البناء (SBC)</field>
+        <field name="res_model">rawasi.sbc.code</field>
+        <field name="view_mode">list</field>
+    </record>
+</odoo>

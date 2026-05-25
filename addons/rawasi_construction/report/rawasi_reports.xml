@@ -1,0 +1,511 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ════════════════ منافسة (Competition) ════════════════ -->
+    <record id="action_report_competition" model="ir.actions.report">
+        <field name="name">تقرير المنافسة</field>
+        <field name="model">rawasi.competition</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">rawasi_construction.report_competition</field>
+        <field name="report_file">rawasi_construction.report_competition</field>
+        <field name="binding_model_id" ref="model_rawasi_competition"/>
+        <field name="binding_type">report</field>
+    </record>
+    <template id="report_competition">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h2 class="text-center">تقرير المنافسة</h2>
+                        <h4 class="text-center"><span t-field="o.name"/></h4>
+                        <table class="table table-sm">
+                            <tr><th style="width:30%">الرقم المرجعي</th><td><span t-field="o.reference"/></td></tr>
+                            <tr><th>الجهة المالكة</th><td><span t-field="o.entity_name"/></td></tr>
+                            <tr><th>موعد التقديم</th><td><span t-field="o.submission_deadline"/></td></tr>
+                            <tr><th>الحالة</th><td><span t-field="o.state"/></td></tr>
+                        </table>
+                        <h5>جدول الكميات</h5>
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>#</th><th>البند</th><th>الوحدة</th>
+                                    <th class="text-end">الكمية</th>
+                                    <th class="text-end">تكلفة الوحدة</th>
+                                    <th class="text-end">سعر الوحدة</th>
+                                    <th class="text-end">الإجمالي</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="o.boq_item_ids" t-as="it">
+                                    <td><span t-field="it.serial"/></td>
+                                    <td><span t-field="it.name"/></td>
+                                    <td><span t-field="it.unit_id"/></td>
+                                    <td class="text-end"><span t-field="it.quantity"/></td>
+                                    <td class="text-end"><span t-field="it.unit_cost"/></td>
+                                    <td class="text-end"><span t-field="it.unit_price"/></td>
+                                    <td class="text-end"><span t-field="it.total_price"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <table class="table table-sm">
+                            <tr><th style="width:70%" class="text-end">إجمالي التكلفة</th><td class="text-end"><span t-field="o.amount_total_cost"/></td></tr>
+                            <tr><th class="text-end">المبلغ بدون ضريبة</th><td class="text-end"><span t-field="o.amount_total_price"/></td></tr>
+                            <tr><th class="text-end">الضريبة</th><td class="text-end"><span t-field="o.amount_tax"/></td></tr>
+                            <tr><th class="text-end">الإجمالي شامل الضريبة</th><td class="text-end"><span t-field="o.amount_total_incl_tax"/></td></tr>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- ════════════════ طلب مواد (MR) ════════════════ -->
+    <record id="action_report_material_request" model="ir.actions.report">
+        <field name="name">تقرير طلب المواد</field>
+        <field name="model">rawasi.material.request</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">rawasi_construction.report_material_request</field>
+        <field name="report_file">rawasi_construction.report_material_request</field>
+        <field name="binding_model_id" ref="model_rawasi_material_request"/>
+        <field name="binding_type">report</field>
+    </record>
+    <template id="report_material_request">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h2 class="text-center">طلب مواد</h2>
+                        <h4 class="text-center"><span t-field="o.name"/></h4>
+                        <table class="table table-sm">
+                            <tr><th style="width:30%">المشروع</th><td><span t-field="o.project_id"/></td></tr>
+                            <tr><th>التاريخ</th><td><span t-field="o.request_date"/></td></tr>
+                            <tr><th>مقدّم الطلب</th><td><span t-field="o.requested_by_id"/></td></tr>
+                            <tr><th>الحالة</th><td><span t-field="o.state"/></td></tr>
+                        </table>
+                        <table class="table table-sm">
+                            <thead>
+                                <tr><th>بند BOQ</th><th>الوصف</th><th class="text-end">الكمية</th><th>الوحدة</th><th class="text-end">تكلفة الوحدة</th><th class="text-end">الإجمالي</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="o.line_ids" t-as="l">
+                                    <td><span t-field="l.boq_item_id"/></td>
+                                    <td><span t-field="l.description"/></td>
+                                    <td class="text-end"><span t-field="l.quantity"/></td>
+                                    <td><span t-field="l.unit_id"/></td>
+                                    <td class="text-end"><span t-field="l.unit_cost"/></td>
+                                    <td class="text-end"><span t-field="l.amount_subtotal"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <table class="table table-sm">
+                            <tr><th style="width:70%" class="text-end">الإجمالي</th><td class="text-end"><span t-field="o.amount_total"/></td></tr>
+                        </table>
+                        <p t-if="o.note"><strong>ملاحظات: </strong><span t-field="o.note"/></p>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- ════════════════ أمر شراء (PO) ════════════════ -->
+    <record id="action_report_purchase_order" model="ir.actions.report">
+        <field name="name">تقرير أمر الشراء</field>
+        <field name="model">rawasi.purchase.order</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">rawasi_construction.report_purchase_order</field>
+        <field name="report_file">rawasi_construction.report_purchase_order</field>
+        <field name="binding_model_id" ref="model_rawasi_purchase_order"/>
+        <field name="binding_type">report</field>
+    </record>
+    <template id="report_purchase_order">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h2 class="text-center">أمر شراء</h2>
+                        <h4 class="text-center"><span t-field="o.name"/></h4>
+                        <table class="table table-sm">
+                            <tr><th style="width:30%">المشروع</th><td><span t-field="o.project_id"/></td></tr>
+                            <tr><th>المورّد</th><td><span t-field="o.vendor_id"/></td></tr>
+                            <tr><th>التاريخ</th><td><span t-field="o.order_date"/></td></tr>
+                            <tr><th>الحالة</th><td><span t-field="o.state"/></td></tr>
+                        </table>
+                        <table class="table table-sm">
+                            <thead>
+                                <tr><th>بند BOQ</th><th>الوصف</th><th class="text-end">الكمية</th><th>الوحدة</th><th class="text-end">تكلفة الوحدة</th><th class="text-end">الإجمالي</th><th class="text-end">المستلَم</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="o.line_ids" t-as="l">
+                                    <td><span t-field="l.boq_item_id"/></td>
+                                    <td><span t-field="l.description"/></td>
+                                    <td class="text-end"><span t-field="l.quantity"/></td>
+                                    <td><span t-field="l.unit_id"/></td>
+                                    <td class="text-end"><span t-field="l.unit_cost"/></td>
+                                    <td class="text-end"><span t-field="l.amount_subtotal"/></td>
+                                    <td class="text-end"><span t-field="l.qty_received"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <table class="table table-sm">
+                            <tr><th style="width:70%" class="text-end">الإجمالي</th><td class="text-end"><span t-field="o.amount_total"/></td></tr>
+                        </table>
+                        <p t-if="o.note"><strong>ملاحظات: </strong><span t-field="o.note"/></p>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- ════════════════ سند استلام (GRN) ════════════════ -->
+    <record id="action_report_goods_receipt" model="ir.actions.report">
+        <field name="name">تقرير سند الاستلام</field>
+        <field name="model">rawasi.goods.receipt</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">rawasi_construction.report_goods_receipt</field>
+        <field name="report_file">rawasi_construction.report_goods_receipt</field>
+        <field name="binding_model_id" ref="model_rawasi_goods_receipt"/>
+        <field name="binding_type">report</field>
+    </record>
+    <template id="report_goods_receipt">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h2 class="text-center">سند استلام مواد</h2>
+                        <h4 class="text-center"><span t-field="o.name"/></h4>
+                        <table class="table table-sm">
+                            <tr><th style="width:30%">أمر الشراء</th><td><span t-field="o.order_id"/></td></tr>
+                            <tr><th>المشروع</th><td><span t-field="o.project_id"/></td></tr>
+                            <tr><th>تاريخ الاستلام</th><td><span t-field="o.receipt_date"/></td></tr>
+                            <tr><th>الحالة</th><td><span t-field="o.state"/></td></tr>
+                        </table>
+                        <table class="table table-sm">
+                            <thead>
+                                <tr><th>بند BOQ</th><th>الوصف</th><th class="text-end">الكمية المستلَمة</th><th>الوحدة</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="o.line_ids" t-as="l">
+                                    <td><span t-field="l.boq_item_id"/></td>
+                                    <td><span t-field="l.description"/></td>
+                                    <td class="text-end"><span t-field="l.quantity"/></td>
+                                    <td><span t-field="l.unit_id"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p t-if="o.note"><strong>ملاحظات: </strong><span t-field="o.note"/></p>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- ════════════════ مستند (DMS) ════════════════ -->
+    <record id="action_report_document" model="ir.actions.report">
+        <field name="name">تقرير المستند</field>
+        <field name="model">rawasi.document</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">rawasi_construction.report_document</field>
+        <field name="report_file">rawasi_construction.report_document</field>
+        <field name="binding_model_id" ref="model_rawasi_document"/>
+        <field name="binding_type">report</field>
+    </record>
+    <template id="report_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h2 class="text-center">مستند المشروع</h2>
+                        <h4 class="text-center"><span t-field="o.reference"/></h4>
+                        <table class="table table-sm">
+                            <tr><th style="width:30%">العنوان</th><td><span t-field="o.name"/></td></tr>
+                            <tr><th>المشروع</th><td><span t-field="o.project_id"/></td></tr>
+                            <tr><th>بند جدول الكميات</th><td><span t-field="o.boq_item_id"/></td></tr>
+                            <tr><th>نوع المستند</th><td><span t-field="o.document_type"/></td></tr>
+                            <tr><th>المراجعة</th><td><span t-field="o.revision"/></td></tr>
+                            <tr><th>التاريخ</th><td><span t-field="o.document_date"/></td></tr>
+                            <tr><th>المسؤول</th><td><span t-field="o.owner_id"/></td></tr>
+                            <tr><th>الحالة</th><td><span t-field="o.state"/></td></tr>
+                        </table>
+                        <p t-if="o.note"><strong>ملاحظات: </strong><span t-field="o.note"/></p>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- ════════════════ تقرير يومي (DSR) ════════════════ -->
+    <record id="action_report_dsr" model="ir.actions.report">
+        <field name="name">التقرير اليومي</field>
+        <field name="model">rawasi.daily.report</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">rawasi_construction.report_dsr</field>
+        <field name="report_file">rawasi_construction.report_dsr</field>
+        <field name="binding_model_id" ref="model_rawasi_daily_report"/>
+        <field name="binding_type">report</field>
+    </record>
+    <template id="report_dsr">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h2 class="text-center">التقرير اليومي للموقع</h2>
+                        <h4 class="text-center"><span t-field="o.name"/></h4>
+                        <table class="table table-sm">
+                            <tr><th style="width:30%">المشروع</th><td><span t-field="o.project_id"/></td></tr>
+                            <tr><th>التاريخ</th><td><span t-field="o.report_date"/></td></tr>
+                            <tr><th>أعدّه</th><td><span t-field="o.prepared_by_id"/></td></tr>
+                            <tr><th>الطقس</th><td><span t-field="o.weather"/></td></tr>
+                            <tr><th>درجة الحرارة</th><td><span t-field="o.temperature"/></td></tr>
+                            <tr><th>إجمالي العمالة</th><td><span t-field="o.total_workers"/></td></tr>
+                            <tr><th>الحالة</th><td><span t-field="o.state"/></td></tr>
+                        </table>
+                        <h5>العمالة</h5>
+                        <table class="table table-sm">
+                            <thead><tr><th>التخصص</th><th class="text-end">العدد</th><th>ملاحظة</th></tr></thead>
+                            <tbody>
+                                <tr t-foreach="o.labor_ids" t-as="lb">
+                                    <td><span t-field="lb.trade"/></td>
+                                    <td class="text-end"><span t-field="lb.worker_count"/></td>
+                                    <td><span t-field="lb.note"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p t-if="o.work_done"><strong>الأعمال المنفّذة: </strong><span t-field="o.work_done"/></p>
+                        <p t-if="o.delays"><strong>المعوقات: </strong><span t-field="o.delays"/></p>
+                        <p t-if="o.equipment"><strong>المعدات: </strong><span t-field="o.equipment"/></p>
+                        <p t-if="o.visitors"><strong>الزوار: </strong><span t-field="o.visitors"/></p>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- ════════════════ عدم مطابقة (NCR) ════════════════ -->
+    <record id="action_report_ncr" model="ir.actions.report">
+        <field name="name">تقرير عدم المطابقة</field>
+        <field name="model">rawasi.ncr</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">rawasi_construction.report_ncr</field>
+        <field name="report_file">rawasi_construction.report_ncr</field>
+        <field name="binding_model_id" ref="model_rawasi_ncr"/>
+        <field name="binding_type">report</field>
+    </record>
+    <template id="report_ncr">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h2 class="text-center">تقرير عدم مطابقة</h2>
+                        <h4 class="text-center"><span t-field="o.name"/></h4>
+                        <table class="table table-sm">
+                            <tr><th style="width:30%">المشروع</th><td><span t-field="o.project_id"/></td></tr>
+                            <tr><th>بند جدول الكميات</th><td><span t-field="o.boq_item_id"/></td></tr>
+                            <tr><th>الموضوع</th><td><span t-field="o.subject"/></td></tr>
+                            <tr><th>الخطورة</th><td><span t-field="o.severity"/></td></tr>
+                            <tr><th>رفعه</th><td><span t-field="o.raised_by_id"/></td></tr>
+                            <tr><th>تاريخ الرصد</th><td><span t-field="o.issue_date"/></td></tr>
+                            <tr><th>المسؤول عن المعالجة</th><td><span t-field="o.responsible_id"/></td></tr>
+                            <tr><th>تاريخ الاستحقاق</th><td><span t-field="o.due_date"/></td></tr>
+                            <tr><th>تاريخ الإغلاق</th><td><span t-field="o.closed_date"/></td></tr>
+                            <tr><th>الحالة</th><td><span t-field="o.state"/></td></tr>
+                        </table>
+                        <p><strong>وصف عدم المطابقة: </strong><span t-field="o.description"/></p>
+                        <p t-if="o.root_cause"><strong>السبب الجذري: </strong><span t-field="o.root_cause"/></p>
+                        <p t-if="o.corrective_action"><strong>الإجراء التصحيحي: </strong><span t-field="o.corrective_action"/></p>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- ════════════════ طلب معلومات (RFI) ════════════════ -->
+    <record id="action_report_rfi" model="ir.actions.report">
+        <field name="name">تقرير طلب المعلومات</field>
+        <field name="model">rawasi.rfi</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">rawasi_construction.report_rfi</field>
+        <field name="report_file">rawasi_construction.report_rfi</field>
+        <field name="binding_model_id" ref="model_rawasi_rfi"/>
+        <field name="binding_type">report</field>
+    </record>
+    <template id="report_rfi">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h2 class="text-center">طلب معلومات</h2>
+                        <h4 class="text-center"><span t-field="o.name"/></h4>
+                        <table class="table table-sm">
+                            <tr><th style="width:30%">المشروع</th><td><span t-field="o.project_id"/></td></tr>
+                            <tr><th>بند جدول الكميات</th><td><span t-field="o.boq_item_id"/></td></tr>
+                            <tr><th>الموضوع</th><td><span t-field="o.subject"/></td></tr>
+                            <tr><th>الأولوية</th><td><span t-field="o.priority"/></td></tr>
+                            <tr><th>مقدّم الطلب</th><td><span t-field="o.raised_by_id"/></td></tr>
+                            <tr><th>موجَّه إلى</th><td><span t-field="o.assigned_to_id"/></td></tr>
+                            <tr><th>تاريخ الإرسال</th><td><span t-field="o.submitted_date"/></td></tr>
+                            <tr><th>تاريخ الحاجة</th><td><span t-field="o.date_required"/></td></tr>
+                            <tr><th>تاريخ الرد</th><td><span t-field="o.date_answered"/></td></tr>
+                            <tr><th>الحالة</th><td><span t-field="o.state"/></td></tr>
+                        </table>
+                        <p><strong>الاستفسار: </strong><span t-field="o.question"/></p>
+                        <p t-if="o.answer"><strong>الرد: </strong><span t-field="o.answer"/></p>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- ════════════════ أمر تغيير (VO) ════════════════ -->
+    <record id="action_report_variation_order" model="ir.actions.report">
+        <field name="name">تقرير أمر التغيير</field>
+        <field name="model">rawasi.variation.order</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">rawasi_construction.report_variation_order</field>
+        <field name="report_file">rawasi_construction.report_variation_order</field>
+        <field name="binding_model_id" ref="model_rawasi_variation_order"/>
+        <field name="binding_type">report</field>
+    </record>
+    <template id="report_variation_order">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h2 class="text-center">أمر تغيير</h2>
+                        <h4 class="text-center"><span t-field="o.name"/></h4>
+                        <table class="table table-sm">
+                            <tr><th style="width:30%">المشروع</th><td><span t-field="o.project_id"/></td></tr>
+                            <tr><th>الموضوع</th><td><span t-field="o.subject"/></td></tr>
+                            <tr><th>النوع</th><td><span t-field="o.vo_type"/></td></tr>
+                            <tr><th>التاريخ</th><td><span t-field="o.vo_date"/></td></tr>
+                            <tr><th>الحالة</th><td><span t-field="o.state"/></td></tr>
+                        </table>
+                        <table class="table table-sm">
+                            <thead>
+                                <tr><th>نوع التغيير</th><th>البند</th><th class="text-end">الكمية</th><th class="text-end">سعر الوحدة</th><th class="text-end">الأثر</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="o.line_ids" t-as="l">
+                                    <td><span t-field="l.change_type"/></td>
+                                    <td><span t-field="l.description"/></td>
+                                    <td class="text-end"><span t-field="l.quantity"/></td>
+                                    <td class="text-end"><span t-field="l.unit_price"/></td>
+                                    <td class="text-end"><span t-field="l.amount_subtotal"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <table class="table table-sm">
+                            <tr><th style="width:70%" class="text-end">صافي أثر التغيير</th><td class="text-end"><span t-field="o.amount_total"/></td></tr>
+                        </table>
+                        <p t-if="o.reason"><strong>المبرّر: </strong><span t-field="o.reason"/></p>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- ════════════════ مستخلص دفع (IPC) ════════════════ -->
+    <record id="action_report_payment_certificate" model="ir.actions.report">
+        <field name="name">تقرير المستخلص</field>
+        <field name="model">rawasi.payment.certificate</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">rawasi_construction.report_payment_certificate</field>
+        <field name="report_file">rawasi_construction.report_payment_certificate</field>
+        <field name="binding_model_id" ref="model_rawasi_payment_certificate"/>
+        <field name="binding_type">report</field>
+    </record>
+    <template id="report_payment_certificate">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h2 class="text-center">مستخلص دفع</h2>
+                        <h4 class="text-center"><span t-field="o.name"/> (رقم <span t-field="o.sequence_no"/>)</h4>
+                        <table class="table table-sm">
+                            <tr><th style="width:30%">المشروع</th><td><span t-field="o.project_id"/></td></tr>
+                            <tr><th>الفترة</th><td><span t-field="o.period_from"/> - <span t-field="o.period_to"/></td></tr>
+                            <tr><th>الحالة</th><td><span t-field="o.state"/></td></tr>
+                        </table>
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>البند</th><th>الوحدة</th>
+                                    <th class="text-end">تعاقدي</th>
+                                    <th class="text-end">سابق</th>
+                                    <th class="text-end">الفترة</th>
+                                    <th class="text-end">تراكمي</th>
+                                    <th class="text-end">% الإنجاز</th>
+                                    <th class="text-end">قيمة الفترة</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="o.line_ids" t-as="l">
+                                    <td><span t-field="l.boq_item_id"/></td>
+                                    <td><span t-field="l.unit_id"/></td>
+                                    <td class="text-end"><span t-field="l.contract_qty"/></td>
+                                    <td class="text-end"><span t-field="l.prev_qty"/></td>
+                                    <td class="text-end"><span t-field="l.work_qty"/></td>
+                                    <td class="text-end"><span t-field="l.cumulative_qty"/></td>
+                                    <td class="text-end"><span t-field="l.cumulative_pct"/></td>
+                                    <td class="text-end"><span t-field="l.amount_work"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <table class="table table-sm">
+                            <tr><th style="width:70%" class="text-end">قيمة أعمال الفترة</th><td class="text-end"><span t-field="o.amount_work_period"/></td></tr>
+                            <tr><th class="text-end">محتجز الضمان</th><td class="text-end"><span t-field="o.retention_amount"/></td></tr>
+                            <tr><th class="text-end">استرداد الدفعة المقدمة</th><td class="text-end"><span t-field="o.advance_recovery"/></td></tr>
+                            <tr><th class="text-end">الصافي قبل الضريبة</th><td class="text-end"><span t-field="o.amount_net"/></td></tr>
+                            <tr><th class="text-end">الضريبة</th><td class="text-end"><span t-field="o.amount_tax"/></td></tr>
+                            <tr><th class="text-end">الإجمالي المستحق</th><td class="text-end"><span t-field="o.amount_total"/></td></tr>
+                        </table>
+                        <div class="row mt-4">
+                            <div class="col-8">
+                                <p><strong>البائع: </strong><span t-field="o.company_id"/></p>
+                                <p><strong>الرقم الضريبي: </strong><span t-field="o.company_id.vat"/></p>
+                                <small class="text-muted">فاتورة ضريبية — متوافقة مع متطلبات هيئة الزكاة والضريبة والجمارك (ZATCA).</small>
+                            </div>
+                            <div class="col-4 text-center">
+                                <img t-if="o.zatca_qr_image" t-att-src="image_data_uri(o.zatca_qr_image)"
+                                     style="max-width:120px;" alt="ZATCA QR"/>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- ════════════════ ضمان بنكي (BG) ════════════════ -->
+    <record id="action_report_bank_guarantee" model="ir.actions.report">
+        <field name="name">تقرير الضمان البنكي</field>
+        <field name="model">rawasi.bank.guarantee</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">rawasi_construction.report_bank_guarantee</field>
+        <field name="report_file">rawasi_construction.report_bank_guarantee</field>
+        <field name="binding_model_id" ref="model_rawasi_bank_guarantee"/>
+        <field name="binding_type">report</field>
+    </record>
+    <template id="report_bank_guarantee">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h2 class="text-center">ضمان بنكي</h2>
+                        <h4 class="text-center"><span t-field="o.name"/></h4>
+                        <table class="table table-sm">
+                            <tr><th style="width:30%">المشروع</th><td><span t-field="o.project_id"/></td></tr>
+                            <tr><th>نوع الضمان</th><td><span t-field="o.guarantee_type"/></td></tr>
+                            <tr><th>البنك</th><td><span t-field="o.bank_name"/></td></tr>
+                            <tr><th>رقم الضمان</th><td><span t-field="o.reference_no"/></td></tr>
+                            <tr><th>المستفيد</th><td><span t-field="o.beneficiary"/></td></tr>
+                            <tr><th>المبلغ</th><td><span t-field="o.amount"/></td></tr>
+                            <tr><th>تاريخ الإصدار</th><td><span t-field="o.issue_date"/></td></tr>
+                            <tr><th>تاريخ الانتهاء</th><td><span t-field="o.expiry_date"/></td></tr>
+                            <tr><th>أيام حتى الانتهاء</th><td><span t-field="o.days_to_expiry"/></td></tr>
+                            <tr><th>الحالة</th><td><span t-field="o.state"/></td></tr>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

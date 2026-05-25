@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ════════ اعتماد المواد (MAS) ════════ -->
+    <record id="view_mas_list" model="ir.ui.view">
+        <field name="name">rawasi.material.approval.list</field>
+        <field name="model">rawasi.material.approval</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="project_id"/>
+                <field name="material_name"/>
+                <field name="boq_item_id"/>
+                <field name="submittal_date"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'approved'"
+                       decoration-info="state == 'submitted'"
+                       decoration-warning="state == 'approved_as_noted'"
+                       decoration-danger="state in ('rejected','resubmit')"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_mas_form" model="ir.ui.view">
+        <field name="name">rawasi.material.approval.form</field>
+        <field name="model">rawasi.material.approval</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_submit" type="object" string="رفع للاستشاري"
+                            class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_generate_submittal_pdf" type="object"
+                            string="توليد ملف مدموج (PDF)" class="btn-secondary"
+                            invisible="state == 'draft'"/>
+                    <button name="action_approve" type="object" string="اعتماد"
+                            class="btn-primary" invisible="state != 'submitted'"/>
+                    <button name="action_approve_as_noted" type="object" string="اعتماد مع ملاحظات"
+                            invisible="state != 'submitted'"/>
+                    <button name="action_request_resubmit" type="object" string="إعادة رفع"
+                            invisible="state != 'submitted'"/>
+                    <button name="action_reject" type="object" string="رفض"
+                            invisible="state != 'submitted'"/>
+                    <button name="action_reset_to_draft" type="object" string="إعادة لمسودة"
+                            groups="base.group_system" invisible="state == 'draft'"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,submitted,approved"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="project_id"/>
+                            <field name="boq_item_id"/>
+                            <field name="material_name"/>
+                        </group>
+                        <group>
+                            <field name="manufacturer"/>
+                            <field name="supplier"/>
+                            <field name="submittal_date"/>
+                            <field name="consultant_id"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="المرفقات" name="attachments">
+                            <field name="attachment_ids" widget="many2many_binary"/>
+                            <group>
+                                <field name="merged_pdf" filename="merged_pdf_name"
+                                       readonly="1" invisible="not merged_pdf"/>
+                                <field name="merged_pdf_name" invisible="1"/>
+                            </group>
+                        </page>
+                        <page string="ملاحظات الاستشاري" name="remarks">
+                            <field name="consultant_remarks" placeholder="ملاحظات الاستشاري..."/>
+                        </page>
+                        <page string="ملاحظات" name="note">
+                            <field name="note" placeholder="ملاحظات داخلية..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_material_approval" model="ir.actions.act_window">
+        <field name="name">اعتماد المواد</field>
+        <field name="res_model">rawasi.material.approval</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>
