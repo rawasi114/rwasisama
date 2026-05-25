@@ -1,0 +1,168 @@
+// Rawasi Sama ERP — Prisma schema
+// Phase 0 (Foundation): identity, RBAC, files, audit, and the lookup tables
+// (units + SBC) that the BOQ-centric domain in later phases depends on.
+// المبدأ المعماري: بند BOQ هو الكيان المحوري — تُضاف جداوله في المرحلة الأولى.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// فئة الوحدة (تُستخدم في units_lookup)
+enum UnitCategory {
+  LENGTH
+  AREA
+  VOLUME
+  WEIGHT
+  COUNT
+  GROUP
+  SYSTEM
+  OTHER
+}
+
+// الأدوار (RBAC) — الأدوار السبعة من الدستور تُزرع كـ system roles
+model Role {
+  id          String       @id @default(uuid()) @db.Uuid
+  name        String       @unique // e.g. CEO, SITE_ENGINEER
+  nameAr      String       @map("name_ar")
+  description String?
+  isSystem    Boolean      @default(false) @map("is_system")
+  permissions Permission[] @relation("RolePermissions")
+  users       User[]
+  createdAt   DateTime     @default(now()) @map("created_at")
+  updatedAt   DateTime     @updatedAt @map("updated_at")
+
+  @@map("roles")
+}
+
+// الصلاحيات على مستوى Resource + Action
+model Permission {
+  id          String   @id @default(uuid()) @db.Uuid
+  resource    String
+  action      String
+  description String?
+  roles       Role[]   @relation("RolePermissions")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@unique([resource, action])
+  @@map("permissions")
+}
+
+// المستخدمون
+model User {
+  id            String         @id @default(uuid()) @db.Uuid
+  email         String         @unique
+  passwordHash  String         @map("password_hash")
+  fullNameAr    String         @map("full_name_ar")
+  fullNameEn    String?        @map("full_name_en")
+  phone         String?
+  roleId        String         @map("role_id") @db.Uuid
+  role          Role           @relation(fields: [roleId], references: [id])
+  isActive      Boolean        @default(true) @map("is_active")
+  lastLoginAt   DateTime?      @map("last_login_at")
+  refreshTokens RefreshToken[]
+  uploadedFiles File[]         @relation("UploadedBy")
+  auditLogs     AuditLog[]
+  createdAt     DateTime       @default(now()) @map("created_at")
+  updatedAt     DateTime       @updatedAt @map("updated_at")
+
+  @@map("users")
+}
+
+// رموز التحديث (Refresh Tokens) — تُخزَّن مجزّأة (hash) لدعم التدوير والإبطال
+model RefreshToken {
+  id        String    @id @default(uuid()) @db.Uuid
+  userId    String    @map("user_id") @db.Uuid
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash String    @unique @map("token_hash")
+  expiresAt DateTime  @map("expires_at")
+  revokedAt DateTime? @map("revoked_at")
+  userAgent String?   @map("user_agent")
+  ip        String?
+  createdAt DateTime  @default(now()) @map("created_at")
+
+  @@index([userId])
+  @@map("refresh_tokens")
+}
+
+// نظام الملفات الموحّد
+model File {
+  id           String     @id @default(uuid()) @db.Uuid
+  originalName String     @map("original_name")
+  storageKey   String     @map("storage_key")
+  driver       String     @default("local")
+  mimeType     String     @map("mime_type")
+  sizeBytes    Int        @map("size_bytes")
+  checksum     String?
+  uploadedById String?    @map("uploaded_by_id") @db.Uuid
+  uploadedBy   User?      @relation("UploadedBy", fields: [uploadedById], references: [id])
+  links        FileLink[]
+  createdAt    DateTime   @default(now()) @map("created_at")
+
+  @@map("files")
+}
+
+// ربط الملف بأي كيان (polymorphic) — يُستخدم لاحقاً لربط الملفات ببنود BOQ وغيرها
+model FileLink {
+  id         String   @id @default(uuid()) @db.Uuid
+  fileId     String   @map("file_id") @db.Uuid
+  file       File     @relation(fields: [fileId], references: [id], onDelete: Cascade)
+  entityType String   @map("entity_type")
+  entityId   String   @map("entity_id") @db.Uuid
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  @@index([entityType, entityId])
+  @@map("file_links")
+}
+
+// سجل التدقيق — كل عملية حساسة تُسجَّل هنا
+model AuditLog {
+  id          String   @id @default(uuid()) @db.Uuid
+  userId      String?  @map("user_id") @db.Uuid
+  user        User?    @relation(fields: [userId], references: [id])
+  action      String
+  resource    String
+  resourceId  String?  @map("resource_id")
+  beforeState Json?    @map("before_state")
+  afterState  Json?    @map("after_state")
+  ip          String?
+  userAgent   String?  @map("user_agent")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@index([resource, resourceId])
+  @@index([userId])
+  @@map("audit_logs")
+}
+
+// جدول توحيد الوحدات — يضمن تطبيع كل كتابات الوحدة الواحدة إلى unit_id واحد
+model UnitLookup {
+  id              String       @id @default(uuid()) @db.Uuid
+  canonicalCode   String       @unique @map("canonical_code")
+  canonicalNameAr String       @map("canonical_name_ar")
+  canonicalNameEn String       @map("canonical_name_en")
+  displaySymbolAr String       @map("display_symbol_ar")
+  category        UnitCategory
+  aliases         String[]
+  sbcCodes        SbcCode[]
+  createdAt       DateTime     @default(now()) @map("created_at")
+
+  @@map("units_lookup")
+}
+
+// جدول رموز كود البناء السعودي (SBC)
+model SbcCode {
+  code          Int         @id
+  codeGroup     Int         @map("code_group")
+  nameAr        String      @map("name_ar")
+  nameEn        String?     @map("name_en")
+  typicalUnitId String?     @map("typical_unit_id") @db.Uuid
+  typicalUnit   UnitLookup? @relation(fields: [typicalUnitId], references: [id])
+  parentCode    Int?        @map("parent_code")
+  createdAt     DateTime    @default(now()) @map("created_at")
+
+  @@map("sbc_codes_lookup")
+}
