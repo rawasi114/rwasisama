@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ════════ طلب مواد (MR) ════════ -->
+    <record id="view_material_request_list" model="ir.ui.view">
+        <field name="name">rawasi.material.request.list</field>
+        <field name="model">rawasi.material.request</field>
+        <field name="arch" type="xml">
+            <list decoration-danger="has_over_budget and state in ('draft','submitted')">
+                <field name="name"/>
+                <field name="project_id"/>
+                <field name="request_date"/>
+                <field name="requested_by_id"/>
+                <field name="amount_total"/>
+                <field name="has_over_budget" column_invisible="1"/>
+                <field name="currency_id" column_invisible="1"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'approved'"
+                       decoration-info="state == 'submitted'"
+                       decoration-muted="state == 'procured'"
+                       decoration-danger="state == 'rejected'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_material_request_form" model="ir.ui.view">
+        <field name="name">rawasi.material.request.form</field>
+        <field name="model">rawasi.material.request</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_submit" type="object" string="تقديم"
+                            class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_override_budget" type="object"
+                            string="اعتماد تجاوز الميزانية" class="btn-warning"
+                            groups="rawasi_construction.group_projects_director"
+                            invisible="not has_over_budget or override_budget or state not in ('draft','submitted')"/>
+                    <button name="action_approve" type="object" string="اعتماد"
+                            class="btn-primary" invisible="state != 'submitted'"/>
+                    <button name="action_create_po" type="object" string="إنشاء أمر شراء"
+                            class="btn-primary" invisible="state != 'approved'"/>
+                    <button name="action_reject" type="object" string="رفض"
+                            invisible="state not in ('submitted',)"/>
+                    <button name="action_reset_to_draft" type="object" string="إعادة لمسودة"
+                            invisible="state in ('draft','procured')"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,submitted,approved,procured"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <div class="alert alert-warning" role="alert"
+                         invisible="not has_over_budget">
+                        تنبيه: بعض السطور تتجاوز الميزانية المتبقية لبنود جدول الكميات.
+                        <field name="override_budget" invisible="1"/>
+                        <span invisible="not override_budget"> (تم اعتماد التجاوز)</span>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="project_id"/>
+                            <field name="request_date"/>
+                        </group>
+                        <group>
+                            <field name="requested_by_id"/>
+                            <field name="has_over_budget" invisible="1"/>
+                        </group>
+                    </group>
+                    <field name="line_ids">
+                        <list editable="bottom" decoration-danger="over_budget">
+                            <field name="boq_item_id"/>
+                            <field name="description"/>
+                            <field name="quantity"/>
+                            <field name="unit_id"/>
+                            <field name="unit_cost"/>
+                            <field name="amount_subtotal"/>
+                            <field name="boq_remaining"/>
+                            <field name="over_budget"/>
+                            <field name="currency_id" column_invisible="1"/>
+                        </list>
+                    </field>
+                    <group class="oe_subtotal_footer">
+                        <field name="amount_total"/>
+                    </group>
+                    <field name="note" placeholder="ملاحظات..."/>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_material_request" model="ir.actions.act_window">
+        <field name="name">طلبات المواد</field>
+        <field name="res_model">rawasi.material.request</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- ════════ أمر شراء (PO) ════════ -->
+    <record id="view_purchase_order_list" model="ir.ui.view">
+        <field name="name">rawasi.purchase.order.list</field>
+        <field name="model">rawasi.purchase.order</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="project_id"/>
+                <field name="vendor_id"/>
+                <field name="order_date"/>
+                <field name="amount_total"/>
+                <field name="currency_id" column_invisible="1"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'received'"
+                       decoration-info="state == 'confirmed'"
+                       decoration-danger="state == 'cancelled'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_purchase_order_form" model="ir.ui.view">
+        <field name="name">rawasi.purchase.order.form</field>
+        <field name="model">rawasi.purchase.order</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_confirm" type="object" string="تأكيد"
+                            class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_create_grn" type="object" string="استلام مواد"
+                            class="btn-primary" invisible="state != 'confirmed'"/>
+                    <button name="action_cancel" type="object" string="إلغاء"
+                            invisible="state in ('cancelled','received')"/>
+                    <button name="action_reset_to_draft" type="object" string="إعادة لمسودة"
+                            invisible="state != 'cancelled'"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,confirmed,received"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_open_receipts" type="object"
+                                class="oe_stat_button" icon="fa-truck">
+                            <field name="receipt_count" widget="statinfo" string="الاستلامات"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="project_id"/>
+                            <field name="vendor_id"/>
+                        </group>
+                        <group>
+                            <field name="order_date"/>
+                            <field name="mr_id"/>
+                        </group>
+                    </group>
+                    <field name="line_ids">
+                        <list editable="bottom">
+                            <field name="boq_item_id"/>
+                            <field name="description"/>
+                            <field name="quantity"/>
+                            <field name="unit_id"/>
+                            <field name="unit_cost"/>
+                            <field name="amount_subtotal"/>
+                            <field name="qty_received"/>
+                            <field name="amount_open"/>
+                            <field name="currency_id" column_invisible="1"/>
+                        </list>
+                    </field>
+                    <group class="oe_subtotal_footer">
+                        <field name="amount_total"/>
+                    </group>
+                    <field name="note" placeholder="ملاحظات..."/>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_purchase_order" model="ir.actions.act_window">
+        <field name="name">أوامر الشراء</field>
+        <field name="res_model">rawasi.purchase.order</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- ════════ سند استلام (GRN) ════════ -->
+    <record id="view_goods_receipt_list" model="ir.ui.view">
+        <field name="name">rawasi.goods.receipt.list</field>
+        <field name="model">rawasi.goods.receipt</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="order_id"/>
+                <field name="project_id"/>
+                <field name="receipt_date"/>
+                <field name="state" widget="badge" decoration-success="state == 'done'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_goods_receipt_form" model="ir.ui.view">
+        <field name="name">rawasi.goods.receipt.form</field>
+        <field name="model">rawasi.goods.receipt</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_validate" type="object" string="تأكيد الاستلام"
+                            class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_cancel" type="object" string="إلغاء"
+                            invisible="state != 'draft'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <field name="order_id" readonly="1"/>
+                        <field name="receipt_date"/>
+                    </group>
+                    <field name="line_ids">
+                        <list editable="bottom">
+                            <field name="po_line_id"/>
+                            <field name="boq_item_id"/>
+                            <field name="description"/>
+                            <field name="quantity"/>
+                            <field name="unit_id"/>
+                        </list>
+                    </field>
+                    <field name="note" placeholder="ملاحظات..."/>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_goods_receipt" model="ir.actions.act_window">
+        <field name="name">سندات الاستلام</field>
+        <field name="res_model">rawasi.goods.receipt</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- ════════ لوحة الميزانية ════════ -->
+    <record id="view_boq_budget_list" model="ir.ui.view">
+        <field name="name">rawasi.boq.item.budget.list</field>
+        <field name="model">rawasi.boq.item</field>
+        <field name="arch" type="xml">
+            <list create="0"
+                  decoration-danger="budget_state == 'over'"
+                  decoration-warning="budget_state == 'warning'">
+                <field name="competition_id"/>
+                <field name="name"/>
+                <field name="total_cost" string="الميزانية"/>
+                <field name="amount_committed"/>
+                <field name="amount_spent"/>
+                <field name="amount_remaining"/>
+                <field name="consumption_pct" widget="percentage"/>
+                <field name="is_locked" widget="boolean_toggle"/>
+                <field name="budget_state" widget="badge"
+                       decoration-success="budget_state == 'ok'"
+                       decoration-warning="budget_state == 'warning'"
+                       decoration-danger="budget_state == 'over'"/>
+                <field name="currency_id" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_boq_budget_search" model="ir.ui.view">
+        <field name="name">rawasi.boq.item.budget.search</field>
+        <field name="model">rawasi.boq.item</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="competition_id"/>
+                <filter name="over" string="متجاوز" domain="[('budget_state','=','over')]"/>
+                <filter name="warning" string="تحذير" domain="[('budget_state','=','warning')]"/>
+                <filter name="locked" string="مقفل" domain="[('is_locked','=',True)]"/>
+                <group>
+                    <filter name="g_comp" string="المنافسة" context="{'group_by':'competition_id'}"/>
+                    <filter name="g_state" string="حالة الميزانية" context="{'group_by':'budget_state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_boq_budget" model="ir.actions.act_window">
+        <field name="name">لوحة الميزانية</field>
+        <field name="res_model">rawasi.boq.item</field>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="view_boq_budget_list"/>
+        <field name="search_view_id" ref="view_boq_budget_search"/>
+        <field name="context">{'search_default_g_comp': 1}</field>
+    </record>
+</odoo>

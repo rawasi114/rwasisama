@@ -32,6 +32,32 @@
                   action="action_wbs_activity"
                   sequence="30"/>
 
+        <!-- المشتريات والميزانية -->
+        <menuitem id="menu_rawasi_procurement"
+                  name="المشتريات والميزانية"
+                  parent="menu_rawasi_root"
+                  sequence="40"/>
+        <menuitem id="menu_rawasi_mr"
+                  name="طلبات المواد"
+                  parent="menu_rawasi_procurement"
+                  action="action_material_request"
+                  sequence="10"/>
+        <menuitem id="menu_rawasi_po"
+                  name="أوامر الشراء"
+                  parent="menu_rawasi_procurement"
+                  action="action_purchase_order"
+                  sequence="20"/>
+        <menuitem id="menu_rawasi_grn"
+                  name="سندات الاستلام"
+                  parent="menu_rawasi_procurement"
+                  action="action_goods_receipt"
+                  sequence="30"/>
+        <menuitem id="menu_rawasi_budget"
+                  name="لوحة الميزانية"
+                  parent="menu_rawasi_procurement"
+                  action="action_boq_budget"
+                  sequence="40"/>
+
         <!-- الإعدادات -->
         <menuitem id="menu_rawasi_config"
                   name="الإعدادات"
