@@ -54,6 +54,15 @@ class TestPricing(TransactionCase):
         )
         self.assertAlmostEqual(self.comp.amount_indirect_cost, 5000.0, places=2)
 
+    def test_vat_totals(self):
+        self._add_item(10, 100, 130)   # untaxed offer price = 1300
+        self.assertAlmostEqual(self.comp.amount_total_price, 1300.0, places=2)
+        self.assertAlmostEqual(self.comp.amount_tax, 195.0, places=2)  # 15%
+        self.assertAlmostEqual(self.comp.amount_total_incl_tax, 1495.0, places=2)
+
+    def test_default_currency_is_sar(self):
+        self.assertEqual(self.comp.currency_id.name, "SAR")
+
     def test_apply_default_margin(self):
         item = self._add_item(10, 100, 0)
         self.comp.action_apply_margin()

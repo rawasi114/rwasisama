@@ -35,9 +35,15 @@ class RawasiCompetition(models.Model):
     currency_id = fields.Many2one(
         "res.currency",
         string="العملة",
-        default=lambda self: self.env.company.currency_id,
+        default=lambda self: self._default_currency(),
         required=True,
     )
+
+    @api.model
+    def _default_currency(self):
+        # العملة الافتراضية: الريال السعودي إن وُجد، وإلا عملة الشركة.
+        sar = self.env.ref("base.SAR", raise_if_not_found=False)
+        return sar or self.env.company.currency_id
 
     boq_item_ids = fields.One2many(
         "rawasi.boq.item", "competition_id", string="بنود جدول الكميات"
@@ -65,7 +71,18 @@ class RawasiCompetition(models.Model):
         string="إجمالي التكلفة", compute="_compute_amounts", store=True
     )
     amount_total_price = fields.Monetary(
-        string="إجمالي سعر العرض", compute="_compute_amounts", store=True
+        string="المبلغ الإجمالي بدون الضريبة", compute="_compute_amounts", store=True
+    )
+    vat_rate = fields.Float(
+        string="نسبة ضريبة القيمة المضافة %",
+        default=15.0,
+        help="ضريبة القيمة المضافة في السعودية (15%).",
+    )
+    amount_tax = fields.Monetary(
+        string="مبلغ الضريبة", compute="_compute_amounts", store=True
+    )
+    amount_total_incl_tax = fields.Monetary(
+        string="الإجمالي شامل الضريبة", compute="_compute_amounts", store=True
     )
     margin_amount = fields.Monetary(
         string="هامش الربح (قيمة)", compute="_compute_amounts", store=True
@@ -87,6 +104,7 @@ class RawasiCompetition(models.Model):
         "boq_item_ids.total_cost",
         "boq_item_ids.total_price",
         "indirect_cost_ids.amount",
+        "vat_rate",
     )
     def _compute_amounts(self):
         for comp in self:
@@ -98,6 +116,8 @@ class RawasiCompetition(models.Model):
             comp.amount_indirect_cost = indirect
             comp.amount_total_cost = total_cost
             comp.amount_total_price = price
+            comp.amount_tax = price * (comp.vat_rate / 100.0)
+            comp.amount_total_incl_tax = price + comp.amount_tax
             comp.margin_amount = price - total_cost
             comp.margin_pct = (comp.margin_amount / price * 100.0) if price else 0.0
 

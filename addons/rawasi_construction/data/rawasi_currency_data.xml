@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- noupdate: يُطبَّق مرة واحدة عند التثبيت؛ يمكن تغييره لاحقاً من الإعدادات. -->
+    <data noupdate="1">
+        <!-- تفعيل عملة الريال السعودي -->
+        <record id="base.SAR" model="res.currency">
+            <field name="active" eval="True"/>
+        </record>
+
+        <!-- جعل عملة الشركة الافتراضية ريالاً سعودياً -->
+        <record id="base.main_company" model="res.company">
+            <field name="currency_id" ref="base.SAR"/>
+        </record>
+    </data>
+</odoo>
