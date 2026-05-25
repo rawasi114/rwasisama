@@ -8,3 +8,4 @@ from . import test_phase4
 from . import test_price_intelligence
 from . import test_governance
 from . import test_phase6
+from . import test_phase7
