@@ -5,7 +5,10 @@ from odoo import api, fields, models
 class RawasiDailyReport(models.Model):
     _name = "rawasi.daily.report"
     _description = "التقرير اليومي للموقع (Daily Site Report)"
-    _inherit = ["mail.thread", "mail.activity.mixin"]
+    _inherit = [
+        "mail.thread", "mail.activity.mixin",
+        "rawasi.workflow.mixin", "rawasi.printable.mixin",
+    ]
     _order = "report_date desc, id desc"
 
     name = fields.Char(
@@ -74,10 +77,14 @@ class RawasiDailyReport(models.Model):
         for rep in self:
             rep.total_workers = sum(rep.labor_ids.mapped("worker_count"))
 
+    def _report_xmlid(self):
+        return "rawasi_construction.action_report_dsr"
+
     def action_confirm(self):
         self.write({"state": "confirmed"})
 
     def action_reset_to_draft(self):
+        self._ensure_admin()
         self.write({"state": "draft"})
 
 

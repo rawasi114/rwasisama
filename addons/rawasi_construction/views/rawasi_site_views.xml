@@ -25,8 +25,11 @@
                 <header>
                     <button name="action_confirm" type="object" string="اعتماد"
                             class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_print_with_attachments" type="object"
+                            string="طباعة مع المرفقات" class="btn-secondary"
+                            invisible="not attachment_ids"/>
                     <button name="action_reset_to_draft" type="object" string="إعادة لمسودة"
-                            invisible="state != 'confirmed'"/>
+                            groups="base.group_system" invisible="state != 'confirmed'"/>
                     <field name="state" widget="statusbar"/>
                 </header>
                 <sheet>
@@ -110,9 +113,14 @@
                             class="btn-primary" invisible="state != 'open'"/>
                     <button name="action_close" type="object" string="إغلاق"
                             class="btn-primary" invisible="state not in ('open','in_progress')"/>
+                    <button name="action_print_with_attachments" type="object"
+                            string="طباعة مع المرفقات" class="btn-secondary"
+                            invisible="not attachment_ids"/>
                     <button name="action_void" type="object" string="إلغاء"
+                            groups="base.group_system"
                             invisible="state in ('closed','void')"/>
                     <button name="action_reopen" type="object" string="إعادة فتح"
+                            groups="base.group_system"
                             invisible="state not in ('closed','void')"/>
                     <field name="state" widget="statusbar"
                            statusbar_visible="open,in_progress,closed"/>
@@ -194,8 +202,11 @@
                             class="btn-primary" invisible="state != 'submitted'"/>
                     <button name="action_close" type="object" string="إغلاق"
                             invisible="state != 'answered'"/>
+                    <button name="action_print_with_attachments" type="object"
+                            string="طباعة مع المرفقات" class="btn-secondary"
+                            invisible="not attachment_ids"/>
                     <button name="action_reset_to_draft" type="object" string="إعادة لمسودة"
-                            invisible="state in ('draft','closed')"/>
+                            groups="base.group_system" invisible="state in ('draft','closed')"/>
                     <field name="state" widget="statusbar"
                            statusbar_visible="draft,submitted,answered,closed"/>
                 </header>

@@ -5,7 +5,10 @@ from odoo import api, fields, models
 class RawasiDocument(models.Model):
     _name = "rawasi.document"
     _description = "مستند المشروع (DMS)"
-    _inherit = ["mail.thread", "mail.activity.mixin"]
+    _inherit = [
+        "mail.thread", "mail.activity.mixin",
+        "rawasi.workflow.mixin", "rawasi.printable.mixin",
+    ]
     _order = "create_date desc"
 
     name = fields.Char(string="العنوان", required=True, tracking=True)
@@ -80,6 +83,9 @@ class RawasiDocument(models.Model):
         for doc in self:
             doc.attachment_count = len(doc.attachment_ids)
 
+    def _report_xmlid(self):
+        return "rawasi_construction.action_report_document"
+
     def action_submit_review(self):
         self.write({"state": "under_review"})
 
@@ -87,7 +93,9 @@ class RawasiDocument(models.Model):
         self.write({"state": "approved"})
 
     def action_supersede(self):
+        self._ensure_admin()
         self.write({"state": "superseded"})
 
     def action_reset_to_draft(self):
+        self._ensure_admin()
         self.write({"state": "draft"})

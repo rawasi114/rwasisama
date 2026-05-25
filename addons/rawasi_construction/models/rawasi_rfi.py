@@ -6,7 +6,10 @@ from odoo.exceptions import UserError
 class RawasiRfi(models.Model):
     _name = "rawasi.rfi"
     _description = "طلب معلومات (Request For Information)"
-    _inherit = ["mail.thread", "mail.activity.mixin"]
+    _inherit = [
+        "mail.thread", "mail.activity.mixin",
+        "rawasi.workflow.mixin", "rawasi.printable.mixin",
+    ]
     _order = "create_date desc"
 
     name = fields.Char(
@@ -75,8 +78,12 @@ class RawasiRfi(models.Model):
                 raise UserError(_("يلزم إدخال الرد قبل وسم الطلب كمُجاب."))
             rfi.write({"state": "answered", "date_answered": fields.Date.context_today(rfi)})
 
+    def _report_xmlid(self):
+        return "rawasi_construction.action_report_rfi"
+
     def action_close(self):
         self.write({"state": "closed"})
 
     def action_reset_to_draft(self):
+        self._ensure_admin()
         self.write({"state": "draft"})

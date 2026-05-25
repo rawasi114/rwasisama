@@ -44,7 +44,7 @@
                             string="تحويل لمشروع" class="btn-primary"
                             invisible="state != 'won' or project_id"/>
                     <button name="action_reset_to_draft" type="object" string="إعادة لمسودة"
-                            invisible="state in ('draft',)"/>
+                            groups="base.group_system" invisible="state in ('draft',)"/>
                     <field name="state" widget="statusbar"
                            statusbar_visible="draft,pricing,submitted,won"/>
                 </header>

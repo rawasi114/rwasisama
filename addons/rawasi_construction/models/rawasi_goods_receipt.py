@@ -6,7 +6,7 @@ from odoo.exceptions import UserError
 class RawasiGoodsReceipt(models.Model):
     _name = "rawasi.goods.receipt"
     _description = "سند استلام مواد (GRN)"
-    _inherit = ["mail.thread", "mail.activity.mixin"]
+    _inherit = ["mail.thread", "mail.activity.mixin", "rawasi.workflow.mixin"]
     _order = "create_date desc"
 
     name = fields.Char(string="الرقم", required=True, copy=False, readonly=True, default="/")
@@ -48,6 +48,7 @@ class RawasiGoodsReceipt(models.Model):
                 po.state = "received"
 
     def action_cancel(self):
+        self._ensure_admin()
         self.write({"state": "cancelled"})
 
 

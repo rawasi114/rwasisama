@@ -31,9 +31,14 @@
                             class="btn-primary" invisible="state != 'draft'"/>
                     <button name="action_approve" type="object" string="اعتماد"
                             class="btn-primary" invisible="state != 'under_review'"/>
+                    <button name="action_print_with_attachments" type="object"
+                            string="طباعة مع المرفقات" class="btn-secondary"
+                            invisible="not attachment_ids"/>
                     <button name="action_supersede" type="object" string="إلغاء/استبدال"
+                            groups="base.group_system"
                             invisible="state in ('draft','superseded')"/>
                     <button name="action_reset_to_draft" type="object" string="إعادة لمسودة"
+                            groups="base.group_system"
                             invisible="state == 'draft'"/>
                     <field name="state" widget="statusbar"
                            statusbar_visible="draft,under_review,approved"/>

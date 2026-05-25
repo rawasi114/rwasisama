@@ -6,7 +6,7 @@ from odoo.exceptions import UserError
 class RawasiMaterialRequest(models.Model):
     _name = "rawasi.material.request"
     _description = "طلب مواد (Material Request)"
-    _inherit = ["mail.thread", "mail.activity.mixin"]
+    _inherit = ["mail.thread", "mail.activity.mixin", "rawasi.workflow.mixin"]
     _order = "create_date desc"
 
     name = fields.Char(string="الرقم", required=True, copy=False, readonly=True, default="/")
@@ -110,6 +110,7 @@ class RawasiMaterialRequest(models.Model):
         self.write({"state": "rejected"})
 
     def action_reset_to_draft(self):
+        self._ensure_admin()
         self.write({"state": "draft"})
 
     def action_create_po(self):

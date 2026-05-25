@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from . import rawasi_mixins
 from . import rawasi_unit
 from . import rawasi_sbc_code
 from . import rawasi_price_intelligence

@@ -6,7 +6,7 @@ from odoo.exceptions import UserError
 class RawasiPurchaseOrder(models.Model):
     _name = "rawasi.purchase.order"
     _description = "أمر شراء (Purchase Order)"
-    _inherit = ["mail.thread", "mail.activity.mixin"]
+    _inherit = ["mail.thread", "mail.activity.mixin", "rawasi.workflow.mixin"]
     _order = "create_date desc"
 
     name = fields.Char(string="الرقم", required=True, copy=False, readonly=True, default="/")
@@ -59,9 +59,11 @@ class RawasiPurchaseOrder(models.Model):
             po.state = "confirmed"
 
     def action_cancel(self):
+        self._ensure_admin()
         self.write({"state": "cancelled"})
 
     def action_reset_to_draft(self):
+        self._ensure_admin()
         self.write({"state": "draft"})
 
     def action_create_grn(self):

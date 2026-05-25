@@ -41,7 +41,7 @@
                     <button name="action_reject" type="object" string="رفض"
                             invisible="state not in ('submitted',)"/>
                     <button name="action_reset_to_draft" type="object" string="إعادة لمسودة"
-                            invisible="state in ('draft','procured')"/>
+                            groups="base.group_system" invisible="state in ('draft','procured')"/>
                     <field name="state" widget="statusbar"
                            statusbar_visible="draft,submitted,approved,procured"/>
                 </header>
@@ -125,9 +125,10 @@
                     <button name="action_create_grn" type="object" string="استلام مواد"
                             class="btn-primary" invisible="state != 'confirmed'"/>
                     <button name="action_cancel" type="object" string="إلغاء"
+                            groups="base.group_system"
                             invisible="state in ('cancelled','received')"/>
                     <button name="action_reset_to_draft" type="object" string="إعادة لمسودة"
-                            invisible="state != 'cancelled'"/>
+                            groups="base.group_system" invisible="state != 'cancelled'"/>
                     <field name="state" widget="statusbar"
                            statusbar_visible="draft,confirmed,received"/>
                 </header>
@@ -204,7 +205,7 @@
                     <button name="action_validate" type="object" string="تأكيد الاستلام"
                             class="btn-primary" invisible="state != 'draft'"/>
                     <button name="action_cancel" type="object" string="إلغاء"
-                            invisible="state != 'draft'"/>
+                            groups="base.group_system" invisible="state != 'draft'"/>
                     <field name="state" widget="statusbar"/>
                 </header>
                 <sheet>

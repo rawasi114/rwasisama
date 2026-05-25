@@ -9,7 +9,7 @@ from odoo.tools.pdf import merge_pdf
 class RawasiMaterialApproval(models.Model):
     _name = "rawasi.material.approval"
     _description = "طلب اعتماد مادة (Material Approval Submission)"
-    _inherit = ["mail.thread", "mail.activity.mixin"]
+    _inherit = ["mail.thread", "mail.activity.mixin", "rawasi.workflow.mixin"]
     _order = "create_date desc"
 
     name = fields.Char(
@@ -87,6 +87,7 @@ class RawasiMaterialApproval(models.Model):
         self.write({"state": "resubmit"})
 
     def action_reset_to_draft(self):
+        self._ensure_admin()
         self.write({"state": "draft"})
 
     # ── دمج PDF (الغلاف + المرفقات في ملف واحد) ──────────────────

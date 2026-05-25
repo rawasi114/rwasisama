@@ -6,3 +6,4 @@ from . import test_wbs
 from . import test_budget
 from . import test_phase4
 from . import test_price_intelligence
+from . import test_governance

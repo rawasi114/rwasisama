@@ -5,7 +5,10 @@ from odoo import api, fields, models
 class RawasiNcr(models.Model):
     _name = "rawasi.ncr"
     _description = "تقرير عدم مطابقة (Non-Conformance Report)"
-    _inherit = ["mail.thread", "mail.activity.mixin"]
+    _inherit = [
+        "mail.thread", "mail.activity.mixin",
+        "rawasi.workflow.mixin", "rawasi.printable.mixin",
+    ]
     _order = "create_date desc"
 
     name = fields.Char(
@@ -68,6 +71,9 @@ class RawasiNcr(models.Model):
                 ) or "/"
         return super().create(vals_list)
 
+    def _report_xmlid(self):
+        return "rawasi_construction.action_report_ncr"
+
     def action_start(self):
         self.write({"state": "in_progress"})
 
@@ -75,7 +81,9 @@ class RawasiNcr(models.Model):
         self.write({"state": "closed", "closed_date": fields.Date.context_today(self)})
 
     def action_void(self):
+        self._ensure_admin()
         self.write({"state": "void"})
 
     def action_reopen(self):
+        self._ensure_admin()
         self.write({"state": "open", "closed_date": False})

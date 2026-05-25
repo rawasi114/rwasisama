@@ -8,7 +8,7 @@ from .arabic_utils import normalize_match
 class RawasiCompetition(models.Model):
     _name = "rawasi.competition"
     _description = "منافسة / فرصة"
-    _inherit = ["mail.thread", "mail.activity.mixin"]
+    _inherit = ["mail.thread", "mail.activity.mixin", "rawasi.workflow.mixin"]
     _order = "create_date desc"
 
     name = fields.Char(string="اسم المنافسة", required=True, tracking=True)
@@ -140,22 +140,23 @@ class RawasiCompetition(models.Model):
 
     def action_won(self):
         self.write({"state": "won"})
-        self.price_intelligence_ids.write({"outcome": "won"})
+        self.price_intelligence_ids.sudo().write({"outcome": "won"})
 
     def action_lost(self):
         self.write({"state": "lost"})
-        self.price_intelligence_ids.write({"outcome": "lost"})
+        self.price_intelligence_ids.sudo().write({"outcome": "lost"})
 
     def action_reset_to_draft(self):
-        self.price_intelligence_ids.unlink()
+        self._ensure_admin()
+        self.price_intelligence_ids.sudo().unlink()
         self.write({"state": "draft"})
 
     def _snapshot_prices(self):
         """يلتقط أسعار البنود المسعّرة في ذاكرة الأسعار (تحديث لقطة المنافسة)."""
-        PI = self.env["rawasi.price.intelligence"]
+        PI = self.env["rawasi.price.intelligence"].sudo()
         today = fields.Date.context_today(self)
         for comp in self:
-            comp.price_intelligence_ids.unlink()
+            comp.price_intelligence_ids.sudo().unlink()
             rows = []
             for item in comp.boq_item_ids:
                 if not item.unit_price:
