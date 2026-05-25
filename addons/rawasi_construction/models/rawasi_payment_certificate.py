@@ -1,6 +1,14 @@
 # -*- coding: utf-8 -*-
+import base64
+
 from odoo import api, fields, models, _
 from odoo.exceptions import UserError
+
+
+def _zatca_tlv(tag, value):
+    """ترميز TLV لحقل واحد في رمز ZATCA (Tag-Length-Value)."""
+    data = (value or "").encode("utf-8")
+    return bytes([tag, len(data)]) + data
 
 
 class RawasiPaymentCertificate(models.Model):
@@ -66,6 +74,36 @@ class RawasiPaymentCertificate(models.Model):
         "ir.attachment", "rawasi_pc_attachment_rel", "pc_id", "attachment_id",
         string="المرفقات",
     )
+    # ── امتثال ZATCA (هيئة الزكاة والضريبة) ──────────────────────
+    zatca_qr = fields.Char(
+        string="رمز ZATCA (Base64 TLV)", compute="_compute_zatca", store=True
+    )
+    zatca_qr_image = fields.Binary(string="رمز QR", compute="_compute_zatca")
+
+    @api.depends("amount_total", "amount_tax", "create_date",
+                 "company_id", "company_id.name", "company_id.vat")
+    def _compute_zatca(self):
+        """يبني رمز ZATCA (المرحلة الأولى): اسم البائع، الرقم الضريبي، الطابع
+        الزمني، الإجمالي شامل الضريبة، مبلغ الضريبة — مُرمَّزة TLV ثم Base64."""
+        report = self.env["ir.actions.report"]
+        for pc in self:
+            company = pc.company_id or self.env.company
+            stamp = pc.create_date or fields.Datetime.now()
+            ts = stamp.strftime("%Y-%m-%dT%H:%M:%SZ")
+            tlv = (
+                _zatca_tlv(1, company.name or "")
+                + _zatca_tlv(2, company.vat or "")
+                + _zatca_tlv(3, ts)
+                + _zatca_tlv(4, "%.2f" % (pc.amount_total or 0.0))
+                + _zatca_tlv(5, "%.2f" % (pc.amount_tax or 0.0))
+            )
+            b64 = base64.b64encode(tlv).decode()
+            pc.zatca_qr = b64
+            try:
+                png = report.barcode("QR", b64)
+                pc.zatca_qr_image = base64.b64encode(png)
+            except Exception:
+                pc.zatca_qr_image = False
 
     @api.model_create_multi
     def create(self, vals_list):
@@ -154,7 +192,7 @@ class RawasiPaymentCertificateLine(models.Model):
     pc_state = fields.Selection(related="pc_id.state", store=True)
     # القيد المعماري: كل سطر مستخلص يرتبط ببند جدول الكميات
     boq_item_id = fields.Many2one(
-        "rawasi.boq.item", string="بند جدول الكميات", required=True
+        "rawasi.boq.item", string="بند جدول الكميات", required=True, index=True
     )
     description = fields.Text(related="boq_item_id.name", string="الوصف")
     unit_id = fields.Many2one(related="boq_item_id.unit_id", string="الوحدة")

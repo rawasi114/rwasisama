@@ -178,6 +178,11 @@
                             <field name="amount_total" class="oe_subtotal_footer_separator"/>
                         </group>
                     </group>
+                    <group string="امتثال ZATCA" col="2">
+                        <field name="zatca_qr_image" widget="image" class="oe_avatar"
+                               nolabel="1" readonly="1"/>
+                        <field name="zatca_qr" readonly="1"/>
+                    </group>
                     <field name="attachment_ids" widget="many2many_binary"/>
                 </sheet>
                 <chatter/>

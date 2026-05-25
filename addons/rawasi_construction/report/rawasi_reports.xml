@@ -457,6 +457,17 @@
                             <tr><th class="text-end">الضريبة</th><td class="text-end"><span t-field="o.amount_tax"/></td></tr>
                             <tr><th class="text-end">الإجمالي المستحق</th><td class="text-end"><span t-field="o.amount_total"/></td></tr>
                         </table>
+                        <div class="row mt-4">
+                            <div class="col-8">
+                                <p><strong>البائع: </strong><span t-field="o.company_id"/></p>
+                                <p><strong>الرقم الضريبي: </strong><span t-field="o.company_id.vat"/></p>
+                                <small class="text-muted">فاتورة ضريبية — متوافقة مع متطلبات هيئة الزكاة والضريبة والجمارك (ZATCA).</small>
+                            </div>
+                            <div class="col-4 text-center">
+                                <img t-if="o.zatca_qr_image" t-att-src="image_data_uri(o.zatca_qr_image)"
+                                     style="max-width:120px;" alt="ZATCA QR"/>
+                            </div>
+                        </div>
                     </div>
                 </t>
             </t>
