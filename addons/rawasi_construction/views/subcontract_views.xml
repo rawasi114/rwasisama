@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_subcontract_list" model="ir.ui.view">
+        <field name="name">rawasi.subcontract.list</field>
+        <field name="model">rawasi.subcontract</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="subcontractor_id"/>
+                <field name="project_id"/>
+                <field name="contract_date"/>
+                <field name="total_amount"/>
+                <field name="currency_id" column_invisible="1"/>
+                <field name="ipc_count" string="مستخلصات"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'active'"
+                       decoration-muted="state == 'closed'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_subcontract_form" model="ir.ui.view">
+        <field name="name">rawasi.subcontract.form</field>
+        <field name="model">rawasi.subcontract</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_activate" type="object" string="تفعيل"
+                            class="btn-primary" invisible="state != 'draft'"
+                            groups="rawasi_construction.group_projects_director,rawasi_construction.group_tech_office_manager"/>
+                    <button name="action_close" type="object" string="إغلاق"
+                            invisible="state != 'active'"
+                            groups="rawasi_construction.group_projects_director,rawasi_construction.group_tech_office_manager"/>
+                    <button name="action_print_with_attachments" type="object"
+                            string="طباعة مع المرفقات" class="btn-secondary"
+                            invisible="not attachment_ids"/>
+                    <button name="action_reset_to_draft" type="object" string="إعادة لمسودة"
+                            groups="base.group_system" invisible="state == 'draft'"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,active,closed"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_open_ipcs" type="object"
+                                class="oe_stat_button" icon="fa-money">
+                            <field name="ipc_count" widget="statinfo" string="المستخلصات"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="subcontractor_id"/>
+                            <field name="project_id"/>
+                            <field name="contract_date"/>
+                        </group>
+                        <group>
+                            <field name="retention_percent"/>
+                            <field name="total_amount"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <field name="scope" placeholder="نطاق العمل..."/>
+                    <field name="line_ids">
+                        <list editable="bottom">
+                            <field name="boq_item_id" options="{'no_create': True}"/>
+                            <field name="description"/>
+                            <field name="uom_id"/>
+                            <field name="quantity"/>
+                            <field name="unit_price"/>
+                            <field name="subtotal"/>
+                            <field name="certified_quantity" string="تراكمي معتمد"/>
+                            <field name="currency_id" column_invisible="1"/>
+                        </list>
+                    </field>
+                    <group class="oe_subtotal_footer">
+                        <field name="total_amount"/>
+                    </group>
+                    <notebook>
+                        <page string="المرفقات" name="attachments">
+                            <field name="attachment_ids" widget="many2many_binary"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_subcontract_search" model="ir.ui.view">
+        <field name="name">rawasi.subcontract.search</field>
+        <field name="model">rawasi.subcontract</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="subcontractor_id"/>
+                <field name="project_id"/>
+                <filter name="draft" string="مسودة" domain="[('state','=','draft')]"/>
+                <filter name="active" string="نافذ" domain="[('state','=','active')]"/>
+                <filter name="closed" string="مغلق" domain="[('state','=','closed')]"/>
+                <group>
+                    <filter name="g_project" string="المشروع" context="{'group_by':'project_id'}"/>
+                    <filter name="g_subcontractor" string="المقاول" context="{'group_by':'subcontractor_id'}"/>
+                    <filter name="g_state" string="الحالة" context="{'group_by':'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_subcontract" model="ir.actions.act_window">
+        <field name="name">العقود الفرعية</field>
+        <field name="res_model">rawasi.subcontract</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_subcontract_search"/>
+    </record>
+</odoo>
