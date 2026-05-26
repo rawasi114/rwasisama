@@ -29,6 +29,10 @@ class TestWbs(TransactionCase):
         # مهام فرعية مولّدة تحت المراحل
         children = self.project.wbs_activity_ids.filtered(lambda a: a.parent_id)
         self.assertTrue(len(children) >= 6, "يجب توليد مهام فرعية")
+        # كل الأنشطة المولّدة لها تواريخ لتظهر على الجدول الزمني (Gantt)
+        self.assertTrue(all(mains.mapped("date_start")), "لكل مرحلة تاريخ بداية")
+        self.assertTrue(all(mains.mapped("date_end")), "لكل مرحلة تاريخ نهاية")
+        self.assertTrue(all(children.mapped("date_start")), "لكل مهمة فرعية تاريخ بداية")
         # لا يكرّر المراحل الرئيسية عند الاستدعاء مرة أخرى
         self.project.action_generate_wbs_phases()
         self.assertEqual(
