@@ -96,6 +96,10 @@
         <field name="arch" type="xml">
             <list>
                 <field name="name"/>
+                <field name="certificate_type" widget="badge"
+                       decoration-info="certificate_type == 'owner'"
+                       decoration-warning="certificate_type == 'subcontractor'"/>
+                <field name="partner_id"/>
                 <field name="project_id"/>
                 <field name="sequence_no"/>
                 <field name="period_to"/>
@@ -141,6 +145,11 @@
                     </div>
                     <group>
                         <group>
+                            <field name="certificate_type" widget="radio" options="{'horizontal': True}"/>
+                            <field name="partner_id" string="الجهة المالكة / العميل"
+                                   invisible="certificate_type != 'owner'"/>
+                            <field name="partner_id" string="مقاول الباطن"
+                                   invisible="certificate_type != 'subcontractor'"/>
                             <field name="project_id"/>
                             <field name="sequence_no"/>
                         </group>
@@ -190,10 +199,42 @@
         </field>
     </record>
 
+    <record id="view_payment_certificate_search" model="ir.ui.view">
+        <field name="name">rawasi.payment.certificate.search</field>
+        <field name="model">rawasi.payment.certificate</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="project_id"/>
+                <field name="partner_id"/>
+                <filter name="owner_type" string="للجهة المالكة / العميل"
+                        domain="[('certificate_type','=','owner')]"/>
+                <filter name="subcontractor_type" string="لمقاول باطن"
+                        domain="[('certificate_type','=','subcontractor')]"/>
+                <separator/>
+                <filter name="approved" string="معتمدة"
+                        domain="[('state','in',('approved','paid'))]"/>
+                <filter name="paid" string="مدفوعة"
+                        domain="[('state','=','paid')]"/>
+                <group>
+                    <filter name="g_type" string="النوع"
+                            context="{'group_by':'certificate_type'}"/>
+                    <filter name="g_partner" string="الطرف المقابل"
+                            context="{'group_by':'partner_id'}"/>
+                    <filter name="g_project" string="المشروع"
+                            context="{'group_by':'project_id'}"/>
+                    <filter name="g_state" string="الحالة"
+                            context="{'group_by':'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
     <record id="action_payment_certificate" model="ir.actions.act_window">
         <field name="name">المستخلصات</field>
         <field name="res_model">rawasi.payment.certificate</field>
         <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_payment_certificate_search"/>
     </record>
 
     <!-- ════════════════ ضمان بنكي (BG) ════════════════ -->
