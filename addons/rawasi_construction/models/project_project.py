@@ -14,6 +14,13 @@ class ProjectProject(models.Model):
         string="الرقم التسلسلي", readonly=True, copy=False, index=True,
         help="رقم تسلسلي تلقائي بصيغة RS-PRJ-YYYY##### يربط المشروع بكل تفاصيله.",
     )
+    site_engineer_ids = fields.Many2many(
+        "res.users",
+        "rawasi_project_site_engineer_rel",
+        "project_id", "user_id",
+        string="مهندسو الموقع",
+        help="مهندسو الموقع المسؤولون عن هذا المشروع — مفتاح عزل مقاولي الباطن ومستخلصاتهم.",
+    )
     rawasi_competition_id = fields.Many2one(
         "rawasi.competition", string="المنافسة المصدر", readonly=True
     )

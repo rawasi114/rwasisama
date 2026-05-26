@@ -106,5 +106,26 @@
             <field name="padding">4</field>
             <field name="company_id" eval="False"/>
         </record>
+        <record id="seq_subcontractor" model="ir.sequence">
+            <field name="name">مقاول من الباطن</field>
+            <field name="code">rawasi.subcontractor</field>
+            <field name="prefix">SUB/</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        <record id="seq_subcontract" model="ir.sequence">
+            <field name="name">عقد مقاول من الباطن</field>
+            <field name="code">rawasi.subcontract</field>
+            <field name="prefix">SUB-CON/%(year)s/</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        <record id="seq_subcontract_ipc" model="ir.sequence">
+            <field name="name">مستخلص مقاول من الباطن</field>
+            <field name="code">rawasi.subcontract.ipc</field>
+            <field name="prefix">SUB-IPC/%(year)s/</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
     </data>
 </odoo>
