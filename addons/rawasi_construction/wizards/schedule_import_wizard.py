@@ -11,18 +11,33 @@ from ..models.arabic_utils import normalize_light
 
 try:
     import openpyxl
+    from openpyxl.utils import get_column_letter
 except ImportError:  # pragma: no cover
     openpyxl = None
 
 HEADER_ALIASES = {
     "النشاط": "name", "المهمة": "name", "اسم النشاط": "name", "البند": "name",
     "المرحلة": "phase", "مرحلة": "phase",
+    "التسلسل": "sequence", "الترتيب": "sequence", "تسلسل": "sequence", "ترتيب": "sequence",
     "تاريخ البداية": "date_start", "البداية": "date_start", "بداية": "date_start",
     "تاريخ النهاية": "date_end", "النهاية": "date_end", "نهاية": "date_end",
+    "بداية خط الأساس": "baseline_start", "بداية الأساس": "baseline_start",
+    "نهاية خط الأساس": "baseline_end", "نهاية الأساس": "baseline_end",
+    "البداية الفعلية": "actual_start", "بداية فعلية": "actual_start",
+    "النهاية الفعلية": "actual_end", "نهاية فعلية": "actual_end",
     "نسبة الإنجاز": "progress", "الإنجاز": "progress", "النسبة": "progress",
-    "معلم": "milestone", "معلم رئيسي": "milestone",
+    "معلم": "milestone", "معلم رئيسي": "milestone", "معلَم": "milestone",
 }
 HEADER_SCAN_ROWS = 20
+
+# أعمدة قالب الجدول الزمني (بالترتيب) — تطابق كل حقول الجدول القابلة للاستيراد
+TEMPLATE_COLUMNS = [
+    "النشاط", "المرحلة", "التسلسل",
+    "تاريخ البداية", "تاريخ النهاية",
+    "بداية خط الأساس", "نهاية خط الأساس",
+    "البداية الفعلية", "النهاية الفعلية",
+    "نسبة الإنجاز", "معلم",
+]
 
 
 def _norm_key(text):
@@ -92,6 +107,59 @@ class ScheduleImportWizard(models.TransientModel):
         except (TypeError, ValueError):
             return 0.0
 
+    @staticmethod
+    def _to_int(value, default):
+        if value in (None, ""):
+            return default
+        try:
+            return int(float(value))
+        except (TypeError, ValueError):
+            return default
+
+    # ── تحميل قالب الجدول الزمني (Excel جاهز للتعبئة) ────────────
+    def _generate_schedule_template(self):
+        if openpyxl is None:
+            raise UserError(_("مكتبة openpyxl غير متوفرة على الخادم."))
+        wb = openpyxl.Workbook()
+        ws = wb.active
+        ws.title = "الجدول الزمني"
+        ws.append(TEMPLATE_COLUMNS)
+        # صف مثال إرشادي (يمكن حذفه قبل الاستيراد)
+        ws.append([
+            "مثال: أعمال الحفر والردم", "الأعمال الإنشائية", 10,
+            "2026-01-01", "2026-01-20",
+            "2026-01-01", "2026-01-20",
+            "", "", "0", "لا",
+        ])
+        for idx in range(1, len(TEMPLATE_COLUMNS) + 1):
+            ws.column_dimensions[get_column_letter(idx)].width = 20
+        # ورقة مرجعية بأسماء المراحل القياسية لنسخها في عمود «المرحلة»
+        ws_ref = wb.create_sheet("المراحل المتاحة")
+        ws_ref.append(["انسخ اسم المرحلة في عمود «المرحلة»"])
+        for phase in self.env["rawasi.wbs.phase"].search([], order="sequence"):
+            ws_ref.append([phase.name])
+        ws_ref.column_dimensions["A"].width = 45
+        buf = io.BytesIO()
+        wb.save(buf)
+        return buf.getvalue()
+
+    def action_download_template(self):
+        data = self._generate_schedule_template()
+        attachment = self.env["ir.attachment"].create({
+            "name": "قالب_الجدول_الزمني.xlsx",
+            "type": "binary",
+            "datas": base64.b64encode(data),
+            "mimetype": (
+                "application/vnd.openxmlformats-officedocument."
+                "spreadsheetml.sheet"
+            ),
+        })
+        return {
+            "type": "ir.actions.act_url",
+            "url": "/web/content/%s?download=true" % attachment.id,
+            "target": "self",
+        }
+
     def action_import(self):
         self.ensure_one()
         sheet = self._load_sheet()
@@ -122,9 +190,13 @@ class ScheduleImportWizard(models.TransientModel):
                 "project_id": self.project_id.id,
                 "phase_id": phase.id if phase else False,
                 "name": str(name),
-                "sequence": seq,
+                "sequence": self._to_int(data.get("sequence"), seq),
                 "date_start": self._to_date(data.get("date_start")),
                 "date_end": self._to_date(data.get("date_end")),
+                "baseline_start": self._to_date(data.get("baseline_start")),
+                "baseline_end": self._to_date(data.get("baseline_end")),
+                "actual_start": self._to_date(data.get("actual_start")),
+                "actual_end": self._to_date(data.get("actual_end")),
                 "progress": self._to_progress(data.get("progress")),
                 "is_milestone": is_milestone,
             })
