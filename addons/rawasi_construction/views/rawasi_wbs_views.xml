@@ -149,6 +149,8 @@
             <xpath expr="//header" position="inside">
                 <button name="action_generate_wbs_phases" type="object"
                         string="توليد المراحل الخمس" class="btn-secondary"/>
+                <button name="action_download_schedule_template" type="object"
+                        string="قالب الجدول الزمني" class="btn-secondary"/>
                 <button name="action_open_schedule_import" type="object"
                         string="استيراد الجدول الزمني" class="btn-secondary"/>
             </xpath>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- قائمة المشاريع الإنشائية -->
+    <record id="view_rawasi_project_list" model="ir.ui.view">
+        <field name="name">project.project.list.rawasi</field>
+        <field name="model">project.project</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="rawasi_competition_id"/>
+                <field name="wbs_count" string="أنشطة WBS"/>
+                <field name="rawasi_budget_total"/>
+                <field name="rawasi_budget_consumed"/>
+                <field name="rawasi_budget_remaining"/>
+                <field name="rawasi_currency_id" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_rawasi_project_search" model="ir.ui.view">
+        <field name="name">project.project.search.rawasi</field>
+        <field name="model">project.project</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="rawasi_competition_id"/>
+                <filter name="my" string="مشاريعي" domain="[('user_id','=',uid)]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_rawasi_projects" model="ir.actions.act_window">
+        <field name="name">المشاريع</field>
+        <field name="res_model">project.project</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('rawasi_is_construction', '=', True)]</field>
+        <field name="context">{'default_rawasi_is_construction': True}</field>
+        <field name="view_id" ref="view_rawasi_project_list"/>
+        <field name="search_view_id" ref="view_rawasi_project_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">لا توجد مشاريع بعد</p>
+            <p>تُنشأ المشاريع تلقائياً عند تحويل منافسة فائزة إلى مشروع.</p>
+        </field>
+    </record>
+
+    <!-- إظهار معلومات المقاولات (المنافسة + الميزانية) في نموذج المشروع -->
+    <record id="view_project_form_rawasi_construction" model="ir.ui.view">
+        <field name="name">project.project.form.rawasi.construction</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.edit_project"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="inside">
+                <group string="معلومات المقاولات (رواسي سما)"
+                       invisible="not rawasi_is_construction">
+                    <field name="rawasi_is_construction" invisible="1"/>
+                    <field name="rawasi_competition_id"/>
+                    <field name="rawasi_budget_total"/>
+                    <field name="rawasi_budget_consumed"/>
+                    <field name="rawasi_budget_remaining"/>
+                    <field name="rawasi_currency_id" invisible="1"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>
