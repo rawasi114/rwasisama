@@ -11,3 +11,4 @@ from . import test_phase6
 from . import test_phase7
 from . import test_phase8
 from . import test_enhancements
+from . import test_subcontractor

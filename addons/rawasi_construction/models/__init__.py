@@ -20,3 +20,6 @@ from . import rawasi_rfi
 from . import rawasi_variation_order
 from . import rawasi_payment_certificate
 from . import rawasi_bank_guarantee
+from . import rawasi_subcontractor
+from . import rawasi_subcontract
+from . import rawasi_subcontract_ipc

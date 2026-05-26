@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "رواسي سما — إدارة الإنشاءات والمقاولات",
-    "version": "19.0.7.8.0",
+    "version": "19.0.8.0.0",
     "category": "Services/Project",
     "summary": "موديول إدارة دورة المنافسات والمشاريع الإنشائية (Rawasi Sama Construction ERP)",
     "description": "موديول أودو أصلي يؤتمت الدورة المستندية لشركات المقاولات من الفرصة إلى الإغلاق. المبدأ المعماري: بند جدول الكميات هو النواة الذرية للنظام (BOQ Item is the Atomic Unit). المرحلة صفر: الأساس + الأدوار السبعة + قائمة التطبيق + لوحة التحكم.",
@@ -18,6 +18,7 @@
         "security/rawasi_security.xml",
         "security/ir.model.access.csv",
         "security/multicompany_rules.xml",
+        "security/subcontractor_security.xml",
         "data/rawasi_currency_data.xml",
         "data/rawasi_sequence_data.xml",
         "data/rawasi_unit_data.xml",
@@ -35,12 +36,17 @@
         "report/mas_report.xml",
         "report/rawasi_reports.xml",
         "report/schedule_report.xml",
+        "report/subcontractor_reports.xml",
+        "views/subcontractor_views.xml",
+        "views/subcontract_views.xml",
+        "views/subcontract_ipc_views.xml",
         "views/rawasi_document_views.xml",
         "views/rawasi_mas_views.xml",
         "views/rawasi_site_views.xml",
         "views/rawasi_contracts_views.xml",
         "views/rawasi_dashboard_views.xml",
         "views/rawasi_menus.xml",
+        "views/subcontractor_menus.xml",
     ],
     "assets": {
         "web.assets_backend": [
