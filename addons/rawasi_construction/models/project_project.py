@@ -72,15 +72,6 @@ class ProjectProject(models.Model):
                 ) or False
         return super().create(vals_list)
 
-    @api.depends("name", "rawasi_serial")
-    def _compute_display_name(self):
-        super()._compute_display_name()
-        for project in self:
-            if project.rawasi_serial:
-                project.display_name = "[%s] %s" % (
-                    project.rawasi_serial, project.display_name
-                )
-
     def _compute_wbs_count(self):
         for project in self:
             project.wbs_count = len(project.wbs_activity_ids)
