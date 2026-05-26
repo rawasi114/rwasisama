@@ -114,24 +114,55 @@
         <field name="view_mode">list,form</field>
     </record>
 
-    <!-- قوالب المراحل (إعداد) -->
+    <!-- قوالب المراحل الرئيسية (إعداد) -->
     <record id="view_wbs_phase_list" model="ir.ui.view">
         <field name="name">rawasi.wbs.phase.list</field>
         <field name="model">rawasi.wbs.phase</field>
         <field name="arch" type="xml">
-            <list editable="bottom">
+            <list>
                 <field name="sequence" widget="handle"/>
-                <field name="name"/>
                 <field name="code"/>
+                <field name="name"/>
+                <field name="objective" optional="show"/>
                 <field name="active" widget="boolean_toggle"/>
             </list>
         </field>
     </record>
 
+    <record id="view_wbs_phase_form" model="ir.ui.view">
+        <field name="name">rawasi.wbs.phase.form</field>
+        <field name="model">rawasi.wbs.phase</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="code"/>
+                            <field name="name"/>
+                            <field name="sequence"/>
+                        </group>
+                        <group>
+                            <field name="active"/>
+                            <field name="color" widget="color_picker"/>
+                        </group>
+                    </group>
+                    <field name="objective" placeholder="الهدف المباشر للمرحلة..."/>
+                    <separator string="المهام القياسية (تُولَّد كأنشطة فرعية تحت المرحلة)"/>
+                    <field name="task_ids">
+                        <list editable="bottom">
+                            <field name="sequence" widget="handle"/>
+                            <field name="name"/>
+                        </list>
+                    </field>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
     <record id="action_wbs_phase" model="ir.actions.act_window">
-        <field name="name">المراحل القياسية (WBS)</field>
+        <field name="name">المراحل الرئيسية للمشروع</field>
         <field name="res_model">rawasi.wbs.phase</field>
-        <field name="view_mode">list</field>
+        <field name="view_mode">list,form</field>
     </record>
 
     <!-- إضافة أزرار WBS إلى نموذج المشروع -->
