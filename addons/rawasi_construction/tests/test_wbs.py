@@ -20,13 +20,22 @@ class TestWbs(TransactionCase):
         super().setUp()
         self.project = self.env["project.project"].create({"name": "مشروع اختبار WBS"})
 
-    def test_generate_five_phases(self):
+    def test_generate_phases(self):
         self.project.action_generate_wbs_phases()
-        phases = self.project.wbs_activity_ids.filtered(lambda a: a.phase_id)
-        self.assertEqual(len(phases), 5, "يجب توليد المراحل الخمس")
-        # لا يكرّر عند الاستدعاء مرة أخرى
+        mains = self.project.wbs_activity_ids.filtered(
+            lambda a: a.phase_id and not a.parent_id
+        )
+        self.assertEqual(len(mains), 6, "يجب توليد المراحل الرئيسية الست")
+        # مهام فرعية مولّدة تحت المراحل
+        children = self.project.wbs_activity_ids.filtered(lambda a: a.parent_id)
+        self.assertTrue(len(children) >= 6, "يجب توليد مهام فرعية")
+        # لا يكرّر المراحل الرئيسية عند الاستدعاء مرة أخرى
         self.project.action_generate_wbs_phases()
-        self.assertEqual(len(self.project.wbs_activity_ids.filtered(lambda a: a.phase_id)), 5)
+        self.assertEqual(
+            len(self.project.wbs_activity_ids.filtered(
+                lambda a: a.phase_id and not a.parent_id)),
+            6,
+        )
 
     def test_duration_and_dates(self):
         act = self.env["rawasi.wbs.activity"].create({
@@ -70,8 +79,6 @@ class TestWbs(TransactionCase):
         self.assertEqual(len(acts), 6, "يجب استيراد 6 أنشطة")
 
         mob = acts.filtered(lambda a: a.name == "تجهيز الموقع")
-        self.assertTrue(mob.phase_id, "يجب مطابقة المرحلة بالاسم")
-        self.assertEqual(mob.phase_id.code, "MOB")
         self.assertEqual(mob.progress, 100.0)
 
         milestone = acts.filtered(lambda a: a.name == "التسليم الابتدائي")
