@@ -36,6 +36,9 @@ class RawasiBoqItem(models.Model):
     currency_id = fields.Many2one(
         related="competition_id.currency_id", store=True, readonly=True
     )
+    company_id = fields.Many2one(
+        "res.company", related="competition_id.company_id", store=True, readonly=True,
+    )
     unit_cost = fields.Monetary(string="تكلفة الوحدة")
     total_cost = fields.Monetary(
         string="إجمالي التكلفة", compute="_compute_totals", store=True
