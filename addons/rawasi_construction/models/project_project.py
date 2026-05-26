@@ -1,14 +1,46 @@
 # -*- coding: utf-8 -*-
-from odoo import _, fields, models
+from odoo import api, _, fields, models
 
 
 class ProjectProject(models.Model):
     _inherit = "project.project"
 
+    # مشروع إنشائي تابع لنظام رواسي سما (لتمييزه عن مشاريع أودو/الورشة العامة)
+    rawasi_is_construction = fields.Boolean(string="مشروع مقاولات", default=False)
+    rawasi_competition_id = fields.Many2one(
+        "rawasi.competition", string="المنافسة المصدر", readonly=True
+    )
+    rawasi_currency_id = fields.Many2one(related="company_id.currency_id")
+    rawasi_budget_total = fields.Monetary(
+        string="الميزانية التعاقدية", compute="_compute_rawasi_budget",
+        currency_field="rawasi_currency_id",
+    )
+    rawasi_budget_consumed = fields.Monetary(
+        string="المستهلك", compute="_compute_rawasi_budget",
+        currency_field="rawasi_currency_id",
+    )
+    rawasi_budget_remaining = fields.Monetary(
+        string="المتبقي", compute="_compute_rawasi_budget",
+        currency_field="rawasi_currency_id",
+    )
+
     wbs_activity_ids = fields.One2many(
         "rawasi.wbs.activity", "project_id", string="أنشطة WBS"
     )
     wbs_count = fields.Integer(string="عدد الأنشطة", compute="_compute_wbs_count")
+
+    @api.depends(
+        "rawasi_competition_id.boq_item_ids.total_cost",
+        "rawasi_competition_id.boq_item_ids.amount_consumed",
+    )
+    def _compute_rawasi_budget(self):
+        for project in self:
+            items = project.rawasi_competition_id.boq_item_ids
+            total = sum(items.mapped("total_cost"))
+            consumed = sum(items.mapped("amount_consumed"))
+            project.rawasi_budget_total = total
+            project.rawasi_budget_consumed = consumed
+            project.rawasi_budget_remaining = total - consumed
 
     # ملاحظة: نستخدم بادئة rawasi_ لتفادي التعارض مع حقول موديولات أخرى
     # (مثل documents_project الذي يعرّف document_ids/document_count على المشروع).

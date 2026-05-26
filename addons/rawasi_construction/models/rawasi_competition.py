@@ -211,6 +211,8 @@ class RawasiCompetition(models.Model):
             {
                 "name": self.name,
                 "company_id": self.company_id.id,
+                "rawasi_is_construction": True,
+                "rawasi_competition_id": self.id,
             }
         )
         self.project_id = project.id

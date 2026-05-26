@@ -60,6 +60,32 @@ class TestPricedImport(TransactionCase):
 
 
 @tagged("post_install", "-at_install")
+class TestProjectsSystem(TransactionCase):
+    def test_convert_flags_construction_and_budget(self):
+        comp = self.env["rawasi.competition"].create({"name": "منافسة المشروع"})
+        self.env["rawasi.boq.item"].create({
+            "competition_id": comp.id, "name": "بند", "quantity": 10.0,
+            "unit_cost": 100.0, "unit_price": 120.0,
+        })
+        comp.action_start_pricing()
+        comp.action_submit()
+        comp.action_won()
+        comp.action_convert_to_project()
+        proj = comp.project_id
+        self.assertTrue(proj)
+        self.assertTrue(proj.rawasi_is_construction)
+        self.assertEqual(proj.rawasi_competition_id, comp)
+        self.assertEqual(proj.rawasi_budget_total, 1000.0)  # 10 × 100
+        # يظهر ضمن نطاق قائمة المشاريع
+        found = self.env["project.project"].search([
+            ("rawasi_is_construction", "=", True), ("id", "=", proj.id),
+        ])
+        self.assertTrue(found)
+        # تم توليد المراحل الخمس
+        self.assertTrue(len(proj.wbs_activity_ids) >= 5)
+
+
+@tagged("post_install", "-at_install")
 class TestScheduleTemplate(TransactionCase):
     def setUp(self):
         super().setUp()
