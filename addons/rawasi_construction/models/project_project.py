@@ -95,22 +95,34 @@ class ProjectProject(models.Model):
         return self._rawasi_open_related(_("طلبات المعلومات"), "rawasi.rfi")
 
     def action_generate_wbs_phases(self):
-        """يولّد المراحل الخمس (من القوالب) كأنشطة عليا إن لم تكن موجودة."""
+        """يولّد المراحل الرئيسية الست (من القوالب) كأنشطة عليا مع مهامها الفرعية."""
         Activity = self.env["rawasi.wbs.activity"]
         phases = self.env["rawasi.wbs.phase"].search([], order="sequence")
         for project in self:
-            existing = project.wbs_activity_ids.filtered(lambda a: a.phase_id and not a.parent_id)
+            existing = project.wbs_activity_ids.filtered(
+                lambda a: a.phase_id and not a.parent_id
+            )
             existing_phase_ids = existing.mapped("phase_id")
             seq = 10
             for phase in phases:
                 if phase in existing_phase_ids:
                     continue
-                Activity.create({
+                parent = Activity.create({
                     "project_id": project.id,
                     "phase_id": phase.id,
-                    "name": phase.name,
+                    "name": ("%s %s" % (phase.code, phase.name)) if phase.code else phase.name,
                     "sequence": seq,
                 })
+                tseq = 10
+                for task in phase.task_ids:
+                    Activity.create({
+                        "project_id": project.id,
+                        "phase_id": phase.id,
+                        "parent_id": parent.id,
+                        "name": task.name,
+                        "sequence": tseq,
+                    })
+                    tseq += 10
                 seq += 10
         return self.action_open_wbs()
 
