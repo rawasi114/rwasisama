@@ -103,3 +103,7 @@ class ProjectProject(models.Model):
             "target": "new",
             "context": {"default_project_id": self.id},
         }
+
+    def action_download_schedule_template(self):
+        """تنزيل قالب Excel للجدول الزمني (بكل الحقول) مباشرةً من المشروع."""
+        return self.env["rawasi.schedule.import.wizard"].action_download_template()

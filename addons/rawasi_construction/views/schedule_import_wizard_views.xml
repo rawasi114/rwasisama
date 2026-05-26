@@ -12,10 +12,14 @@
                     <field name="replace_existing"/>
                 </group>
                 <div class="alert alert-info" role="alert">
-                    يستورد الأنشطة عبر مطابقة عناوين الأعمدة (النشاط، المرحلة،
-                    تاريخ البداية، تاريخ النهاية، نسبة الإنجاز).
+                    <p>لتسهيل العمل: حمّل <b>قالب الجدول الزمني</b> (Excel)، عبّئه ثم ارفعه هنا واستورد.</p>
+                    <p>الأعمدة المدعومة: النشاط، المرحلة، التسلسل، تاريخ البداية،
+                       تاريخ النهاية، بداية/نهاية خط الأساس، البداية/النهاية الفعلية،
+                       نسبة الإنجاز، معلم. (المطابقة بأسماء الأعمدة، لا يهمّ ترتيبها.)</p>
                 </div>
                 <footer>
+                    <button name="action_download_template" type="object"
+                            string="تحميل قالب الجدول الزمني" class="btn-secondary"/>
                     <button name="action_import" type="object" string="استيراد"
                             class="btn-primary"/>
                     <button string="إلغاء" class="btn-secondary" special="cancel"/>
