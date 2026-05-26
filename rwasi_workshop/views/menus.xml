@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <menuitem id="menu_rwasi_root" name="ورشة رواسي سما" sequence="15"/>
+    <menuitem id="menu_rwasi_root" name="ورشة رواسي سما" sequence="15"
+              groups="rwasi_workshop.group_workshop_user,rwasi_workshop.group_workshop_manager"/>
 
     <!-- 1) العمليات -->
     <menuitem id="menu_rwasi_operations" name="العمليات"
