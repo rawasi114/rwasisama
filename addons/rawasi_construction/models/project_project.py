@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from datetime import timedelta
+
 from odoo import api, _, fields, models
 
 
@@ -95,34 +97,57 @@ class ProjectProject(models.Model):
         return self._rawasi_open_related(_("طلبات المعلومات"), "rawasi.rfi")
 
     def action_generate_wbs_phases(self):
-        """يولّد المراحل الرئيسية الست (من القوالب) كأنشطة عليا مع مهامها الفرعية."""
+        """يولّد المراحل الرئيسية الست (من القوالب) كأنشطة عليا مع مهامها الفرعية،
+        ويُسند تواريخ افتراضية متسلسلة لتظهر مباشرةً على الجدول الزمني (Gantt)."""
         Activity = self.env["rawasi.wbs.activity"]
         phases = self.env["rawasi.wbs.phase"].search([], order="sequence")
+        today = fields.Date.context_today(self)
+        phase_days = 30
         for project in self:
             existing = project.wbs_activity_ids.filtered(
                 lambda a: a.phase_id and not a.parent_id
             )
             existing_phase_ids = existing.mapped("phase_id")
+            start = project.date_start or today
+            if hasattr(start, "date"):  # في حال كان Datetime
+                start = start.date()
+            cursor = start
             seq = 10
             for phase in phases:
                 if phase in existing_phase_ids:
                     continue
+                p_start = cursor
+                p_end = cursor + timedelta(days=phase_days - 1)
                 parent = Activity.create({
                     "project_id": project.id,
                     "phase_id": phase.id,
                     "name": ("%s %s" % (phase.code, phase.name)) if phase.code else phase.name,
                     "sequence": seq,
+                    "date_start": p_start,
+                    "date_end": p_end,
                 })
+                tasks = phase.task_ids
+                n = len(tasks)
+                span = max(1, phase_days // n) if n else phase_days
+                tcursor = p_start
                 tseq = 10
-                for task in phase.task_ids:
+                for i, task in enumerate(tasks):
+                    t_start = tcursor
+                    t_end = p_end if i == n - 1 else min(
+                        p_end, tcursor + timedelta(days=span - 1)
+                    )
                     Activity.create({
                         "project_id": project.id,
                         "phase_id": phase.id,
                         "parent_id": parent.id,
                         "name": task.name,
                         "sequence": tseq,
+                        "date_start": t_start,
+                        "date_end": t_end,
                     })
+                    tcursor = t_end + timedelta(days=1)
                     tseq += 10
+                cursor = p_end + timedelta(days=1)
                 seq += 10
         return self.action_open_wbs()
 
