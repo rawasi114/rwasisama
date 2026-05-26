@@ -21,22 +21,6 @@ class RawasiPaymentCertificate(models.Model):
     _order = "create_date desc"
 
     name = fields.Char(string="الرقم", default="/", readonly=True, copy=False)
-    certificate_type = fields.Selection(
-        [
-            ("owner", "للجهة المالكة / العميل"),
-            ("subcontractor", "لمقاول باطن"),
-        ],
-        string="نوع المستخلص",
-        default="owner",
-        required=True,
-        tracking=True,
-    )
-    partner_id = fields.Many2one(
-        "res.partner",
-        string="الطرف المقابل",
-        tracking=True,
-        help="الجهة المالكة/العميل لمستخلصات العميل، أو مقاول الباطن لمستخلصات الباطن.",
-    )
     project_id = fields.Many2one(
         "project.project", string="المشروع", required=True, tracking=True
     )
@@ -123,17 +107,9 @@ class RawasiPaymentCertificate(models.Model):
 
     @api.model_create_multi
     def create(self, vals_list):
-        seq_obj = self.env["ir.sequence"]
         for vals in vals_list:
             if vals.get("name", "/") == "/":
-                ctype = vals.get("certificate_type") or "owner"
-                code = (
-                    "rawasi.payment.certificate.subcontractor"
-                    if ctype == "subcontractor"
-                    else "rawasi.payment.certificate.owner"
-                )
-                # نحتفظ بالتسلسل العام كاحتياط للسجلات القديمة/التوافق
-                vals["name"] = seq_obj.next_by_code(code) or seq_obj.next_by_code(
+                vals["name"] = self.env["ir.sequence"].next_by_code(
                     "rawasi.payment.certificate"
                 ) or "/"
         return super().create(vals_list)

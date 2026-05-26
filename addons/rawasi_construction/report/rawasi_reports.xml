@@ -431,15 +431,6 @@
                         <h4 class="text-center"><span t-field="o.name"/> (رقم <span t-field="o.sequence_no"/>)</h4>
                         <table class="table table-sm">
                             <tr><th style="width:30%">المشروع</th><td><span t-field="o.project_id"/></td></tr>
-                            <tr><th>نوع المستخلص</th><td><span t-field="o.certificate_type"/></td></tr>
-                            <tr t-if="o.certificate_type == 'owner'">
-                                <th>الجهة المالكة / العميل</th>
-                                <td><span t-field="o.partner_id"/></td>
-                            </tr>
-                            <tr t-if="o.certificate_type == 'subcontractor'">
-                                <th>مقاول الباطن</th>
-                                <td><span t-field="o.partner_id"/></td>
-                            </tr>
                             <tr><th>الفترة</th><td><span t-field="o.period_from"/> - <span t-field="o.period_to"/></td></tr>
                             <tr><th>الحالة</th><td><span t-field="o.state"/></td></tr>
                         </table>
