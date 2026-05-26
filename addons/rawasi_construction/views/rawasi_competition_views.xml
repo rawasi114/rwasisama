@@ -5,6 +5,7 @@
         <field name="model">rawasi.competition</field>
         <field name="arch" type="xml">
             <list>
+                <field name="serial"/>
                 <field name="name"/>
                 <field name="reference"/>
                 <field name="entity_name"/>
@@ -60,6 +61,7 @@
                     <div class="oe_title">
                         <label for="name"/>
                         <h1><field name="name" placeholder="اسم المنافسة"/></h1>
+                        <h3><field name="serial" readonly="1" placeholder="الرقم التسلسلي يُولّد تلقائياً"/></h3>
                     </div>
                     <group>
                         <group>
@@ -143,6 +145,7 @@
         <field name="arch" type="xml">
             <search>
                 <field name="name"/>
+                <field name="serial"/>
                 <field name="reference"/>
                 <field name="entity_name"/>
                 <filter name="f_draft" string="مسودة" domain="[('state','=','draft')]"/>

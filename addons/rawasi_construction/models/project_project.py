@@ -6,9 +6,14 @@ from odoo import api, _, fields, models
 
 class ProjectProject(models.Model):
     _inherit = "project.project"
+    _rec_names_search = ["name", "rawasi_serial"]
 
     # مشروع إنشائي تابع لنظام رواسي سما (لتمييزه عن مشاريع أودو/الورشة العامة)
     rawasi_is_construction = fields.Boolean(string="مشروع مقاولات", default=False)
+    rawasi_serial = fields.Char(
+        string="الرقم التسلسلي", readonly=True, copy=False, index=True,
+        help="رقم تسلسلي تلقائي بصيغة RS-PRJ-YYYY##### يربط المشروع بكل تفاصيله.",
+    )
     rawasi_competition_id = fields.Many2one(
         "rawasi.competition", string="المنافسة المصدر", readonly=True
     )
@@ -57,6 +62,24 @@ class ProjectProject(models.Model):
     rawasi_dsr_count = fields.Integer(compute="_compute_rawasi_phase4_counts")
     rawasi_ncr_count = fields.Integer(compute="_compute_rawasi_phase4_counts")
     rawasi_rfi_count = fields.Integer(compute="_compute_rawasi_phase4_counts")
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            if vals.get("rawasi_is_construction") and not vals.get("rawasi_serial"):
+                vals["rawasi_serial"] = self.env["ir.sequence"].next_by_code(
+                    "rawasi.project.serial"
+                ) or False
+        return super().create(vals_list)
+
+    @api.depends("name", "rawasi_serial")
+    def _compute_display_name(self):
+        super()._compute_display_name()
+        for project in self:
+            if project.rawasi_serial:
+                project.display_name = "[%s] %s" % (
+                    project.rawasi_serial, project.display_name
+                )
 
     def _compute_wbs_count(self):
         for project in self:
