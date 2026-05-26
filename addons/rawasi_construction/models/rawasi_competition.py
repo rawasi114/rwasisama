@@ -10,8 +10,13 @@ class RawasiCompetition(models.Model):
     _description = "منافسة / فرصة"
     _inherit = ["mail.thread", "mail.activity.mixin", "rawasi.workflow.mixin"]
     _order = "create_date desc"
+    _rec_names_search = ["name", "serial", "reference"]
 
     name = fields.Char(string="اسم المنافسة", required=True, tracking=True)
+    serial = fields.Char(
+        string="الرقم التسلسلي", readonly=True, copy=False, index=True,
+        help="رقم تسلسلي تلقائي بصيغة RS-TND-YYYY#### يربط المنافسة بكل تفاصيلها.",
+    )
     reference = fields.Char(string="الرقم المرجعي (اعتماد)", tracking=True, copy=False)
     entity_name = fields.Char(string="الجهة المالكة", tracking=True)
     description = fields.Text(string="الوصف")
@@ -40,6 +45,22 @@ class RawasiCompetition(models.Model):
         default=lambda self: self._default_currency(),
         required=True,
     )
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            if not vals.get("serial"):
+                vals["serial"] = self.env["ir.sequence"].next_by_code(
+                    "rawasi.competition.serial"
+                ) or False
+        return super().create(vals_list)
+
+    @api.depends("name", "serial")
+    def _compute_display_name(self):
+        super()._compute_display_name()
+        for rec in self:
+            if rec.serial:
+                rec.display_name = "[%s] %s" % (rec.serial, rec.display_name)
 
     @api.model
     def _default_currency(self):

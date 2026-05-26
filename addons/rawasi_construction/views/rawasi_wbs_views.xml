@@ -184,6 +184,8 @@
                         string="قالب الجدول الزمني" class="btn-secondary"/>
                 <button name="action_open_schedule_import" type="object"
                         string="استيراد الجدول الزمني" class="btn-secondary"/>
+                <button name="action_print_schedule" type="object"
+                        string="طباعة الجدول الزمني" class="btn-secondary"/>
             </xpath>
         </field>
     </record>

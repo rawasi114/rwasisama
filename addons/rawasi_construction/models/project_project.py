@@ -6,9 +6,14 @@ from odoo import api, _, fields, models
 
 class ProjectProject(models.Model):
     _inherit = "project.project"
+    _rec_names_search = ["name", "rawasi_serial"]
 
     # مشروع إنشائي تابع لنظام رواسي سما (لتمييزه عن مشاريع أودو/الورشة العامة)
     rawasi_is_construction = fields.Boolean(string="مشروع مقاولات", default=False)
+    rawasi_serial = fields.Char(
+        string="الرقم التسلسلي", readonly=True, copy=False, index=True,
+        help="رقم تسلسلي تلقائي بصيغة RS-PRJ-YYYY##### يربط المشروع بكل تفاصيله.",
+    )
     rawasi_competition_id = fields.Many2one(
         "rawasi.competition", string="المنافسة المصدر", readonly=True
     )
@@ -57,6 +62,15 @@ class ProjectProject(models.Model):
     rawasi_dsr_count = fields.Integer(compute="_compute_rawasi_phase4_counts")
     rawasi_ncr_count = fields.Integer(compute="_compute_rawasi_phase4_counts")
     rawasi_rfi_count = fields.Integer(compute="_compute_rawasi_phase4_counts")
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            if vals.get("rawasi_is_construction") and not vals.get("rawasi_serial"):
+                vals["rawasi_serial"] = self.env["ir.sequence"].next_by_code(
+                    "rawasi.project.serial"
+                ) or False
+        return super().create(vals_list)
 
     def _compute_wbs_count(self):
         for project in self:
@@ -150,6 +164,135 @@ class ProjectProject(models.Model):
                 cursor = p_end + timedelta(days=1)
                 seq += 10
         return self.action_open_wbs()
+
+    # ── المسار الحرج (CPM) وطباعة الجدول الزمني ──────────────────
+    def _compute_wbs_critical_path(self):
+        """يحسب المسار الحرج (CPM) على الأنشطة الورقية عبر علاقات الأسبقية والمدد،
+        ويعيّن is_critical/total_float. الأنشطة الأب حرجة إن كان أحد أبنائها حرجاً."""
+        for project in self:
+            acts = project.wbs_activity_ids
+            leaves = acts.filtered(lambda a: not a.child_ids and a.date_start and a.date_end)
+            leaf_ids = set(leaves.ids)
+
+            def _dur(a):
+                return max((a.date_end - a.date_start).days + 1, 1)
+
+            dur = {a.id: _dur(a) for a in leaves}
+            preds = {
+                a.id: [p.id for p in a.predecessor_ids if p.id in leaf_ids]
+                for a in leaves
+            }
+            succ = {aid: [] for aid in leaf_ids}
+            for aid, plist in preds.items():
+                for p in plist:
+                    succ[p].append(aid)
+
+            ef = {}
+
+            def calc_ef(aid, stack):
+                if aid in ef:
+                    return ef[aid]
+                if aid in stack:
+                    return dur[aid]
+                base = max([calc_ef(p, stack | {aid}) for p in preds[aid]], default=0)
+                ef[aid] = base + dur[aid]
+                return ef[aid]
+
+            for aid in leaf_ids:
+                calc_ef(aid, set())
+            project_end = max(ef.values(), default=0)
+            es = {aid: ef[aid] - dur[aid] for aid in leaf_ids}
+
+            lf = {}
+
+            def calc_lf(aid, stack):
+                if aid in lf:
+                    return lf[aid]
+                if aid in stack:
+                    return project_end
+                lf[aid] = min(
+                    [calc_lf(s, stack | {aid}) - dur[s] for s in succ[aid]],
+                    default=project_end,
+                )
+                return lf[aid]
+
+            for aid in leaf_ids:
+                calc_lf(aid, set())
+
+            for a in leaves:
+                tf = (lf[a.id] - dur[a.id]) - es[a.id]
+                a.total_float = tf
+                a.is_critical = tf <= 0
+            for a in acts.filtered(lambda x: x.child_ids):
+                crit = any(a.child_ids.mapped("is_critical"))
+                a.is_critical = crit
+                a.total_float = 0
+
+    def _schedule_report_lines(self):
+        """يبني بيانات مخطط الجدول الزمني (Gantt) للطباعة: نِسَب الإزاحة والعرض
+        لكل نشاط على محور زمني، مع لون (حرج/معلَم/عادي) وأشهر المحور."""
+        self.ensure_one()
+        acts = self.wbs_activity_ids.filtered(
+            lambda a: a.date_start and a.date_end
+        ).sorted(key=lambda a: (a.sequence, a.date_start, a.id))
+        if not acts:
+            return {"lines": [], "periods": [], "total": 0}
+        pmin = min(acts.mapped("date_start"))
+        pmax = max(acts.mapped("date_end"))
+        total = max((pmax - pmin).days + 1, 1)
+        lines = []
+        for a in acts:
+            offset = (a.date_start - pmin).days
+            width = (a.date_end - a.date_start).days + 1
+            if a.is_critical:
+                color = "#d9534f"
+            elif a.is_milestone:
+                color = "#6f42c1"
+            else:
+                color = "#4a90d2"
+            offset_pct = round(offset * 100.0 / total, 2)
+            width_pct = round(max(width, 1) * 100.0 / total, 2)
+            bar_style = (
+                f"position:absolute;left:{offset_pct}%;width:{width_pct}%;"
+                f"background:{color};height:11px;border-radius:2px;"
+            )
+            lines.append({
+                "name": a.name,
+                "level": 1 if a.parent_id else 0,
+                "date_start": a.date_start,
+                "date_end": a.date_end,
+                "duration": a.duration,
+                "total_float": a.total_float,
+                "is_critical": a.is_critical,
+                "bar_style": bar_style,
+            })
+        # أعمدة الأشهر للمحور الزمني
+        periods = []
+        y, m = pmin.year, pmin.month
+        from datetime import date as _date
+        cur = _date(y, m, 1)
+        while cur <= pmax:
+            nm_y, nm_m = (y + 1, 1) if m == 12 else (y, m + 1)
+            nxt = _date(nm_y, nm_m, 1)
+            seg_start = max(cur, pmin)
+            offset = (seg_start - pmin).days
+            offset_pct = round(offset * 100.0 / total, 2)
+            periods.append({
+                "label": "%02d/%04d" % (m, y),
+                "style": (
+                    f"position:absolute;left:{offset_pct}%;font-size:7px;"
+                    f"border-left:1px solid #ccc;padding-left:1px;"
+                ),
+            })
+            y, m, cur = nm_y, nm_m, nxt
+        return {"lines": lines, "periods": periods, "total": total}
+
+    def action_print_schedule(self):
+        self.ensure_one()
+        self._compute_wbs_critical_path()
+        return self.env.ref(
+            "rawasi_construction.action_report_schedule"
+        ).report_action(self)
 
     def action_open_wbs(self):
         self.ensure_one()

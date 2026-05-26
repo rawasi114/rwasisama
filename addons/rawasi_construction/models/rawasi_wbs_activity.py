@@ -36,6 +36,9 @@ class RawasiWbsActivity(models.Model):
     actual_end = fields.Date(string="النهاية الفعلية")
 
     progress = fields.Float(string="نسبة الإنجاز %", default=0.0)
+    # المسار الحرج (يُحسب عند طباعة/تحديث الجدول الزمني)
+    is_critical = fields.Boolean(string="على المسار الحرج", default=False)
+    total_float = fields.Integer(string="الطفو الكلي (أيام)", default=0)
 
     predecessor_ids = fields.Many2many(
         "rawasi.wbs.activity",
