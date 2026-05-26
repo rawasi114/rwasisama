@@ -79,9 +79,23 @@
             <field name="company_id" eval="False"/>
         </record>
         <record id="seq_payment_certificate" model="ir.sequence">
-            <field name="name">مستخلص دفع</field>
+            <field name="name">مستخلص دفع (عام/قديم)</field>
             <field name="code">rawasi.payment.certificate</field>
             <field name="prefix">IPC/%(year)s/</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        <record id="seq_payment_certificate_owner" model="ir.sequence">
+            <field name="name">مستخلص دفع — للجهة المالكة / العميل</field>
+            <field name="code">rawasi.payment.certificate.owner</field>
+            <field name="prefix">IPC-OWN/%(year)s/</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        <record id="seq_payment_certificate_subcontractor" model="ir.sequence">
+            <field name="name">مستخلص دفع — لمقاول باطن</field>
+            <field name="code">rawasi.payment.certificate.subcontractor</field>
+            <field name="prefix">IPC-SUB/%(year)s/</field>
             <field name="padding">4</field>
             <field name="company_id" eval="False"/>
         </record>

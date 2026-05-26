@@ -96,6 +96,32 @@ class TestPhase6(TransactionCase):
         with self.assertRaises(UserError):
             pc.line_ids.work_qty = 99.0  # يتجاوز الكمية التعاقدية 10
 
+    def test_pc_owner_vs_subcontractor_sequences(self):
+        Partner = self.env["res.partner"]
+        owner_p = Partner.create({"name": "وزارة الإسكان"})
+        sub_p = Partner.create({"name": "مقاول الكهرباء"})
+        owner_pc = self.env["rawasi.payment.certificate"].create({
+            "project_id": self.project.id,
+            "certificate_type": "owner",
+            "partner_id": owner_p.id,
+        })
+        sub_pc = self.env["rawasi.payment.certificate"].create({
+            "project_id": self.project.id,
+            "certificate_type": "subcontractor",
+            "partner_id": sub_p.id,
+        })
+        self.assertTrue(owner_pc.name.startswith("IPC-OWN/"))
+        self.assertTrue(sub_pc.name.startswith("IPC-SUB/"))
+        self.assertEqual(owner_pc.partner_id, owner_p)
+        self.assertEqual(sub_pc.partner_id, sub_p)
+        # تصفية حسب النوع
+        owner_only = self.env["rawasi.payment.certificate"].search([
+            ("certificate_type", "=", "owner"),
+            ("project_id", "=", self.project.id),
+        ])
+        self.assertIn(owner_pc, owner_only)
+        self.assertNotIn(sub_pc, owner_only)
+
     def test_pc_prev_qty_from_approved(self):
         pc1 = self.env["rawasi.payment.certificate"].create({
             "project_id": self.project.id, "sequence_no": 1,
