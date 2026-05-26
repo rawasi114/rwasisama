@@ -6,6 +6,7 @@
         <field name="model">project.project</field>
         <field name="arch" type="xml">
             <list>
+                <field name="rawasi_serial"/>
                 <field name="name"/>
                 <field name="rawasi_competition_id"/>
                 <field name="wbs_count" string="أنشطة WBS"/>
@@ -23,6 +24,7 @@
         <field name="arch" type="xml">
             <search>
                 <field name="name"/>
+                <field name="rawasi_serial"/>
                 <field name="rawasi_competition_id"/>
                 <filter name="my" string="مشاريعي" domain="[('user_id','=',uid)]"/>
             </search>
@@ -53,6 +55,7 @@
                 <group string="معلومات المقاولات (رواسي سما)"
                        invisible="not rawasi_is_construction">
                     <field name="rawasi_is_construction" invisible="1"/>
+                    <field name="rawasi_serial" readonly="1"/>
                     <field name="rawasi_competition_id"/>
                     <field name="rawasi_budget_total"/>
                     <field name="rawasi_budget_consumed"/>

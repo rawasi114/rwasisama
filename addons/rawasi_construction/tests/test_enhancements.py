@@ -86,6 +86,35 @@ class TestProjectsSystem(TransactionCase):
 
 
 @tagged("post_install", "-at_install")
+class TestSerials(TransactionCase):
+    def test_competition_serial_and_search(self):
+        comp = self.env["rawasi.competition"].create({"name": "منافسة الترميم"})
+        self.assertTrue(comp.serial, "يجب توليد رقم تسلسلي")
+        self.assertTrue(comp.serial.startswith("RS-TND-"))
+        # البحث بالرقم التسلسلي يجد المنافسة
+        found = self.env["rawasi.competition"].name_search(name=comp.serial)
+        self.assertIn(comp.id, [r[0] for r in found])
+        # البحث بالاسم أيضاً
+        found_name = self.env["rawasi.competition"].name_search(name="الترميم")
+        self.assertIn(comp.id, [r[0] for r in found_name])
+
+    def test_project_serial_on_convert_and_search(self):
+        comp = self.env["rawasi.competition"].create({"name": "منافسة المشروع التسلسلي"})
+        self.env["rawasi.boq.item"].create({
+            "competition_id": comp.id, "name": "بند", "quantity": 1.0,
+            "unit_cost": 1.0, "unit_price": 2.0,
+        })
+        comp.action_start_pricing()
+        comp.action_submit()
+        comp.action_won()
+        comp.action_convert_to_project()
+        proj = comp.project_id
+        self.assertTrue(proj.rawasi_serial.startswith("RS-PRJ-"))
+        found = self.env["project.project"].name_search(name=proj.rawasi_serial)
+        self.assertIn(proj.id, [r[0] for r in found])
+
+
+@tagged("post_install", "-at_install")
 class TestScheduleTemplate(TransactionCase):
     def setUp(self):
         super().setUp()
