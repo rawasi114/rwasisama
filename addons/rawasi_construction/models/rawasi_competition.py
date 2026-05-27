@@ -121,6 +121,18 @@ class RawasiCompetition(models.Model):
         "project.project", string="المشروع", readonly=True, copy=False
     )
 
+    # نتيجة الترسية — تُملأ عند إغلاق المنافسة (فائز/خاسر) لبناء ذاكرة الترسيات.
+    award_value = fields.Monetary(
+        string="قيمة الترسية",
+        tracking=True,
+        help="القيمة التي تمت بها الترسية فعلياً (سواء فزنا نحن أو فاز غيرنا). "
+             "إلزامية عند الإغلاق كخاسرة لجمع أسعار الترسيات للتحليل.",
+    )
+    awarded_to = fields.Char(
+        string="رست على", tracking=True,
+        help="اسم الجهة/المقاول الذي رست عليه المنافسة (في حال خسرناها).",
+    )
+
     @api.depends("boq_item_ids")
     def _compute_boq_item_count(self):
         for comp in self:
@@ -160,10 +172,21 @@ class RawasiCompetition(models.Model):
         self._snapshot_prices()
 
     def action_won(self):
+        for comp in self:
+            # عند الفوز: قيمة الترسية = إجمالي عرضنا شامل الضريبة (إن لم تكن مُحدَّدة)
+            if not comp.award_value:
+                comp.award_value = comp.amount_total_incl_tax
         self.write({"state": "won"})
         self.price_intelligence_ids.sudo().write({"outcome": "won"})
 
     def action_lost(self):
+        for comp in self:
+            if not comp.award_value or comp.award_value <= 0:
+                raise UserError(_(
+                    "لإغلاق المنافسة كخاسرة يجب إدخال «قيمة الترسية» أولاً "
+                    "(القيمة التي رست بها على الفائز). الهدف بناء ذاكرة "
+                    "ترسيات للتحليل المستقبلي."
+                ))
         self.write({"state": "lost"})
         self.price_intelligence_ids.sudo().write({"outcome": "lost"})
 
