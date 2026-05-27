@@ -30,9 +30,10 @@ class RawasiUnit(models.Model):
     )
     active = fields.Boolean(default=True)
 
-    _sql_constraints = [
-        ("code_uniq", "unique(code)", "الرمز القياسي للوحدة يجب أن يكون فريداً."),
-    ]
+    _code_uniq = models.Constraint(
+        "UNIQUE(code)",
+        "الرمز القياسي للوحدة يجب أن يكون فريداً.",
+    )
 
     def _normalized_aliases(self):
         """مجموعة المرادفات المطبَّعة لهذه الوحدة (شاملةً الاسم والرمز)."""

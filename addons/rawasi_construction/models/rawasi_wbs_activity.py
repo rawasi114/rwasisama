@@ -17,7 +17,7 @@ class RawasiWbsActivity(models.Model):
         "rawasi.wbs.activity", string="النشاط الأب",
         ondelete="cascade", index=True,
     )
-    parent_path = fields.Char(index=True, unaccent=False)
+    parent_path = fields.Char(index=True)
     child_ids = fields.One2many("rawasi.wbs.activity", "parent_id", string="الأنشطة الفرعية")
 
     name = fields.Char(string="النشاط", required=True)
