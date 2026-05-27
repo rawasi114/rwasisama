@@ -22,3 +22,6 @@ access_rawasi_bid_employee,access.rps.rawasi.bid.employee,model_rps_rawasi_bid,b
 access_pricing_simulator_admin,access.rps.pricing.simulator.admin,model_rps_pricing_simulator,base.group_system,1,1,1,1
 access_pricing_simulator_user,access.rps.pricing.simulator.user,model_rps_pricing_simulator,group_rps_reader,1,1,1,0
 access_pricing_simulator_employee,access.rps.pricing.simulator.employee,model_rps_pricing_simulator,base.group_user,1,1,1,0
+access_boq_import_admin,access.rps.boq.import.admin,model_rps_boq_import_wizard,base.group_system,1,1,1,1
+access_boq_import_entry,access.rps.boq.import.entry,model_rps_boq_import_wizard,group_rps_data_entry,1,1,1,0
+access_boq_import_employee,access.rps.boq.import.employee,model_rps_boq_import_wizard,base.group_user,1,1,1,0

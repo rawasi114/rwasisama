@@ -136,6 +136,14 @@ class TenderBoqItem(UUIDPKMixin, TimestampMixin, Base):
     is_high_volume: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
     volume_share_pct: Mapped[float | None] = mapped_column(Numeric(5, 2))
 
+    boq_type: Mapped[str] = mapped_column(
+        String(30), default="original_tender", nullable=False
+    )
+    source_file_id: Mapped[UUID | None] = mapped_column(ForeignKey("tender_files.id"))
+    source_competitor_id: Mapped[UUID | None] = mapped_column(
+        ForeignKey("competitors.id")
+    )
+
     notes: Mapped[str | None] = mapped_column(Text)
 
     tender: Mapped[Tender] = relationship("Tender", back_populates="boq_items")

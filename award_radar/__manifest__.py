@@ -31,6 +31,7 @@
         "views/competitor_views.xml",
         "views/master_item_views.xml",
         "views/analytics_dashboard.xml",
+        "wizards/boq_import_wizard.xml",
         "wizards/pricing_simulator.xml",
     ],
     "application": True,

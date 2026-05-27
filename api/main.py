@@ -18,7 +18,14 @@ from api.core.errors import (
     ValidationError,
 )
 from api.core.logging import configure_logging, get_logger
-from api.routers import analytics, health, master_items, normalization, tenders
+from api.routers import (
+    analytics,
+    boq_import,
+    health,
+    master_items,
+    normalization,
+    tenders,
+)
 
 LOG = get_logger(__name__)
 
@@ -57,6 +64,7 @@ def create_app() -> FastAPI:
 
     app.include_router(health.router)
     app.include_router(tenders.router)
+    app.include_router(boq_import.router)
     app.include_router(master_items.router)
     app.include_router(normalization.router)
     app.include_router(analytics.router)
