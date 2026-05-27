@@ -164,22 +164,23 @@ class RawasiSubcontractIpcLine(models.Model):
         related="subcontract_line_id.unit_price", string="سعر الوحدة"
     )
     previous_quantity = fields.Float(
-        string="الكمية السابقة", compute="_compute_qtys"
+        string="الكمية السابقة", compute="_compute_previous_quantity",
     )
     period_quantity = fields.Float(string="كمية الفترة", default=0.0)
     cumulative_quantity = fields.Float(
-        string="الكمية التراكمية", compute="_compute_qtys", store=True
+        string="الكمية التراكمية", compute="_compute_cumulative", store=True,
     )
     progress_percent = fields.Float(
-        string="نسبة الإنجاز %", compute="_compute_qtys", store=True
+        string="نسبة الإنجاز %", compute="_compute_cumulative", store=True,
     )
     period_value = fields.Monetary(
         string="قيمة الفترة", compute="_compute_value", store=True
     )
     currency_id = fields.Many2one(related="ipc_id.currency_id")
 
-    @api.depends("subcontract_line_id", "ipc_id", "period_quantity", "contract_quantity")
-    def _compute_qtys(self):
+    @api.depends("subcontract_line_id")
+    def _compute_previous_quantity(self):
+        """الكمية السابقة محسوبة من المستخلصات المعتمدة الأخرى (غير مخزّنة)."""
         IpcLine = self.env["rawasi.subcontract.ipc.line"]
         for ln in self:
             domain = [
@@ -188,9 +189,13 @@ class RawasiSubcontractIpcLine(models.Model):
             ]
             if ln.id:
                 domain.append(("id", "!=", ln.id))
-            prev = sum(IpcLine.search(domain).mapped("period_quantity"))
-            ln.previous_quantity = prev
-            ln.cumulative_quantity = prev + ln.period_quantity
+            ln.previous_quantity = sum(IpcLine.search(domain).mapped("period_quantity"))
+
+    @api.depends("previous_quantity", "period_quantity", "contract_quantity")
+    def _compute_cumulative(self):
+        """الكمية التراكمية ونسبة الإنجاز (مخزّنتان، تعتمدان على الكمية السابقة + الفترة)."""
+        for ln in self:
+            ln.cumulative_quantity = ln.previous_quantity + ln.period_quantity
             ln.progress_percent = (
                 (ln.cumulative_quantity / ln.contract_quantity * 100.0)
                 if ln.contract_quantity else 0.0

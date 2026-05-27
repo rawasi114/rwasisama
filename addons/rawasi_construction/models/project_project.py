@@ -24,7 +24,9 @@ class ProjectProject(models.Model):
     rawasi_competition_id = fields.Many2one(
         "rawasi.competition", string="المنافسة المصدر", readonly=True
     )
-    rawasi_currency_id = fields.Many2one(related="company_id.currency_id")
+    rawasi_currency_id = fields.Many2one(
+        related="company_id.currency_id", string="عملة المقاولات",
+    )
     rawasi_budget_total = fields.Monetary(
         string="الميزانية التعاقدية", compute="_compute_rawasi_budget",
         currency_field="rawasi_currency_id",
