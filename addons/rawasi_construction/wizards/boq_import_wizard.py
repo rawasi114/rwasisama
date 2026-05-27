@@ -51,13 +51,11 @@ HEADER_ALIASES = {
 HEADER_SCAN_ROWS = 20  # عدد الصفوف الأولى التي نبحث فيها عن صف العناوين
 
 # أعمدة قالب جدول الكميات (بالترتيب) — تطابق المرادفات أعلاه ليرفع الملف بسلاسة.
-# عمود «تكلفة الوحدة» مُضاف لجمع التكاليف منذ مرحلة التسعير.
+# «وصف البند» عمود مدمج يجمع: الفئة + البند + الوصف + المواصفات (بترويسات داخلية).
+# نتسامح مع القوالب القديمة التي تفصل الأعمدة الأربعة — يدمجها الاستيراد تلقائياً.
 BOQ_TEMPLATE_COLUMNS = [
     "الرقم التسلسلي",
-    "الفئة",
-    "البند",
     "وصف البند",
-    "المواصفات",
     "الوحدة",
     "الكمية",
     "تكلفة الوحدة",
@@ -66,6 +64,24 @@ BOQ_TEMPLATE_COLUMNS = [
     "منتج من القائمة الإلزامية",
     "الرمز الإنشائي",
 ]
+
+
+def _build_combined_description(data):
+    """يجمع الفئة/البند/الوصف/المواصفات في نص واحد بترويسات داخلية.
+    لو لم تتوفّر إلا قيمة واحدة، تُستخدم كما هي دون ترويسة."""
+    sources = (
+        ("الفئة", data.get("category")),
+        ("البند", data.get("work_group")),
+        ("وصف البند", data.get("description")),
+        ("المواصفات", data.get("specifications")),
+    )
+    parts = [(label, str(value).strip()) for label, value in sources
+             if value and str(value).strip()]
+    if not parts:
+        return ""
+    if len(parts) == 1:
+        return parts[0][1]
+    return "\n".join("%s: %s" % (label, val) for label, val in parts)
 
 
 def _norm_key(text):
@@ -156,15 +172,23 @@ class BoqImportWizard(models.TransientModel):
         ws = wb.active
         ws.title = "جدول الكميات"
         ws.append(BOQ_TEMPLATE_COLUMNS)
-        # صف مثال إرشادي (يمكن حذفه قبل الاستيراد)
-        ws.append([
-            1, "أعمال الخرسانة", "خرسانة مسلحة",
-            "صبّ خرسانة C30 للأساسات",
-            "خرسانة جاهزة مقاومتها 30 ميجاباسكال مع حديد تسليح حسب المخططات",
-            "م3", 100, 320, 380, 38000, "نعم", "BC-100",
-        ])
-        for idx in range(1, len(BOQ_TEMPLATE_COLUMNS) + 1):
-            ws.column_dimensions[get_column_letter(idx)].width = 22
+        # صف مثال إرشادي (يمكن حذفه قبل الاستيراد). خلية «وصف البند» متعدّدة الأسطر
+        # تجمع الفئة/البند/الوصف/المواصفات بترويسات داخلية واضحة.
+        sample_description = (
+            "الفئة: أعمال الخرسانة\n"
+            "البند: خرسانة مسلحة\n"
+            "وصف البند: صبّ خرسانة C30 للأساسات\n"
+            "المواصفات: خرسانة جاهزة مقاومتها 30 ميجاباسكال مع حديد تسليح حسب المخططات"
+        )
+        ws.append([1, sample_description, "م3", 100, 320, 380, 38000, "نعم", "BC-100"])
+        # تنسيق: عرض وحجم خلية الوصف + التفاف النص في كل سطور البيانات
+        from openpyxl.styles import Alignment
+        for idx, header in enumerate(BOQ_TEMPLATE_COLUMNS, start=1):
+            ws.column_dimensions[get_column_letter(idx)].width = 50 if header == "وصف البند" else 18
+        for row in ws.iter_rows(min_row=2, max_row=ws.max_row):
+            for cell in row:
+                cell.alignment = Alignment(wrap_text=True, vertical="top")
+        ws.row_dimensions[2].height = 70
         # ورقة مرجعية: الوحدات المتاحة في النظام (لنسخها في عمود «الوحدة»)
         ws_units = wb.create_sheet("الوحدات المتاحة")
         ws_units.append(["انسخ رمز الوحدة في عمود «الوحدة»"])
@@ -276,13 +300,19 @@ class BoqImportWizard(models.TransientModel):
             if unit_price:
                 priced_count += 1
 
+            # دمج الفئة/البند/الوصف/المواصفات في «وصف البند» (مع ترويسات داخلية)
+            # ليبقى البند واضحاً مهما اختلفت قوالب الجهات الحكومية في توزيع النص.
+            combined_data = dict(data)
+            combined_data["category"] = category
+            combined_data["work_group"] = group
+            combined_name = _build_combined_description(combined_data) or str(desc)
             vals_list.append({
                 "competition_id": comp.id,
                 "sequence": seq,
                 "serial": str(data.get("serial")) if data.get("serial") not in (None, "") else False,
                 "category": category or False,
                 "work_group": group or False,
-                "name": str(desc),
+                "name": combined_name,
                 "specifications": data.get("specifications") or False,
                 "unit_text": str(unit_text) if unit_text else False,
                 "unit_id": unit.id if unit else False,

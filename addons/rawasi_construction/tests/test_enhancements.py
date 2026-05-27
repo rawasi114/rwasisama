@@ -158,6 +158,51 @@ class TestBoqTemplate(TransactionCase):
         self.assertIn("تكلفة الوحدة", headers, "يجب أن يحوي القالب عمود التكاليف")
         self.assertIn("الكمية", headers)
         self.assertIn("وصف البند", headers)
+        # الفئة/البند/المواصفات ليست أعمدة منفصلة في القالب الجديد
+        self.assertNotIn("الفئة", headers)
+        self.assertNotIn("المواصفات", headers)
+
+    def test_import_merges_legacy_four_columns(self):
+        """قالب قديم بأعمدة منفصلة: يدمج النظام الأربعة في «وصف البند» تلقائياً."""
+        comp = self.env["rawasi.competition"].create({"name": "م. قديم"})
+        wiz = self.env["rawasi.boq.import.wizard"].create({
+            "competition_id": comp.id,
+            "file": _xlsx(
+                ["الفئة", "البند", "وصف البند", "المواصفات", "الوحدة", "الكمية"],
+                [["الخرسانة", "خرسانة مسلحة", "صبّ أساسات", "C30 معتمدة", "م3", 10]],
+            ),
+            "filename": "legacy.xlsx",
+        })
+        wiz.action_import()
+        item = comp.boq_item_ids
+        self.assertEqual(len(item), 1)
+        # الاسم يجمع الأربعة بترويسات داخلية
+        self.assertIn("الفئة: الخرسانة", item.name)
+        self.assertIn("البند: خرسانة مسلحة", item.name)
+        self.assertIn("وصف البند: صبّ أساسات", item.name)
+        self.assertIn("المواصفات: C30 معتمدة", item.name)
+
+    def test_import_single_description_column(self):
+        """قالب جديد بعمود واحد: يُستخدم كما هو دون ترويسة مضافة."""
+        comp = self.env["rawasi.competition"].create({"name": "م. جديد"})
+        single = (
+            "الفئة: الدهانات\n"
+            "البند: دهان داخلي\n"
+            "وصف البند: دهان بلاستيك\n"
+            "المواصفات: درجة أولى"
+        )
+        wiz = self.env["rawasi.boq.import.wizard"].create({
+            "competition_id": comp.id,
+            "file": _xlsx(
+                ["وصف البند", "الوحدة", "الكمية"],
+                [[single, "م2", 50]],
+            ),
+            "filename": "new.xlsx",
+        })
+        wiz.action_import()
+        item = comp.boq_item_ids
+        self.assertEqual(len(item), 1)
+        self.assertEqual(item.name, single)
 
     def test_download_action_returns_url(self):
         action = self.env["rawasi.boq.import.wizard"].action_download_template()
