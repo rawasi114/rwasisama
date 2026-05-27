@@ -163,7 +163,7 @@ class TestBoqTemplate(TransactionCase):
         self.assertNotIn("المواصفات", headers)
 
     def test_import_merges_legacy_four_columns(self):
-        """قالب قديم بأعمدة منفصلة: يدمج النظام الأربعة في «وصف البند» تلقائياً."""
+        """قالب قديم بأعمدة منفصلة: يدمج النظام الأربعة في «وصف البند» كأسطر متتابعة."""
         comp = self.env["rawasi.competition"].create({"name": "م. قديم"})
         wiz = self.env["rawasi.boq.import.wizard"].create({
             "competition_id": comp.id,
@@ -176,21 +176,13 @@ class TestBoqTemplate(TransactionCase):
         wiz.action_import()
         item = comp.boq_item_ids
         self.assertEqual(len(item), 1)
-        # الاسم يجمع الأربعة بترويسات داخلية
-        self.assertIn("الفئة: الخرسانة", item.name)
-        self.assertIn("البند: خرسانة مسلحة", item.name)
-        self.assertIn("وصف البند: صبّ أساسات", item.name)
-        self.assertIn("المواصفات: C30 معتمدة", item.name)
+        expected = "الخرسانة\nخرسانة مسلحة\nصبّ أساسات\nC30 معتمدة"
+        self.assertEqual(item.name, expected)
 
     def test_import_single_description_column(self):
-        """قالب جديد بعمود واحد: يُستخدم كما هو دون ترويسة مضافة."""
+        """قالب جديد بعمود واحد: يُستخدم كما هو."""
         comp = self.env["rawasi.competition"].create({"name": "م. جديد"})
-        single = (
-            "الفئة: الدهانات\n"
-            "البند: دهان داخلي\n"
-            "وصف البند: دهان بلاستيك\n"
-            "المواصفات: درجة أولى"
-        )
+        single = "دهان بلاستيك داخلي درجة أولى"
         wiz = self.env["rawasi.boq.import.wizard"].create({
             "competition_id": comp.id,
             "file": _xlsx(

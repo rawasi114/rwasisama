@@ -67,21 +67,11 @@ BOQ_TEMPLATE_COLUMNS = [
 
 
 def _build_combined_description(data):
-    """يجمع الفئة/البند/الوصف/المواصفات في نص واحد بترويسات داخلية.
-    لو لم تتوفّر إلا قيمة واحدة، تُستخدم كما هي دون ترويسة."""
-    sources = (
-        ("الفئة", data.get("category")),
-        ("البند", data.get("work_group")),
-        ("وصف البند", data.get("description")),
-        ("المواصفات", data.get("specifications")),
-    )
-    parts = [(label, str(value).strip()) for label, value in sources
-             if value and str(value).strip()]
-    if not parts:
-        return ""
-    if len(parts) == 1:
-        return parts[0][1]
-    return "\n".join("%s: %s" % (label, val) for label, val in parts)
+    """يجمع قيم الفئة/البند/الوصف/المواصفات في نص واحد بأسطر متتابعة (بدون ترويسات).
+    لو لم تتوفّر إلا قيمة واحدة، تُستخدم كما هي."""
+    values = [data.get(k) for k in ("category", "work_group", "description", "specifications")]
+    parts = [str(v).strip() for v in values if v and str(v).strip()]
+    return "\n".join(parts)
 
 
 def _norm_key(text):
@@ -173,12 +163,12 @@ class BoqImportWizard(models.TransientModel):
         ws.title = "جدول الكميات"
         ws.append(BOQ_TEMPLATE_COLUMNS)
         # صف مثال إرشادي (يمكن حذفه قبل الاستيراد). خلية «وصف البند» متعدّدة الأسطر
-        # تجمع الفئة/البند/الوصف/المواصفات بترويسات داخلية واضحة.
+        # تجمع الفئة/البند/الوصف/المواصفات على شكل أسطر متتابعة بدون ترويسات.
         sample_description = (
-            "الفئة: أعمال الخرسانة\n"
-            "البند: خرسانة مسلحة\n"
-            "وصف البند: صبّ خرسانة C30 للأساسات\n"
-            "المواصفات: خرسانة جاهزة مقاومتها 30 ميجاباسكال مع حديد تسليح حسب المخططات"
+            "أعمال الخرسانة\n"
+            "خرسانة مسلحة\n"
+            "صبّ خرسانة C30 للأساسات\n"
+            "خرسانة جاهزة مقاومتها 30 ميجاباسكال مع حديد تسليح حسب المخططات"
         )
         ws.append([1, sample_description, "م3", 100, 320, 380, 38000, "نعم", "BC-100"])
         # تنسيق: عرض وحجم خلية الوصف + التفاف النص في كل سطور البيانات
