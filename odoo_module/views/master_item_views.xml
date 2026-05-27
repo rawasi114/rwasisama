@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_rps_master_item_tree" model="ir.ui.view">
+        <field name="name">rps.master.item.tree</field>
+        <field name="model">rps.master.item</field>
+        <field name="arch" type="xml">
+            <tree string="قاموس البنود">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="default_unit"/>
+                <field name="usage_count"/>
+                <field name="is_active"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_rps_master_item_form" model="ir.ui.view">
+        <field name="name">rps.master.item.form</field>
+        <field name="model">rps.master.item</field>
+        <field name="arch" type="xml">
+            <form string="بند معياري">
+                <sheet>
+                    <group>
+                        <field name="code"/>
+                        <field name="name"/>
+                        <field name="default_unit"/>
+                        <field name="is_active"/>
+                        <field name="usage_count" readonly="1"/>
+                    </group>
+                    <group string="الوصف">
+                        <field name="description" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_rps_master_items" model="ir.actions.act_window">
+        <field name="name">البنود المعيارية</field>
+        <field name="res_model">rps.master.item</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_rps_master_items_all" name="البنود المعيارية"
+              parent="menu_rps_master_items" action="action_rps_master_items" sequence="10"/>
+</odoo>

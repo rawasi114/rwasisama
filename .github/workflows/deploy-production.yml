@@ -1,0 +1,38 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      # GitHub will require manual approval if 'required reviewers' is set
+      # for this environment in the repo settings.
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt pytest
+
+      - name: Run tests
+        env:
+          APP_ENV: test
+          DATABASE_URL: sqlite+pysqlite:///:memory:
+          ANTHROPIC_API_KEY: test-key
+        run: pytest -q --no-cov
+
+      - name: Build Docker image
+        run: docker build -t rawasi-pricing:prod-${{ github.sha }} .
+
+      - name: Deploy
+        run: |
+          echo "Deploying rawasi-pricing:prod-${{ github.sha }} to production..."
+          echo "Replace this with the actual deploy script."

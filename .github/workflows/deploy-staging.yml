@@ -1,0 +1,38 @@
+name: Deploy to Staging
+
+on:
+  push:
+    branches: [staging]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: staging
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt pytest
+
+      - name: Run tests
+        env:
+          APP_ENV: test
+          DATABASE_URL: sqlite+pysqlite:///:memory:
+          ANTHROPIC_API_KEY: test-key
+        run: pytest -q --no-cov
+
+      - name: Build Docker image
+        run: |
+          docker build -t rawasi-pricing:stg-${{ github.sha }} .
+
+      - name: Deploy
+        # Replace this with the actual staging deploy script for your infra
+        # (ssh + docker compose pull/up, or your platform's deploy step).
+        run: |
+          echo "Deploying rawasi-pricing:stg-${{ github.sha }} to staging..."
+          echo "Replace this with the actual deploy script."

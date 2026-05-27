@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_rps_tender_tree" model="ir.ui.view">
+        <field name="name">rps.tender.tree</field>
+        <field name="model">rps.tender</field>
+        <field name="arch" type="xml">
+            <tree string="المنافسات">
+                <field name="etimad_tender_id"/>
+                <field name="name"/>
+                <field name="government_entity"/>
+                <field name="region_name"/>
+                <field name="award_date"/>
+                <field name="award_value" sum="إجمالي"/>
+                <field name="winner_name"/>
+                <field name="rawasi_participated"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_rps_tender_form" model="ir.ui.view">
+        <field name="name">rps.tender.form</field>
+        <field name="model">rps.tender</field>
+        <field name="arch" type="xml">
+            <form string="منافسة">
+                <sheet>
+                    <group>
+                        <field name="etimad_tender_id"/>
+                        <field name="name"/>
+                        <field name="government_entity"/>
+                        <field name="sub_entity_name"/>
+                        <field name="region_name"/>
+                        <field name="award_date"/>
+                        <field name="award_value"/>
+                        <field name="winner_name"/>
+                        <field name="total_bidders"/>
+                        <field name="rawasi_participated"/>
+                        <field name="rawasi_rank" attrs="{'invisible': [('rawasi_participated', '=', False)]}"/>
+                        <field name="rawasi_bid_amount" attrs="{'invisible': [('rawasi_participated', '=', False)]}"/>
+                        <field name="data_quality_score" readonly="1"/>
+                        <field name="has_full_boq" readonly="1"/>
+                    </group>
+                    <group string="ملاحظات">
+                        <field name="notes" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_rps_tenders" model="ir.actions.act_window">
+        <field name="name">المنافسات</field>
+        <field name="res_model">rps.tender</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_rps_tenders_all" name="جميع الترسيات"
+              parent="menu_rps_tenders" action="action_rps_tenders" sequence="10"/>
+</odoo>

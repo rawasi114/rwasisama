@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_rps_competitor_tree" model="ir.ui.view">
+        <field name="name">rps.competitor.tree</field>
+        <field name="model">rps.competitor</field>
+        <field name="arch" type="xml">
+            <tree string="المنافسون">
+                <field name="name"/>
+                <field name="classification_grade"/>
+                <field name="threat_level"/>
+                <field name="total_wins_observed"/>
+                <field name="total_appearances"/>
+                <field name="win_rate"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_rps_competitor_form" model="ir.ui.view">
+        <field name="name">rps.competitor.form</field>
+        <field name="model">rps.competitor</field>
+        <field name="arch" type="xml">
+            <form string="منافس">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="cr_number"/>
+                        <field name="classification_grade"/>
+                        <field name="threat_level"/>
+                        <field name="total_wins_observed" readonly="1"/>
+                        <field name="total_appearances" readonly="1"/>
+                        <field name="win_rate" readonly="1"/>
+                    </group>
+                    <group string="ملاحظات">
+                        <field name="notes" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_rps_competitors" model="ir.actions.act_window">
+        <field name="name">المنافسون</field>
+        <field name="res_model">rps.competitor</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_rps_competitors_all" name="جميع المنافسين"
+              parent="menu_rps_competitors" action="action_rps_competitors" sequence="10"/>
+</odoo>

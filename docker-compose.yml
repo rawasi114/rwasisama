@@ -1,0 +1,42 @@
+services:
+  db:
+    image: pgvector/pgvector:pg16
+    container_name: rawasi_pricing_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-rawasi_pricing}
+      POSTGRES_USER: ${POSTGRES_USER:-rawasi}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-rawasi_dev_pwd}
+    ports:
+      - "5432:5432"
+    volumes:
+      - rawasi_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-rawasi}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: rawasi_pricing_api
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./api:/app/api
+      - ./scripts:/app/scripts
+      - ./migrations:/app/migrations
+      - ./prompts:/app/prompts
+      - ./uploads:/app/uploads
+    command: uvicorn api.main:app --host 0.0.0.0 --port 8000 --reload
+
+volumes:
+  rawasi_pgdata:

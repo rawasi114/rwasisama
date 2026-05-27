@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_rps_root" name="التسعير الذكي" sequence="50"/>
+
+    <menuitem id="menu_rps_tenders" name="المنافسات" parent="menu_rps_root" sequence="10"/>
+    <menuitem id="menu_rps_competitors" name="المنافسون" parent="menu_rps_root" sequence="20"/>
+    <menuitem id="menu_rps_master_items" name="قاموس البنود" parent="menu_rps_root" sequence="30"/>
+    <menuitem id="menu_rps_analytics" name="التحليلات" parent="menu_rps_root" sequence="40"/>
+    <menuitem id="menu_rps_settings" name="الإعدادات" parent="menu_rps_root" sequence="90"/>
+</odoo>

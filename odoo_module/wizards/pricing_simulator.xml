@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_rps_pricing_simulator_form" model="ir.ui.view">
+        <field name="name">rps.pricing.simulator.form</field>
+        <field name="model">rps.pricing.simulator</field>
+        <field name="arch" type="xml">
+            <form string="محاكي التسعير">
+                <sheet>
+                    <group>
+                        <field name="tender_id"/>
+                        <field name="proposed_bid_amount"/>
+                        <field name="estimated_cost"/>
+                    </group>
+                    <group string="النتيجة" attrs="{'invisible': [('recommendation', '=', False)]}">
+                        <field name="win_probability" readonly="1"/>
+                        <field name="expected_margin_pct" readonly="1"/>
+                        <field name="expected_value" readonly="1"/>
+                        <field name="recommendation" readonly="1"/>
+                    </group>
+                    <footer>
+                        <button string="احسب" type="object" name="action_calculate" class="btn-primary"/>
+                        <button string="إغلاق" special="cancel"/>
+                    </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_rps_pricing_simulator" model="ir.actions.act_window">
+        <field name="name">محاكي التسعير</field>
+        <field name="res_model">rps.pricing.simulator</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_rps_pricing_simulator" name="محاكي التسعير"
+              parent="menu_rps_analytics" action="action_rps_pricing_simulator" sequence="20"/>
+</odoo>
