@@ -89,7 +89,6 @@
         <field name="target">new</field>
         <field name="binding_model_id" ref="model_rps_tender"/>
         <field name="binding_view_types">form,list</field>
-        <field name="context">{'default_tender_id': active_id}</field>
     </record>
 
     <menuitem id="menu_rps_boq_import"

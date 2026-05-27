@@ -33,6 +33,20 @@ class BoqImportWizard(models.TransientModel):
         required=True,
         help="مهم جداً: نوع جدول الكميات يحدد كيف يعالجه المحرك التحليلي.",
     )
+
+    @api.model
+    def default_get(self, fields_list):
+        """Auto-fill tender_id when the wizard is opened from a tender form/list.
+
+        Safe both when there is no active record (menu entry) and when the
+        wizard is launched via the Actions dropdown of a tender (binding).
+        """
+        res = super().default_get(fields_list)
+        active_model = self.env.context.get("active_model")
+        active_id = self.env.context.get("active_id")
+        if active_model == "rps.tender" and active_id:
+            res["tender_id"] = active_id
+        return res
     source_competitor_id = fields.Many2one(
         "rps.competitor",
         string="المنافس صاحب الجدول",
