@@ -13,6 +13,8 @@
                 <field name="boq_item_count"/>
                 <field name="amount_total_price"/>
                 <field name="margin_pct" optional="show"/>
+                <field name="award_value" optional="show"/>
+                <field name="awarded_to" optional="hide"/>
                 <field name="currency_id" column_invisible="1"/>
                 <field name="state" widget="badge"
                        decoration-success="state == 'won'"
@@ -118,6 +120,13 @@
                         </page>
                     </notebook>
                 </sheet>
+                <group string="نتيجة الترسية"
+                       invisible="state not in ('submitted','won','lost')">
+                    <group>
+                        <field name="award_value"/>
+                        <field name="awarded_to" invisible="state != 'lost'"/>
+                    </group>
+                </group>
                 <div class="oe_right oe_subtotal_footer" style="max-width:32rem;">
                     <group>
                         <field name="amount_direct_cost"/>
