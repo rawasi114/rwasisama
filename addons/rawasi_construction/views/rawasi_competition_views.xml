@@ -119,30 +119,27 @@
                             </field>
                         </page>
                     </notebook>
-                </sheet>
-                <group string="نتيجة الترسية"
-                       invisible="state not in ('submitted','won','lost')">
-                    <group>
-                        <field name="award_value"/>
-                        <field name="awarded_to" invisible="state != 'lost'"/>
+                    <group string="نتيجة الترسية"
+                           invisible="state not in ('submitted','won','lost')">
+                        <group>
+                            <field name="award_value"/>
+                            <field name="awarded_to" invisible="state != 'lost'"/>
+                        </group>
                     </group>
-                </group>
-                <div class="oe_right oe_subtotal_footer" style="max-width:32rem;">
-                    <group>
+                    <group class="oe_subtotal_footer">
                         <field name="amount_direct_cost"/>
                         <field name="amount_indirect_cost"/>
                         <field name="amount_total_cost"/>
                         <field name="margin_amount"/>
                         <field name="margin_pct"/>
-                    </group>
-                    <group>
                         <field name="amount_total_price"/>
                         <field name="vat_rate"/>
                         <field name="amount_tax"/>
                         <field name="amount_total_incl_tax"
                                class="oe_subtotal_footer_separator"/>
                     </group>
-                </div>
+                    <div class="oe_clear"/>
+                </sheet>
                 <chatter/>
             </form>
         </field>
