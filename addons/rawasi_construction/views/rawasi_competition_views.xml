@@ -32,6 +32,9 @@
                 <header>
                     <button name="action_start_pricing" type="object" string="بدء التسعير"
                             class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_download_boq_template" type="object"
+                            string="قالب جدول الكميات" class="btn-secondary"
+                            invisible="state not in ('draft', 'pricing')"/>
                     <button name="action_open_import_wizard" type="object"
                             string="استيراد جدول الكميات" class="btn-secondary"
                             invisible="state not in ('draft', 'pricing')"/>

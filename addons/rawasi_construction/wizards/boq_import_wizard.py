@@ -18,6 +18,7 @@ from ..models.arabic_utils import normalize_light, normalize_unit
 
 try:
     import openpyxl
+    from openpyxl.utils import get_column_letter
 except ImportError:  # pragma: no cover
     openpyxl = None
 
@@ -48,6 +49,23 @@ HEADER_ALIASES = {
 }
 
 HEADER_SCAN_ROWS = 20  # عدد الصفوف الأولى التي نبحث فيها عن صف العناوين
+
+# أعمدة قالب جدول الكميات (بالترتيب) — تطابق المرادفات أعلاه ليرفع الملف بسلاسة.
+# عمود «تكلفة الوحدة» مُضاف لجمع التكاليف منذ مرحلة التسعير.
+BOQ_TEMPLATE_COLUMNS = [
+    "الرقم التسلسلي",
+    "الفئة",
+    "البند",
+    "وصف البند",
+    "المواصفات",
+    "الوحدة",
+    "الكمية",
+    "تكلفة الوحدة",
+    "سعر الوحدة",
+    "إجمالي السعر",
+    "منتج من القائمة الإلزامية",
+    "الرمز الإنشائي",
+]
 
 
 def _norm_key(text):
@@ -129,6 +147,58 @@ class BoqImportWizard(models.TransientModel):
         if token in ("لا", "no"):
             return "no"
         return False
+
+    # ── تحميل قالب جدول الكميات (Excel جاهز للتعبئة) ─────────────
+    def _generate_boq_template(self):
+        if openpyxl is None:
+            raise UserError(_("مكتبة openpyxl غير متوفرة على الخادم."))
+        wb = openpyxl.Workbook()
+        ws = wb.active
+        ws.title = "جدول الكميات"
+        ws.append(BOQ_TEMPLATE_COLUMNS)
+        # صف مثال إرشادي (يمكن حذفه قبل الاستيراد)
+        ws.append([
+            1, "أعمال الخرسانة", "خرسانة مسلحة",
+            "صبّ خرسانة C30 للأساسات",
+            "خرسانة جاهزة مقاومتها 30 ميجاباسكال مع حديد تسليح حسب المخططات",
+            "م3", 100, 320, 380, 38000, "نعم", "BC-100",
+        ])
+        for idx in range(1, len(BOQ_TEMPLATE_COLUMNS) + 1):
+            ws.column_dimensions[get_column_letter(idx)].width = 22
+        # ورقة مرجعية: الوحدات المتاحة في النظام (لنسخها في عمود «الوحدة»)
+        ws_units = wb.create_sheet("الوحدات المتاحة")
+        ws_units.append(["انسخ رمز الوحدة في عمود «الوحدة»"])
+        for u in self.env["rawasi.unit"].search([("active", "=", True)], order="name"):
+            ws_units.append([u.code or u.name, u.name or ""])
+        ws_units.column_dimensions["A"].width = 14
+        ws_units.column_dimensions["B"].width = 30
+        # ورقة تعليمات قصيرة
+        ws_help = wb.create_sheet("ملاحظات")
+        ws_help.append(["الإلزامي: «وصف البند» و«الكمية» فقط."])
+        ws_help.append(["باقي الأعمدة اختيارية — لكن «تكلفة الوحدة» و«سعر الوحدة» تجعل البند مُسعَّراً تلقائياً."])
+        ws_help.append(["إن أدخلت «إجمالي السعر» دون «سعر الوحدة»، يُحتسب سعر الوحدة = الإجمالي ÷ الكمية."])
+        ws_help.append(["الترتيب لا يهمّ — النظام يطابق أسماء الأعمدة."])
+        ws_help.column_dimensions["A"].width = 90
+        buf = io.BytesIO()
+        wb.save(buf)
+        return buf.getvalue()
+
+    def action_download_template(self):
+        data = self._generate_boq_template()
+        attachment = self.env["ir.attachment"].create({
+            "name": "قالب_جدول_الكميات.xlsx",
+            "type": "binary",
+            "datas": base64.b64encode(data),
+            "mimetype": (
+                "application/vnd.openxmlformats-officedocument."
+                "spreadsheetml.sheet"
+            ),
+        })
+        return {
+            "type": "ir.actions.act_url",
+            "url": "/web/content/%s?download=true" % attachment.id,
+            "target": "self",
+        }
 
     # ── التنفيذ ──────────────────────────────────────────────────
     def action_import(self):

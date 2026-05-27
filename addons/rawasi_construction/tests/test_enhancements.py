@@ -146,6 +146,31 @@ class TestSerials(TransactionCase):
 
 
 @tagged("post_install", "-at_install")
+class TestBoqTemplate(TransactionCase):
+    def test_template_is_valid_xlsx_with_cost_column(self):
+        Wiz = self.env["rawasi.boq.import.wizard"]
+        data = Wiz._generate_boq_template()
+        self.assertEqual(data[:2], b"PK")
+        wb = openpyxl.load_workbook(io.BytesIO(data))
+        self.assertIn("جدول الكميات", wb.sheetnames)
+        self.assertIn("الوحدات المتاحة", wb.sheetnames)
+        headers = [c.value for c in wb["جدول الكميات"][1]]
+        self.assertIn("تكلفة الوحدة", headers, "يجب أن يحوي القالب عمود التكاليف")
+        self.assertIn("الكمية", headers)
+        self.assertIn("وصف البند", headers)
+
+    def test_download_action_returns_url(self):
+        action = self.env["rawasi.boq.import.wizard"].action_download_template()
+        self.assertEqual(action["type"], "ir.actions.act_url")
+        self.assertIn("/web/content/", action["url"])
+
+    def test_competition_button_delegates(self):
+        comp = self.env["rawasi.competition"].create({"name": "للتجربة"})
+        action = comp.action_download_boq_template()
+        self.assertEqual(action["type"], "ir.actions.act_url")
+
+
+@tagged("post_install", "-at_install")
 class TestScheduleTemplate(TransactionCase):
     def setUp(self):
         super().setUp()
