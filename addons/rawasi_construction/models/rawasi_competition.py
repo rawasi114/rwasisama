@@ -72,7 +72,7 @@ class RawasiCompetition(models.Model):
         "rawasi.boq.item", "competition_id", string="بنود جدول الكميات"
     )
     indirect_cost_ids = fields.One2many(
-        "rawasi.indirect.cost", "competition_id", string="التكاليف غير المباشرة"
+        "rawasi.indirect.cost", "competition_id", string="بنود التكاليف غير المباشرة"
     )
     price_intelligence_ids = fields.One2many(
         "rawasi.price.intelligence", "competition_id", string="لقطات ذاكرة الأسعار"

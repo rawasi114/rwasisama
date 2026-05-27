@@ -76,16 +76,17 @@ class RawasiPaymentCertificate(models.Model):
     )
     # ── امتثال ZATCA (هيئة الزكاة والضريبة) ──────────────────────
     zatca_qr = fields.Char(
-        string="رمز ZATCA (Base64 TLV)", compute="_compute_zatca", store=True
+        string="رمز ZATCA (Base64 TLV)", compute="_compute_zatca_qr", store=True
     )
-    zatca_qr_image = fields.Binary(string="رمز QR", compute="_compute_zatca")
+    zatca_qr_image = fields.Binary(
+        string="رمز QR", compute="_compute_zatca_image",
+    )
 
     @api.depends("amount_total", "amount_tax", "create_date",
                  "company_id", "company_id.name", "company_id.vat")
-    def _compute_zatca(self):
+    def _compute_zatca_qr(self):
         """يبني رمز ZATCA (المرحلة الأولى): اسم البائع، الرقم الضريبي، الطابع
         الزمني، الإجمالي شامل الضريبة، مبلغ الضريبة — مُرمَّزة TLV ثم Base64."""
-        report = self.env["ir.actions.report"]
         for pc in self:
             company = pc.company_id or self.env.company
             stamp = pc.create_date or fields.Datetime.now()
@@ -97,10 +98,18 @@ class RawasiPaymentCertificate(models.Model):
                 + _zatca_tlv(4, "%.2f" % (pc.amount_total or 0.0))
                 + _zatca_tlv(5, "%.2f" % (pc.amount_tax or 0.0))
             )
-            b64 = base64.b64encode(tlv).decode()
-            pc.zatca_qr = b64
+            pc.zatca_qr = base64.b64encode(tlv).decode()
+
+    @api.depends("zatca_qr")
+    def _compute_zatca_image(self):
+        """يولّد صورة QR (PNG) من رمز ZATCA. غير مخزّن — يُحسب عند العرض/الطباعة."""
+        report = self.env["ir.actions.report"]
+        for pc in self:
+            if not pc.zatca_qr:
+                pc.zatca_qr_image = False
+                continue
             try:
-                png = report.barcode("QR", b64)
+                png = report.barcode("QR", pc.zatca_qr)
                 pc.zatca_qr_image = base64.b64encode(png)
             except Exception:
                 pc.zatca_qr_image = False

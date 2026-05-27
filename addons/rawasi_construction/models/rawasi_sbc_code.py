@@ -11,9 +11,10 @@ class RawasiSbcCode(models.Model):
     name = fields.Char(string="البند/الفصل", required=True, translate=True)
     active = fields.Boolean(default=True)
 
-    _sql_constraints = [
-        ("code_uniq", "unique(code)", "رمز SBC يجب أن يكون فريداً."),
-    ]
+    _code_uniq = models.Constraint(
+        "UNIQUE(code)",
+        "رمز SBC يجب أن يكون فريداً.",
+    )
 
     @api.depends("code", "name")
     def _compute_display_name(self):
