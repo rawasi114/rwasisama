@@ -33,7 +33,7 @@
                   sequence="22"/>
 
         <menuitem id="menu_rawasi_price_intelligence"
-                  name="ذاكرة الأسعار"
+                  name="رادار الترسية"
                   parent="menu_rawasi_root"
                   action="action_price_intelligence"
                   sequence="25"/>
