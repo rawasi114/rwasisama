@@ -12,11 +12,13 @@
                     <field name="replace_existing"/>
                 </group>
                 <div class="alert alert-info" role="alert">
-                    يدعم النظام قوالب اعتماد المختلفة عبر مطابقة عناوين الأعمدة
-                    (لا يعتمد على ترتيب الأعمدة)، مع تعبئة الفئة تلقائياً وتطبيع
-                    وحدات القياس. الملفات غير المطابقة لجدول الكميات تُرفض.
+                    <p>لتسهيل العمل: حمّل <b>قالب جدول الكميات</b> (Excel)، عبّئه ثم ارفعه هنا واستورد.</p>
+                    <p>القالب يحوي عمود <b>تكلفة الوحدة</b> وعمود سعر الوحدة، فإن سعّرت في الملف يُرفع البند مُسعّراً تلقائياً.</p>
+                    <p>المطابقة بأسماء الأعمدة (لا يهمّ ترتيبها)، مع تطبيع وحدات القياس وتعبئة الفئة تلقائياً.</p>
                 </div>
                 <footer>
+                    <button name="action_download_template" type="object"
+                            string="تحميل قالب جدول الكميات" class="btn-secondary"/>
                     <button name="action_import" type="object" string="استيراد"
                             class="btn-primary"/>
                     <button string="إلغاء" class="btn-secondary" special="cancel"/>

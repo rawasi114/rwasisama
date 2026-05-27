@@ -234,6 +234,10 @@ class RawasiCompetition(models.Model):
                 item.unit_price = item.unit_cost * factor
         return True
 
+    def action_download_boq_template(self):
+        """تنزيل قالب Excel لجدول الكميات (بكل الأعمدة + عمود التكلفة) لتعبئته وإعادة رفعه."""
+        return self.env["rawasi.boq.import.wizard"].action_download_template()
+
     def action_open_import_wizard(self):
         self.ensure_one()
         return {
