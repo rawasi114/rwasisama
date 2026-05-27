@@ -86,6 +86,37 @@ class TestProjectsSystem(TransactionCase):
 
 
 @tagged("post_install", "-at_install")
+class TestAwardValue(TransactionCase):
+    def setUp(self):
+        super().setUp()
+        self.comp = self.env["rawasi.competition"].create({"name": "م. ترسية"})
+        self.env["rawasi.boq.item"].create({
+            "competition_id": self.comp.id, "name": "بند",
+            "quantity": 1.0, "unit_cost": 100.0, "unit_price": 120.0,
+        })
+        self.comp.action_start_pricing()
+        self.comp.action_submit()
+
+    def test_close_lost_requires_award_value(self):
+        from odoo.exceptions import UserError
+        with self.assertRaises(UserError):
+            self.comp.action_lost()
+        self.comp.award_value = 110.0
+        self.comp.awarded_to = "مقاول آخر"
+        self.comp.action_lost()
+        self.assertEqual(self.comp.state, "lost")
+        self.assertEqual(self.comp.award_value, 110.0)
+
+    def test_close_won_autofills_award_value(self):
+        # عند الفوز: قيمة الترسية = إجمالي عرضنا شامل الضريبة (إن لم تكن مُحدَّدة)
+        self.assertFalse(self.comp.award_value)
+        expected = self.comp.amount_total_incl_tax
+        self.comp.action_won()
+        self.assertEqual(self.comp.state, "won")
+        self.assertEqual(self.comp.award_value, expected)
+
+
+@tagged("post_install", "-at_install")
 class TestSerials(TransactionCase):
     def test_competition_serial_and_search(self):
         comp = self.env["rawasi.competition"].create({"name": "منافسة الترميم"})
