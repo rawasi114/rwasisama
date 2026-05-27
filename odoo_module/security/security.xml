@@ -6,25 +6,21 @@
     </record>
 
     <record id="group_rps_reader" model="res.groups">
-        <field name="name">قارئ</field>
-        <field name="category_id" ref="module_category_rps"/>
+        <field name="name">قارئ - رواسي التسعير</field>
     </record>
 
     <record id="group_rps_data_entry" model="res.groups">
-        <field name="name">إدخال بيانات</field>
-        <field name="category_id" ref="module_category_rps"/>
+        <field name="name">إدخال بيانات - رواسي التسعير</field>
         <field name="implied_ids" eval="[(4, ref('group_rps_reader'))]"/>
     </record>
 
     <record id="group_rps_reviewer" model="res.groups">
-        <field name="name">مراجع تقني</field>
-        <field name="category_id" ref="module_category_rps"/>
+        <field name="name">مراجع تقني - رواسي التسعير</field>
         <field name="implied_ids" eval="[(4, ref('group_rps_data_entry'))]"/>
     </record>
 
     <record id="group_rps_manager" model="res.groups">
-        <field name="name">مدير</field>
-        <field name="category_id" ref="module_category_rps"/>
+        <field name="name">مدير - رواسي التسعير</field>
         <field name="implied_ids" eval="[(4, ref('group_rps_reviewer'))]"/>
     </record>
 </odoo>

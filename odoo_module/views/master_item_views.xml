@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <record id="view_rps_master_item_tree" model="ir.ui.view">
-        <field name="name">rps.master.item.tree</field>
+    <record id="view_rps_master_item_list" model="ir.ui.view">
+        <field name="name">rps.master.item.list</field>
         <field name="model">rps.master.item</field>
         <field name="arch" type="xml">
-            <tree string="قاموس البنود">
+            <list string="قاموس البنود">
                 <field name="code"/>
                 <field name="name"/>
                 <field name="default_unit"/>
                 <field name="usage_count"/>
                 <field name="is_active"/>
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -38,7 +38,7 @@
     <record id="action_rps_master_items" model="ir.actions.act_window">
         <field name="name">البنود المعيارية</field>
         <field name="res_model">rps.master.item</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
     </record>
 
     <menuitem id="menu_rps_master_items_all" name="البنود المعيارية"

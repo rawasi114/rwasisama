@@ -3,8 +3,7 @@
     <record id="action_rps_dashboard" model="ir.actions.act_window">
         <field name="name">لوحة التحليلات</field>
         <field name="res_model">rps.tender</field>
-        <field name="view_mode">graph,tree</field>
-        <field name="context">{'search_default_award_date': 1}</field>
+        <field name="view_mode">graph,list</field>
     </record>
 
     <menuitem id="menu_rps_dashboard" name="لوحة التحليلات"

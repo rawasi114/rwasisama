@@ -16,8 +16,6 @@
     "depends": [
         "base",
         "mail",
-        "project",
-        "sale",
     ],
     "data": [
         "security/security.xml",
@@ -29,16 +27,8 @@
         "views/analytics_dashboard.xml",
         "wizards/pricing_simulator.xml",
     ],
-    "external_dependencies": {
-        "python": [
-            "anthropic",
-            "httpx",
-            "pandas",
-            "openpyxl",
-        ],
-    },
     "application": True,
     "installable": True,
     "auto_install": False,
-    "license": "OEEL-1",
+    "license": "LGPL-3",
 }

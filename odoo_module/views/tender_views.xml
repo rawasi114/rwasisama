@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <record id="view_rps_tender_tree" model="ir.ui.view">
-        <field name="name">rps.tender.tree</field>
+    <record id="view_rps_tender_list" model="ir.ui.view">
+        <field name="name">rps.tender.list</field>
         <field name="model">rps.tender</field>
         <field name="arch" type="xml">
-            <tree string="المنافسات">
+            <list string="المنافسات">
                 <field name="etimad_tender_id"/>
                 <field name="name"/>
                 <field name="government_entity"/>
@@ -13,7 +13,7 @@
                 <field name="award_value" sum="إجمالي"/>
                 <field name="winner_name"/>
                 <field name="rawasi_participated"/>
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -34,8 +34,8 @@
                         <field name="winner_name"/>
                         <field name="total_bidders"/>
                         <field name="rawasi_participated"/>
-                        <field name="rawasi_rank" attrs="{'invisible': [('rawasi_participated', '=', False)]}"/>
-                        <field name="rawasi_bid_amount" attrs="{'invisible': [('rawasi_participated', '=', False)]}"/>
+                        <field name="rawasi_rank" invisible="not rawasi_participated"/>
+                        <field name="rawasi_bid_amount" invisible="not rawasi_participated"/>
                         <field name="data_quality_score" readonly="1"/>
                         <field name="has_full_boq" readonly="1"/>
                     </group>
@@ -50,7 +50,7 @@
     <record id="action_rps_tenders" model="ir.actions.act_window">
         <field name="name">المنافسات</field>
         <field name="res_model">rps.tender</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
     </record>
 
     <menuitem id="menu_rps_tenders_all" name="جميع الترسيات"

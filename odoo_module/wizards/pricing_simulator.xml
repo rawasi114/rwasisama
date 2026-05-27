@@ -11,7 +11,7 @@
                         <field name="proposed_bid_amount"/>
                         <field name="estimated_cost"/>
                     </group>
-                    <group string="النتيجة" attrs="{'invisible': [('recommendation', '=', False)]}">
+                    <group string="النتيجة" invisible="not recommendation">
                         <field name="win_probability" readonly="1"/>
                         <field name="expected_margin_pct" readonly="1"/>
                         <field name="expected_value" readonly="1"/>
