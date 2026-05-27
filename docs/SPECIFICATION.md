@@ -1,4 +1,4 @@
-# Rawasi Pricing Intelligence — Technical Specification (Concise)
+# Award Radar (رادار الترسية) — Technical Specification (Concise)
 
 This is the implementer-facing summary. The full strategic specification
 (in Arabic) is the document of record.

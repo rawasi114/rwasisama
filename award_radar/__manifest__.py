@@ -1,15 +1,21 @@
 {
-    "name": "Rawasi Pricing Intelligence",
+    "name": "Award Radar — رادار الترسية",
     "version": "1.0.0",
     "category": "Sales/Contracting",
-    "summary": "Intelligent pricing system for Saudi government tenders",
+    "summary": "رادار الترسية: استخبارات تنافسية للمنافسات الحكومية السعودية",
     "description": """
-نظام متكامل للذكاء التسعيري في المنافسات الحكومية:
+رادار الترسية (Award Radar)
+============================
+
+منصة استخبارات تنافسية متكاملة لمنافسات القطاع الحكومي السعودي.
+
+الميزات الرئيسية:
 - قاعدة بيانات الترسيات والمنافسين
 - استخراج جداول الكميات تلقائياً عبر Claude API
 - محرك تسعير مرجعي للبنود
 - تحليل المنافسين وأنماط تسعيرهم
-- حساب احتمالية الفوز وأداة Go/No-Go
+- حساب احتمالية الفوز
+- أداة Go/No-Go لقرار الدخول الذكي
     """,
     "author": "Rawasi Sama Contracting",
     "website": "https://rawasisama.com",

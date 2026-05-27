@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <record id="module_category_rps" model="ir.module.category">
-        <field name="name">Rawasi Pricing Intelligence</field>
+        <field name="name">رادار الترسية</field>
         <field name="sequence">20</field>
     </record>
 
     <record id="group_rps_reader" model="res.groups">
-        <field name="name">قارئ - رواسي التسعير</field>
+        <field name="name">قارئ - رادار الترسية</field>
     </record>
 
     <record id="group_rps_data_entry" model="res.groups">
-        <field name="name">إدخال بيانات - رواسي التسعير</field>
+        <field name="name">إدخال بيانات - رادار الترسية</field>
         <field name="implied_ids" eval="[(4, ref('group_rps_reader'))]"/>
     </record>
 
     <record id="group_rps_reviewer" model="res.groups">
-        <field name="name">مراجع تقني - رواسي التسعير</field>
+        <field name="name">مراجع تقني - رادار الترسية</field>
         <field name="implied_ids" eval="[(4, ref('group_rps_data_entry'))]"/>
     </record>
 
     <record id="group_rps_manager" model="res.groups">
-        <field name="name">مدير - رواسي التسعير</field>
+        <field name="name">مدير - رادار الترسية</field>
         <field name="implied_ids" eval="[(4, ref('group_rps_reviewer'))]"/>
     </record>
 </odoo>

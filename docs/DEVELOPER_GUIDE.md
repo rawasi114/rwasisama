@@ -35,7 +35,7 @@ migrations/    ── Alembic versioned migrations
 scripts/       ── one-shot scripts (bulk import, seed data)
 prompts/       ── Claude prompts (versioned with the code)
 tests/         ── unit / integration / e2e
-rawasi_pricing_intelligence/   ── Odoo module (technical name)
+award_radar/   ── Odoo module (technical name: award_radar)
 docs/          ── user-facing documentation
 ```
 
