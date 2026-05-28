@@ -2,20 +2,14 @@
 <odoo>
     <data noupdate="1">
 
-        <!-- ═══════════════════════════════════════════════════════ -->
-        <!-- بذرة كبيرة: تصنيف + بنود كنسية + مرادفات              -->
-        <!-- مولَّدة من 4 جداول كميات حقيقية (554 بند خام)         -->
-        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- بذرة مولَّدة من 4 جداول كميات حقيقية -->
 
-        <!-- الشعب الإضافية -->
         <record id="tax_div_site" model="rawasi.item.taxonomy">
             <field name="code">SITE</field>
             <field name="name_ar">أعمال الموقع</field>
             <field name="name_en">Site Works</field>
             <field name="level">division</field>
         </record>
-
-        <!-- الأقسام (المستوى الثاني) -->
         <record id="tax_sec_arch_access" model="rawasi.item.taxonomy">
             <field name="code">ARCH-ACC</field>
             <field name="name_ar">اكسسوارات وملحقات</field>
@@ -149,8 +143,6 @@
             <field name="level">section</field>
             <field name="parent_id" ref="tax_div_struct"/>
         </record>
-
-        <!-- الفئات (المستوى الثالث) -->
         <record id="tax_cat_arch_access_bath" model="rawasi.item.taxonomy">
             <field name="code">ARCH-ACC-BTH</field>
             <field name="name_ar">ملحقات الحمامات</field>
@@ -389,8 +381,6 @@
             <field name="level">category</field>
             <field name="parent_id" ref="tax_sec_strc_protect"/>
         </record>
-
-        <!-- الفئات الفرعية: كل فئة لها فئة فرعية «عام» تجمع بنودها -->
         <record id="tax_sub_arch_access_bath_gen" model="rawasi.item.taxonomy">
             <field name="code">ARCH-ACC-BTH-GEN</field>
             <field name="name_ar">ملحقات الحمامات — عام</field>
@@ -629,8 +619,6 @@
             <field name="level">subcategory</field>
             <field name="parent_id" ref="tax_cat_strc_protect_waterproof"/>
         </record>
-
-        <!-- البنود الكنسية -->
         <record id="item_strc_ert_exc_001" model="rawasi.item.master">
             <field name="canonical_code">STRC-ERT-EXC-001</field>
             <field name="name_ar">اعمال الحفريات لزوم القواعد والميدات</field>
@@ -4786,17 +4774,11 @@
             <field name="created_via">bulk_import</field>
             <field name="review_status">draft</field>
         </record>
-
-        <!-- المرادفات (الصياغات الخام من الملفات الأربعة) -->
         <record id="syn_strc_ert_exc_001_01" model="rawasi.item.synonym">
             <field name="canonical_item_id" ref="item_strc_ert_exc_001"/>
             <field name="text_raw">اعمال الحفريات لزوم القواعد والميدات</field>
         </record>
         <record id="syn_strc_ert_exc_002_01" model="rawasi.item.synonym">
-            <field name="canonical_item_id" ref="item_strc_ert_exc_002"/>
-            <field name="text_raw">اعمال الردم حول الاساسات</field>
-        </record>
-        <record id="syn_strc_ert_exc_002_02" model="rawasi.item.synonym">
             <field name="canonical_item_id" ref="item_strc_ert_exc_002"/>
             <field name="text_raw">اعمال الردم حول الاساسات</field>
         </record>
@@ -4816,10 +4798,6 @@
             <field name="canonical_item_id" ref="item_strc_ert_trm_001"/>
             <field name="text_raw">الرش ضد النمل الأبيض أسفل  بلاطات الأرضية</field>
         </record>
-        <record id="syn_strc_ert_trm_001_02" model="rawasi.item.synonym">
-            <field name="canonical_item_id" ref="item_strc_ert_trm_001"/>
-            <field name="text_raw">الرش ضد النمل الأبيض أسفل بلاطات الأرضية</field>
-        </record>
         <record id="syn_strc_ert_trm_002_01" model="rawasi.item.synonym">
             <field name="canonical_item_id" ref="item_strc_ert_trm_002"/>
             <field name="text_raw">الرش ضد النمل الأبيض حول المبنى بعرض 3متر</field>
@@ -4832,15 +4810,7 @@
             <field name="canonical_item_id" ref="item_strc_con_pln_001"/>
             <field name="text_raw">اعمال خرسانة عادية سمك 100مم اسفل القواعد والميدات جهد 25 نيوتن/مم2 .</field>
         </record>
-        <record id="syn_strc_con_pln_001_02" model="rawasi.item.synonym">
-            <field name="canonical_item_id" ref="item_strc_con_pln_001"/>
-            <field name="text_raw">اعمال خرسانة عادية سمك 100مم اسفل القواعد والميدات جهد 25 نيوتن/مم2 .</field>
-        </record>
         <record id="syn_strc_con_rnf_001_01" model="rawasi.item.synonym">
-            <field name="canonical_item_id" ref="item_strc_con_rnf_001"/>
-            <field name="text_raw">خرسانة مسلحة للقواعد جهد (35)نيوتن/مم2 (الاسطوانة) للخرسانة تحت سطح الأرض بإسمنت مقاوم للكبريتات مع كافة ما يلزم العمل.</field>
-        </record>
-        <record id="syn_strc_con_rnf_001_02" model="rawasi.item.synonym">
             <field name="canonical_item_id" ref="item_strc_con_rnf_001"/>
             <field name="text_raw">خرسانة مسلحة للقواعد جهد (35)نيوتن/مم2 (الاسطوانة) للخرسانة تحت سطح الأرض بإسمنت مقاوم للكبريتات مع كافة ما يلزم العمل.</field>
         </record>
@@ -5040,10 +5010,6 @@
             <field name="canonical_item_id" ref="item_arch_fin_wal_005"/>
             <field name="text_raw">توريد وتركيب قواطيع زجاجية (partitions)  ذات ألواح مفردة من الزجاج السيكوريت  سماكة 12مم. يشمل السعر الإطارالمعدني من الاستينلس استيل بقطاع 20*35*1 مم  والاكسسوارات التثبيت ومانع التسرب و يتم استكمال العمل علي أكمل وجه طبقاً للمواصفات وتعليمات جهازالإشراف.</field>
         </record>
-        <record id="syn_arch_fin_wal_005_02" model="rawasi.item.synonym">
-            <field name="canonical_item_id" ref="item_arch_fin_wal_005"/>
-            <field name="text_raw">توريد وتركيب قواطيع زجاجية (partitions) ذات ألواح مفردة من الزجاج السيكوريت سماكة 12مم. يشمل السعر الإطارالمعدني من الاستينلس استيل بقطاع 20*35*1 مم والاكسسوارات التثبيت ومانع التسرب و يتم استكمال العمل علي أكمل وجه طبقاً للمواصفات وتعليمات جهازالإشراف.</field>
-        </record>
         <record id="syn_strc_mas_plt_001_01" model="rawasi.item.synonym">
             <field name="canonical_item_id" ref="item_strc_mas_plt_001"/>
             <field name="text_raw">اللياسة الأسمنتية للجدران الداخلية</field>
@@ -5132,10 +5098,6 @@
             <field name="canonical_item_id" ref="item_strc_prt_wpr_005"/>
             <field name="text_raw">بالمتر المربع توريد وتركيب قواطع من ألواح الجبس المزدوجة المقاوم للرطوبة والحريق (سمك اللوح 12.5 مم) سمك الجدار 10 سم شامل القوائم والعوارض المعدنية والصوف الزجاجي العازل للصوت والحرارة والاكسسوارات بجوده عاليه للتحمل الاوزان مع معالجه الفواصل و المعجون وكل مايلزم من   دهانات وعمل فتحات الكشافات وفتحات المكيفات طبقا لاصول الصناعه والمواصفات الفنيه  ، والسعر يشمل جميع ما يلزم لإنهاء العمل وتسليمه و</field>
         </record>
-        <record id="syn_strc_prt_wpr_005_02" model="rawasi.item.synonym">
-            <field name="canonical_item_id" ref="item_strc_prt_wpr_005"/>
-            <field name="text_raw">بالمتر المربع توريد وتركيب قواطع من ألواح الجبس المزدوجة المقاوم للرطوبة والحريق (سمك اللوح 12.5 مم) سمك الجدار 10 سم شامل القوائم والعوارض المعدنية والصوف الزجاجي العازل للصوت والحرارة والاكسسوارات بجوده عاليه للتحمل الاوزان مع معالجه الفواصل و المعجون وكل مايلزم من دهانات وعمل فتحات الكشافات وفتحات المكيفات طبقا لاصول الصناعه والمواصفات الفنيه ، والسعر يشمل جميع ما يلزم لإنهاء العمل وتسليمه وفقا</field>
-        </record>
         <record id="syn_arch_fin_wal_007_01" model="rawasi.item.synonym">
             <field name="canonical_item_id" ref="item_arch_fin_wal_007"/>
             <field name="text_raw">أعمال دهانات داخلية أكريلك شاملة كافة أعمال المعجون والصنفرة.</field>
@@ -5148,23 +5110,11 @@
             <field name="canonical_item_id" ref="item_arch_acc_bth_001"/>
             <field name="text_raw">حامل ورق تنشيف مع حاوية قمامة من الستانلس ستيل داخل الجدار.</field>
         </record>
-        <record id="syn_arch_acc_bth_001_02" model="rawasi.item.synonym">
-            <field name="canonical_item_id" ref="item_arch_acc_bth_001"/>
-            <field name="text_raw">حامل ورق تنشيف مع حاوية قمامة من الستانلس ستيل داخل الجدار.</field>
-        </record>
         <record id="syn_arch_acc_bth_002_01" model="rawasi.item.synonym">
             <field name="canonical_item_id" ref="item_arch_acc_bth_002"/>
             <field name="text_raw">حاوية صابون سائل من ستانلس ستيل تثبت بالجدار.</field>
         </record>
-        <record id="syn_arch_acc_bth_002_02" model="rawasi.item.synonym">
-            <field name="canonical_item_id" ref="item_arch_acc_bth_002"/>
-            <field name="text_raw">حاوية صابون سائل من ستانلس ستيل تثبت بالجدار.</field>
-        </record>
         <record id="syn_arch_acc_bth_003_01" model="rawasi.item.synonym">
-            <field name="canonical_item_id" ref="item_arch_acc_bth_003"/>
-            <field name="text_raw">حامل ورق تنشيف مثبت بالجدار لحمام المعاقين.</field>
-        </record>
-        <record id="syn_arch_acc_bth_003_02" model="rawasi.item.synonym">
             <field name="canonical_item_id" ref="item_arch_acc_bth_003"/>
             <field name="text_raw">حامل ورق تنشيف مثبت بالجدار لحمام المعاقين.</field>
         </record>
@@ -5184,23 +5134,11 @@
             <field name="canonical_item_id" ref="item_arch_acc_bth_004"/>
             <field name="text_raw">علاقة ملابس</field>
         </record>
-        <record id="syn_arch_acc_bth_004_02" model="rawasi.item.synonym">
-            <field name="canonical_item_id" ref="item_arch_acc_bth_004"/>
-            <field name="text_raw">علاقة ملابس</field>
-        </record>
         <record id="syn_inhs_mtl_stl_003_01" model="rawasi.item.synonym">
             <field name="canonical_item_id" ref="item_inhs_mtl_stl_003"/>
             <field name="text_raw">مرآة وجه ذات إطار من الستانلس ستيل بارتفاع (1000) مم.</field>
         </record>
-        <record id="syn_inhs_mtl_stl_003_02" model="rawasi.item.synonym">
-            <field name="canonical_item_id" ref="item_inhs_mtl_stl_003"/>
-            <field name="text_raw">مرآة وجه ذات إطار من الستانلس ستيل بارتفاع (1000) مم.</field>
-        </record>
         <record id="syn_arch_fin_skr_002_01" model="rawasi.item.synonym">
-            <field name="canonical_item_id" ref="item_arch_fin_skr_002"/>
-            <field name="text_raw">وحدات من الكوريان للأحواض بدورات المياه عرض (600) مم شاملة الوزرة الخلفية والتجليد الامامي مع أعمال التثبيت.</field>
-        </record>
-        <record id="syn_arch_fin_skr_002_02" model="rawasi.item.synonym">
             <field name="canonical_item_id" ref="item_arch_fin_skr_002"/>
             <field name="text_raw">وحدات من الكوريان للأحواض بدورات المياه عرض (600) مم شاملة الوزرة الخلفية والتجليد الامامي مع أعمال التثبيت.</field>
         </record>
@@ -5286,15 +5224,7 @@
             <field name="canonical_item_id" ref="item_mech_plm_wtr_004"/>
             <field name="text_raw">مواسير قطر 25 مم .</field>
         </record>
-        <record id="syn_mech_plm_wtr_004_02" model="rawasi.item.synonym">
-            <field name="canonical_item_id" ref="item_mech_plm_wtr_004"/>
-            <field name="text_raw">مواسير قطر 25 مم .</field>
-        </record>
         <record id="syn_mech_plm_wtr_005_01" model="rawasi.item.synonym">
-            <field name="canonical_item_id" ref="item_mech_plm_wtr_005"/>
-            <field name="text_raw">مواسير قطر 40 مم .</field>
-        </record>
-        <record id="syn_mech_plm_wtr_005_02" model="rawasi.item.synonym">
             <field name="canonical_item_id" ref="item_mech_plm_wtr_005"/>
             <field name="text_raw">مواسير قطر 40 مم .</field>
         </record>
@@ -5302,15 +5232,7 @@
             <field name="canonical_item_id" ref="item_mech_plm_wtr_006"/>
             <field name="text_raw">مواسير قطر 50 مم .</field>
         </record>
-        <record id="syn_mech_plm_wtr_006_02" model="rawasi.item.synonym">
-            <field name="canonical_item_id" ref="item_mech_plm_wtr_006"/>
-            <field name="text_raw">مواسير قطر 50 مم .</field>
-        </record>
         <record id="syn_mech_plm_wtr_007_01" model="rawasi.item.synonym">
-            <field name="canonical_item_id" ref="item_mech_plm_wtr_007"/>
-            <field name="text_raw">مواسير قطر 65 مم .</field>
-        </record>
-        <record id="syn_mech_plm_wtr_007_02" model="rawasi.item.synonym">
             <field name="canonical_item_id" ref="item_mech_plm_wtr_007"/>
             <field name="text_raw">مواسير قطر 65 مم .</field>
         </record>
@@ -5322,15 +5244,7 @@
             <field name="canonical_item_id" ref="item_mech_plm_wtr_009"/>
             <field name="text_raw">مواسير قطر 100 مم .</field>
         </record>
-        <record id="syn_mech_plm_wtr_009_02" model="rawasi.item.synonym">
-            <field name="canonical_item_id" ref="item_mech_plm_wtr_009"/>
-            <field name="text_raw">مواسير قطر 100 مم .</field>
-        </record>
         <record id="syn_mech_plm_wtr_010_01" model="rawasi.item.synonym">
-            <field name="canonical_item_id" ref="item_mech_plm_wtr_010"/>
-            <field name="text_raw">مواسير قطر 150 مم .</field>
-        </record>
-        <record id="syn_mech_plm_wtr_010_02" model="rawasi.item.synonym">
             <field name="canonical_item_id" ref="item_mech_plm_wtr_010"/>
             <field name="text_raw">مواسير قطر 150 مم .</field>
         </record>
@@ -5341,10 +5255,6 @@
         <record id="syn_strc_con_rnf_020_01" model="rawasi.item.synonym">
             <field name="canonical_item_id" ref="item_strc_con_rnf_020"/>
             <field name="text_raw">توريد وتركيب واختبار كبائن إطفاء حريق (FHC) من نوع (Class-llI)  بفتحة واحدة من الصلب الذي لا يصدأ بالكامل (STANLSTEEL 316) من النوع الغاطس على أن يتم تقديم عينة للاعتماد قبل التركيب وطبقاً لمخططات ومواصفات المشروع وتعليمات الدفاع المدني و كود (NFPA)، بقطر اسمي  2.5 &amp; 1.5 بوصة (38 ملم تقريبًا) داخل كابينة الحريق لتوفير وسيلة فعالة وسريعة لمكافحة الحريق في مراحله الأولية. يبلغ طول الخرطوم 30 مترًا، </field>
-        </record>
-        <record id="syn_strc_con_rnf_020_02" model="rawasi.item.synonym">
-            <field name="canonical_item_id" ref="item_strc_con_rnf_020"/>
-            <field name="text_raw">توريد وتركيب واختبار كبائن إطفاء حريق (FHC) من نوع (Class-llI) بفتحة واحدة من الصلب الذي لا يصدأ بالكامل (STANLSTEEL 316) من النوع الغاطس على أن يتم تقديم عينة للاعتماد قبل التركيب وطبقاً لمخططات ومواصفات المشروع وتعليمات الدفاع المدني و كود (NFPA)، بقطر اسمي 2.5 &amp; 1.5 بوصة (38 ملم تقريبًا) داخل كابينة الحريق لتوفير وسيلة فعالة وسريعة لمكافحة الحريق في مراحله الأولية. يبلغ طول الخرطوم 30 مترًا، وي</field>
         </record>
         <record id="syn_arch_oth_oth_002_01" model="rawasi.item.synonym">
             <field name="canonical_item_id" ref="item_arch_oth_oth_002"/>
@@ -5359,10 +5269,6 @@
             <field name="text_raw">توريد وتركيب واختبار كبائن إطفاء حريق (FHC) مصنوعة بالكامل من الصلب الذي لا يصدأ (Stainless Steel 316) من النوع الغاطس، والخـاصة بطفاية الحريق سِعة 5 كجم، على أن يتم تقديم عيّنة للاعتماد قبل التركيب، وذلك وفقًا لمخططات ومواصفات المشروع وتعليمات الدفاع المدني وكود (NFPA).</field>
         </record>
         <record id="syn_arch_fin_wal_010_01" model="rawasi.item.synonym">
-            <field name="canonical_item_id" ref="item_arch_fin_wal_010"/>
-            <field name="text_raw">توريد وتركيب وصلة دفاع مدني (Fire Department Connection) مصنعة وفقاً لمتطلبات الدفاع المدني المحلي ومعايير NFPA13 وNFPA14، على أن تكون الوصلة معتمدة UL Listed وFM Approved، وتتكون وصلة الدفاع المدني من جسم رئيسي من الحديد الزهر أو النحاس عالي الجودة المقاوم للتآكل بمدخلين بوصلة قياسية بقطر 2½ بوصة (65 مم) مزودة بفتحات ملولبة وفق مواصفات NST أو حسب متطلبات الدفاع المدني، ومزودة بأغطية وقائية (Caps)</field>
-        </record>
-        <record id="syn_arch_fin_wal_010_02" model="rawasi.item.synonym">
             <field name="canonical_item_id" ref="item_arch_fin_wal_010"/>
             <field name="text_raw">توريد وتركيب وصلة دفاع مدني (Fire Department Connection) مصنعة وفقاً لمتطلبات الدفاع المدني المحلي ومعايير NFPA13 وNFPA14، على أن تكون الوصلة معتمدة UL Listed وFM Approved، وتتكون وصلة الدفاع المدني من جسم رئيسي من الحديد الزهر أو النحاس عالي الجودة المقاوم للتآكل بمدخلين بوصلة قياسية بقطر 2½ بوصة (65 مم) مزودة بفتحات ملولبة وفق مواصفات NST أو حسب متطلبات الدفاع المدني، ومزودة بأغطية وقائية (Caps)</field>
         </record>
@@ -5552,10 +5458,6 @@
             <field name="canonical_item_id" ref="item_elec_lit_fix_012"/>
             <field name="text_raw">وحدة انارة طوارئ لمخارج السلالم مع علامة خروج</field>
         </record>
-        <record id="syn_elec_lit_fix_012_02" model="rawasi.item.synonym">
-            <field name="canonical_item_id" ref="item_elec_lit_fix_012"/>
-            <field name="text_raw">وحدة انارة طوارئ لمخارج السلالم مع علامة خروج</field>
-        </record>
         <record id="syn_elec_lit_fix_013_01" model="rawasi.item.synonym">
             <field name="canonical_item_id" ref="item_elec_lit_fix_013"/>
             <field name="text_raw">وحدة انارة خارجية 50 وات ليد جدارية</field>
@@ -5564,15 +5466,7 @@
             <field name="canonical_item_id" ref="item_elec_pwr_out_001"/>
             <field name="text_raw">مخرج مفرد 13 أمبير</field>
         </record>
-        <record id="syn_elec_pwr_out_001_02" model="rawasi.item.synonym">
-            <field name="canonical_item_id" ref="item_elec_pwr_out_001"/>
-            <field name="text_raw">مخرج مفرد 13 أمبير</field>
-        </record>
         <record id="syn_elec_pwr_out_002_01" model="rawasi.item.synonym">
-            <field name="canonical_item_id" ref="item_elec_pwr_out_002"/>
-            <field name="text_raw">مخرج مفرد 45 أمبير</field>
-        </record>
-        <record id="syn_elec_pwr_out_002_02" model="rawasi.item.synonym">
             <field name="canonical_item_id" ref="item_elec_pwr_out_002"/>
             <field name="text_raw">مخرج مفرد 45 أمبير</field>
         </record>
@@ -5580,15 +5474,7 @@
             <field name="canonical_item_id" ref="item_arch_fin_flr_010"/>
             <field name="text_raw">مخارج أرضية Floor Box تحتوي علي عدد 2 مخرج قوي و 2 مخرج بيانات</field>
         </record>
-        <record id="syn_arch_fin_flr_010_02" model="rawasi.item.synonym">
-            <field name="canonical_item_id" ref="item_arch_fin_flr_010"/>
-            <field name="text_raw">مخارج أرضية Floor Box تحتوي علي عدد 2 مخرج قوي و 2 مخرج بيانات</field>
-        </record>
         <record id="syn_elec_pwr_out_003_01" model="rawasi.item.synonym">
-            <field name="canonical_item_id" ref="item_elec_pwr_out_003"/>
-            <field name="text_raw">مخرج 45 لزوم السخانات مع مفتاح تشغيل 45 أمبير</field>
-        </record>
-        <record id="syn_elec_pwr_out_003_02" model="rawasi.item.synonym">
             <field name="canonical_item_id" ref="item_elec_pwr_out_003"/>
             <field name="text_raw">مخرج 45 لزوم السخانات مع مفتاح تشغيل 45 أمبير</field>
         </record>
@@ -5604,15 +5490,7 @@
             <field name="canonical_item_id" ref="item_elec_pwr_out_004"/>
             <field name="text_raw">مخرج بيانات RJ45 شامل والمواسير الاسلاك  CAT6</field>
         </record>
-        <record id="syn_elec_pwr_out_004_02" model="rawasi.item.synonym">
-            <field name="canonical_item_id" ref="item_elec_pwr_out_004"/>
-            <field name="text_raw">مخرج بيانات RJ45 شامل والمواسير الاسلاك CAT6</field>
-        </record>
         <record id="syn_elec_pwr_cbl_009_01" model="rawasi.item.synonym">
-            <field name="canonical_item_id" ref="item_elec_pwr_cbl_009"/>
-            <field name="text_raw">توريد وتركيب واختبار لوحة إنذار الحريق الرئيسية من النوع المعنون (Addressable) سعة 6 حلقات ( x 6 loops ) تركب عند غرفة الحراسة، ويشمل السعر كافة ملحقات التركيب ومواسير والعلب والاسلاك وأجهزة شحن وبطاريات وخلافه وكذا كابل التغذية بالكهرباء والبند يشمل جميع ما يلزم للتركيب والتشغيل والبرمجة والاختبار طبقاً للمواصفات والمخططات وتعليمات المهندس المشرف. .</field>
-        </record>
-        <record id="syn_elec_pwr_cbl_009_02" model="rawasi.item.synonym">
             <field name="canonical_item_id" ref="item_elec_pwr_cbl_009"/>
             <field name="text_raw">توريد وتركيب واختبار لوحة إنذار الحريق الرئيسية من النوع المعنون (Addressable) سعة 6 حلقات ( x 6 loops ) تركب عند غرفة الحراسة، ويشمل السعر كافة ملحقات التركيب ومواسير والعلب والاسلاك وأجهزة شحن وبطاريات وخلافه وكذا كابل التغذية بالكهرباء والبند يشمل جميع ما يلزم للتركيب والتشغيل والبرمجة والاختبار طبقاً للمواصفات والمخططات وتعليمات المهندس المشرف. .</field>
         </record>
@@ -5624,17 +5502,9 @@
             <field name="canonical_item_id" ref="item_elec_fir_alm_001"/>
             <field name="text_raw">توريد وتركيب وتشغيل وأختبار كاشف دخان معنون  ((Addressable) ، والسعر يشمل جميع أعمال التاسيس والاسلاك وكل ما يلزم لانهاء البند علي اكمل وجه حسسب المواصفات وتعليمات المهندس المشرف .</field>
         </record>
-        <record id="syn_elec_fir_alm_001_02" model="rawasi.item.synonym">
-            <field name="canonical_item_id" ref="item_elec_fir_alm_001"/>
-            <field name="text_raw">توريد وتركيب وتشغيل وأختبار كاشف دخان معنون ((Addressable) ، والسعر يشمل جميع أعمال التاسيس والاسلاك وكل ما يلزم لانهاء البند علي اكمل وجه حسسب المواصفات وتعليمات المهندس المشرف .</field>
-        </record>
         <record id="syn_site_lnd_plt_008_01" model="rawasi.item.synonym">
             <field name="canonical_item_id" ref="item_site_lnd_plt_008"/>
             <field name="text_raw">توريد وتركيب وتشغيل وأختبار كاشف حراري معنون  ((Addressable) ، والسعر يشمل جميع أعمال التاسيس والاسلاك وكل ما يلزم لانهاء البند علي اكمل وجه حسسب المواصفات وتعليمات المهندس المشرف .</field>
-        </record>
-        <record id="syn_site_lnd_plt_008_02" model="rawasi.item.synonym">
-            <field name="canonical_item_id" ref="item_site_lnd_plt_008"/>
-            <field name="text_raw">توريد وتركيب وتشغيل واختبار كاشف حراري معنون ((Addressable) ، والسعر يشمل جميع أعمال التاسيس والاسلاك وكل ما يلزم لانهاء البند علي اكمل وجه حسسب المواصفات وتعليمات المهندس المشرف .</field>
         </record>
         <record id="syn_site_lnd_plt_009_01" model="rawasi.item.synonym">
             <field name="canonical_item_id" ref="item_site_lnd_plt_009"/>
@@ -5668,10 +5538,6 @@
             <field name="canonical_item_id" ref="item_mech_plm_wtr_019"/>
             <field name="text_raw">توريد وتركيب وتأسيس نقاط لزوم كاميرات المراقبله والبند يشمل المواسير الحديدية والبلاستسكية والعلب المعدنية والاسلاك cat6 والسحب الي غرفة البيانات حسب المواصفات الفنية وتوجيهات المهندس المشرف.</field>
         </record>
-        <record id="syn_mech_plm_wtr_019_02" model="rawasi.item.synonym">
-            <field name="canonical_item_id" ref="item_mech_plm_wtr_019"/>
-            <field name="text_raw">توريد وتركيب وتأسيس نقاط لزوم كاميرات المراقبله والبند يشمل المواسير الحديدية والبلاستسكية والعلب المعدنية والاسلاك cat6 والسحب الي غرفة البيانات حسب المواصفات الفنية وتوجيهات المهندس المشرف.</field>
-        </record>
         <record id="syn_elec_pwr_cbl_010_01" model="rawasi.item.synonym">
             <field name="canonical_item_id" ref="item_elec_pwr_cbl_010"/>
             <field name="text_raw">توريد وتركيب حوامل كابلات بعرض 45 سم وارتفاع 10سم من الحديد المجلفن والبند يشمل جميع اكسسوارات التركيب والتثبيت وتثبيت الكابلات وكل ما يلزم لانهاء البند علي اكمل وجه وحسب توجيهات المهندس المشرف.</field>
@@ -5692,25 +5558,13 @@
             <field name="canonical_item_id" ref="item_arch_fin_flr_011"/>
             <field name="text_raw">توريد وتركيب بلاط انترلوك  بجميع مقاساته سماكة 6 سم بالألوان المطلوبة للممرات والارصفة الخارجية، ويشمل البند تنفيذ خرسانة ضغط  250 كجم/سم² أسفل الإنترلوك بسمك لا يقل عن 10 سم و ،ايضا عمل طبقة سمك 7 سم من الرمل الناعم للتسوية أسفل البلاط وعمل جميع مايلزم لإنهاء الاعمال.</field>
         </record>
-        <record id="syn_arch_fin_flr_011_02" model="rawasi.item.synonym">
-            <field name="canonical_item_id" ref="item_arch_fin_flr_011"/>
-            <field name="text_raw">توريد وتركيب بلاط انترلوك بجميع مقاساته سماكة 6 سم بالألوان المطلوبة للممرات والارصفة الخارجية، ويشمل البند تنفيذ خرسانة ضغط 250 كجم/سم² أسفل الإنترلوك بسمك لا يقل عن 10 سم و ،ايضا عمل طبقة سمك 7 سم من الرمل الناعم للتسوية أسفل البلاط وعمل جميع مايلزم لإنهاء الاعمال.</field>
-        </record>
         <record id="syn_strc_ert_exc_010_01" model="rawasi.item.synonym">
             <field name="canonical_item_id" ref="item_strc_ert_exc_010"/>
             <field name="text_raw">بالمتر الطولي توريد وتركيب بردورة أسمنتية  مسبقة الصنع مقاس 50×30×10سم مشطوفة من الجهتين حسب التفاصيل والمناسيب الموضحة بالمخططات وتركب على طبقة خرسانية سمك 10سم وعرض 40 سم وطبقة حماية 10 سم من الجوانب للارصفة  ويشمل السعرالدهانات اللازمة 3 اوجه و كامل الأعمال المطلوبة من إزالة الطبقة السطحية من الاسفلت والحفر والمونة أسمنتية حسب المواصفات وتعليمات المهندس المشرف بالألوان المطلوبة</field>
         </record>
-        <record id="syn_strc_ert_exc_010_02" model="rawasi.item.synonym">
-            <field name="canonical_item_id" ref="item_strc_ert_exc_010"/>
-            <field name="text_raw">بالمتر الطولي توريد وتركيب بردورة أسمنتية مسبقة الصنع مقاس 50×30×10سم مشطوفة من الجهتين حسب التفاصيل والمناسيب الموضحة بالمخططات وتركب على طبقة خرسانية سمك 10سم وعرض 40 سم وطبقة حماية 10 سم من الجوانب للارصفة ويشمل السعرالدهانات اللازمة 3 اوجه و كامل الأعمال المطلوبة من إزالة الطبقة السطحية من الاسفلت والحفر والمونة أسمنتية حسب المواصفات وتعليمات المهندس المشرف بالألوان المطلوبة</field>
-        </record>
         <record id="syn_strc_ert_exc_011_01" model="rawasi.item.synonym">
             <field name="canonical_item_id" ref="item_strc_ert_exc_011"/>
             <field name="text_raw">بالمتر الطولي توريد وتركيب بردورة أسمنتية  مسبقة الصنع مقاس 50×30×15سم مشطوفة من أعلى حسب التفاصيل والمناسيب الموضحة بالمخططات وتركب على طبقة خرسانية سمك 10سم وعرض 40 سم وطبقة حماية 10 سم من الجوانب للارصفة  ويشمل السعرالدهانات اللازمة 3 اوجه و كامل الأعمال المطلوبة من إزالة الطبقة السطحية من الاسفلت والحفر والمونة أسمنتية حسب المواصفات وتعليمات المهندس المشرف بالألوان المطلوبة</field>
-        </record>
-        <record id="syn_strc_ert_exc_011_02" model="rawasi.item.synonym">
-            <field name="canonical_item_id" ref="item_strc_ert_exc_011"/>
-            <field name="text_raw">بالمتر الطولي توريد وتركيب بردورة أسمنتية مسبقة الصنع مقاس 50×30×15سم مشطوفة من أعلى حسب التفاصيل والمناسيب الموضحة بالمخططات وتركب على طبقة خرسانية سمك 10سم وعرض 40 سم وطبقة حماية 10 سم من الجوانب للارصفة ويشمل السعرالدهانات اللازمة 3 اوجه و كامل الأعمال المطلوبة من إزالة الطبقة السطحية من الاسفلت والحفر والمونة أسمنتية حسب المواصفات وتعليمات المهندس المشرف بالألوان المطلوبة</field>
         </record>
         <record id="syn_strc_ert_exc_012_01" model="rawasi.item.synonym">
             <field name="canonical_item_id" ref="item_strc_ert_exc_012"/>
@@ -6464,15 +6318,7 @@
             <field name="canonical_item_id" ref="item_mech_plm_wtr_028"/>
             <field name="text_raw">مواسير قطر 15 مم</field>
         </record>
-        <record id="syn_mech_plm_wtr_028_02" model="rawasi.item.synonym">
-            <field name="canonical_item_id" ref="item_mech_plm_wtr_028"/>
-            <field name="text_raw">مواسير قطر 15 مم</field>
-        </record>
         <record id="syn_mech_plm_wtr_029_01" model="rawasi.item.synonym">
-            <field name="canonical_item_id" ref="item_mech_plm_wtr_029"/>
-            <field name="text_raw">مواسير قطر 20 مم</field>
-        </record>
-        <record id="syn_mech_plm_wtr_029_02" model="rawasi.item.synonym">
             <field name="canonical_item_id" ref="item_mech_plm_wtr_029"/>
             <field name="text_raw">مواسير قطر 20 مم</field>
         </record>
@@ -7016,6 +6862,5 @@
             <field name="canonical_item_id" ref="item_arch_oth_oth_050"/>
             <field name="text_raw">تشطيب وانهاء وتركيب البوابة الرئيسية والبند يشمل تركيب مصدات هيدروليك واعمال الكهرباء وكل مايلزم حسب توجيهات المهندس المشرف</field>
         </record>
-
     </data>
 </odoo>
