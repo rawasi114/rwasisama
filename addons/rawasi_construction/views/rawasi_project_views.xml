@@ -62,6 +62,30 @@
                     <field name="rawasi_budget_remaining"/>
                     <field name="rawasi_currency_id" invisible="1"/>
                 </group>
+                <notebook invisible="not rawasi_is_construction or not rawasi_competition_id">
+                    <page string="جدول الكميات" name="rawasi_boq">
+                        <div class="oe_button_box mb-2">
+                            <button name="action_open_boq_items" type="object"
+                                    class="btn btn-primary" icon="fa-external-link">
+                                <field name="rawasi_boq_item_count" string="فتح في شاشة كاملة"/>
+                            </button>
+                        </div>
+                        <field name="rawasi_boq_item_ids" readonly="1">
+                            <list>
+                                <field name="sequence" widget="handle"/>
+                                <field name="serial"/>
+                                <field name="name"/>
+                                <field name="unit_id"/>
+                                <field name="quantity"/>
+                                <field name="unit_cost"/>
+                                <field name="total_cost" sum="إجمالي التكلفة"/>
+                                <field name="unit_price"/>
+                                <field name="total_price" sum="إجمالي السعر"/>
+                                <field name="currency_id" column_invisible="1"/>
+                            </list>
+                        </field>
+                    </page>
+                </notebook>
             </xpath>
         </field>
     </record>
