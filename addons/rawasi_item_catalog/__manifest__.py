@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "رواسي سما — كتالوج البنود الموحَّد",
-    "version": "19.0.3.0.1",
+    "version": "19.0.3.0.2",
     "category": "Services/Project",
     "summary": "Master item catalog: taxonomy, canonical items, synonyms, attributes, semantic search (pgvector)",
     "description": """

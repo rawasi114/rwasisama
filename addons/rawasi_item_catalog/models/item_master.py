@@ -15,6 +15,7 @@ class ItemMaster(models.Model):
 
     _name = "rawasi.item.master"
     _description = "بند كنسي (Canonical Item)"
+    _inherit = ["mail.thread", "mail.activity.mixin"]
     _order = "canonical_code"
     _rec_name = "name_ar"
 
