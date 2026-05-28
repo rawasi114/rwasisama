@@ -24,12 +24,13 @@ class ProjectProject(models.Model):
     rawasi_competition_id = fields.Many2one(
         "rawasi.competition", string="المنافسة المصدر", readonly=True
     )
-    rawasi_boq_item_ids = fields.One2many(
-        related="rawasi_competition_id.boq_item_ids",
-        string="بنود جدول الكميات", readonly=True,
+    rawasi_boq_item_ids = fields.Many2many(
+        "rawasi.boq.item",
+        string="بنود جدول الكميات",
+        compute="_compute_rawasi_boq_item_ids",
     )
     rawasi_boq_item_count = fields.Integer(
-        string="عدد البنود", compute="_compute_rawasi_boq_item_count",
+        string="عدد البنود", compute="_compute_rawasi_boq_item_ids",
     )
     rawasi_currency_id = fields.Many2one(
         related="company_id.currency_id", string="عملة المقاولات",
@@ -93,9 +94,11 @@ class ProjectProject(models.Model):
             project.wbs_count = len(project.wbs_activity_ids)
 
     @api.depends("rawasi_competition_id.boq_item_ids")
-    def _compute_rawasi_boq_item_count(self):
+    def _compute_rawasi_boq_item_ids(self):
         for project in self:
-            project.rawasi_boq_item_count = len(project.rawasi_competition_id.boq_item_ids)
+            items = project.rawasi_competition_id.boq_item_ids
+            project.rawasi_boq_item_ids = items
+            project.rawasi_boq_item_count = len(items)
 
     def action_open_boq_items(self):
         self.ensure_one()
