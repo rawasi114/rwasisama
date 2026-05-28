@@ -1,6 +1,23 @@
 .o_rawasi_dashboard {
-    direction: rtl;
-    text-align: right;
+    direction: rtl !important;
+    text-align: right !important;
+    unicode-bidi: isolate;
+
+    * {
+        direction: rtl !important;
+    }
+
+    p,
+    .o_rawasi_subtitle,
+    .o_rawasi_brand,
+    .o_rawasi_title,
+    .o_rawasi_pillar_title,
+    .o_rawasi_pillar_desc,
+    .o_rawasi_footer {
+        direction: rtl !important;
+        text-align: right !important;
+        unicode-bidi: isolate;
+    }
 
     .o_rawasi_hero {
         background: linear-gradient(135deg, #253747 0%, #3a526b 100%);
@@ -39,7 +56,13 @@
         line-height: 1.9;
         text-align: right;
 
-        p { color: #2c3e50; font-size: 1rem; text-align: right; }
+        p {
+            color: #2c3e50;
+            font-size: 1rem;
+            text-align: right !important;
+            direction: rtl !important;
+            unicode-bidi: isolate;
+        }
         .lead { font-size: 1.05rem; }
         strong { color: #253747; }
     }
@@ -71,7 +94,7 @@
     }
 
     .o_rawasi_footer {
-        text-align: center;
+        text-align: center !important;
         color: #6a7480;
         font-size: 0.9rem;
         padding: 0.75rem 0;
