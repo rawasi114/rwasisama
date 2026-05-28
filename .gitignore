@@ -4,6 +4,7 @@ __pycache__/
 *.egg-info/
 .venv/
 venv/
+*.swp
 
 # Odoo runtime
 *.log
@@ -28,12 +29,3 @@ dist/
 .next/
 .env
 *.tsbuildinfo
-
-# Cross-branch leftover directories — this branch (claude/item-catalog) was
-# forked from the empty main and only owns rawasi_item_catalog. The dirs
-# below belong to other branches (rawasisama / Test) and re-appear in the
-# working tree on branch switch; ignore them here so they don't pollute
-# this feature branch's commits.
-/addons/rawasi_construction/
-/addons/rawasi_construction_gantt/
-/rwasi_workshop/
