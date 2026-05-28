@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# Odoo runtime
+*.log
+.odoorc
+odoo.conf
+filestore/
+sessions/
+data_dir/
+
+# local Odoo source + venv used only for testing (do not commit)
+/.odoo-src/
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+
+# stray artifacts from the previous (removed) JS stack — keep them out
+node_modules/
+.turbo/
+dist/
+.next/
+.env
+*.tsbuildinfo
+
+# Cross-branch leftover directories — this branch (claude/item-catalog) was
+# forked from the empty main and only owns rawasi_item_catalog. The dirs
+# below belong to other branches (rawasisama / Test) and re-appear in the
+# working tree on branch switch; ignore them here so they don't pollute
+# this feature branch's commits.
+/addons/rawasi_construction/
+/addons/rawasi_construction_gantt/
+/rwasi_workshop/
