@@ -5,7 +5,7 @@
         <field name="name">rawasi.item.synonym.search</field>
         <field name="model">rawasi.item.synonym</field>
         <field name="arch" type="xml">
-            <search string="بحث في المرادفات">
+            <search>
                 <field name="text_raw"/>
                 <field name="text_normalized"/>
                 <field name="canonical_item_id"/>
@@ -17,7 +17,7 @@
                         domain="[('confidence_score','&lt;',0.7)]"/>
                 <filter name="recent" string="آخر 30 يوم"
                         domain="[('last_seen_date','&gt;=', (context_today() - relativedelta(days=30)).strftime('%Y-%m-%d'))]"/>
-                <group expand="0" string="تجميع">
+                <group>
                     <filter name="group_by_canonical" string="حسب البند الكنسي"
                             context="{'group_by':'canonical_item_id'}"/>
                     <filter name="group_by_source" string="حسب الجهة المصدر"

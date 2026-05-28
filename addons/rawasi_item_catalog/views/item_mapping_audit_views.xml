@@ -5,7 +5,7 @@
         <field name="name">rawasi.item.mapping.audit.search</field>
         <field name="model">rawasi.item.mapping.audit</field>
         <field name="arch" type="xml">
-            <search string="بحث في سجل التدقيق">
+            <search>
                 <field name="raw_text"/>
                 <field name="canonical_item_id"/>
                 <field name="mapped_by_user_id"/>
@@ -27,7 +27,7 @@
                         domain="[('user_action','=','rejected_new_canonical')]"/>
                 <filter name="rejected_review" string="رُفض → للمراجعة"
                         domain="[('user_action','=','rejected_no_match')]"/>
-                <group expand="0" string="تجميع">
+                <group>
                     <filter name="group_by_source" string="حسب المصدر"
                             context="{'group_by':'suggestion_source'}"/>
                     <filter name="group_by_action" string="حسب الإجراء"

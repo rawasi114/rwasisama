@@ -6,7 +6,7 @@
         <field name="name">rawasi.item.taxonomy.search</field>
         <field name="model">rawasi.item.taxonomy</field>
         <field name="arch" type="xml">
-            <search string="بحث في شجرة التصنيف">
+            <search>
                 <field name="code"/>
                 <field name="name_ar"/>
                 <field name="name_en"/>
@@ -18,7 +18,7 @@
                 <filter name="level_section" string="أقسام" domain="[('level','=','section')]"/>
                 <filter name="level_category" string="فئات" domain="[('level','=','category')]"/>
                 <filter name="level_subcategory" string="فئات فرعية" domain="[('level','=','subcategory')]"/>
-                <group expand="0" string="تجميع">
+                <group>
                     <filter name="group_by_level" string="حسب المستوى" context="{'group_by':'level'}"/>
                     <filter name="group_by_parent" string="حسب الأب" context="{'group_by':'parent_id'}"/>
                 </group>

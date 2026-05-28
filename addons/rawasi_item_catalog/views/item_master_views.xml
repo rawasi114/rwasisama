@@ -6,7 +6,7 @@
         <field name="name">rawasi.item.master.search</field>
         <field name="model">rawasi.item.master</field>
         <field name="arch" type="xml">
-            <search string="بحث في البنود الكنسية">
+            <search>
                 <field name="canonical_code"/>
                 <field name="name_ar"/>
                 <field name="name_en"/>
@@ -21,7 +21,7 @@
                 <filter name="in_house" string="تصنيع داخلي" domain="[('is_in_house','=',True)]"/>
                 <filter name="active" string="نشط" domain="[('active','=',True)]"/>
                 <filter name="archived" string="مؤرشف" domain="[('active','=',False)]"/>
-                <group expand="0" string="تجميع">
+                <group>
                     <filter name="group_by_taxonomy" string="حسب التصنيف" context="{'group_by':'taxonomy_id'}"/>
                     <filter name="group_by_review" string="حسب حالة المراجعة" context="{'group_by':'review_status'}"/>
                     <filter name="group_by_workshop" string="حسب الورشة" context="{'group_by':'workshop_type'}"/>
