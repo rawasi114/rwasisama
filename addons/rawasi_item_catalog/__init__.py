@@ -15,12 +15,16 @@ def _pre_init_hook(env):
 
 
 def _post_init_hook(env):
-    """Add 1024-dim embedding columns + HNSW cosine indexes after install.
+    """Post-install setup: pgvector columns + bootstrap admin access.
 
-    Done in raw SQL because Odoo's ORM has no native vector field. The
-    columns stay NULL until the (out-of-scope-for-this-module) embedding
-    pipeline starts populating them. HNSW index on an empty column is
-    cheap; it grows as rows are filled.
+    1. Add 1024-dim embedding columns + HNSW cosine indexes via raw SQL
+       (Odoo ORM has no native vector field). The columns stay NULL until
+       the embedding pipeline (out of scope here) starts populating them.
+
+    2. Grant the admin user the catalog admin group so the App Launcher
+       icon is reachable immediately after install. Without this, the
+       module installs cleanly but the menu — which is groups-gated — is
+       invisible to everyone, and the user thinks the install failed.
     """
     queries = [
         "ALTER TABLE rawasi_item_master "
@@ -34,3 +38,10 @@ def _post_init_hook(env):
     ]
     for q in queries:
         env.cr.execute(q)
+
+    admin_group = env.ref(
+        "rawasi_item_catalog.group_item_catalog_admin", raise_if_not_found=False,
+    )
+    admin_user = env.ref("base.user_admin", raise_if_not_found=False)
+    if admin_group and admin_user:
+        admin_group.write({"user_ids": [(4, admin_user.id)]})
