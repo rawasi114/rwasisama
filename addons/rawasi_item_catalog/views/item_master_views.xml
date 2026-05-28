@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- البحث -->
+    <record id="view_item_master_search" model="ir.ui.view">
+        <field name="name">rawasi.item.master.search</field>
+        <field name="model">rawasi.item.master</field>
+        <field name="arch" type="xml">
+            <search string="بحث في البنود الكنسية">
+                <field name="canonical_code"/>
+                <field name="name_ar"/>
+                <field name="name_en"/>
+                <field name="taxonomy_id"/>
+                <field name="synonym_ids" string="ابحث في المرادفات"
+                       filter_domain="[('synonym_ids.text_normalized','ilike',self)]"/>
+                <separator/>
+                <filter name="draft" string="مسودة" domain="[('review_status','=','draft')]"/>
+                <filter name="reviewed" string="مراجَع" domain="[('review_status','=','reviewed')]"/>
+                <filter name="approved" string="معتمَد" domain="[('review_status','=','approved')]"/>
+                <separator/>
+                <filter name="in_house" string="تصنيع داخلي" domain="[('is_in_house','=',True)]"/>
+                <filter name="active" string="نشط" domain="[('active','=',True)]"/>
+                <filter name="archived" string="مؤرشف" domain="[('active','=',False)]"/>
+                <group expand="0" string="تجميع">
+                    <filter name="group_by_taxonomy" string="حسب التصنيف" context="{'group_by':'taxonomy_id'}"/>
+                    <filter name="group_by_review" string="حسب حالة المراجعة" context="{'group_by':'review_status'}"/>
+                    <filter name="group_by_workshop" string="حسب الورشة" context="{'group_by':'workshop_type'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- قائمة -->
+    <record id="view_item_master_list" model="ir.ui.view">
+        <field name="name">rawasi.item.master.list</field>
+        <field name="model">rawasi.item.master</field>
+        <field name="arch" type="xml">
+            <list string="البنود الكنسية" multi_edit="1">
+                <field name="canonical_code"/>
+                <field name="name_ar"/>
+                <field name="name_en" optional="hide"/>
+                <field name="taxonomy_id"/>
+                <field name="uom_id"/>
+                <field name="synonym_count" string="مرادفات"/>
+                <field name="is_in_house" optional="hide"/>
+                <field name="workshop_type" optional="hide"/>
+                <field name="review_status" widget="badge"
+                       decoration-info="review_status == 'draft'"
+                       decoration-warning="review_status == 'reviewed'"
+                       decoration-success="review_status == 'approved'"/>
+                <field name="active" widget="boolean_toggle" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- النموذج -->
+    <record id="view_item_master_form" model="ir.ui.view">
+        <field name="name">rawasi.item.master.form</field>
+        <field name="model">rawasi.item.master</field>
+        <field name="arch" type="xml">
+            <form string="بند كنسي">
+                <header>
+                    <field name="review_status" widget="statusbar"
+                           options="{'clickable': '1'}"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" type="object"
+                                name="action_open_synonyms"
+                                icon="fa-list-ul">
+                            <field name="synonym_count" string="مرادفات" widget="statinfo"/>
+                        </button>
+                    </div>
+                    <widget name="web_ribbon" title="مؤرشف"
+                            bg_color="bg-danger" invisible="active"/>
+                    <field name="reference_image" widget="image"
+                           class="oe_avatar"/>
+                    <div class="oe_title">
+                        <label for="canonical_code"/>
+                        <h1><field name="canonical_code" placeholder="FLR-POR-6060-001"/></h1>
+                        <label for="name_ar"/>
+                        <h2><field name="name_ar" placeholder="بلاط بورسلين 60×60"/></h2>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="taxonomy_id"
+                                   options="{'no_create_edit': True}"/>
+                            <field name="uom_id"/>
+                            <field name="name_en"/>
+                            <field name="description_short"/>
+                        </group>
+                        <group>
+                            <field name="is_in_house"/>
+                            <field name="workshop_type"
+                                   invisible="not is_in_house"
+                                   required="is_in_house"/>
+                            <field name="created_via"/>
+                            <field name="created_by_user_id" readonly="1"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="الوصف التفصيلي" name="description">
+                            <field name="description_long" placeholder="مواصفات تفصيلية..."/>
+                        </page>
+                        <page string="الخصائص" name="attributes">
+                            <field name="attribute_ids">
+                                <list editable="bottom">
+                                    <field name="display_order" widget="handle"/>
+                                    <field name="attribute_key"/>
+                                    <field name="attribute_key_custom"
+                                           column_invisible="parent.attribute_key != 'other'"/>
+                                    <field name="attribute_value"/>
+                                    <field name="attribute_unit"/>
+                                    <field name="is_searchable" widget="boolean_toggle"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="المرادفات" name="synonyms">
+                            <field name="synonym_ids">
+                                <list editable="bottom">
+                                    <field name="text_raw"/>
+                                    <field name="text_normalized" readonly="1"/>
+                                    <field name="source_entity_id"/>
+                                    <field name="frequency"/>
+                                    <field name="last_seen_date"/>
+                                    <field name="confidence_score" widget="progressbar"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_item_master" model="ir.actions.act_window">
+        <field name="name">البنود الكنسية</field>
+        <field name="res_model">rawasi.item.master</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_item_master_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">لا توجد بنود كنسية بعد</p>
+            <p>أنشئ أول بند: اختر فئة فرعية من شجرة التصنيف، ثم أعطه كوداً
+               بنمط <strong>XXX-XXX-XXXX-NNN</strong> (مثلاً <code>FLR-POR-6060-001</code>).</p>
+        </field>
+    </record>
+
+</odoo>

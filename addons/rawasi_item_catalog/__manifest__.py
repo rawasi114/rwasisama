@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 {
     "name": "رواسي سما — كتالوج البنود الموحَّد",
-    "version": "19.0.1.1.1",
+    "version": "19.0.2.0.0",
     "category": "Services/Project",
     "summary": "Master item catalog: taxonomy, canonical items, synonyms, attributes, semantic search (pgvector)",
     "description": """
         كتالوج البنود الموحَّد لشركة رواسي سما للمقاولات.
 
-        Phase 1: 5 نماذج كاملة + 3 مجموعات أمان + بذر الشعب الخمس
-        + 1024-dim embedding columns عبر post-init hook.
+        Phase 2: واجهات كاملة لكل النماذج الخمسة + قائمة رئيسية تظهر في
+        App Launcher مع أيقونة الموديول.
     """,
     "author": "Rawasi Sama Contracting",
     "website": "https://rawasi-sama.sa",
@@ -22,6 +22,11 @@
         "security/security.xml",
         "security/ir.model.access.csv",
         "data/taxonomy_root_seed.xml",
+        "views/item_taxonomy_views.xml",
+        "views/item_master_views.xml",
+        "views/item_synonym_views.xml",
+        "views/item_mapping_audit_views.xml",
+        "views/menu.xml",
     ],
     "pre_init_hook": "_pre_init_hook",
     "post_init_hook": "_post_init_hook",

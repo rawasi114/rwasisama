@@ -106,3 +106,14 @@ class ItemTaxonomy(models.Model):
     def _check_no_recursion(self):
         if self._has_cycle("parent_id"):
             raise ValidationError(_("لا يمكن إنشاء حلقة في شجرة التصنيف."))
+
+    def action_open_master_items(self):
+        self.ensure_one()
+        return {
+            "type": "ir.actions.act_window",
+            "name": _("بنود التصنيف: %s") % self.display_name_full,
+            "res_model": "rawasi.item.master",
+            "view_mode": "list,form",
+            "domain": [("taxonomy_id", "=", self.id)],
+            "context": {"default_taxonomy_id": self.id},
+        }

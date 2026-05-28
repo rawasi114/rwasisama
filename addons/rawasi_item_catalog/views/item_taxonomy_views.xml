@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- البحث -->
+    <record id="view_item_taxonomy_search" model="ir.ui.view">
+        <field name="name">rawasi.item.taxonomy.search</field>
+        <field name="model">rawasi.item.taxonomy</field>
+        <field name="arch" type="xml">
+            <search string="بحث في شجرة التصنيف">
+                <field name="code"/>
+                <field name="name_ar"/>
+                <field name="name_en"/>
+                <field name="parent_id"/>
+                <filter name="active" string="نشطة" domain="[('active','=',True)]"/>
+                <filter name="inactive" string="مؤرشفة" domain="[('active','=',False)]"/>
+                <separator/>
+                <filter name="level_division" string="شعب" domain="[('level','=','division')]"/>
+                <filter name="level_section" string="أقسام" domain="[('level','=','section')]"/>
+                <filter name="level_category" string="فئات" domain="[('level','=','category')]"/>
+                <filter name="level_subcategory" string="فئات فرعية" domain="[('level','=','subcategory')]"/>
+                <group expand="0" string="تجميع">
+                    <filter name="group_by_level" string="حسب المستوى" context="{'group_by':'level'}"/>
+                    <filter name="group_by_parent" string="حسب الأب" context="{'group_by':'parent_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- قائمة شجرية -->
+    <record id="view_item_taxonomy_list" model="ir.ui.view">
+        <field name="name">rawasi.item.taxonomy.list</field>
+        <field name="model">rawasi.item.taxonomy</field>
+        <field name="arch" type="xml">
+            <list string="شجرة التصنيف" default_order="parent_path, code">
+                <field name="code"/>
+                <field name="name_ar"/>
+                <field name="name_en" optional="hide"/>
+                <field name="level" widget="badge"/>
+                <field name="parent_id"/>
+                <field name="master_item_count" string="عدد البنود"/>
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- النموذج -->
+    <record id="view_item_taxonomy_form" model="ir.ui.view">
+        <field name="name">rawasi.item.taxonomy.form</field>
+        <field name="model">rawasi.item.taxonomy</field>
+        <field name="arch" type="xml">
+            <form string="عقدة تصنيف">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" type="object"
+                                name="action_open_master_items"
+                                icon="fa-cubes"
+                                invisible="master_item_count == 0">
+                            <field name="master_item_count" string="بنود كنسية" widget="statinfo"/>
+                        </button>
+                    </div>
+                    <widget name="web_ribbon" title="مؤرشف"
+                            bg_color="bg-danger" invisible="active"/>
+                    <div class="oe_title">
+                        <label for="code"/>
+                        <h1><field name="code" placeholder="ARCH"/></h1>
+                        <label for="name_ar"/>
+                        <h2><field name="name_ar" placeholder="الأعمال المعمارية"/></h2>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="level"/>
+                            <field name="parent_id"
+                                   domain="[('level','in',['division','section','category'])]"/>
+                            <field name="active"/>
+                        </group>
+                        <group>
+                            <field name="name_en" placeholder="Architectural Works"/>
+                            <field name="display_name_full" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="الوصف" name="description">
+                            <field name="description" placeholder="وصف مفصّل لهذه العقدة..."/>
+                        </page>
+                        <page string="الأبناء المباشرون" name="children"
+                              invisible="level == 'subcategory'">
+                            <field name="child_ids" readonly="1">
+                                <list>
+                                    <field name="code"/>
+                                    <field name="name_ar"/>
+                                    <field name="level" widget="badge"/>
+                                    <field name="master_item_count"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="البنود الكنسية" name="master_items"
+                              invisible="level != 'subcategory'">
+                            <field name="master_item_ids" readonly="1">
+                                <list>
+                                    <field name="canonical_code"/>
+                                    <field name="name_ar"/>
+                                    <field name="uom_id"/>
+                                    <field name="review_status" widget="badge"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Kanban -->
+    <record id="view_item_taxonomy_kanban" model="ir.ui.view">
+        <field name="name">rawasi.item.taxonomy.kanban</field>
+        <field name="model">rawasi.item.taxonomy</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="level">
+                <field name="code"/>
+                <field name="name_ar"/>
+                <field name="master_item_count"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="oe_kanban_global_click p-2">
+                            <div class="o_kanban_record_title">
+                                <strong>[<field name="code"/>] <field name="name_ar"/></strong>
+                            </div>
+                            <div class="text-muted small">
+                                <field name="name_en"/>
+                            </div>
+                            <div class="mt-1">
+                                <span class="badge text-bg-secondary">
+                                    <field name="master_item_count"/> بند
+                                </span>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Hierarchy view (تشجيري عمودي يعرض الأب/الأبناء) -->
+    <record id="view_item_taxonomy_hierarchy" model="ir.ui.view">
+        <field name="name">rawasi.item.taxonomy.hierarchy</field>
+        <field name="model">rawasi.item.taxonomy</field>
+        <field name="arch" type="xml">
+            <hierarchy js_class="hierarchy_view" child_field="child_ids">
+                <field name="parent_id" invisible="1"/>
+                <templates>
+                    <t t-name="hierarchy-box">
+                        <div class="o_hierarchy_node_header">
+                            <strong>[<field name="code"/>] <field name="name_ar"/></strong>
+                        </div>
+                        <div class="o_hierarchy_node_body">
+                            <span class="badge text-bg-light"><field name="level"/></span>
+                            <span class="ms-1"><field name="master_item_count"/> بند</span>
+                        </div>
+                    </t>
+                </templates>
+            </hierarchy>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_item_taxonomy" model="ir.actions.act_window">
+        <field name="name">شجرة التصنيف</field>
+        <field name="res_model">rawasi.item.taxonomy</field>
+        <field name="view_mode">hierarchy,list,kanban,form</field>
+        <field name="search_view_id" ref="view_item_taxonomy_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">لا توجد عقد تصنيف بعد</p>
+            <p>الشعب الخمس مبذورة افتراضياً. أضف الأقسام والفئات تحتها.</p>
+        </field>
+    </record>
+
+</odoo>

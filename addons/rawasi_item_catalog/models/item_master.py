@@ -114,3 +114,14 @@ class ItemMaster(models.Model):
                 raise ValidationError(_(
                     "البند «%s» يجب أن يُربط بفئة فرعية (subcategory)، لكنه رُبط بمستوى «%s»."
                 ) % (rec.name_ar, rec.taxonomy_id.level))
+
+    def action_open_synonyms(self):
+        self.ensure_one()
+        return {
+            "type": "ir.actions.act_window",
+            "name": _("مرادفات: %s") % self.name_ar,
+            "res_model": "rawasi.item.synonym",
+            "view_mode": "list,form",
+            "domain": [("canonical_item_id", "=", self.id)],
+            "context": {"default_canonical_item_id": self.id},
+        }

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_item_mapping_audit_search" model="ir.ui.view">
+        <field name="name">rawasi.item.mapping.audit.search</field>
+        <field name="model">rawasi.item.mapping.audit</field>
+        <field name="arch" type="xml">
+            <search string="بحث في سجل التدقيق">
+                <field name="raw_text"/>
+                <field name="canonical_item_id"/>
+                <field name="mapped_by_user_id"/>
+                <separator/>
+                <filter name="source_pgvector" string="pgvector"
+                        domain="[('suggestion_source','=','pgvector')]"/>
+                <filter name="source_claude" string="Claude API"
+                        domain="[('suggestion_source','=','claude_api')]"/>
+                <filter name="source_exact" string="تطابق نصي"
+                        domain="[('suggestion_source','=','exact_match')]"/>
+                <filter name="source_manual" string="يدوي"
+                        domain="[('suggestion_source','=','manual')]"/>
+                <separator/>
+                <filter name="accepted" string="قُبل"
+                        domain="[('user_action','=','accepted')]"/>
+                <filter name="modified" string="عُدِّل"
+                        domain="[('user_action','=','modified')]"/>
+                <filter name="rejected_new" string="رُفض → بند جديد"
+                        domain="[('user_action','=','rejected_new_canonical')]"/>
+                <filter name="rejected_review" string="رُفض → للمراجعة"
+                        domain="[('user_action','=','rejected_no_match')]"/>
+                <group expand="0" string="تجميع">
+                    <filter name="group_by_source" string="حسب المصدر"
+                            context="{'group_by':'suggestion_source'}"/>
+                    <filter name="group_by_action" string="حسب الإجراء"
+                            context="{'group_by':'user_action'}"/>
+                    <filter name="group_by_user" string="حسب المستخدم"
+                            context="{'group_by':'mapped_by_user_id'}"/>
+                    <filter name="group_by_date" string="حسب الشهر"
+                            context="{'group_by':'mapping_date:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_item_mapping_audit_list" model="ir.ui.view">
+        <field name="name">rawasi.item.mapping.audit.list</field>
+        <field name="model">rawasi.item.mapping.audit</field>
+        <field name="arch" type="xml">
+            <list string="سجل التدقيق" create="0">
+                <field name="mapping_date"/>
+                <field name="raw_text"/>
+                <field name="canonical_item_id"/>
+                <field name="suggestion_source" widget="badge"/>
+                <field name="user_action" widget="badge"
+                       decoration-success="user_action == 'accepted'"
+                       decoration-info="user_action == 'modified'"
+                       decoration-warning="user_action == 'rejected_new_canonical'"
+                       decoration-danger="user_action == 'rejected_no_match'"/>
+                <field name="claude_confidence" optional="hide"/>
+                <field name="pgvector_distance" optional="hide"/>
+                <field name="mapped_by_user_id"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_item_mapping_audit_form" model="ir.ui.view">
+        <field name="name">rawasi.item.mapping.audit.form</field>
+        <field name="model">rawasi.item.mapping.audit</field>
+        <field name="arch" type="xml">
+            <form string="سجل تدقيق" create="0" edit="0">
+                <sheet>
+                    <group>
+                        <group string="السياق">
+                            <field name="mapping_date"/>
+                            <field name="mapped_by_user_id"/>
+                            <field name="suggestion_source"/>
+                            <field name="user_action"/>
+                        </group>
+                        <group string="المؤشرات">
+                            <field name="claude_confidence" widget="progressbar"
+                                   invisible="suggestion_source != 'claude_api'"/>
+                            <field name="pgvector_distance"
+                                   invisible="suggestion_source != 'pgvector'"/>
+                        </group>
+                    </group>
+                    <group string="النصوص والبنود">
+                        <field name="raw_text"/>
+                        <field name="canonical_item_id"/>
+                        <field name="original_suggestion_id"
+                               invisible="user_action == 'rejected_no_match'"/>
+                    </group>
+                    <group string="ملاحظات">
+                        <field name="notes" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_item_mapping_audit" model="ir.actions.act_window">
+        <field name="name">سجل التدقيق</field>
+        <field name="res_model">rawasi.item.mapping.audit</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_item_mapping_audit_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">لا توجد سجلات تدقيق بعد</p>
+            <p>كل قرار ربط نص خام ببند كنسي يُسجَّل هنا تلقائياً (في مرحلة لاحقة).</p>
+        </field>
+    </record>
+
+</odoo>
