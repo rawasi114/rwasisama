@@ -24,6 +24,14 @@ class ProjectProject(models.Model):
     rawasi_competition_id = fields.Many2one(
         "rawasi.competition", string="المنافسة المصدر", readonly=True
     )
+    rawasi_boq_item_ids = fields.Many2many(
+        "rawasi.boq.item",
+        string="بنود جدول الكميات",
+        compute="_compute_rawasi_boq_item_ids",
+    )
+    rawasi_boq_item_count = fields.Integer(
+        string="عدد البنود", compute="_compute_rawasi_boq_item_ids",
+    )
     rawasi_currency_id = fields.Many2one(
         related="company_id.currency_id", string="عملة المقاولات",
     )
@@ -84,6 +92,26 @@ class ProjectProject(models.Model):
     def _compute_wbs_count(self):
         for project in self:
             project.wbs_count = len(project.wbs_activity_ids)
+
+    @api.depends("rawasi_competition_id.boq_item_ids")
+    def _compute_rawasi_boq_item_ids(self):
+        for project in self:
+            items = project.rawasi_competition_id.boq_item_ids
+            project.rawasi_boq_item_ids = items
+            project.rawasi_boq_item_count = len(items)
+
+    def action_open_boq_items(self):
+        self.ensure_one()
+        if not self.rawasi_competition_id:
+            return False
+        return {
+            "type": "ir.actions.act_window",
+            "name": _("جدول الكميات"),
+            "res_model": "rawasi.boq.item",
+            "view_mode": "list,form",
+            "domain": [("competition_id", "=", self.rawasi_competition_id.id)],
+            "context": {"default_competition_id": self.rawasi_competition_id.id},
+        }
 
     def _compute_rawasi_phase4_counts(self):
         for project in self:

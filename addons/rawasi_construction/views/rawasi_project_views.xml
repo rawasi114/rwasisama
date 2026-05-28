@@ -57,11 +57,39 @@
                     <field name="rawasi_is_construction" invisible="1"/>
                     <field name="rawasi_serial" readonly="1"/>
                     <field name="rawasi_competition_id"/>
+                    <field name="rawasi_boq_item_count" invisible="1"/>
                     <field name="rawasi_budget_total"/>
                     <field name="rawasi_budget_consumed"/>
                     <field name="rawasi_budget_remaining"/>
                     <field name="rawasi_currency_id" invisible="1"/>
                 </group>
+            </xpath>
+            <xpath expr="//notebook" position="inside">
+                <page string="جدول الكميات" name="rawasi_boq"
+                      invisible="not rawasi_is_construction">
+                    <div class="mb-2">
+                        <button name="action_open_boq_items" type="object"
+                                string="فتح في شاشة كاملة"
+                                class="btn btn-primary" icon="fa-external-link"
+                                invisible="not rawasi_competition_id"/>
+                        <span invisible="rawasi_competition_id" class="text-muted">
+                            هذا المشروع غير مرتبط بمنافسة — لا يوجد جدول كميات.
+                        </span>
+                    </div>
+                    <field name="rawasi_boq_item_ids" readonly="1">
+                        <list>
+                            <field name="serial"/>
+                            <field name="name"/>
+                            <field name="unit_id"/>
+                            <field name="quantity"/>
+                            <field name="unit_cost"/>
+                            <field name="total_cost" sum="إجمالي التكلفة"/>
+                            <field name="unit_price"/>
+                            <field name="total_price" sum="إجمالي السعر"/>
+                            <field name="currency_id" column_invisible="1"/>
+                        </list>
+                    </field>
+                </page>
             </xpath>
         </field>
     </record>
