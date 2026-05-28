@@ -21,6 +21,7 @@
     'data': [
         'security/workshop_security.xml',
         'security/ir.model.access.csv',
+        'security/multicompany_rules.xml',
         'data/sequences.xml',
         'views/work_order_views.xml',
         'views/daily_views.xml',

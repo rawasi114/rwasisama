@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- قائمة أنشطة WBS -->
+    <record id="view_wbs_activity_list" model="ir.ui.view">
+        <field name="name">rawasi.wbs.activity.list</field>
+        <field name="model">rawasi.wbs.activity</field>
+        <field name="arch" type="xml">
+            <list editable="bottom" decoration-bf="is_milestone">
+                <field name="sequence" widget="handle"/>
+                <field name="phase_id" optional="show"/>
+                <field name="name"/>
+                <field name="date_start"/>
+                <field name="date_end"/>
+                <field name="duration" optional="show"/>
+                <field name="progress" optional="show"/>
+                <field name="planned_cost" optional="show"/>
+                <field name="is_milestone" optional="hide"/>
+                <field name="project_id" column_invisible="1"/>
+                <field name="currency_id" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- نموذج نشاط WBS -->
+    <record id="view_wbs_activity_form" model="ir.ui.view">
+        <field name="name">rawasi.wbs.activity.form</field>
+        <field name="model">rawasi.wbs.activity</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="اسم النشاط"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="project_id"/>
+                            <field name="phase_id"/>
+                            <field name="parent_id"
+                                   domain="[('project_id','=',project_id),('id','!=',id)]"/>
+                            <field name="is_milestone"/>
+                            <field name="progress"/>
+                        </group>
+                        <group>
+                            <field name="date_start"/>
+                            <field name="date_end"/>
+                            <field name="duration"/>
+                            <field name="planned_cost"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                    </group>
+                    <group string="خط الأساس والفعلي" col="4">
+                        <field name="baseline_start"/>
+                        <field name="baseline_end"/>
+                        <field name="actual_start"/>
+                        <field name="actual_end"/>
+                    </group>
+                    <notebook>
+                        <page string="بنود جدول الكميات">
+                            <field name="boq_item_ids"
+                                   domain="[('competition_id.project_id','=',project_id)]">
+                                <list>
+                                    <field name="serial"/>
+                                    <field name="name"/>
+                                    <field name="quantity"/>
+                                    <field name="unit_id"/>
+                                    <field name="total_cost"/>
+                                    <field name="currency_id" column_invisible="1"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="الأنشطة السابقة (Predecessors)">
+                            <field name="predecessor_ids"
+                                   domain="[('project_id','=',project_id),('id','!=',id)]"/>
+                        </page>
+                        <page string="الأنشطة الفرعية">
+                            <field name="child_ids" context="{'default_project_id': project_id}">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="name"/>
+                                    <field name="date_start"/>
+                                    <field name="date_end"/>
+                                    <field name="progress"/>
+                                    <field name="project_id" column_invisible="1"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_wbs_activity_search" model="ir.ui.view">
+        <field name="name">rawasi.wbs.activity.search</field>
+        <field name="model">rawasi.wbs.activity</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="project_id"/>
+                <field name="phase_id"/>
+                <filter name="milestones" string="المعالم" domain="[('is_milestone','=',True)]"/>
+                <group>
+                    <filter name="g_phase" string="المرحلة" context="{'group_by':'phase_id'}"/>
+                    <filter name="g_project" string="المشروع" context="{'group_by':'project_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_wbs_activity" model="ir.actions.act_window">
+        <field name="name">أنشطة WBS</field>
+        <field name="res_model">rawasi.wbs.activity</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- قوالب المراحل الرئيسية (إعداد) -->
+    <record id="view_wbs_phase_list" model="ir.ui.view">
+        <field name="name">rawasi.wbs.phase.list</field>
+        <field name="model">rawasi.wbs.phase</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="sequence" widget="handle"/>
+                <field name="code"/>
+                <field name="name"/>
+                <field name="objective" optional="show"/>
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_wbs_phase_form" model="ir.ui.view">
+        <field name="name">rawasi.wbs.phase.form</field>
+        <field name="model">rawasi.wbs.phase</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="code"/>
+                            <field name="name"/>
+                            <field name="sequence"/>
+                        </group>
+                        <group>
+                            <field name="active"/>
+                            <field name="color" widget="color_picker"/>
+                        </group>
+                    </group>
+                    <field name="objective" placeholder="الهدف المباشر للمرحلة..."/>
+                    <separator string="المهام القياسية (تُولَّد كأنشطة فرعية تحت المرحلة)"/>
+                    <field name="task_ids">
+                        <list editable="bottom">
+                            <field name="sequence" widget="handle"/>
+                            <field name="name"/>
+                        </list>
+                    </field>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_wbs_phase" model="ir.actions.act_window">
+        <field name="name">المراحل الرئيسية للمشروع</field>
+        <field name="res_model">rawasi.wbs.phase</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- إضافة أزرار WBS إلى نموذج المشروع -->
+    <record id="view_project_form_rawasi_wbs" model="ir.ui.view">
+        <field name="name">project.project.form.rawasi.wbs</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.edit_project"/>
+        <field name="arch" type="xml">
+            <div name="button_box" position="inside">
+                <button name="action_open_wbs" type="object" class="oe_stat_button"
+                        icon="fa-sitemap">
+                    <field name="wbs_count" widget="statinfo" string="أنشطة WBS"/>
+                </button>
+            </div>
+            <xpath expr="//header" position="inside">
+                <button name="action_generate_wbs_phases" type="object"
+                        string="توليد المراحل الخمس" class="btn-secondary"/>
+                <button name="action_download_schedule_template" type="object"
+                        string="قالب الجدول الزمني" class="btn-secondary"/>
+                <button name="action_open_schedule_import" type="object"
+                        string="استيراد الجدول الزمني" class="btn-secondary"/>
+                <button name="action_print_schedule" type="object"
+                        string="طباعة الجدول الزمني" class="btn-secondary"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
