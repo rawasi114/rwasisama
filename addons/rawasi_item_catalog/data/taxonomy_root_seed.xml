@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- الشعب الخمس الجذرية — تُبذَر مرة واحدة فقط. noupdate=1 يحميها من التحديث. -->
+
+        <record id="tax_div_arch" model="rawasi.item.taxonomy">
+            <field name="code">ARCH</field>
+            <field name="name_ar">الأعمال المعمارية</field>
+            <field name="name_en">Architectural Works</field>
+            <field name="level">division</field>
+        </record>
+
+        <record id="tax_div_struct" model="rawasi.item.taxonomy">
+            <field name="code">STRC</field>
+            <field name="name_ar">الأعمال الإنشائية</field>
+            <field name="name_en">Structural Works</field>
+            <field name="level">division</field>
+        </record>
+
+        <record id="tax_div_elec" model="rawasi.item.taxonomy">
+            <field name="code">ELEC</field>
+            <field name="name_ar">الأعمال الكهربائية</field>
+            <field name="name_en">Electrical Works</field>
+            <field name="level">division</field>
+        </record>
+
+        <record id="tax_div_mech" model="rawasi.item.taxonomy">
+            <field name="code">MECH</field>
+            <field name="name_ar">الأعمال الميكانيكية</field>
+            <field name="name_en">Mechanical Works</field>
+            <field name="level">division</field>
+        </record>
+
+        <record id="tax_div_inhouse" model="rawasi.item.taxonomy">
+            <field name="code">INHS</field>
+            <field name="name_ar">التصنيع الداخلي</field>
+            <field name="name_en">In-House Manufacturing</field>
+            <field name="level">division</field>
+        </record>
+
+    </data>
+</odoo>

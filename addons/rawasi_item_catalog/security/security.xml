@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <!-- فئة الموديول في صلاحيات المستخدم -->
+        <record id="module_category_item_catalog" model="ir.module.category">
+            <field name="name">كتالوج البنود</field>
+            <field name="description">صلاحيات كتالوج البنود الموحَّد لرواسي سما.</field>
+            <field name="sequence">90</field>
+        </record>
+
+        <!-- قارئ: قراءة فقط -->
+        <record id="group_item_catalog_user" model="res.groups">
+            <field name="name">قارئ كتالوج البنود</field>
+            <field name="category_id" ref="module_category_item_catalog"/>
+        </record>
+
+        <!-- محرّر: قراءة + كتابة + إنشاء (دون حذف) -->
+        <record id="group_item_catalog_editor" model="res.groups">
+            <field name="name">محرّر كتالوج البنود</field>
+            <field name="category_id" ref="module_category_item_catalog"/>
+            <field name="implied_ids" eval="[(4, ref('group_item_catalog_user'))]"/>
+        </record>
+
+        <!-- مدير: كل الصلاحيات + حذف + اعتماد البنود -->
+        <record id="group_item_catalog_admin" model="res.groups">
+            <field name="name">مدير كتالوج البنود</field>
+            <field name="category_id" ref="module_category_item_catalog"/>
+            <field name="implied_ids" eval="[(4, ref('group_item_catalog_editor'))]"/>
+        </record>
+
+    </data>
+</odoo>

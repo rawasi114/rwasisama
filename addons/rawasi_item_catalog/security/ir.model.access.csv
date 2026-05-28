@@ -1,0 +1,16 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_taxonomy_user,taxonomy.user,model_rawasi_item_taxonomy,group_item_catalog_user,1,0,0,0
+access_taxonomy_editor,taxonomy.editor,model_rawasi_item_taxonomy,group_item_catalog_editor,1,1,1,0
+access_taxonomy_admin,taxonomy.admin,model_rawasi_item_taxonomy,group_item_catalog_admin,1,1,1,1
+access_master_user,master.user,model_rawasi_item_master,group_item_catalog_user,1,0,0,0
+access_master_editor,master.editor,model_rawasi_item_master,group_item_catalog_editor,1,1,1,0
+access_master_admin,master.admin,model_rawasi_item_master,group_item_catalog_admin,1,1,1,1
+access_synonym_user,synonym.user,model_rawasi_item_synonym,group_item_catalog_user,1,0,0,0
+access_synonym_editor,synonym.editor,model_rawasi_item_synonym,group_item_catalog_editor,1,1,1,0
+access_synonym_admin,synonym.admin,model_rawasi_item_synonym,group_item_catalog_admin,1,1,1,1
+access_attribute_user,attribute.user,model_rawasi_item_attribute,group_item_catalog_user,1,0,0,0
+access_attribute_editor,attribute.editor,model_rawasi_item_attribute,group_item_catalog_editor,1,1,1,0
+access_attribute_admin,attribute.admin,model_rawasi_item_attribute,group_item_catalog_admin,1,1,1,1
+access_audit_user,audit.user,model_rawasi_item_mapping_audit,group_item_catalog_user,1,0,0,0
+access_audit_editor,audit.editor,model_rawasi_item_mapping_audit,group_item_catalog_editor,1,1,1,0
+access_audit_admin,audit.admin,model_rawasi_item_mapping_audit,group_item_catalog_admin,1,1,1,1
