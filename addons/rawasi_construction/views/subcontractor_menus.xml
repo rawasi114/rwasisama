@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- نافذة مقاولي الباطن — تحت تطبيق رواسي سما، بين «العقود والمستحقات» و«الإعدادات» -->
+    <menuitem id="menu_rawasi_subcontractors"
+              name="مقاولو الباطن"
+              parent="menu_rawasi_root"
+              sequence="58"/>
+    <menuitem id="menu_subcontractor_register"
+              name="سجل المقاولين"
+              parent="menu_rawasi_subcontractors"
+              action="action_subcontractor"
+              sequence="10"/>
+    <menuitem id="menu_subcontract_register"
+              name="العقود الفرعية"
+              parent="menu_rawasi_subcontractors"
+              action="action_subcontract"
+              sequence="20"/>
+    <menuitem id="menu_subcontract_ipc_register"
+              name="المستخلصات"
+              parent="menu_rawasi_subcontractors"
+              action="action_subcontract_ipc"
+              sequence="30"/>
+</odoo>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_customer_payment_list" model="ir.ui.view">
+        <field name="name">rwasi.customer.payment.list</field>
+        <field name="model">rwasi.customer.payment</field>
+        <field name="arch" type="xml">
+            <list string="دفعات العميل">
+                <field name="date"/>
+                <field name="name"/>
+                <field name="sale_order_id"/>
+                <field name="partner_id"/>
+                <field name="method"/>
+                <field name="reference"/>
+                <field name="amount" sum="الإجمالي"/>
+                <field name="currency_id" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_customer_payment_form" model="ir.ui.view">
+        <field name="name">rwasi.customer.payment.form</field>
+        <field name="model">rwasi.customer.payment</field>
+        <field name="arch" type="xml">
+            <form string="دفعة عميل">
+                <sheet>
+                    <div class="oe_title"><h1><field name="name" readonly="1"/></h1></div>
+                    <group>
+                        <group>
+                            <field name="sale_order_id"/>
+                            <field name="partner_id"/>
+                            <field name="date"/>
+                        </group>
+                        <group>
+                            <field name="amount"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="method"/>
+                            <field name="reference"/>
+                        </group>
+                    </group>
+                    <field name="note" placeholder="ملاحظات..."/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_customer_payment" model="ir.actions.act_window">
+        <field name="name">دفعات العملاء</field>
+        <field name="res_model">rwasi.customer.payment</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>

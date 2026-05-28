@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- RS-WS-17 سجل صيانة المعدات -->
+    <record id="view_maintenance_log_form" model="ir.ui.view">
+        <field name="name">rwasi.maintenance.log.form</field>
+        <field name="model">rwasi.maintenance.log</field>
+        <field name="arch" type="xml">
+            <form string="سجل صيانة المعدات والآلات">
+                <sheet>
+                    <div class="oe_title"><h1><field name="name" readonly="1"/></h1></div>
+                    <group>
+                        <group>
+                            <field name="machine"/>
+                            <field name="asset_no"/>
+                        </group>
+                        <group>
+                            <field name="location"/>
+                            <field name="year"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="سجل أعمال الصيانة">
+                            <field name="line_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="date"/>
+                                    <field name="maint_type"/>
+                                    <field name="work_fault"/>
+                                    <field name="spares"/>
+                                    <field name="downtime"/>
+                                    <field name="technician"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="جدول الصيانة الوقائية">
+                            <group>
+                                <group>
+                                    <field name="pm_daily"/>
+                                    <field name="pm_weekly"/>
+                                    <field name="pm_monthly"/>
+                                </group>
+                                <group>
+                                    <field name="pm_quarterly"/>
+                                    <field name="pm_annual"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="الاعتماد">
+                            <group>
+                                <group string="فني الصيانة">
+                                    <field name="technician_name"/>
+                                    <field name="technician_date"/>
+                                    <field name="technician_signature" widget="signature"/>
+                                </group>
+                                <group string="مدير العمليات">
+                                    <field name="manager_name"/>
+                                    <field name="manager_date"/>
+                                    <field name="manager_signature" widget="signature"/>
+                                    <field name="manager_stamp" widget="image"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="view_maintenance_log_list" model="ir.ui.view">
+        <field name="name">rwasi.maintenance.log.list</field>
+        <field name="model">rwasi.maintenance.log</field>
+        <field name="arch" type="xml">
+            <list string="سجل الصيانة">
+                <field name="name"/>
+                <field name="machine"/>
+                <field name="asset_no"/>
+                <field name="location"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_maintenance_log" model="ir.actions.act_window">
+        <field name="name">سجل صيانة المعدات</field>
+        <field name="res_model">rwasi.maintenance.log</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>

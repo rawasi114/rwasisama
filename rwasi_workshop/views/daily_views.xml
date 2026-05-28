@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- RS-WS-05 التحضير اليومي -->
+    <record id="view_daily_preparation_form" model="ir.ui.view">
+        <field name="name">rwasi.daily.preparation.form</field>
+        <field name="model">rwasi.daily.preparation</field>
+        <field name="arch" type="xml">
+            <form string="التحضير اليومي للورشة">
+                <sheet>
+                    <div class="oe_title"><h1><field name="name" readonly="1"/></h1></div>
+                    <group>
+                        <group>
+                            <field name="prep_day"/>
+                            <field name="prep_date"/>
+                        </group>
+                        <group>
+                            <field name="workshop"/>
+                            <field name="shift_supervisor"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="الأعمال المخططة لليوم">
+                            <field name="line_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="wo_no"/>
+                                    <field name="task"/>
+                                    <field name="assigned_to"/>
+                                    <field name="hours"/>
+                                    <field name="expected_output"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="إنتاجية الفنيين والعمال">
+                            <field name="worker_output_ids">
+                                <list editable="bottom">
+                                    <field name="worker"/>
+                                    <field name="trade"/>
+                                    <field name="worker_type"/>
+                                    <field name="wo_no"/>
+                                    <field name="actual_hours"/>
+                                    <field name="output_qty"/>
+                                    <field name="output_uom"/>
+                                    <field name="productivity" readonly="1"/>
+                                    <field name="notes"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="الجاهزية اليومية">
+                            <group>
+                                <group>
+                                    <field name="available_crew"/>
+                                    <field name="absent_crew"/>
+                                    <field name="ready_equipment"/>
+                                    <field name="under_maint_equipment"/>
+                                </group>
+                                <group>
+                                    <field name="chk_materials_ready"/>
+                                    <field name="chk_drawings_approved"/>
+                                    <field name="chk_toolbox_talk"/>
+                                    <field name="chk_ppe_verified"/>
+                                    <field name="chk_targets_reviewed"/>
+                                </group>
+                            </group>
+                            <field name="expected_bottlenecks" placeholder="المعوقات المتوقعة..."/>
+                        </page>
+                        <page string="الاعتماد">
+                            <group>
+                                <group string="معد النموذج">
+                                    <field name="prepared_name"/>
+                                    <field name="prepared_date"/>
+                                    <field name="prepared_signature" widget="signature"/>
+                                </group>
+                                <group string="مدير العمليات">
+                                    <field name="manager_name"/>
+                                    <field name="manager_date"/>
+                                    <field name="manager_signature" widget="signature"/>
+                                    <field name="manager_stamp" widget="image"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="view_daily_preparation_list" model="ir.ui.view">
+        <field name="name">rwasi.daily.preparation.list</field>
+        <field name="model">rwasi.daily.preparation</field>
+        <field name="arch" type="xml">
+            <list string="التحضير اليومي">
+                <field name="name"/>
+                <field name="prep_date"/>
+                <field name="workshop"/>
+                <field name="shift_supervisor"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_daily_preparation" model="ir.actions.act_window">
+        <field name="name">التحضير اليومي للورشة</field>
+        <field name="res_model">rwasi.daily.preparation</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- RS-WS-06 التقرير اليومي -->
+    <record id="view_daily_report_form" model="ir.ui.view">
+        <field name="name">rwasi.daily.report.form</field>
+        <field name="model">rwasi.daily.report</field>
+        <field name="arch" type="xml">
+            <form string="التقرير اليومي للورشة">
+                <sheet>
+                    <div class="oe_title"><h1><field name="name" readonly="1"/></h1></div>
+                    <group>
+                        <group>
+                            <field name="report_date"/>
+                            <field name="workshop"/>
+                        </group>
+                        <group>
+                            <field name="weather"/>
+                            <field name="working_hours"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="الإنجازات اليومية">
+                            <field name="line_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="wo_no"/>
+                                    <field name="description"/>
+                                    <field name="planned"/>
+                                    <field name="done"/>
+                                    <field name="completion"/>
+                                    <field name="remaining"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="الموارد المستخدمة">
+                            <group>
+                                <group>
+                                    <field name="crew_count"/>
+                                    <field name="man_hours"/>
+                                </group>
+                                <group>
+                                    <field name="equipment_used"/>
+                                    <field name="equipment_hours"/>
+                                </group>
+                            </group>
+                            <field name="issues_delays" placeholder="المعوقات والتأخيرات..."/>
+                            <field name="plan_tomorrow" placeholder="خطة الغد..."/>
+                        </page>
+                        <page string="الاعتماد">
+                            <group>
+                                <group string="معد التقرير">
+                                    <field name="prepared_name"/>
+                                    <field name="prepared_date"/>
+                                    <field name="prepared_signature" widget="signature"/>
+                                </group>
+                                <group string="مدير العمليات">
+                                    <field name="manager_name"/>
+                                    <field name="manager_date"/>
+                                    <field name="manager_signature" widget="signature"/>
+                                    <field name="manager_stamp" widget="image"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="view_daily_report_list" model="ir.ui.view">
+        <field name="name">rwasi.daily.report.list</field>
+        <field name="model">rwasi.daily.report</field>
+        <field name="arch" type="xml">
+            <list string="التقرير اليومي">
+                <field name="name"/>
+                <field name="report_date"/>
+                <field name="workshop"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_daily_report" model="ir.actions.act_window">
+        <field name="name">التقرير اليومي للورشة</field>
+        <field name="res_model">rwasi.daily.report</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- ===== إنتاجية الفنيين والعمال (شهرياً) ===== -->
+    <record id="view_daily_worker_pivot" model="ir.ui.view">
+        <field name="name">rwasi.daily.worker.pivot</field>
+        <field name="model">rwasi.daily.worker</field>
+        <field name="arch" type="xml">
+            <pivot string="إنتاجية الفنيين والعمال" sample="1">
+                <field name="worker" type="row"/>
+                <field name="date" interval="month" type="col"/>
+                <field name="output_qty" type="measure"/>
+                <field name="actual_hours" type="measure"/>
+                <field name="productivity" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="view_daily_worker_graph" model="ir.ui.view">
+        <field name="name">rwasi.daily.worker.graph</field>
+        <field name="model">rwasi.daily.worker</field>
+        <field name="arch" type="xml">
+            <graph string="إنتاجية الفنيين والعمال" type="bar">
+                <field name="worker"/>
+                <field name="productivity" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="view_daily_worker_list" model="ir.ui.view">
+        <field name="name">rwasi.daily.worker.list</field>
+        <field name="model">rwasi.daily.worker</field>
+        <field name="arch" type="xml">
+            <list string="إنتاجية الفنيين والعمال">
+                <field name="date"/>
+                <field name="worker"/>
+                <field name="trade"/>
+                <field name="worker_type"/>
+                <field name="workshop"/>
+                <field name="actual_hours" sum="إجمالي الساعات"/>
+                <field name="output_qty" sum="إجمالي المنجز"/>
+                <field name="productivity" avg="متوسط الإنتاجية"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_daily_worker_search" model="ir.ui.view">
+        <field name="name">rwasi.daily.worker.search</field>
+        <field name="model">rwasi.daily.worker</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="worker"/>
+                <field name="trade"/>
+                <field name="workshop"/>
+                <filter name="this_month" string="هذا الشهر"
+                        domain="[('date','&gt;=', (context_today().replace(day=1)).strftime('%Y-%m-%d'))]"/>
+                <group>
+                    <filter name="g_worker" string="الفني/العامل" context="{'group_by':'worker'}"/>
+                    <filter name="g_type" string="النوع" context="{'group_by':'worker_type'}"/>
+                    <filter name="g_workshop" string="الورشة" context="{'group_by':'workshop'}"/>
+                    <filter name="g_month" string="الشهر" context="{'group_by':'date:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_daily_worker_productivity" model="ir.actions.act_window">
+        <field name="name">إنتاجية الفنيين والعمال</field>
+        <field name="res_model">rwasi.daily.worker</field>
+        <field name="view_mode">pivot,graph,list</field>
+        <field name="search_view_id" ref="view_daily_worker_search"/>
+        <field name="context">{'search_default_g_worker': 1, 'search_default_this_month': 1}</field>
+    </record>
+
+</odoo>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_rework_list" model="ir.ui.view">
+        <field name="name">rwasi.rework.list</field>
+        <field name="model">rwasi.rework</field>
+        <field name="arch" type="xml">
+            <list string="إعادة الأعمال" decoration-info="state == 'in_progress'"
+                  decoration-success="state == 'done'" decoration-muted="state == 'cancel'">
+                <field name="name"/>
+                <field name="work_order_id"/>
+                <field name="item"/>
+                <field name="reason"/>
+                <field name="qty"/>
+                <field name="rework_date"/>
+                <field name="state" widget="badge"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_rework_form" model="ir.ui.view">
+        <field name="name">rwasi.rework.form</field>
+        <field name="model">rwasi.rework</field>
+        <field name="arch" type="xml">
+            <form string="إعادة أعمال">
+                <header>
+                    <button name="action_start" string="بدء" type="object" class="btn-primary"
+                            invisible="state != 'draft'"/>
+                    <button name="action_done" string="إنهاء" type="object" class="btn-primary"
+                            invisible="state != 'in_progress'"/>
+                    <button name="action_cancel" string="إلغاء" type="object"
+                            invisible="state in ('done', 'cancel')"/>
+                    <button name="action_draft" string="إعادة لمسودة" type="object"
+                            invisible="state == 'draft'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,in_progress,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_title"><h1><field name="name" readonly="1"/></h1></div>
+                    <group>
+                        <group>
+                            <field name="work_order_id"/>
+                            <field name="ncr_id"/>
+                            <field name="item"/>
+                            <field name="reason"/>
+                        </group>
+                        <group>
+                            <field name="qty"/>
+                            <field name="responsible"/>
+                            <field name="rework_date"/>
+                            <field name="est_hours"/>
+                            <field name="cost"/>
+                        </group>
+                    </group>
+                    <field name="description" placeholder="وصف إعادة العمل المطلوب..."/>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_rework" model="ir.actions.act_window">
+        <field name="name">إعادة الأعمال</field>
+        <field name="res_model">rwasi.rework</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>

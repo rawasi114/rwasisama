@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <record id="seq_work_order" model="ir.sequence">
+        <field name="name">أمر تشغيل / تصنيع</field>
+        <field name="code">rwasi.work.order</field>
+        <field name="prefix">26-RS-WS-01/</field>
+        <field name="padding">4</field>
+    </record>
+
+    <record id="seq_rework" model="ir.sequence">
+        <field name="name">إعادة أعمال</field>
+        <field name="code">rwasi.rework</field>
+        <field name="prefix">26-RS-WS-23/</field>
+        <field name="padding">4</field>
+    </record>
+
+    <record id="seq_customer_payment" model="ir.sequence">
+        <field name="name">دفعة عميل</field>
+        <field name="code">rwasi.customer.payment</field>
+        <field name="prefix">26-PAY/</field>
+        <field name="padding">4</field>
+    </record>
+
+    <record id="seq_daily_preparation" model="ir.sequence">
+        <field name="name">التحضير اليومي</field>
+        <field name="code">rwasi.daily.preparation</field>
+        <field name="prefix">26-RS-WS-05/</field>
+        <field name="padding">4</field>
+    </record>
+
+    <record id="seq_daily_report" model="ir.sequence">
+        <field name="name">التقرير اليومي للورشة</field>
+        <field name="code">rwasi.daily.report</field>
+        <field name="prefix">26-RS-WS-06/</field>
+        <field name="padding">4</field>
+    </record>
+
+    <record id="seq_attendance_sheet" model="ir.sequence">
+        <field name="name">كشف الحضور</field>
+        <field name="code">rwasi.attendance.sheet</field>
+        <field name="prefix">26-RS-WS-07/</field>
+        <field name="padding">4</field>
+    </record>
+
+    <record id="seq_time_card" model="ir.sequence">
+        <field name="name">بطاقة وقت العامل</field>
+        <field name="code">rwasi.time.card</field>
+        <field name="prefix">26-RS-WS-08/</field>
+        <field name="padding">4</field>
+    </record>
+
+    <record id="seq_labor_productivity" model="ir.sequence">
+        <field name="name">إنتاجية العمالة</field>
+        <field name="code">rwasi.labor.productivity</field>
+        <field name="prefix">26-RS-WS-09/</field>
+        <field name="padding">4</field>
+    </record>
+
+    <record id="seq_measurement_sheet" model="ir.sequence">
+        <field name="name">معاينة وتفصيل</field>
+        <field name="code">rwasi.measurement.sheet</field>
+        <field name="prefix">26-RS-WS-10/</field>
+        <field name="padding">4</field>
+    </record>
+
+    <record id="seq_qc_inspection" model="ir.sequence">
+        <field name="name">فحص الجودة</field>
+        <field name="code">rwasi.qc.inspection</field>
+        <field name="prefix">26-RS-WS-15/</field>
+        <field name="padding">4</field>
+    </record>
+
+    <record id="seq_ncr" model="ir.sequence">
+        <field name="name">تقرير عدم المطابقة</field>
+        <field name="code">rwasi.ncr</field>
+        <field name="prefix">26-NCR/</field>
+        <field name="padding">4</field>
+    </record>
+
+    <record id="seq_maintenance_log" model="ir.sequence">
+        <field name="name">صيانة المعدات</field>
+        <field name="code">rwasi.maintenance.log</field>
+        <field name="prefix">26-RS-WS-17/</field>
+        <field name="padding">4</field>
+    </record>
+
+    <record id="seq_toolbox_talk" model="ir.sequence">
+        <field name="name">اجتماع السلامة</field>
+        <field name="code">rwasi.toolbox.talk</field>
+        <field name="prefix">26-RS-WS-18/</field>
+        <field name="padding">4</field>
+    </record>
+
+    <record id="seq_project_closeout" model="ir.sequence">
+        <field name="name">إغلاق وتسليم المشروع</field>
+        <field name="code">rwasi.project.closeout</field>
+        <field name="prefix">26-RS-WS-20/</field>
+        <field name="padding">4</field>
+    </record>
+
+
+</odoo>

@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="action_report_work_order" model="ir.actions.report">
+        <field name="name">أمر التصنيع (RS-WS-01)</field>
+        <field name="model">rwasi.work.order</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">rwasi_workshop.report_work_order_document</field>
+        <field name="report_file">rwasi_workshop.report_work_order_document</field>
+        <field name="binding_model_id" ref="model_rwasi_work_order"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="paperformat_rwasi_a4"/>
+    </record>
+
+    <record id="action_report_daily_preparation" model="ir.actions.report">
+        <field name="name">التحضير اليومي (RS-WS-05)</field>
+        <field name="model">rwasi.daily.preparation</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">rwasi_workshop.report_daily_preparation_document</field>
+        <field name="report_file">rwasi_workshop.report_daily_preparation_document</field>
+        <field name="binding_model_id" ref="model_rwasi_daily_preparation"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="paperformat_rwasi_a4"/>
+    </record>
+
+    <record id="action_report_daily_report" model="ir.actions.report">
+        <field name="name">التقرير اليومي (RS-WS-06)</field>
+        <field name="model">rwasi.daily.report</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">rwasi_workshop.report_daily_report_document</field>
+        <field name="report_file">rwasi_workshop.report_daily_report_document</field>
+        <field name="binding_model_id" ref="model_rwasi_daily_report"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="paperformat_rwasi_a4"/>
+    </record>
+
+    <record id="action_report_attendance_sheet" model="ir.actions.report">
+        <field name="name">كشف الحضور (RS-WS-07)</field>
+        <field name="model">rwasi.attendance.sheet</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">rwasi_workshop.report_attendance_sheet_document</field>
+        <field name="report_file">rwasi_workshop.report_attendance_sheet_document</field>
+        <field name="binding_model_id" ref="model_rwasi_attendance_sheet"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="paperformat_rwasi_a4"/>
+    </record>
+
+    <record id="action_report_time_card" model="ir.actions.report">
+        <field name="name">بطاقة وقت العامل (RS-WS-08)</field>
+        <field name="model">rwasi.time.card</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">rwasi_workshop.report_time_card_document</field>
+        <field name="report_file">rwasi_workshop.report_time_card_document</field>
+        <field name="binding_model_id" ref="model_rwasi_time_card"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="paperformat_rwasi_a4"/>
+    </record>
+
+    <record id="action_report_labor_productivity" model="ir.actions.report">
+        <field name="name">إنتاجية العمالة (RS-WS-09)</field>
+        <field name="model">rwasi.labor.productivity</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">rwasi_workshop.report_labor_productivity_document</field>
+        <field name="report_file">rwasi_workshop.report_labor_productivity_document</field>
+        <field name="binding_model_id" ref="model_rwasi_labor_productivity"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="paperformat_rwasi_a4"/>
+    </record>
+
+    <record id="action_report_measurement_sheet" model="ir.actions.report">
+        <field name="name">معاينة وتفصيل (RS-WS-10)</field>
+        <field name="model">rwasi.measurement.sheet</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">rwasi_workshop.report_measurement_sheet_document</field>
+        <field name="report_file">rwasi_workshop.report_measurement_sheet_document</field>
+        <field name="binding_model_id" ref="model_rwasi_measurement_sheet"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="paperformat_rwasi_a4"/>
+    </record>
+
+    <record id="action_report_qc_inspection" model="ir.actions.report">
+        <field name="name">فحص الجودة (RS-WS-15)</field>
+        <field name="model">rwasi.qc.inspection</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">rwasi_workshop.report_qc_inspection_document</field>
+        <field name="report_file">rwasi_workshop.report_qc_inspection_document</field>
+        <field name="binding_model_id" ref="model_rwasi_qc_inspection"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="paperformat_rwasi_a4"/>
+    </record>
+
+    <record id="action_report_ncr" model="ir.actions.report">
+        <field name="name">عدم المطابقة NCR (RS-WS-16)</field>
+        <field name="model">rwasi.ncr</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">rwasi_workshop.report_ncr_document</field>
+        <field name="report_file">rwasi_workshop.report_ncr_document</field>
+        <field name="binding_model_id" ref="model_rwasi_ncr"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="paperformat_rwasi_a4"/>
+    </record>
+
+    <record id="action_report_maintenance_log" model="ir.actions.report">
+        <field name="name">سجل الصيانة (RS-WS-17)</field>
+        <field name="model">rwasi.maintenance.log</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">rwasi_workshop.report_maintenance_log_document</field>
+        <field name="report_file">rwasi_workshop.report_maintenance_log_document</field>
+        <field name="binding_model_id" ref="model_rwasi_maintenance_log"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="paperformat_rwasi_a4"/>
+    </record>
+
+    <record id="action_report_toolbox_talk" model="ir.actions.report">
+        <field name="name">اجتماع السلامة (RS-WS-18)</field>
+        <field name="model">rwasi.toolbox.talk</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">rwasi_workshop.report_toolbox_talk_document</field>
+        <field name="report_file">rwasi_workshop.report_toolbox_talk_document</field>
+        <field name="binding_model_id" ref="model_rwasi_toolbox_talk"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="paperformat_rwasi_a4"/>
+    </record>
+
+    <record id="action_report_project_closeout" model="ir.actions.report">
+        <field name="name">إغلاق المشروع (RS-WS-20)</field>
+        <field name="model">rwasi.project.closeout</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">rwasi_workshop.report_project_closeout_document</field>
+        <field name="report_file">rwasi_workshop.report_project_closeout_document</field>
+        <field name="binding_model_id" ref="model_rwasi_project_closeout"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="paperformat_rwasi_a4"/>
+    </record>
+
+
+</odoo>

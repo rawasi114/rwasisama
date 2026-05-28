@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- مقاس الورق A4 — هامش علوي أوسع ليتسع لترويسة الشركة (العنوان الطويل) دون تداخل -->
+    <record id="paperformat_rwasi_a4" model="report.paperformat">
+        <field name="name">Rwasi Workshop A4</field>
+        <field name="format">A4</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">60</field>
+        <field name="margin_bottom">30</field>
+        <field name="margin_left">7</field>
+        <field name="margin_right">7</field>
+        <field name="header_spacing">52</field>
+        <field name="dpi">90</field>
+    </record>
+
+    <!-- ============ تنسيق قياسي نظيف (ستايل أودو) ============ -->
+    <template id="report_workshop_style">
+        <style>
+            .rs-doc { direction: rtl; color: #222222; font-size: 12px; }
+            .rs-doc h2.rs-title { text-align: center; font-size: 18px; margin: 6px 0 2px 0; }
+            .rs-doc .rs-sub { text-align: center; color: #888888; font-size: 10px;
+                              letter-spacing: 1px; margin-bottom: 10px; }
+            .sec-title { font-size: 13px; font-weight: bold; color: #333333;
+                         background: #f5f5f5; border-bottom: 1px solid #cccccc;
+                         padding: 4px 8px; margin: 14px 0 6px 0; }
+            table.info { width: 100%; border-collapse: collapse; margin-bottom: 6px; }
+            table.info td { border: 1px solid #e0e0e0; padding: 4px 8px; font-size: 11px; }
+            table.info td.lbl { background: #f7f7f7; font-weight: bold; width: 18%; color: #444444; }
+            table.lines { width: 100%; border-collapse: collapse; margin: 6px 0; }
+            table.lines th { border-bottom: 2px solid #666666; padding: 5px 6px;
+                             font-size: 11px; text-align: right; color: #333333; }
+            table.lines td { border-bottom: 1px solid #e6e6e6; padding: 4px 6px; font-size: 11px; }
+            .chk { display: inline-block; margin: 2px 16px 2px 0; font-size: 11px; }
+            .notes-box { border: 1px solid #e0e0e0; padding: 6px 8px; min-height: 30px;
+                         margin-bottom: 6px; white-space: pre-line; font-size: 11px; }
+            table.rwasi-sign { width: 100%; border-collapse: collapse; margin-top: 16px; }
+            table.rwasi-sign td { border: 1px solid #cccccc; width: 50%; padding: 6px 8px;
+                                  vertical-align: top; height: 70px; }
+            .sign-role { font-weight: bold; color: #333333; margin-bottom: 6px; font-size: 11px; }
+            .sign-img { height: 32px; }
+            .sign-img img { max-height: 32px; max-width: 90%; }
+            .sign-line { font-size: 10px; color: #666666; padding: 1px 0; }
+        </style>
+    </template>
+
+    <!-- ترويسة بسيطة: عنوان المستند + سطر بيانات (الشركة من ترويسة أودو) -->
+    <template id="report_workshop_header">
+        <h2 class="rs-title"><t t-out="title"/></h2>
+        <div class="rs-sub"><t t-out="title_en"/></div>
+        <table class="info">
+            <tr>
+                <td class="lbl">رقم المستند</td><td><t t-out="o.name"/></td>
+                <td class="lbl">التاريخ</td><td><span t-field="o.date_issued"/></td>
+                <td class="lbl">الكود</td><td><t t-out="code"/></td>
+            </tr>
+        </table>
+    </template>
+
+    <!-- كتل التوقيع -->
+    <template id="report_workshop_signoff">
+        <table class="rwasi-sign">
+            <tr>
+                <td>
+                    <div class="sign-role">معدّ النموذج</div>
+                    <div class="sign-line">الاسم: <t t-out="o.prepared_name or ''"/></div>
+                    <div class="sign-img"><img t-if="o.prepared_signature" t-att-src="image_data_uri(o.prepared_signature)"/></div>
+                    <div class="sign-line">التاريخ: <span t-field="o.prepared_date"/></div>
+                </td>
+                <td>
+                    <div class="sign-role">مدير العمليات</div>
+                    <div class="sign-line">الاسم: <t t-out="o.manager_name or ''"/></div>
+                    <div class="sign-img">
+                        <img t-if="o.manager_signature" t-att-src="image_data_uri(o.manager_signature)"/>
+                        <img t-if="o.manager_stamp" t-att-src="image_data_uri(o.manager_stamp)" style="max-height:32px;"/>
+                    </div>
+                    <div class="sign-line">التاريخ: <span t-field="o.manager_date"/></div>
+                </td>
+            </tr>
+        </table>
+    </template>
+
+    <!-- التخطيط: ترويسة أودو القياسية + المحتوى -->
+    <template id="report_workshop_layout">
+        <t t-set="title_en" t-value="{
+            'RS-WS-01': 'WORK ORDER',
+            'RS-WS-02': 'MATERIAL REQUISITION',
+            'RS-WS-03': 'GOODS RECEIPT NOTE',
+            'RS-WS-04': 'MATERIAL ISSUE VOUCHER',
+            'RS-WS-05': 'DAILY PREPARATION',
+            'RS-WS-06': 'DAILY WORKSHOP REPORT',
+            'RS-WS-07': 'ATTENDANCE SHEET',
+            'RS-WS-08': 'JOB TIME CARD',
+            'RS-WS-09': 'LABOR PRODUCTIVITY',
+            'RS-WS-10': 'MEASUREMENT SHEET',
+            'RS-WS-11': 'CARPENTRY JOB ORDER',
+            'RS-WS-12': 'STEELWORK JOB ORDER',
+            'RS-WS-13': 'ALUMINUM JOB ORDER',
+            'RS-WS-14': 'CNC JOB ORDER',
+            'RS-WS-15': 'QC INSPECTION REPORT',
+            'RS-WS-16': 'NON-CONFORMANCE REPORT',
+            'RS-WS-17': 'MAINTENANCE LOG',
+            'RS-WS-18': 'HSE TOOLBOX TALK',
+            'RS-WS-19': 'DELIVERY / GATE PASS',
+            'RS-WS-20': 'PROJECT CLOSEOUT',
+            'RS-WS-21': 'MATERIAL REQUEST',
+            'RS-WS-22': 'SALES DAILY REPORT',
+        }.get(code, '')"/>
+        <!-- بعض تخطيطات الترويسة (مثل Bubble) تتطلب متغيّر doc في السياق -->
+        <t t-set="doc" t-value="o"/>
+        <t t-call="web.external_layout">
+            <div class="page rs-doc">
+                <t t-call="rwasi_workshop.report_workshop_style"/>
+                <t t-call="rwasi_workshop.report_workshop_header"/>
+                <t t-out="0"/>
+                <t t-call="rwasi_workshop.report_workshop_signoff"/>
+            </div>
+        </t>
+    </template>
+
+</odoo>

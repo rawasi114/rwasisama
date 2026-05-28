@@ -1,37 +1,26 @@
 # -*- coding: utf-8 -*-
 {
-    "name": "رواسي سما — كتالوج البنود الموحَّد",
-    "version": "19.0.4.0.0",
-    "category": "Services/Project",
-    "summary": "Master item catalog: taxonomy, canonical items, synonyms, attributes, semantic search (pgvector)",
+    "name": "رواسي سما — كتالوج البنود (مدموج في موديول المقاولات)",
+    "version": "19.0.5.0.0",
+    "category": "Hidden",
+    "summary": "Stub — catalog merged into rawasi_construction. Do not install.",
     "description": """
-        كتالوج البنود الموحَّد لشركة رواسي سما للمقاولات.
+        ⚠️ هذا الموديول تم دمجه داخل rawasi_construction.
 
-        Phase 2: واجهات كاملة لكل النماذج الخمسة + قائمة رئيسية تظهر في
-        App Launcher مع أيقونة الموديول.
+        كل النماذج (rawasi.item.master، rawasi.item.taxonomy، إلخ.)
+        والبيانات (الـ 519 بنداً + شجرة التصنيف + المرادفات) موجودة الآن
+        تحت موديول رواسي سما — إدارة الإنشاءات والمقاولات.
+
+        التثبيت معطَّل لمنع الاستخدام الجديد. الموديولات المثبَّتة سابقاً
+        ستجد بياناتها سليمة بعد ترقية rawasi_construction (سكربت الترقية
+        ينقل ملكية ir.model.data تلقائياً).
     """,
     "author": "Rawasi Sama Contracting",
     "website": "https://rawasi-sama.sa",
     "license": "LGPL-3",
-    "depends": [
-        "base",
-        "mail",
-        "uom",
-    ],
-    "data": [
-        "security/security.xml",
-        "security/ir.model.access.csv",
-        "data/taxonomy_root_seed.xml",
-        "data/catalog_import_2026_05.xml",
-        "views/item_taxonomy_views.xml",
-        "views/item_master_views.xml",
-        "views/item_synonym_views.xml",
-        "views/item_mapping_audit_views.xml",
-        "views/menu.xml",
-    ],
-    "pre_init_hook": "_pre_init_hook",
-    "post_init_hook": "_post_init_hook",
-    "installable": True,
-    "application": True,
+    "depends": ["rawasi_construction"],
+    "data": [],
+    "installable": False,
+    "application": False,
     "auto_install": False,
 }
