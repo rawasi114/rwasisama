@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_rawasi_competition_list" model="ir.ui.view">
+        <field name="name">rawasi.competition.list</field>
+        <field name="model">rawasi.competition</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="serial"/>
+                <field name="name"/>
+                <field name="reference"/>
+                <field name="entity_name"/>
+                <field name="submission_deadline"/>
+                <field name="boq_item_count"/>
+                <field name="amount_total_price"/>
+                <field name="margin_pct" optional="show"/>
+                <field name="award_value" optional="show"/>
+                <field name="awarded_to" optional="hide"/>
+                <field name="currency_id" column_invisible="1"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'won'"
+                       decoration-danger="state == 'lost'"
+                       decoration-info="state == 'submitted'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_rawasi_competition_form" model="ir.ui.view">
+        <field name="name">rawasi.competition.form</field>
+        <field name="model">rawasi.competition</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_start_pricing" type="object" string="بدء التسعير"
+                            class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_download_boq_template" type="object"
+                            string="قالب جدول الكميات" class="btn-secondary"
+                            invisible="state not in ('draft', 'pricing')"/>
+                    <button name="action_open_import_wizard" type="object"
+                            string="استيراد جدول الكميات" class="btn-secondary"
+                            invisible="state not in ('draft', 'pricing')"/>
+                    <button name="action_apply_margin" type="object"
+                            string="تطبيق الهامش الافتراضي" invisible="state != 'pricing'"/>
+                    <button name="action_submit" type="object" string="تقديم العرض"
+                            class="btn-primary" invisible="state != 'pricing'"/>
+                    <button name="action_won" type="object" string="ترسية (فائز)"
+                            class="btn-primary" invisible="state != 'submitted'"/>
+                    <button name="action_lost" type="object" string="خاسر"
+                            invisible="state != 'submitted'"/>
+                    <button name="action_convert_to_project" type="object"
+                            string="تحويل لمشروع" class="btn-primary"
+                            invisible="state != 'won' or project_id"/>
+                    <button name="action_reset_to_draft" type="object" string="إعادة لمسودة"
+                            groups="base.group_system" invisible="state in ('draft',)"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,pricing,submitted,won"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_open_project" type="object" class="oe_stat_button"
+                                icon="fa-folder-open" invisible="not project_id">
+                            <div class="o_stat_info">
+                                <span class="o_stat_text">المشروع</span>
+                            </div>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="اسم المنافسة"/></h1>
+                        <h3><field name="serial" readonly="1" placeholder="الرقم التسلسلي يُولّد تلقائياً"/></h3>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="reference"/>
+                            <field name="entity_name"/>
+                            <field name="submission_deadline"/>
+                        </group>
+                        <group>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="currency_id"/>
+                            <field name="default_margin_pct"/>
+                        </group>
+                    </group>
+                    <field name="description" placeholder="وصف المنافسة..."/>
+
+                    <notebook>
+                        <page string="جدول الكميات (BOQ)" name="boq">
+                            <field name="boq_item_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="serial" optional="show"/>
+                                    <field name="category" optional="show"/>
+                                    <field name="work_group" optional="hide"/>
+                                    <field name="name"/>
+                                    <field name="unit_id" optional="show"/>
+                                    <field name="unit_text" optional="hide"/>
+                                    <field name="quantity"/>
+                                    <field name="unit_cost"/>
+                                    <field name="total_cost" optional="show"/>
+                                    <field name="unit_price"/>
+                                    <field name="total_price" optional="show"/>
+                                    <field name="margin_pct" optional="hide"/>
+                                    <field name="sbc_code_id" optional="hide"/>
+                                    <field name="mandatory_local" optional="hide"/>
+                                    <field name="currency_id" column_invisible="1"/>
+                                    <button name="action_show_price_suggestions" type="object"
+                                            icon="fa-lightbulb-o" title="اقتراحات الأسعار التاريخية"/>
+                                    <button name="action_apply_best_price" type="object"
+                                            icon="fa-magic" title="تطبيق أفضل سعر مطابق"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="التكاليف غير المباشرة" name="indirect">
+                            <field name="indirect_cost_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="name"/>
+                                    <field name="compute_type"/>
+                                    <field name="value"/>
+                                    <field name="amount"/>
+                                    <field name="currency_id" column_invisible="1"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                    <group string="نتيجة الترسية"
+                           invisible="state not in ('submitted','won','lost')">
+                        <group>
+                            <field name="award_value"/>
+                            <field name="awarded_to" invisible="state != 'lost'"/>
+                        </group>
+                    </group>
+                    <group class="oe_subtotal_footer">
+                        <field name="amount_direct_cost"/>
+                        <field name="amount_indirect_cost"/>
+                        <field name="amount_total_cost"/>
+                        <field name="margin_amount"/>
+                        <field name="margin_pct"/>
+                        <field name="amount_total_price"/>
+                        <field name="vat_rate"/>
+                        <field name="amount_tax"/>
+                        <field name="amount_total_incl_tax"
+                               class="oe_subtotal_footer_separator"/>
+                    </group>
+                    <div class="oe_clear"/>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_rawasi_competition_search" model="ir.ui.view">
+        <field name="name">rawasi.competition.search</field>
+        <field name="model">rawasi.competition</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="serial"/>
+                <field name="reference"/>
+                <field name="entity_name"/>
+                <filter name="f_draft" string="مسودة" domain="[('state','=','draft')]"/>
+                <filter name="f_pricing" string="قيد التسعير" domain="[('state','=','pricing')]"/>
+                <filter name="f_submitted" string="مقدَّم" domain="[('state','=','submitted')]"/>
+                <filter name="f_won" string="فائز" domain="[('state','=','won')]"/>
+                <separator/>
+                <group>
+                    <filter name="g_state" string="الحالة" context="{'group_by':'state'}"/>
+                    <filter name="g_entity" string="الجهة" context="{'group_by':'entity_name'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_rawasi_competition" model="ir.actions.act_window">
+        <field name="name">المنافسات</field>
+        <field name="res_model">rawasi.competition</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">أنشئ أول منافسة</p>
+            <p>سجّل المنافسة ثم استورد جدول الكميات من ملف اعتماد وابدأ التسعير.</p>
+        </field>
+    </record>
+</odoo>

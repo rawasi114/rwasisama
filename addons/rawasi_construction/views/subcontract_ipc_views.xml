@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_subcontract_ipc_list" model="ir.ui.view">
+        <field name="name">rawasi.subcontract.ipc.list</field>
+        <field name="model">rawasi.subcontract.ipc</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="subcontract_id"/>
+                <field name="subcontractor_id"/>
+                <field name="project_id"/>
+                <field name="ipc_date"/>
+                <field name="net_payable"/>
+                <field name="currency_id" column_invisible="1"/>
+                <field name="state" widget="badge"
+                       decoration-success="state in ('approved','paid')"
+                       decoration-muted="state == 'paid'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_subcontract_ipc_form" model="ir.ui.view">
+        <field name="name">rawasi.subcontract.ipc.form</field>
+        <field name="model">rawasi.subcontract.ipc</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_generate_lines" type="object"
+                            string="توليد البنود من العقد" class="btn-secondary"
+                            invisible="state != 'draft'"/>
+                    <button name="action_approve" type="object" string="اعتماد"
+                            class="btn-primary" invisible="state != 'draft'"
+                            groups="rawasi_construction.group_projects_director,rawasi_construction.group_tech_office_manager"/>
+                    <button name="action_mark_paid" type="object" string="تعليم كمدفوع"
+                            class="btn-primary" invisible="state != 'approved'"
+                            groups="rawasi_construction.group_accountant,rawasi_construction.group_projects_director,rawasi_construction.group_tech_office_manager"/>
+                    <button name="action_print_with_attachments" type="object"
+                            string="طباعة مع المرفقات" class="btn-secondary"
+                            invisible="not attachment_ids"/>
+                    <button name="action_reset_to_draft" type="object" string="إعادة لمسودة"
+                            groups="base.group_system" invisible="state == 'draft'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="subcontract_id"/>
+                            <field name="subcontractor_id" readonly="1"/>
+                            <field name="project_id" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="ipc_date"/>
+                            <field name="payment_date" invisible="state != 'paid'"/>
+                            <field name="payment_reference" invisible="state != 'paid'"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <field name="line_ids">
+                        <list editable="bottom">
+                            <field name="subcontract_line_id"
+                                   domain="[('subcontract_id', '=', parent.subcontract_id)]"
+                                   options="{'no_create': True}"/>
+                            <field name="description"/>
+                            <field name="uom_id"/>
+                            <field name="contract_quantity"/>
+                            <field name="previous_quantity"/>
+                            <field name="period_quantity"/>
+                            <field name="cumulative_quantity"/>
+                            <field name="progress_percent"/>
+                            <field name="unit_price"/>
+                            <field name="period_value"/>
+                            <field name="currency_id" column_invisible="1"/>
+                        </list>
+                    </field>
+                    <group>
+                        <group>
+                            <field name="other_deductions"/>
+                            <field name="vat_rate"/>
+                        </group>
+                        <group class="oe_subtotal_footer">
+                            <field name="subtotal"/>
+                            <field name="retention_amount"/>
+                            <field name="net_before_vat"/>
+                            <field name="vat_amount"/>
+                            <field name="net_payable" class="oe_subtotal_footer_separator"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="المرفقات" name="attachments">
+                            <field name="attachment_ids" widget="many2many_binary"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_subcontract_ipc_search" model="ir.ui.view">
+        <field name="name">rawasi.subcontract.ipc.search</field>
+        <field name="model">rawasi.subcontract.ipc</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="subcontract_id"/>
+                <field name="subcontractor_id"/>
+                <field name="project_id"/>
+                <filter name="draft" string="مسودة" domain="[('state','=','draft')]"/>
+                <filter name="approved" string="معتمد" domain="[('state','=','approved')]"/>
+                <filter name="paid" string="مدفوع" domain="[('state','=','paid')]"/>
+                <group>
+                    <filter name="g_project" string="المشروع" context="{'group_by':'project_id'}"/>
+                    <filter name="g_sub" string="المقاول" context="{'group_by':'subcontractor_id'}"/>
+                    <filter name="g_state" string="الحالة" context="{'group_by':'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_subcontract_ipc" model="ir.actions.act_window">
+        <field name="name">مستخلصات الباطن</field>
+        <field name="res_model">rawasi.subcontract.ipc</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_subcontract_ipc_search"/>
+    </record>
+</odoo>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- قواعد سجلات تعدّد الشركات لموديول الورش: كل سجل يحوي company_id يُرى
+         فقط من قِبل المستخدمين المسموح لهم بشركته. -->
+    <data noupdate="1">
+        <record id="rule_work_order_company" model="ir.rule">
+            <field name="name">أمر تصنيع: متعدد الشركات</field>
+            <field name="model_id" ref="model_rwasi_work_order"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_daily_preparation_company" model="ir.rule">
+            <field name="name">تحضير يومي: متعدد الشركات</field>
+            <field name="model_id" ref="model_rwasi_daily_preparation"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_daily_report_company" model="ir.rule">
+            <field name="name">تقرير يومي: متعدد الشركات</field>
+            <field name="model_id" ref="model_rwasi_daily_report"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_measurement_sheet_company" model="ir.rule">
+            <field name="name">معاينة: متعدد الشركات</field>
+            <field name="model_id" ref="model_rwasi_measurement_sheet"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_toolbox_talk_company" model="ir.rule">
+            <field name="name">صندوق الأدوات (السلامة): متعدد الشركات</field>
+            <field name="model_id" ref="model_rwasi_toolbox_talk"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_project_closeout_company" model="ir.rule">
+            <field name="name">إغلاق مشروع: متعدد الشركات</field>
+            <field name="model_id" ref="model_rwasi_project_closeout"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_maintenance_log_company" model="ir.rule">
+            <field name="name">صيانة: متعدد الشركات</field>
+            <field name="model_id" ref="model_rwasi_maintenance_log"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_qc_inspection_company" model="ir.rule">
+            <field name="name">فحص الجودة: متعدد الشركات</field>
+            <field name="model_id" ref="model_rwasi_qc_inspection"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_workshop_ncr_company" model="ir.rule">
+            <field name="name">عدم مطابقة (ورش): متعدد الشركات</field>
+            <field name="model_id" ref="model_rwasi_ncr"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_rework_company" model="ir.rule">
+            <field name="name">إعادة عمل: متعدد الشركات</field>
+            <field name="model_id" ref="model_rwasi_rework"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_attendance_sheet_company" model="ir.rule">
+            <field name="name">حضور: متعدد الشركات</field>
+            <field name="model_id" ref="model_rwasi_attendance_sheet"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_time_card_company" model="ir.rule">
+            <field name="name">بطاقة وقت: متعدد الشركات</field>
+            <field name="model_id" ref="model_rwasi_time_card"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_labor_productivity_company" model="ir.rule">
+            <field name="name">إنتاجية العمالة: متعدد الشركات</field>
+            <field name="model_id" ref="model_rwasi_labor_productivity"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_performance_score_company" model="ir.rule">
+            <field name="name">تقييم الأداء: متعدد الشركات</field>
+            <field name="model_id" ref="model_rwasi_performance_score"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_customer_payment_company" model="ir.rule">
+            <field name="name">دفعة عميل (ورش): متعدد الشركات</field>
+            <field name="model_id" ref="model_rwasi_customer_payment"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+    </data>
+</odoo>

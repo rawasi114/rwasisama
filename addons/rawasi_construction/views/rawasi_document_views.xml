@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ════════ مستندات المشروع (DMS) ════════ -->
+    <record id="view_document_list" model="ir.ui.view">
+        <field name="name">rawasi.document.list</field>
+        <field name="model">rawasi.document</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="reference"/>
+                <field name="name"/>
+                <field name="project_id"/>
+                <field name="document_type"/>
+                <field name="revision"/>
+                <field name="document_date"/>
+                <field name="attachment_count" string="ملفات"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'approved'"
+                       decoration-info="state == 'under_review'"
+                       decoration-muted="state == 'superseded'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_document_form" model="ir.ui.view">
+        <field name="name">rawasi.document.form</field>
+        <field name="model">rawasi.document</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_submit_review" type="object" string="إرسال للمراجعة"
+                            class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_approve" type="object" string="اعتماد"
+                            class="btn-primary" invisible="state != 'under_review'"/>
+                    <button name="action_print_with_attachments" type="object"
+                            string="طباعة مع المرفقات" class="btn-secondary"
+                            invisible="not attachment_ids"/>
+                    <button name="action_supersede" type="object" string="إلغاء/استبدال"
+                            groups="base.group_system"
+                            invisible="state in ('draft','superseded')"/>
+                    <button name="action_reset_to_draft" type="object" string="إعادة لمسودة"
+                            groups="base.group_system"
+                            invisible="state == 'draft'"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,under_review,approved"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="reference" readonly="1"/></h1>
+                        <h2><field name="name" placeholder="عنوان المستند"/></h2>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="project_id"/>
+                            <field name="boq_item_id"/>
+                            <field name="document_type"/>
+                        </group>
+                        <group>
+                            <field name="revision"/>
+                            <field name="document_date"/>
+                            <field name="owner_id"/>
+                        </group>
+                    </group>
+                    <field name="attachment_ids" widget="many2many_binary"/>
+                    <field name="attachment_count" invisible="1"/>
+                    <field name="note" placeholder="ملاحظات..."/>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_document_search" model="ir.ui.view">
+        <field name="name">rawasi.document.search</field>
+        <field name="model">rawasi.document</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="reference"/>
+                <field name="project_id"/>
+                <filter name="approved" string="معتمد" domain="[('state','=','approved')]"/>
+                <group>
+                    <filter name="g_project" string="المشروع" context="{'group_by':'project_id'}"/>
+                    <filter name="g_type" string="النوع" context="{'group_by':'document_type'}"/>
+                    <filter name="g_state" string="الحالة" context="{'group_by':'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_document" model="ir.actions.act_window">
+        <field name="name">المستندات</field>
+        <field name="res_model">rawasi.document</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- أزرار المرحلة الرابعة الإحصائية في نموذج المشروع -->
+    <record id="view_project_form_rawasi_phase4" model="ir.ui.view">
+        <field name="name">project.project.form.rawasi.phase4</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.edit_project"/>
+        <field name="arch" type="xml">
+            <div name="button_box" position="inside">
+                <button name="action_open_documents" type="object" class="oe_stat_button"
+                        icon="fa-folder-open">
+                    <field name="rawasi_document_count" widget="statinfo" string="المستندات"/>
+                </button>
+                <button name="action_open_mas" type="object" class="oe_stat_button"
+                        icon="fa-check-square-o">
+                    <field name="rawasi_mas_count" widget="statinfo" string="اعتماد المواد"/>
+                </button>
+                <button name="action_open_dsr" type="object" class="oe_stat_button"
+                        icon="fa-calendar">
+                    <field name="rawasi_dsr_count" widget="statinfo" string="تقارير يومية"/>
+                </button>
+                <button name="action_open_ncr" type="object" class="oe_stat_button"
+                        icon="fa-exclamation-triangle">
+                    <field name="rawasi_ncr_count" widget="statinfo" string="عدم مطابقة"/>
+                </button>
+                <button name="action_open_rfi" type="object" class="oe_stat_button"
+                        icon="fa-question-circle">
+                    <field name="rawasi_rfi_count" widget="statinfo" string="طلبات معلومات"/>
+                </button>
+            </div>
+        </field>
+    </record>
+</odoo>
