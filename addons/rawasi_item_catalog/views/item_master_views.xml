@@ -109,7 +109,7 @@
                                     <field name="display_order" widget="handle"/>
                                     <field name="attribute_key"/>
                                     <field name="attribute_key_custom"
-                                           column_invisible="parent.attribute_key != 'other'"/>
+                                           optional="hide"/>
                                     <field name="attribute_value"/>
                                     <field name="attribute_unit"/>
                                     <field name="is_searchable" widget="boolean_toggle"/>
