@@ -2,17 +2,17 @@
 <odoo>
 
     <!-- البحث -->
-    <record id="view_item_master_search" model="ir.ui.view">
-        <field name="name">rawasi.item.master.search</field>
-        <field name="model">rawasi.item.master</field>
+    <record id="view_reference_item_search" model="ir.ui.view">
+        <field name="name">rawasi.reference.item.search</field>
+        <field name="model">rawasi.reference.item</field>
         <field name="arch" type="xml">
             <search>
-                <field name="canonical_code"/>
-                <field name="name_ar"/>
+                <field name="reference_code"/>
+                <field name="approved_name"/>
                 <field name="name_en"/>
                 <field name="taxonomy_id"/>
-                <field name="synonym_ids" string="ابحث في الصياغات البديلة"
-                       filter_domain="[('synonym_ids.text_normalized','ilike',self)]"/>
+                <field name="variant_ids" string="ابحث في الصياغات البديلة"
+                       filter_domain="[('variant_ids.normalized_text','ilike',self)]"/>
                 <separator/>
                 <filter name="draft" string="مسودة" domain="[('review_status','=','draft')]"/>
                 <filter name="reviewed" string="مراجَع" domain="[('review_status','=','reviewed')]"/>
@@ -31,17 +31,17 @@
     </record>
 
     <!-- قائمة -->
-    <record id="view_item_master_list" model="ir.ui.view">
-        <field name="name">rawasi.item.master.list</field>
-        <field name="model">rawasi.item.master</field>
+    <record id="view_reference_item_list" model="ir.ui.view">
+        <field name="name">rawasi.reference.item.list</field>
+        <field name="model">rawasi.reference.item</field>
         <field name="arch" type="xml">
             <list string="البنود المعيارية" multi_edit="1">
-                <field name="canonical_code"/>
-                <field name="name_ar"/>
+                <field name="reference_code"/>
+                <field name="approved_name"/>
                 <field name="name_en" optional="hide"/>
                 <field name="taxonomy_id"/>
                 <field name="uom_id"/>
-                <field name="synonym_count" string="الصياغات البديلة"/>
+                <field name="variant_count" string="الصياغات البديلة"/>
                 <field name="is_in_house" optional="hide"/>
                 <field name="workshop_type" optional="hide"/>
                 <field name="review_status" widget="badge"
@@ -54,9 +54,9 @@
     </record>
 
     <!-- النموذج -->
-    <record id="view_item_master_form" model="ir.ui.view">
-        <field name="name">rawasi.item.master.form</field>
-        <field name="model">rawasi.item.master</field>
+    <record id="view_reference_item_form" model="ir.ui.view">
+        <field name="name">rawasi.reference.item.form</field>
+        <field name="model">rawasi.reference.item</field>
         <field name="arch" type="xml">
             <form string="بند معياري">
                 <header>
@@ -66,9 +66,9 @@
                 <sheet>
                     <div class="oe_button_box" name="button_box">
                         <button class="oe_stat_button" type="object"
-                                name="action_open_synonyms"
+                                name="action_open_variants"
                                 icon="fa-list-ul">
-                            <field name="synonym_count" string="الصياغات البديلة" widget="statinfo"/>
+                            <field name="variant_count" string="الصياغات البديلة" widget="statinfo"/>
                         </button>
                     </div>
                     <widget name="web_ribbon" title="مؤرشف"
@@ -76,10 +76,10 @@
                     <field name="reference_image" widget="image"
                            class="oe_avatar"/>
                     <div class="oe_title">
-                        <label for="canonical_code"/>
-                        <h1><field name="canonical_code" placeholder="FLR-POR-6060-001"/></h1>
-                        <label for="name_ar"/>
-                        <h2><field name="name_ar" placeholder="بلاط بورسلين 60×60"/></h2>
+                        <label for="reference_code"/>
+                        <h1><field name="reference_code" placeholder="FLR-POR-6060-001"/></h1>
+                        <label for="approved_name"/>
+                        <h2><field name="approved_name" placeholder="بلاط بورسلين 60×60"/></h2>
                     </div>
                     <group>
                         <group>
@@ -104,23 +104,23 @@
                             <field name="description_long" placeholder="مواصفات تفصيلية..."/>
                         </page>
                         <page string="المواصفات الفنية" name="attributes">
-                            <field name="attribute_ids">
+                            <field name="specification_ids">
                                 <list editable="bottom">
                                     <field name="display_order" widget="handle"/>
-                                    <field name="attribute_key"/>
-                                    <field name="attribute_key_custom"
+                                    <field name="spec_key"/>
+                                    <field name="spec_key_custom"
                                            optional="hide"/>
-                                    <field name="attribute_value"/>
-                                    <field name="attribute_unit"/>
+                                    <field name="spec_value"/>
+                                    <field name="spec_unit"/>
                                     <field name="is_searchable" widget="boolean_toggle"/>
                                 </list>
                             </field>
                         </page>
                         <page string="الصياغات البديلة" name="synonyms">
-                            <field name="synonym_ids">
+                            <field name="variant_ids">
                                 <list editable="bottom">
-                                    <field name="text_raw"/>
-                                    <field name="text_normalized" readonly="1"/>
+                                    <field name="original_text"/>
+                                    <field name="normalized_text" readonly="1"/>
                                     <field name="source_entity_id"/>
                                     <field name="frequency"/>
                                     <field name="last_seen_date"/>
@@ -136,11 +136,11 @@
     </record>
 
     <!-- Action -->
-    <record id="action_item_master" model="ir.actions.act_window">
+    <record id="action_reference_item" model="ir.actions.act_window">
         <field name="name">البنود المعيارية</field>
-        <field name="res_model">rawasi.item.master</field>
+        <field name="res_model">rawasi.reference.item</field>
         <field name="view_mode">list,form</field>
-        <field name="search_view_id" ref="view_item_master_search"/>
+        <field name="search_view_id" ref="view_reference_item_search"/>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">لا توجد بنود معيارية بعد</p>
             <p>أنشئ أول بند: اختر فئة فرعية من شجرة التصنيف، ثم أعطه كوداً

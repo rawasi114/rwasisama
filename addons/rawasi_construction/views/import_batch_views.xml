@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ═══ دفعة الاستيراد ═══ -->
+    <record id="view_import_batch_search" model="ir.ui.view">
+        <field name="name">rawasi.import.batch.search</field>
+        <field name="model">rawasi.import.batch</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="filename"/>
+                <field name="source_entity_id"/>
+                <field name="competition_id"/>
+                <filter name="draft" string="مسودة" domain="[('state','=','draft')]"/>
+                <filter name="reviewing" string="قيد المراجعة" domain="[('state','=','reviewing')]"/>
+                <filter name="approved" string="معتمَدة" domain="[('state','=','approved')]"/>
+                <group>
+                    <filter name="group_by_state" string="حسب الحالة" context="{'group_by':'state'}"/>
+                    <filter name="group_by_user" string="حسب الراافع" context="{'group_by':'uploaded_by_user_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_import_batch_list" model="ir.ui.view">
+        <field name="name">rawasi.import.batch.list</field>
+        <field name="model">rawasi.import.batch</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="upload_date"/>
+                <field name="filename"/>
+                <field name="source_entity_id"/>
+                <field name="competition_id" optional="hide"/>
+                <field name="total_lines"/>
+                <field name="matched_lines"/>
+                <field name="pending_lines" decoration-warning="pending_lines &gt; 0"/>
+                <field name="state" widget="badge"
+                       decoration-info="state == 'draft'"
+                       decoration-warning="state == 'reviewing'"
+                       decoration-success="state == 'approved'"/>
+                <field name="uploaded_by_user_id"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_import_batch_form" model="ir.ui.view">
+        <field name="name">rawasi.import.batch.form</field>
+        <field name="model">rawasi.import.batch</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_open_review" type="object"
+                            string="مراجعة السطور" class="btn-primary"
+                            invisible="state == 'approved'"/>
+                    <button name="action_approve_import" type="object"
+                            string="اعتماد الاستيراد" class="btn-success"
+                            invisible="state == 'approved' or pending_lines &gt; 0"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="filename"/>
+                        <h1><field name="filename" readonly="state != 'draft'"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="file_data" filename="filename" readonly="state != 'draft'"/>
+                            <field name="source_entity_id"/>
+                            <field name="competition_id"/>
+                        </group>
+                        <group>
+                            <field name="upload_date" readonly="1"/>
+                            <field name="uploaded_by_user_id" readonly="1"/>
+                            <field name="total_lines" readonly="1"/>
+                            <field name="matched_lines" readonly="1"/>
+                            <field name="pending_lines" readonly="1"/>
+                            <field name="accepted_lines" readonly="1"/>
+                            <field name="rejected_lines" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="السطور" name="lines">
+                            <field name="raw_line_ids" readonly="1">
+                                <list>
+                                    <field name="line_number"/>
+                                    <field name="original_text"/>
+                                    <field name="suggested_match_id"/>
+                                    <field name="suggestion_confidence" widget="progressbar"/>
+                                    <field name="suggestion_source" widget="badge"/>
+                                    <field name="review_status" widget="badge"
+                                           decoration-warning="review_status == 'pending'"
+                                           decoration-success="review_status in ['accepted','modified','created_new']"
+                                           decoration-danger="review_status == 'rejected'"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="ملاحظات" name="notes">
+                            <field name="notes" nolabel="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_import_batch" model="ir.actions.act_window">
+        <field name="name">دفعات استيراد جداول الكميات</field>
+        <field name="res_model">rawasi.import.batch</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_import_batch_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">لا توجد دفعات استيراد بعد</p>
+            <p>ارفع ملف Excel من اعتماد عبر «معالج استيراد جداول الكميات».</p>
+        </field>
+    </record>
+
+    <!-- ═══ سطور خام ═══ -->
+    <record id="view_raw_line_search" model="ir.ui.view">
+        <field name="name">rawasi.import.raw.line.search</field>
+        <field name="model">rawasi.import.raw.line</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="original_text"/>
+                <field name="suggested_match_id"/>
+                <field name="batch_id"/>
+                <filter name="pending" string="بانتظار المراجعة" domain="[('review_status','=','pending')]"/>
+                <filter name="accepted" string="مقبول" domain="[('review_status','=','accepted')]"/>
+                <filter name="modified" string="معدّل" domain="[('review_status','=','modified')]"/>
+                <filter name="rejected" string="مرفوض" domain="[('review_status','=','rejected')]"/>
+                <separator/>
+                <filter name="high_conf" string="ثقة عالية (≥85%)" domain="[('suggestion_confidence','&gt;=',85)]"/>
+                <filter name="low_conf" string="ثقة منخفضة (&lt;55%)" domain="[('suggestion_confidence','&lt;',55)]"/>
+                <group>
+                    <filter name="group_by_batch" string="حسب الدفعة" context="{'group_by':'batch_id'}"/>
+                    <filter name="group_by_status" string="حسب الحالة" context="{'group_by':'review_status'}"/>
+                    <filter name="group_by_source" string="حسب مصدر الترشيح" context="{'group_by':'suggestion_source'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_raw_line_list" model="ir.ui.view">
+        <field name="name">rawasi.import.raw.line.list</field>
+        <field name="model">rawasi.import.raw.line</field>
+        <field name="arch" type="xml">
+            <list string="سطور المراجعة" multi_edit="1">
+                <field name="line_number"/>
+                <field name="original_text"/>
+                <field name="original_unit"/>
+                <field name="original_quantity"/>
+                <field name="suggested_match_id" widget="many2one"/>
+                <field name="suggestion_confidence" widget="progressbar"/>
+                <field name="suggestion_source" widget="badge"/>
+                <field name="review_status" widget="badge"
+                       decoration-warning="review_status == 'pending'"
+                       decoration-success="review_status in ['accepted','modified','created_new']"
+                       decoration-danger="review_status == 'rejected'"/>
+                <button name="action_accept" type="object"
+                        string="قبول" icon="fa-check"
+                        invisible="review_status != 'pending' or not suggested_match_id"/>
+                <button name="action_reject" type="object"
+                        string="رفض" icon="fa-times"
+                        invisible="review_status == 'rejected'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_raw_line_form" model="ir.ui.view">
+        <field name="name">rawasi.import.raw.line.form</field>
+        <field name="model">rawasi.import.raw.line</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_accept" type="object"
+                            string="قبول الترشيح" class="btn-success"
+                            invisible="review_status != 'pending' or not suggested_match_id"/>
+                    <button name="action_reject" type="object"
+                            string="رفض السطر" class="btn-danger"
+                            invisible="review_status == 'rejected'"/>
+                    <field name="review_status" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="السطر كما ورد">
+                            <field name="batch_id" readonly="1"/>
+                            <field name="line_number" readonly="1"/>
+                            <field name="original_text"/>
+                            <field name="original_unit"/>
+                            <field name="original_quantity"/>
+                            <field name="original_category"/>
+                            <field name="original_lcgpa_raw"/>
+                        </group>
+                        <group string="الترشيح والتنظيف">
+                            <field name="suggested_match_id" readonly="1"/>
+                            <field name="suggestion_confidence" widget="progressbar" readonly="1"/>
+                            <field name="suggestion_source" readonly="1"/>
+                            <field name="normalized_unit_id" readonly="1"/>
+                            <field name="detected_lcgpa_id" readonly="1"/>
+                            <field name="final_match_id"/>
+                        </group>
+                    </group>
+                    <group string="المواصفات المُستخلَصة تلقائياً">
+                        <group>
+                            <field name="extracted_dimensions" readonly="1"/>
+                            <field name="extracted_thickness" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="extracted_diameter" readonly="1"/>
+                            <field name="extracted_strength" readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="ملاحظات المراجع">
+                        <field name="reviewer_notes" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+</odoo>

@@ -97,7 +97,7 @@
                               invisible="level != 'subcategory'">
                             <field name="master_item_ids" readonly="1">
                                 <list>
-                                    <field name="canonical_code"/>
+                                    <field name="reference_code"/>
                                     <field name="name_ar"/>
                                     <field name="uom_id"/>
                                     <field name="review_status" widget="badge"/>

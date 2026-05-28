@@ -32,17 +32,17 @@
                   action="action_rawasi_projects"
                   sequence="22"/>
 
-        <!-- ═══ كتالوج البنود (مدموج من موديول rawasi_item_catalog السابق) ═══ -->
+        <!-- ═══ سجل البنود المرجعي ومنظومة المطابقة الذكية ═══ -->
         <menuitem id="menu_item_catalog_root"
-                  name="كتالوج البنود"
+                  name="سجل البنود المرجعي"
                   parent="menu_rawasi_root"
                   sequence="23"
                   groups="group_item_catalog_user"/>
 
-        <menuitem id="menu_master_items"
-                  name="البنود المعيارية"
+        <menuitem id="menu_reference_items"
+                  name="البنود المرجعية"
                   parent="menu_item_catalog_root"
-                  action="action_item_master"
+                  action="action_reference_item"
                   sequence="10"/>
 
         <menuitem id="menu_taxonomy"
@@ -51,17 +51,36 @@
                   action="action_item_taxonomy"
                   sequence="20"/>
 
-        <menuitem id="menu_synonyms"
+        <menuitem id="menu_variants"
                   name="الصياغات البديلة"
                   parent="menu_item_catalog_root"
-                  action="action_item_synonym"
+                  action="action_item_variant"
                   sequence="30"/>
 
-        <menuitem id="menu_mapping_audit"
-                  name="سجل قرارات الربط"
+        <menuitem id="menu_lcgpa_codes"
+                  name="أكواد LCGPA"
                   parent="menu_item_catalog_root"
-                  action="action_item_mapping_audit"
+                  action="action_lcgpa_code"
+                  sequence="35"/>
+
+        <menuitem id="menu_import_batches"
+                  name="دفعات استيراد جداول الكميات"
+                  parent="menu_item_catalog_root"
+                  action="action_import_batch"
                   sequence="40"/>
+
+        <menuitem id="menu_import_wizard"
+                  name="معالج استيراد جدول كميات"
+                  parent="menu_item_catalog_root"
+                  action="action_import_wizard"
+                  sequence="45"
+                  groups="group_item_catalog_editor"/>
+
+        <menuitem id="menu_audit_trail"
+                  name="سجل التتبع"
+                  parent="menu_item_catalog_root"
+                  action="action_audit_trail"
+                  sequence="50"/>
 
         <menuitem id="menu_rawasi_price_intelligence"
                   name="رادار الترسية"

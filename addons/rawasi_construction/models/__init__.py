@@ -24,9 +24,12 @@ from . import rawasi_subcontractor
 from . import rawasi_subcontract
 from . import rawasi_subcontract_ipc
 
-# كتالوج البنود (مدموج من موديول rawasi_item_catalog السابق)
+# سجل البنود المرجعي ومنظومة المطابقة الذكية
 from . import item_taxonomy
-from . import item_master
-from . import item_synonym
-from . import item_attribute
-from . import item_mapping_audit
+from . import lcgpa_code
+from . import reference_item
+from . import item_variant
+from . import item_specification
+from . import audit_trail
+from . import import_batch
+from . import import_raw_line

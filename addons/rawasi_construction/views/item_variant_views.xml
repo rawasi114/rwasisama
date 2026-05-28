@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <record id="view_item_synonym_search" model="ir.ui.view">
-        <field name="name">rawasi.item.synonym.search</field>
-        <field name="model">rawasi.item.synonym</field>
+    <record id="view_item_variant_search" model="ir.ui.view">
+        <field name="name">rawasi.item.variant.search</field>
+        <field name="model">rawasi.item.variant</field>
         <field name="arch" type="xml">
             <search>
-                <field name="text_raw"/>
-                <field name="text_normalized"/>
-                <field name="canonical_item_id"/>
+                <field name="original_text"/>
+                <field name="normalized_text"/>
+                <field name="reference_item_id"/>
                 <field name="source_entity_id"/>
                 <separator/>
                 <filter name="high_freq" string="عالية التكرار (≥10)"
@@ -19,7 +19,7 @@
                         domain="[('last_seen_date','&gt;=', (context_today() - relativedelta(days=30)).strftime('%Y-%m-%d'))]"/>
                 <group>
                     <filter name="group_by_canonical" string="حسب البند المعياري"
-                            context="{'group_by':'canonical_item_id'}"/>
+                            context="{'group_by':'reference_item_id'}"/>
                     <filter name="group_by_source" string="حسب الجهة المصدر"
                             context="{'group_by':'source_entity_id'}"/>
                 </group>
@@ -27,14 +27,14 @@
         </field>
     </record>
 
-    <record id="view_item_synonym_list" model="ir.ui.view">
-        <field name="name">rawasi.item.synonym.list</field>
-        <field name="model">rawasi.item.synonym</field>
+    <record id="view_item_variant_list" model="ir.ui.view">
+        <field name="name">rawasi.item.variant.list</field>
+        <field name="model">rawasi.item.variant</field>
         <field name="arch" type="xml">
             <list string="الصياغات البديلة" multi_edit="1">
-                <field name="text_raw"/>
-                <field name="text_normalized" optional="show"/>
-                <field name="canonical_item_id"/>
+                <field name="original_text"/>
+                <field name="normalized_text" optional="show"/>
+                <field name="reference_item_id"/>
                 <field name="source_entity_id" optional="hide"/>
                 <field name="frequency"/>
                 <field name="first_seen_date" optional="hide"/>
@@ -44,18 +44,18 @@
         </field>
     </record>
 
-    <record id="view_item_synonym_form" model="ir.ui.view">
-        <field name="name">rawasi.item.synonym.form</field>
-        <field name="model">rawasi.item.synonym</field>
+    <record id="view_item_variant_form" model="ir.ui.view">
+        <field name="name">rawasi.item.variant.form</field>
+        <field name="model">rawasi.item.variant</field>
         <field name="arch" type="xml">
             <form string="مرادف بند">
                 <sheet>
                     <group>
                         <group>
-                            <field name="canonical_item_id"
+                            <field name="reference_item_id"
                                    options="{'no_create': True}"/>
-                            <field name="text_raw"/>
-                            <field name="text_normalized" readonly="1"/>
+                            <field name="original_text"/>
+                            <field name="normalized_text" readonly="1"/>
                         </group>
                         <group>
                             <field name="source_entity_id"/>
@@ -70,11 +70,11 @@
         </field>
     </record>
 
-    <record id="action_item_synonym" model="ir.actions.act_window">
+    <record id="action_item_variant" model="ir.actions.act_window">
         <field name="name">الصياغات البديلة</field>
-        <field name="res_model">rawasi.item.synonym</field>
+        <field name="res_model">rawasi.item.variant</field>
         <field name="view_mode">list,form</field>
-        <field name="search_view_id" ref="view_item_synonym_search"/>
+        <field name="search_view_id" ref="view_item_variant_search"/>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">لا توجد الصياغات البديلة بعد</p>
             <p>الصياغات البديلة تتراكم تلقائياً مع كل استيراد جدول كميات (في مرحلة لاحقة)،

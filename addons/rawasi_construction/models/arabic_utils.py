@@ -53,3 +53,26 @@ def normalize_match(text):
     text = re.sub(r"[^\w\s]", " ", text, flags=re.UNICODE)
     text = re.sub(r"\s+", " ", text)
     return text.strip()
+
+
+# ── التوحيد الكامل لنص الصياغات البديلة ─────────────────────────
+_AR_DIG = str.maketrans("٠١٢٣٤٥٦٧٨٩", "0123456789")
+_EAST_DIG = str.maketrans("۰۱۲۳۴۵۶۷۸۹", "0123456789")
+
+
+def normalize_text(text):
+    """تطبيع كامل لنص بند، يستخدمه `rawasi.item.variant.normalized_text`.
+
+    خطوات: إزالة التشكيل والتطويل، توحيد الألف/الياء/التاء المربوطة،
+    تحويل الأرقام العربية والفارسية إلى لاتينية، تحويل الأحرف اللاتينية
+    إلى صغير، طي المسافات. يبقي التاء المربوطة على حالها لأن المصطلحات
+    الفنية أحياناً تعتمد على التمييز (ساعة/ساعه).
+    """
+    if not text:
+        return ""
+    s = str(text).strip()
+    s = _TASHKEEL.sub("", s)
+    s = s.translate(_LIGHT_HAMZA)
+    s = s.translate(_AR_DIG).translate(_EAST_DIG)
+    s = re.sub(r"\s+", " ", s)
+    return s.lower().strip()

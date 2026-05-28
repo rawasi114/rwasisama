@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_import_wizard_form" model="ir.ui.view">
+        <field name="name">rawasi.import.wizard.form</field>
+        <field name="model">rawasi.import.wizard</field>
+        <field name="arch" type="xml">
+            <form string="معالج استيراد جدول كميات">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>استيراد جدول كميات من اعتماد</h1>
+                    </div>
+                    <group>
+                        <field name="file_data" filename="filename" widget="binary"/>
+                        <field name="filename"/>
+                        <field name="source_entity_id"/>
+                        <field name="competition_id"/>
+                    </group>
+                    <div class="alert alert-info" role="alert">
+                        <strong>كيف يعمل المعالج:</strong>
+                        <ol>
+                            <li>يقرأ ملف Excel ويتعرّف على أعمدة اعتماد القياسية تلقائياً</li>
+                            <li>يطبّق مُوحِّد الوحدات (الـ 13 صياغة → 5 وحدات معتمدة)</li>
+                            <li>يستخلص المواصفات الفنية (أبعاد، سماكة، قطر، جهد) بـ regex</li>
+                            <li>يطبّق محرك المطابقة الذكية بـ 4 مستويات</li>
+                            <li>ينشئ دفعة استيراد + سطور خام جاهزة للمراجعة</li>
+                        </ol>
+                    </div>
+                </sheet>
+                <footer>
+                    <button name="action_analyze" type="object"
+                            string="تحليل الملف" class="btn-primary"/>
+                    <button special="cancel" string="إلغاء" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_import_wizard" model="ir.actions.act_window">
+        <field name="name">معالج استيراد جدول كميات</field>
+        <field name="res_model">rawasi.import.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

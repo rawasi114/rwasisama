@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_lcgpa_code_search" model="ir.ui.view">
+        <field name="name">rawasi.lcgpa.code.search</field>
+        <field name="model">rawasi.lcgpa.code</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="code"/>
+                <field name="name_ar"/>
+                <field name="name_en"/>
+                <field name="category"/>
+                <filter name="active" string="نشط" domain="[('active','=',True)]"/>
+                <filter name="mandatory" string="إلزامي محلي" domain="[('is_mandatory_local','=',True)]"/>
+                <group>
+                    <filter name="group_by_category" string="حسب التصنيف العام" context="{'group_by':'category'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_lcgpa_code_list" model="ir.ui.view">
+        <field name="name">rawasi.lcgpa.code.list</field>
+        <field name="model">rawasi.lcgpa.code</field>
+        <field name="arch" type="xml">
+            <list string="أكواد LCGPA">
+                <field name="code"/>
+                <field name="name_ar"/>
+                <field name="name_en" optional="hide"/>
+                <field name="category"/>
+                <field name="reference_item_count" string="عدد البنود"/>
+                <field name="is_mandatory_local" widget="boolean_toggle"/>
+                <field name="active" widget="boolean_toggle" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lcgpa_code_form" model="ir.ui.view">
+        <field name="name">rawasi.lcgpa.code.form</field>
+        <field name="model">rawasi.lcgpa.code</field>
+        <field name="arch" type="xml">
+            <form string="رمز LCGPA">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="code"/>
+                        <h1><field name="code" placeholder="2002"/></h1>
+                        <label for="name_ar"/>
+                        <h2><field name="name_ar" placeholder="الخرسانة"/></h2>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name_en"/>
+                            <field name="category" placeholder="مواد إنشائية"/>
+                        </group>
+                        <group>
+                            <field name="is_mandatory_local"/>
+                            <field name="active"/>
+                            <field name="reference_item_count" readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="الوصف">
+                        <field name="description" nolabel="1"/>
+                    </group>
+                    <notebook>
+                        <page string="البنود المرجعية المرتبطة" name="references">
+                            <field name="reference_item_ids" readonly="1">
+                                <list>
+                                    <field name="reference_code"/>
+                                    <field name="approved_name"/>
+                                    <field name="uom_id"/>
+                                    <field name="review_status" widget="badge"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_lcgpa_code" model="ir.actions.act_window">
+        <field name="name">أكواد LCGPA</field>
+        <field name="res_model">rawasi.lcgpa.code</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_lcgpa_code_search"/>
+    </record>
+
+</odoo>

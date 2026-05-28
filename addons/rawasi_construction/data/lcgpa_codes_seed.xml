@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- بذرة أكواد LCGPA الأكثر شيوعاً في ملفات اعتماد -->
+        <!-- المصدر: هيئة المحتوى المحلي والمشتريات الحكومية -->
+
+        <record id="lcgpa_2002" model="rawasi.lcgpa.code">
+            <field name="code">2002</field>
+            <field name="name_ar">الخرسانة</field>
+            <field name="name_en">Concrete</field>
+            <field name="category">مواد إنشائية</field>
+        </record>
+
+        <record id="lcgpa_2031" model="rawasi.lcgpa.code">
+            <field name="code">2031</field>
+            <field name="name_ar">الأبواب الخشبية</field>
+            <field name="name_en">Wooden Doors</field>
+            <field name="category">أبواب وشبابيك</field>
+        </record>
+
+        <record id="lcgpa_2032" model="rawasi.lcgpa.code">
+            <field name="code">2032</field>
+            <field name="name_ar">الأبواب والشبابيك المعدنية</field>
+            <field name="name_en">Metal Doors and Windows</field>
+            <field name="category">أبواب وشبابيك</field>
+        </record>
+
+        <record id="lcgpa_2041" model="rawasi.lcgpa.code">
+            <field name="code">2041</field>
+            <field name="name_ar">الأنابيب</field>
+            <field name="name_en">Pipes</field>
+            <field name="category">سباكة وميكانيكا</field>
+        </record>
+
+        <record id="lcgpa_2051" model="rawasi.lcgpa.code">
+            <field name="code">2051</field>
+            <field name="name_ar">الكابلات الكهربائية</field>
+            <field name="name_en">Electrical Cables</field>
+            <field name="category">كهرباء</field>
+        </record>
+
+        <record id="lcgpa_2061" model="rawasi.lcgpa.code">
+            <field name="code">2061</field>
+            <field name="name_ar">السيراميك والبورسلين</field>
+            <field name="name_en">Ceramic and Porcelain</field>
+            <field name="category">مواد تشطيب</field>
+        </record>
+
+        <record id="lcgpa_2071" model="rawasi.lcgpa.code">
+            <field name="code">2071</field>
+            <field name="name_ar">العزل الحراري والمائي</field>
+            <field name="name_en">Thermal and Water Insulation</field>
+            <field name="category">عزل وحماية</field>
+        </record>
+
+        <record id="lcgpa_2081" model="rawasi.lcgpa.code">
+            <field name="code">2081</field>
+            <field name="name_ar">وحدات التكييف</field>
+            <field name="name_en">Air Conditioning Units</field>
+            <field name="category">تكييف وتهوية</field>
+        </record>
+
+    </data>
+</odoo>

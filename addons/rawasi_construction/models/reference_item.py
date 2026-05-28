@@ -1,45 +1,50 @@
 # -*- coding: utf-8 -*-
+"""البند المرجعي — السجل المعتمَد لكل بند يتكرَّر في جداول الكميات."""
 import re
 
 from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError
 
 
-CANONICAL_CODE_PATTERN = re.compile(
+REFERENCE_CODE_PATTERN = re.compile(
     r"^[A-Z]{2,4}-[A-Z]{2,4}-[A-Z0-9]{2,8}-\d{3}$"
 )
 
 
-class ItemMaster(models.Model):
-    """البند المعياري — السجل المرجعي الموحَّد لكل بند يتكرَّر في جداول الكميات."""
-
-    _name = "rawasi.item.master"
-    _description = "بند معياري (Standard Item)"
+class ReferenceItem(models.Model):
+    _name = "rawasi.reference.item"
+    _description = "بند مرجعي (Reference Item)"
     _inherit = ["mail.thread", "mail.activity.mixin"]
-    _order = "canonical_code"
-    _rec_name = "name_ar"
+    _order = "reference_code"
+    _rec_name = "approved_name"
 
-    canonical_code = fields.Char(
-        string="الكود المعياري", required=True, index=True, copy=False,
+    reference_code = fields.Char(
+        string="الرمز المرجعي", required=True, index=True, copy=False,
         help="نمط: XXX-XXX-XXXX-NNN — مثلاً FLR-POR-6060-001",
     )
-    name_ar = fields.Char(string="الاسم الموحَّد", required=True, index=True)
+    approved_name = fields.Char(
+        string="الاسم المعتمد", required=True, index=True,
+    )
     name_en = fields.Char(string="Name (English)")
 
     taxonomy_id = fields.Many2one(
         "rawasi.item.taxonomy", string="التصنيف", required=True, index=True,
         domain="[('level', '=', 'subcategory')]",
-        help="البنود المعيارية تُربط بفئات فرعية فقط (الأوراق في شجرة التصنيف).",
+        help="البنود المرجعية تُربط بفئات فرعية فقط (أوراق شجرة التصنيف).",
     )
     uom_id = fields.Many2one(
         "uom.uom", string="وحدة القياس الافتراضية", required=True,
+    )
+    lcgpa_code_id = fields.Many2one(
+        "rawasi.lcgpa.code", string="رمز LCGPA",
+        help="رمز هيئة المحتوى المحلي والمشتريات الحكومية المرتبط بهذا البند.",
     )
 
     description_short = fields.Char(string="الوصف الموجز", size=255)
     description_long = fields.Html(string="الوصف التفصيلي")
     reference_image = fields.Binary(string="صورة مرجعية", attachment=True)
 
-    # خصائص رواسي الاستراتيجية
+    # خصائص استراتيجية لرواسي
     is_in_house = fields.Boolean(string="يُصنَّع داخلياً", default=False, index=True)
     workshop_type = fields.Selection(
         [
@@ -59,6 +64,7 @@ class ItemMaster(models.Model):
             ("manual", "إدخال يدوي"),
             ("ai_suggestion", "اقتراح AI مُعتمَد"),
             ("bulk_import", "استيراد جماعي"),
+            ("import_wizard", "وصف اعتماد جديد"),
         ],
         default="manual", required=True, string="مصدر الإنشاء",
     )
@@ -76,37 +82,38 @@ class ItemMaster(models.Model):
     )
 
     # علاقات
-    attribute_ids = fields.One2many(
-        "rawasi.item.attribute", "canonical_item_id", string="المواصفات الفنية",
+    specification_ids = fields.One2many(
+        "rawasi.item.specification", "reference_item_id",
+        string="المواصفات الفنية",
     )
-    synonym_ids = fields.One2many(
-        "rawasi.item.synonym", "canonical_item_id", string="الصياغات البديلة",
+    variant_ids = fields.One2many(
+        "rawasi.item.variant", "reference_item_id",
+        string="الصياغات البديلة",
     )
-    synonym_count = fields.Integer(
+    variant_count = fields.Integer(
         string="عدد الصياغات",
-        compute="_compute_synonym_count", store=True,
+        compute="_compute_variant_count", store=True,
     )
 
-    # عمود embedding يُنشأ عبر post_init_hook كنوع pgvector(1024) — لا يُعرَّف هنا
-    # لأن ORM لا يدعم vector نيتيف. النفاذ إليه عبر SQL مباشر في المرحلة القادمة.
+    # عمود embedding موجود من post_init_hook (vector(1024))
 
-    _canonical_code_uniq = models.Constraint(
-        "UNIQUE(canonical_code)",
-        "الكود المعياري يجب أن يكون فريداً.",
+    _reference_code_uniq = models.Constraint(
+        "UNIQUE(reference_code)",
+        "الرمز المرجعي يجب أن يكون فريداً.",
     )
 
-    @api.depends("synonym_ids")
-    def _compute_synonym_count(self):
+    @api.depends("variant_ids")
+    def _compute_variant_count(self):
         for rec in self:
-            rec.synonym_count = len(rec.synonym_ids)
+            rec.variant_count = len(rec.variant_ids)
 
-    @api.constrains("canonical_code")
+    @api.constrains("reference_code")
     def _check_code_format(self):
         for rec in self:
-            if not CANONICAL_CODE_PATTERN.match(rec.canonical_code or ""):
+            if not REFERENCE_CODE_PATTERN.match(rec.reference_code or ""):
                 raise ValidationError(_(
-                    "الكود «%s» لا يتبع النمط المطلوب. مثال صحيح: FLR-POR-6060-001"
-                ) % rec.canonical_code)
+                    "الرمز «%s» لا يتبع النمط المطلوب. مثال صحيح: FLR-POR-6060-001"
+                ) % rec.reference_code)
 
     @api.constrains("taxonomy_id")
     def _check_taxonomy_is_subcategory(self):
@@ -114,15 +121,15 @@ class ItemMaster(models.Model):
             if rec.taxonomy_id.level != "subcategory":
                 raise ValidationError(_(
                     "البند «%s» يجب أن يُربط بفئة فرعية، لكنه رُبط بمستوى «%s»."
-                ) % (rec.name_ar, rec.taxonomy_id.level))
+                ) % (rec.approved_name, rec.taxonomy_id.level))
 
-    def action_open_synonyms(self):
+    def action_open_variants(self):
         self.ensure_one()
         return {
             "type": "ir.actions.act_window",
-            "name": _("صياغات بديلة: %s") % self.name_ar,
-            "res_model": "rawasi.item.synonym",
+            "name": _("الصياغات البديلة: %s") % self.approved_name,
+            "res_model": "rawasi.item.variant",
             "view_mode": "list,form",
-            "domain": [("canonical_item_id", "=", self.id)],
-            "context": {"default_canonical_item_id": self.id},
+            "domain": [("reference_item_id", "=", self.id)],
+            "context": {"default_reference_item_id": self.id},
         }
