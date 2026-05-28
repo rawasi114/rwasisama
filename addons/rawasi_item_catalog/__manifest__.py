@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "رواسي سما — كتالوج البنود الموحَّد",
-    "version": "19.0.2.0.4",
+    "version": "19.0.3.0.0",
     "category": "Services/Project",
     "summary": "Master item catalog: taxonomy, canonical items, synonyms, attributes, semantic search (pgvector)",
     "description": """
@@ -22,6 +22,7 @@
         "security/security.xml",
         "security/ir.model.access.csv",
         "data/taxonomy_root_seed.xml",
+        "data/catalog_import_2026_05.xml",
         "views/item_taxonomy_views.xml",
         "views/item_master_views.xml",
         "views/item_synonym_views.xml",
