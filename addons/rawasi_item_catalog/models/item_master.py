@@ -11,25 +11,25 @@ CANONICAL_CODE_PATTERN = re.compile(
 
 
 class ItemMaster(models.Model):
-    """البند الكنسي — الكيان الذرّي للكتالوج. كل صياغة خام تربط بواحد من هذه."""
+    """البند المعياري — السجل المرجعي الموحَّد لكل بند يتكرَّر في جداول الكميات."""
 
     _name = "rawasi.item.master"
-    _description = "بند كنسي (Canonical Item)"
+    _description = "بند معياري (Standard Item)"
     _inherit = ["mail.thread", "mail.activity.mixin"]
     _order = "canonical_code"
     _rec_name = "name_ar"
 
     canonical_code = fields.Char(
-        string="الكود الكنسي", required=True, index=True, copy=False,
+        string="الكود المعياري", required=True, index=True, copy=False,
         help="نمط: XXX-XXX-XXXX-NNN — مثلاً FLR-POR-6060-001",
     )
-    name_ar = fields.Char(string="الاسم العربي", required=True, index=True)
+    name_ar = fields.Char(string="الاسم الموحَّد", required=True, index=True)
     name_en = fields.Char(string="Name (English)")
 
     taxonomy_id = fields.Many2one(
         "rawasi.item.taxonomy", string="التصنيف", required=True, index=True,
         domain="[('level', '=', 'subcategory')]",
-        help="البنود الكنسية تُربط بفئات فرعية فقط (أوراق الشجرة).",
+        help="البنود المعيارية تُربط بفئات فرعية فقط (الأوراق في شجرة التصنيف).",
     )
     uom_id = fields.Many2one(
         "uom.uom", string="وحدة القياس الافتراضية", required=True,
@@ -77,13 +77,13 @@ class ItemMaster(models.Model):
 
     # علاقات
     attribute_ids = fields.One2many(
-        "rawasi.item.attribute", "canonical_item_id", string="الخصائص",
+        "rawasi.item.attribute", "canonical_item_id", string="المواصفات الفنية",
     )
     synonym_ids = fields.One2many(
-        "rawasi.item.synonym", "canonical_item_id", string="المرادفات",
+        "rawasi.item.synonym", "canonical_item_id", string="الصياغات البديلة",
     )
     synonym_count = fields.Integer(
-        string="عدد المرادفات",
+        string="عدد الصياغات",
         compute="_compute_synonym_count", store=True,
     )
 
@@ -92,7 +92,7 @@ class ItemMaster(models.Model):
 
     _canonical_code_uniq = models.Constraint(
         "UNIQUE(canonical_code)",
-        "الكود الكنسي يجب أن يكون فريداً.",
+        "الكود المعياري يجب أن يكون فريداً.",
     )
 
     @api.depends("synonym_ids")
@@ -113,14 +113,14 @@ class ItemMaster(models.Model):
         for rec in self:
             if rec.taxonomy_id.level != "subcategory":
                 raise ValidationError(_(
-                    "البند «%s» يجب أن يُربط بفئة فرعية (subcategory)، لكنه رُبط بمستوى «%s»."
+                    "البند «%s» يجب أن يُربط بفئة فرعية، لكنه رُبط بمستوى «%s»."
                 ) % (rec.name_ar, rec.taxonomy_id.level))
 
     def action_open_synonyms(self):
         self.ensure_one()
         return {
             "type": "ir.actions.act_window",
-            "name": _("مرادفات: %s") % self.name_ar,
+            "name": _("صياغات بديلة: %s") % self.name_ar,
             "res_model": "rawasi.item.synonym",
             "view_mode": "list,form",
             "domain": [("canonical_item_id", "=", self.id)],

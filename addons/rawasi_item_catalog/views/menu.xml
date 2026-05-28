@@ -9,43 +9,32 @@
                   web_icon="rawasi_item_catalog,static/description/icon.png"
                   groups="group_item_catalog_user"/>
 
-        <!-- الكتالوج -->
-        <menuitem id="menu_catalog_section"
-                  name="الكتالوج"
-                  parent="menu_root_item_catalog"
-                  sequence="10"/>
+        <!-- بنية مسطَّحة: المستخدم يفتح ما يحتاجه مباشرة بدون طبقات وسيطة -->
 
         <menuitem id="menu_master_items"
-                  name="البنود الكنسية"
-                  parent="menu_catalog_section"
+                  name="البنود المعيارية"
+                  parent="menu_root_item_catalog"
                   action="action_item_master"
                   sequence="10"/>
 
         <menuitem id="menu_taxonomy"
                   name="شجرة التصنيف"
-                  parent="menu_catalog_section"
+                  parent="menu_root_item_catalog"
                   action="action_item_taxonomy"
                   sequence="20"/>
 
         <menuitem id="menu_synonyms"
-                  name="المرادفات"
-                  parent="menu_catalog_section"
+                  name="الصياغات البديلة"
+                  parent="menu_root_item_catalog"
                   action="action_item_synonym"
                   sequence="30"/>
 
-        <!-- المراجعة والتدقيق -->
-        <menuitem id="menu_review_section"
-                  name="المراجعة والتدقيق"
-                  parent="menu_root_item_catalog"
-                  sequence="20"/>
-
         <menuitem id="menu_mapping_audit"
-                  name="سجل التدقيق"
-                  parent="menu_review_section"
+                  name="سجل قرارات الربط"
+                  parent="menu_root_item_catalog"
                   action="action_item_mapping_audit"
-                  sequence="10"/>
+                  sequence="40"/>
 
-        <!-- الإعدادات (للمدير فقط) -->
         <menuitem id="menu_settings_section"
                   name="الإعدادات"
                   parent="menu_root_item_catalog"

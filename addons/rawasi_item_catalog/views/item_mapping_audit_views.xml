@@ -45,7 +45,7 @@
         <field name="name">rawasi.item.mapping.audit.list</field>
         <field name="model">rawasi.item.mapping.audit</field>
         <field name="arch" type="xml">
-            <list string="سجل التدقيق" create="0">
+            <list string="سجل قرارات الربط" create="0">
                 <field name="mapping_date"/>
                 <field name="raw_text"/>
                 <field name="canonical_item_id"/>
@@ -97,13 +97,13 @@
     </record>
 
     <record id="action_item_mapping_audit" model="ir.actions.act_window">
-        <field name="name">سجل التدقيق</field>
+        <field name="name">سجل قرارات الربط</field>
         <field name="res_model">rawasi.item.mapping.audit</field>
         <field name="view_mode">list,form</field>
         <field name="search_view_id" ref="view_item_mapping_audit_search"/>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">لا توجد سجلات تدقيق بعد</p>
-            <p>كل قرار ربط نص خام ببند كنسي يُسجَّل هنا تلقائياً (في مرحلة لاحقة).</p>
+            <p>كل قرار ربط نص خام ببند معياري يُسجَّل هنا تلقائياً (في مرحلة لاحقة).</p>
         </field>
     </record>
 

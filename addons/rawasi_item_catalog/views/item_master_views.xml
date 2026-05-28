@@ -11,7 +11,7 @@
                 <field name="name_ar"/>
                 <field name="name_en"/>
                 <field name="taxonomy_id"/>
-                <field name="synonym_ids" string="ابحث في المرادفات"
+                <field name="synonym_ids" string="ابحث في الصياغات البديلة"
                        filter_domain="[('synonym_ids.text_normalized','ilike',self)]"/>
                 <separator/>
                 <filter name="draft" string="مسودة" domain="[('review_status','=','draft')]"/>
@@ -35,13 +35,13 @@
         <field name="name">rawasi.item.master.list</field>
         <field name="model">rawasi.item.master</field>
         <field name="arch" type="xml">
-            <list string="البنود الكنسية" multi_edit="1">
+            <list string="البنود المعيارية" multi_edit="1">
                 <field name="canonical_code"/>
                 <field name="name_ar"/>
                 <field name="name_en" optional="hide"/>
                 <field name="taxonomy_id"/>
                 <field name="uom_id"/>
-                <field name="synonym_count" string="مرادفات"/>
+                <field name="synonym_count" string="الصياغات البديلة"/>
                 <field name="is_in_house" optional="hide"/>
                 <field name="workshop_type" optional="hide"/>
                 <field name="review_status" widget="badge"
@@ -58,7 +58,7 @@
         <field name="name">rawasi.item.master.form</field>
         <field name="model">rawasi.item.master</field>
         <field name="arch" type="xml">
-            <form string="بند كنسي">
+            <form string="بند معياري">
                 <header>
                     <field name="review_status" widget="statusbar"
                            options="{'clickable': '1'}"/>
@@ -68,7 +68,7 @@
                         <button class="oe_stat_button" type="object"
                                 name="action_open_synonyms"
                                 icon="fa-list-ul">
-                            <field name="synonym_count" string="مرادفات" widget="statinfo"/>
+                            <field name="synonym_count" string="الصياغات البديلة" widget="statinfo"/>
                         </button>
                     </div>
                     <widget name="web_ribbon" title="مؤرشف"
@@ -103,7 +103,7 @@
                         <page string="الوصف التفصيلي" name="description">
                             <field name="description_long" placeholder="مواصفات تفصيلية..."/>
                         </page>
-                        <page string="الخصائص" name="attributes">
+                        <page string="المواصفات الفنية" name="attributes">
                             <field name="attribute_ids">
                                 <list editable="bottom">
                                     <field name="display_order" widget="handle"/>
@@ -116,7 +116,7 @@
                                 </list>
                             </field>
                         </page>
-                        <page string="المرادفات" name="synonyms">
+                        <page string="الصياغات البديلة" name="synonyms">
                             <field name="synonym_ids">
                                 <list editable="bottom">
                                     <field name="text_raw"/>
@@ -137,12 +137,12 @@
 
     <!-- Action -->
     <record id="action_item_master" model="ir.actions.act_window">
-        <field name="name">البنود الكنسية</field>
+        <field name="name">البنود المعيارية</field>
         <field name="res_model">rawasi.item.master</field>
         <field name="view_mode">list,form</field>
         <field name="search_view_id" ref="view_item_master_search"/>
         <field name="help" type="html">
-            <p class="o_view_nocontent_smiling_face">لا توجد بنود كنسية بعد</p>
+            <p class="o_view_nocontent_smiling_face">لا توجد بنود معيارية بعد</p>
             <p>أنشئ أول بند: اختر فئة فرعية من شجرة التصنيف، ثم أعطه كوداً
                بنمط <strong>XXX-XXX-XXXX-NNN</strong> (مثلاً <code>FLR-POR-6060-001</code>).</p>
         </field>

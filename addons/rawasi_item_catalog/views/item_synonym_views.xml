@@ -18,7 +18,7 @@
                 <filter name="recent" string="آخر 30 يوم"
                         domain="[('last_seen_date','&gt;=', (context_today() - relativedelta(days=30)).strftime('%Y-%m-%d'))]"/>
                 <group>
-                    <filter name="group_by_canonical" string="حسب البند الكنسي"
+                    <filter name="group_by_canonical" string="حسب البند المعياري"
                             context="{'group_by':'canonical_item_id'}"/>
                     <filter name="group_by_source" string="حسب الجهة المصدر"
                             context="{'group_by':'source_entity_id'}"/>
@@ -31,7 +31,7 @@
         <field name="name">rawasi.item.synonym.list</field>
         <field name="model">rawasi.item.synonym</field>
         <field name="arch" type="xml">
-            <list string="المرادفات" multi_edit="1">
+            <list string="الصياغات البديلة" multi_edit="1">
                 <field name="text_raw"/>
                 <field name="text_normalized" optional="show"/>
                 <field name="canonical_item_id"/>
@@ -71,14 +71,14 @@
     </record>
 
     <record id="action_item_synonym" model="ir.actions.act_window">
-        <field name="name">المرادفات</field>
+        <field name="name">الصياغات البديلة</field>
         <field name="res_model">rawasi.item.synonym</field>
         <field name="view_mode">list,form</field>
         <field name="search_view_id" ref="view_item_synonym_search"/>
         <field name="help" type="html">
-            <p class="o_view_nocontent_smiling_face">لا توجد مرادفات بعد</p>
-            <p>المرادفات تتراكم تلقائياً مع كل استيراد جدول كميات (في مرحلة لاحقة)،
-               أو يمكن إضافتها يدوياً من نموذج البند الكنسي.</p>
+            <p class="o_view_nocontent_smiling_face">لا توجد الصياغات البديلة بعد</p>
+            <p>الصياغات البديلة تتراكم تلقائياً مع كل استيراد جدول كميات (في مرحلة لاحقة)،
+               أو يمكن إضافتها يدوياً من نموذج البند المعياري.</p>
         </field>
     </record>
 

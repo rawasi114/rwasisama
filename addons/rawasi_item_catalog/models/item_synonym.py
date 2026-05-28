@@ -41,18 +41,18 @@ def normalize_arabic(text):
 
 
 class ItemSynonym(models.Model):
-    """صياغة بديلة (مرادف) لبند كنسي.
+    """صياغة بديلة لبند معياري.
 
     تتراكم من جداول الكميات الواردة من جهات حكومية مختلفة. كل صياغة
     تربط بـ canonical_item_id ولا تتكرر بصياغتها المُطبَّعة لنفس البند.
     """
 
     _name = "rawasi.item.synonym"
-    _description = "مرادف بند (Item Synonym)"
+    _description = "صياغة بديلة (Alternative Wording)"
     _order = "frequency desc, last_seen_date desc"
 
     canonical_item_id = fields.Many2one(
-        "rawasi.item.master", string="البند الكنسي",
+        "rawasi.item.master", string="البند المعياري",
         required=True, ondelete="cascade", index=True,
     )
     text_raw = fields.Char(string="النص الخام", required=True)
@@ -80,7 +80,7 @@ class ItemSynonym(models.Model):
 
     _text_canonical_uniq = models.Constraint(
         "UNIQUE(canonical_item_id, text_normalized)",
-        "لا يمكن تكرار نفس الصياغة المُطبَّعة لنفس البند الكنسي.",
+        "لا يمكن تكرار نفس الصياغة المُطبَّعة لنفس البند المعياري.",
     )
 
     @api.depends("text_raw")

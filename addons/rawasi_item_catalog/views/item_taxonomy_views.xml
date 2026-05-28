@@ -55,7 +55,7 @@
                                 name="action_open_master_items"
                                 icon="fa-cubes"
                                 invisible="master_item_count == 0">
-                            <field name="master_item_count" string="بنود كنسية" widget="statinfo"/>
+                            <field name="master_item_count" string="بنود معيارية" widget="statinfo"/>
                         </button>
                     </div>
                     <widget name="web_ribbon" title="مؤرشف"
@@ -93,7 +93,7 @@
                                 </list>
                             </field>
                         </page>
-                        <page string="البنود الكنسية" name="master_items"
+                        <page string="البنود المعيارية" name="master_items"
                               invisible="level != 'subcategory'">
                             <field name="master_item_ids" readonly="1">
                                 <list>

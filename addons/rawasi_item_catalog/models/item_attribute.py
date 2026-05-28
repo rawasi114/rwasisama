@@ -4,19 +4,19 @@ from odoo.exceptions import ValidationError
 
 
 class ItemAttribute(models.Model):
-    """خاصية منظَّمة على بند كنسي (مقاس / سماكة / درجة / لون...).
+    """مواصفة فنية منظَّمة على بند معياري (مقاس / سماكة / درجة / لون...).
 
-    الفصل عن `description_long` متعمَّد: الخصائص قابلة للاستعلام
+    الفصل عن `description_long` متعمَّد: المواصفات قابلة للاستعلام
     والتصفية، الوصف نص حر للعرض فقط.
     """
 
     _name = "rawasi.item.attribute"
-    _description = "خاصية بند منظَّمة (Item Structured Attribute)"
+    _description = "مواصفة فنية (Technical Specification)"
     _order = "canonical_item_id, display_order, id"
 
     canonical_item_id = fields.Many2one(
         "rawasi.item.master", required=True,
-        ondelete="cascade", index=True, string="البند الكنسي",
+        ondelete="cascade", index=True, string="البند المعياري",
     )
     attribute_key = fields.Selection(
         [

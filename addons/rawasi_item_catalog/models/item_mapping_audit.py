@@ -16,12 +16,12 @@ class ItemMappingAudit(models.Model):
     """
 
     _name = "rawasi.item.mapping.audit"
-    _description = "سجل تدقيق ربط البنود (Item Mapping Audit)"
+    _description = "سجل قرارات الربط (Mapping Decision Log)"
     _order = "mapping_date desc"
 
     raw_text = fields.Text(string="النص الخام", required=True)
     canonical_item_id = fields.Many2one(
-        "rawasi.item.master", string="البند الكنسي المختار",
+        "rawasi.item.master", string="البند المعياري المختار",
         ondelete="set null",
     )
     mapped_by_user_id = fields.Many2one(
@@ -52,7 +52,7 @@ class ItemMappingAudit(models.Model):
         required=True, index=True, string="إجراء المستخدم",
     )
     original_suggestion_id = fields.Many2one(
-        "rawasi.item.master", string="الاقتراح الأصلي",
+        "rawasi.item.master", string="البند المقترح الأصلي",
         ondelete="set null",
         help="البند الذي اقترحه النظام قبل تعديل المستخدم — مفيد لتقييم الجودة.",
     )
