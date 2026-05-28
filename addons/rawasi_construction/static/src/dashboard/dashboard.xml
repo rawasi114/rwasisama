@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <templates xml:space="preserve">
     <t t-name="rawasi_construction.Dashboard">
-        <div class="o_rawasi_dashboard p-4">
+        <div class="o_rawasi_dashboard p-4" dir="rtl" lang="ar">
             <div class="o_rawasi_hero">
                 <div class="o_rawasi_brand">شركة رواسي سما للمقاولات</div>
                 <h1 class="o_rawasi_title">الإطلاق الرسمي لنظام إدارة المقاولات</h1>
