@@ -30,14 +30,17 @@
                 <header>
                     <button name="action_open_submit_wizard" string="طلب اعتماد المواد" type="object"
                             class="btn-primary"
-                            invisible="state != 'draft' or materials_available or not material_line_ids or paid_ratio &lt; 0.5 or material_approval_state in ('to_approve','approved')"/>
-                    <button name="action_open_approve_wizard" string="اعتماد المواد" type="object"
+                            invisible="state != 'draft' or materials_available or not material_line_ids or paid_ratio &lt; 0.5 or material_approval_state in ('to_approve','to_finance','approved')"/>
+                    <button name="action_open_approve_wizard" string="اعتماد وإرسال للحسابات" type="object"
                             class="btn-primary"
                             invisible="material_approval_state != 'to_approve' or not can_approve_materials"/>
+                    <button name="action_open_finance_wizard" string="اعتماد التمويل وإرسال للمشتريات" type="object"
+                            class="btn-primary"
+                            invisible="material_approval_state != 'to_finance' or not can_handle_finance"/>
                     <button name="action_reject_materials" string="رفض" type="object"
-                            invisible="material_approval_state != 'to_approve' or not can_approve_materials"/>
+                            invisible="(material_approval_state != 'to_approve' or not can_approve_materials) and (material_approval_state != 'to_finance' or not can_handle_finance)"/>
                     <button name="action_revise_materials" string="إعادة للتعديل" type="object"
-                            invisible="material_approval_state != 'to_approve' or not can_approve_materials"/>
+                            invisible="(material_approval_state != 'to_approve' or not can_approve_materials) and (material_approval_state != 'to_finance' or not can_handle_finance)"/>
                     <button name="action_handover_materials" string="تسليم المواد للورشة" type="object"
                             class="btn-primary"
                             invisible="material_approval_state != 'approved' or material_handover_done or not materials_available or not can_handle_purchase"/>
@@ -80,6 +83,7 @@
                     <field name="paid_ratio" invisible="1"/>
                     <field name="material_approval_state" invisible="1"/>
                     <field name="can_approve_materials" invisible="1"/>
+                    <field name="can_handle_finance" invisible="1"/>
                     <field name="can_handle_purchase" invisible="1"/>
                     <field name="material_handover_done" invisible="1"/>
                     <div class="alert alert-info" role="alert"
@@ -88,11 +92,15 @@
                     </div>
                     <div class="alert alert-info" role="alert"
                          invisible="material_approval_state != 'to_approve'">
-                        طلب المواد بانتظار اعتماد المسؤول.
+                        طلب المواد بانتظار اعتماد مشرف الورشة.
+                    </div>
+                    <div class="alert alert-info" role="alert"
+                         invisible="material_approval_state != 'to_finance'">
+                        اعتمده مشرف الورشة، بانتظار اعتماد الحسابات وتوفير السيولة.
                     </div>
                     <div class="alert alert-success" role="alert"
                          invisible="material_approval_state != 'approved' or material_handover_done">
-                        تم اعتماد المواد وإسنادها لموظف المشتريات؛ بانتظار الشراء ثم تسليمها للورشة.
+                        اعتمدت الحسابات التمويل، وأُسند الطلب لموظف المشتريات؛ بانتظار الشراء ثم التسليم للورشة.
                     </div>
                     <div class="alert alert-danger" role="alert"
                          invisible="material_approval_state != 'rejected'">
@@ -105,14 +113,21 @@
                     <group invisible="materials_available and material_approval_state == 'draft'">
                         <group string="إسناد طلب المواد">
                             <field name="material_approver_assignee_id" readonly="1"/>
-                            <field name="purchase_user_id" readonly="1"/>
                             <field name="material_approver_id" readonly="1"
                                    invisible="material_approval_state in ('draft','to_approve')"/>
+                            <field name="finance_user_id" readonly="1"
+                                   invisible="material_approval_state in ('draft','to_approve')"/>
+                            <field name="finance_approver_id" readonly="1"
+                                   invisible="material_approval_state in ('draft','to_approve','to_finance')"/>
+                            <field name="finance_approval_date" readonly="1"
+                                   invisible="material_approval_state in ('draft','to_approve','to_finance')"/>
+                            <field name="purchase_user_id" readonly="1"
+                                   invisible="material_approval_state in ('draft','to_approve','to_finance')"/>
                         </group>
                         <group string="سبب الرفض / الإعادة"
-                               invisible="material_approval_state not in ('to_approve','rejected','to_revise')">
+                               invisible="material_approval_state not in ('to_approve','to_finance','rejected','to_revise')">
                             <field name="material_approval_reason" nolabel="1"
-                                   readonly="material_approval_state != 'to_approve'"
+                                   readonly="material_approval_state not in ('to_approve','to_finance')"
                                    placeholder="يكتبه المسؤول عند الرفض أو الإعادة..."/>
                         </group>
                     </group>

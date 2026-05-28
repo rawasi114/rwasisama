@@ -61,11 +61,12 @@ class WorkOrder(models.Model):
     has_draft_rfq = fields.Boolean(compute='_compute_purchase_flow')
     has_rfq_to_confirm = fields.Boolean(compute='_compute_purchase_flow')
     has_pending_receipt = fields.Boolean(compute='_compute_purchase_flow')
-    # اعتماد طلب المواد من مدير المبيعات والورش
+    # اعتماد طلب المواد: مشرف الورشة ← الحسابات ← المشتريات
     material_approval_state = fields.Selection([
         ('draft', 'لم يُطلب'),
-        ('to_approve', 'بانتظار الاعتماد'),
-        ('approved', 'معتمد'),
+        ('to_approve', 'بانتظار مشرف الورشة'),
+        ('to_finance', 'بانتظار اعتماد الحسابات'),
+        ('approved', 'معتمد ومُرسل للمشتريات'),
         ('rejected', 'مرفوض'),
         ('to_revise', 'يحتاج تعديل'),
     ], string='اعتماد طلب المواد', default='draft', tracking=True, copy=False)
@@ -74,12 +75,20 @@ class WorkOrder(models.Model):
         'res.users', string='معتمِد المواد', readonly=True, copy=False)
     # الإسناد والإشعارات والتسليم
     material_approver_assignee_id = fields.Many2one(
-        'res.users', string='المسؤول عن الاعتماد', copy=False,
-        help='يُسنده مشرف الورشة عند رفع الطلب؛ يصله إشعار ليقرّر.')
+        'res.users', string='مشرف الورشة المُسنَد', copy=False,
+        help='يُسنده الفنّي عند رفع الطلب؛ يصله إشعار ليعتمد الطلب فنيّاً.')
+    finance_user_id = fields.Many2one(
+        'res.users', string='موظف الحسابات (التمويل)', copy=False,
+        help='يُسنده مشرف الورشة عند اعتماده الطلب؛ يصله إشعار لاعتماد التمويل.')
+    finance_approver_id = fields.Many2one(
+        'res.users', string='معتمِد التمويل', readonly=True, copy=False)
+    finance_approval_date = fields.Date(
+        string='تاريخ اعتماد التمويل', readonly=True, copy=False)
     purchase_user_id = fields.Many2one(
         'res.users', string='موظف المشتريات', copy=False,
-        help='يُسنده المعتمِد؛ يصله إشعار وينفّذ الشراء من تطبيق المشتريات.')
+        help='يُسنده موظف الحسابات بعد اعتماد التمويل؛ ينفّذ الشراء.')
     can_approve_materials = fields.Boolean(compute='_compute_user_flags')
+    can_handle_finance = fields.Boolean(compute='_compute_user_flags')
     can_handle_purchase = fields.Boolean(compute='_compute_user_flags')
     material_handover_done = fields.Boolean(
         string='تم تسليم المواد للورشة', readonly=True, copy=False)
@@ -204,7 +213,7 @@ class WorkOrder(models.Model):
 
     # ----- أزرار سير العمل (دورة مغلقة) -----
     @api.depends_context('uid')
-    @api.depends('material_approver_assignee_id', 'purchase_user_id')
+    @api.depends('material_approver_assignee_id', 'finance_user_id', 'purchase_user_id')
     def _compute_user_flags(self):
         user = self.env.user
         is_mgr = (user.has_group('rwasi_workshop.group_workshop_manager')
@@ -212,13 +221,20 @@ class WorkOrder(models.Model):
         for wo in self:
             wo.can_approve_materials = is_mgr or (
                 wo.material_approver_assignee_id.id == user.id)
+            wo.can_handle_finance = is_mgr or (
+                wo.finance_user_id.id == user.id)
             wo.can_handle_purchase = is_mgr or (
                 wo.purchase_user_id.id == user.id)
 
     def _ensure_can_approve(self):
         if not self.can_approve_materials:
             raise UserError(_(
-                'الاعتماد متاح للمسؤول المُسنَد إليه أو المدير فقط.'))
+                'الاعتماد الفنّي متاح لمشرف الورشة المُسنَد أو المدير فقط.'))
+
+    def _ensure_can_handle_finance(self):
+        if not self.can_handle_finance:
+            raise UserError(_(
+                'اعتماد التمويل متاح لموظف الحسابات المُسنَد أو المدير فقط.'))
 
     def action_open_submit_wizard(self):
         self.ensure_one()
@@ -246,13 +262,29 @@ class WorkOrder(models.Model):
         self._ensure_can_approve()
         return {
             'type': 'ir.actions.act_window',
-            'name': _('إسناد موظف المشتريات والاعتماد'),
+            'name': _('اعتماد الطلب وإرساله للحسابات'),
             'res_model': 'rwasi.wo.assign.wizard',
             'view_mode': 'form',
             'target': 'new',
             'context': {
                 'default_work_order_id': self.id,
                 'default_mode': 'approve',
+                'default_user_id': self.finance_user_id.id or False,
+            },
+        }
+
+    def action_open_finance_wizard(self):
+        self.ensure_one()
+        self._ensure_can_handle_finance()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('اعتماد التمويل وإسناد المشتريات'),
+            'res_model': 'rwasi.wo.assign.wizard',
+            'view_mode': 'form',
+            'target': 'new',
+            'context': {
+                'default_work_order_id': self.id,
+                'default_mode': 'finance',
                 'default_user_id': self.purchase_user_id.id or False,
             },
         }
@@ -281,55 +313,93 @@ class WorkOrder(models.Model):
         return True
 
     def action_approve_materials(self):
+        """اعتماد مشرف الورشة للطلب فنّياً وإرساله للحسابات لتمويل المشتريات."""
         for wo in self:
             wo._ensure_can_approve()
             if wo.material_approval_state != 'to_approve':
                 continue
-            if not wo.purchase_user_id:
+            if not wo.finance_user_id:
                 raise UserError(_(
-                    'حدّد موظف المشتريات (المُسنَد إليه) قبل الاعتماد.'))
-            wo.material_approval_state = 'approved'
+                    'حدّد موظف الحسابات (المُسنَد إليه) قبل اعتماد الطلب.'))
+            wo.material_approval_state = 'to_finance'
             wo.material_approver_id = self.env.user
             wo.material_approval_reason = False
-            # المستلِم للمواد عند تسليمها للورشة = المعتمِد (يُعدَّل عند الحاجة)
+            wo.activity_schedule(
+                'mail.mail_activity_data_todo',
+                user_id=wo.finance_user_id.id,
+                summary=_('اعتماد تمويل طلب مواد'),
+                note=_('طلب مواد بانتظار اعتمادك مالياً (توفير السيولة) '
+                       'لأمر التصنيع %s.') % wo.name)
+            wo.message_post(body=_(
+                'اعتمد مشرف الورشة الطلب فنّياً وأرسله للحسابات (%s) لتمويل المشتريات.')
+                % wo.finance_user_id.name)
+        return True
+
+    def action_finance_approve(self):
+        """اعتماد الحسابات للتمويل وإسناد المشتريات + إنشاء طلب الشراء."""
+        for wo in self:
+            wo._ensure_can_handle_finance()
+            if wo.material_approval_state != 'to_finance':
+                continue
+            if not wo.purchase_user_id:
+                raise UserError(_(
+                    'حدّد موظف المشتريات (المُسنَد إليه) قبل اعتماد التمويل.'))
+            wo.material_approval_state = 'approved'
+            wo.finance_approver_id = self.env.user
+            wo.finance_approval_date = fields.Date.context_today(wo)
+            wo.material_approval_reason = False
+            # المستلِم للمواد عند تسليمها للورشة = المعتمِد الفنّي (يُعدَّل عند الحاجة)
             if not wo.material_received_by:
-                wo.material_received_by = self.env.user.name
+                wo.material_received_by = (
+                    wo.material_approver_id.name or self.env.user.name)
             wo._create_material_rfq()
             wo.activity_schedule(
                 'mail.mail_activity_data_todo',
                 user_id=wo.purchase_user_id.id,
                 summary=_('تنفيذ شراء مواد'),
-                note=_('تم اعتماد طلب المواد لأمر التصنيع %s. '
+                note=_('اعتمدت الحسابات تمويل طلب المواد لأمر التصنيع %s. '
                        'أكمل طلب الشراء من تطبيق المشتريات ثم سلّم المواد للورشة.')
                 % wo.name)
-            wo.message_post(body=_('تم اعتماد طلب المواد وإسناده إلى %s.')
-                            % wo.purchase_user_id.name)
+            wo.message_post(body=_(
+                'اعتمدت الحسابات التمويل وأرسلت الطلب إلى موظف المشتريات (%s).')
+                % wo.purchase_user_id.name)
         return True
+
+    def _decide_actor(self):
+        """يحدّد الجهة (مشرف/حسابات) المخوّلة بالرفض/الإعادة حسب الحالة الحالية."""
+        self.ensure_one()
+        if self.material_approval_state == 'to_approve':
+            self._ensure_can_approve()
+            self.material_approver_id = self.env.user
+            return 'مشرف الورشة'
+        if self.material_approval_state == 'to_finance':
+            self._ensure_can_handle_finance()
+            self.finance_approver_id = self.env.user
+            return 'الحسابات'
+        return None
 
     def action_reject_materials(self):
         for wo in self:
-            wo._ensure_can_approve()
-            if wo.material_approval_state != 'to_approve':
+            actor = wo._decide_actor()
+            if not actor:
                 continue
             if not wo.material_approval_reason:
                 raise UserError(_('اكتب سبب الرفض في حقل «سبب الرفض / الإعادة» أولاً.'))
             wo.material_approval_state = 'rejected'
-            wo.material_approver_id = self.env.user
-            wo.message_post(body=_('تم رفض طلب المواد. السبب: %s')
-                            % wo.material_approval_reason)
+            wo.message_post(body=_('رفض %s طلب المواد. السبب: %s')
+                            % (actor, wo.material_approval_reason))
         return True
 
     def action_revise_materials(self):
         for wo in self:
-            wo._ensure_can_approve()
-            if wo.material_approval_state != 'to_approve':
+            actor = wo._decide_actor()
+            if not actor:
                 continue
             if not wo.material_approval_reason:
                 raise UserError(_('اكتب سبب الإعادة في حقل «سبب الرفض / الإعادة» أولاً.'))
             wo.material_approval_state = 'to_revise'
-            wo.material_approver_id = self.env.user
-            wo.message_post(body=_('أُعيد طلب المواد للتعديل. السبب: %s')
-                            % wo.material_approval_reason)
+            wo.message_post(body=_('أعاد %s طلب المواد للتعديل. السبب: %s')
+                            % (actor, wo.material_approval_reason))
         return True
 
     def _create_material_rfq(self):
@@ -717,20 +787,25 @@ class WorkOrderAssignWizard(models.TransientModel):
 
     work_order_id = fields.Many2one('rwasi.work.order', required=True)
     mode = fields.Selection([
-        ('submit', 'اعتماد'),
-        ('approve', 'مشتريات'),
+        ('submit', 'إسناد للمشرف'),
+        ('approve', 'إسناد للحسابات'),
+        ('finance', 'إسناد للمشتريات'),
     ], required=True)
     user_id = fields.Many2one(
         'res.users', string='المُسنَد إليه', required=True,
         domain="[('share', '=', False)]")
     note = fields.Char(compute='_compute_note')
 
+    _MODE_NOTES = {
+        'submit': 'اختر مشرف الورشة الذي سيعتمد طلب المواد فنّياً (يصله إشعار).',
+        'approve': 'اختر موظف الحسابات الذي سيعتمد التمويل ويوفّر السيولة (يصله إشعار).',
+        'finance': 'اختر موظف المشتريات الذي سينفّذ الشراء (يصله إشعار).',
+    }
+
     @api.depends('mode')
     def _compute_note(self):
         for w in self:
-            w.note = ('اختر المسؤول عن اعتماد طلب المواد (يصله إشعار).'
-                      if w.mode == 'submit'
-                      else 'اختر موظف المشتريات الذي سينفّذ الشراء (يصله إشعار).')
+            w.note = self._MODE_NOTES.get(w.mode, '')
 
     def action_confirm(self):
         self.ensure_one()
@@ -738,7 +813,10 @@ class WorkOrderAssignWizard(models.TransientModel):
         if self.mode == 'submit':
             wo.material_approver_assignee_id = self.user_id
             wo.action_submit_materials()
-        else:
-            wo.purchase_user_id = self.user_id
+        elif self.mode == 'approve':
+            wo.finance_user_id = self.user_id
             wo.action_approve_materials()
+        else:  # finance
+            wo.purchase_user_id = self.user_id
+            wo.action_finance_approve()
         return {'type': 'ir.actions.act_window_close'}
