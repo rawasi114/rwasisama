@@ -2,13 +2,60 @@
 <templates xml:space="preserve">
     <t t-name="rawasi_construction.Dashboard">
         <div class="o_rawasi_dashboard p-4">
-            <div class="o_rawasi_card">
-                <h1 class="mb-1">مرحباً بك في نظام رواسي سما</h1>
-                <p class="text-muted mb-0">موديول إدارة الإنشاءات والمقاولات</p>
+            <div class="o_rawasi_hero">
+                <div class="o_rawasi_brand">شركة رواسي سما للمقاولات</div>
+                <h1 class="o_rawasi_title">الإطلاق الرسمي لنظام إدارة المقاولات</h1>
+                <div class="o_rawasi_subtitle">منصّة مؤسّسية موحَّدة على <bdi>Odoo</bdi> لإدارة المشاريع من الفرصة إلى الإغلاق</div>
             </div>
-            <div class="alert alert-info mt-4" role="alert">
-                لوحة التحكم فارغة حالياً — ستُبنى مؤشرات الأداء (المنافسات،
-                المشاريع، الميزانيات) في المراحل القادمة.
+
+            <div class="o_rawasi_card mt-4">
+                <p class="lead mb-3">
+                    أرحّب بكم في الإطلاق الرسمي لنظام إدارة المقاولات على منصة <bdi>Odoo</bdi>،
+                    الذي يمثّل خطوة استراتيجية لتحويل إدارة مشاريع رواسي سما من المتابعة
+                    التقليدية إلى <strong>إدارة مؤسسية قائمة على الحوكمة</strong>:
+                    ربط نطاق العمل <bdi>(WBS)</bdi>، ومتابعة <strong>المسار الحرج</strong>،
+                    وضبط التكاليف، ومراقبة الأداء وفق مؤشرات احترافية مثل
+                    <strong>إدارة القيمة المكتسبة <bdi>(EVM)</bdi></strong> و
+                    <strong>الهندسة القيمية <bdi>(VE)</bdi></strong>،
+                    وتحقيق كفاءة الإنفاق دون الإخلال بالجودة أو متطلبات التنفيذ.
+                </p>
+                <p class="mb-3">
+                    صُمِّم هذا النظام ليكون <strong>أداة تنفيذ وتحكُّم</strong> لا مجرد
+                    منصّة إدخال بيانات؛ هدفه رفع كفاءة القرار، تقليل الهدر، توحيد
+                    الإجراءات، تعزيز الشفافية، وتحسين التكامل بين المكتب الفني،
+                    المشاريع، المشتريات، المالية، والموقع.
+                </p>
+                <p class="mb-0">
+                    تم تصميم وتنفيذ هذا النظام من قِبَل <strong>عواد العنزي</strong>،
+                    مع الحرص على أن يكون سير العمليات والدورة المستندية مبنيّاً بشكل
+                    صحيح ومنضبط، عبر تصميم شجرة محاكاة كاملة لسير العمل وتطبيقها
+                    داخل النظام. وسيخضع النظام لتحسينات وتحديثات مستمرة حتى يصبح
+                    بإذن الله نواة العمل التشغيلية لشركة رواسي سما للمقاولات.
+                </p>
+            </div>
+
+            <div class="o_rawasi_pillars mt-4">
+                <div class="o_rawasi_pillar">
+                    <div class="o_rawasi_pillar_title">الحوكمة</div>
+                    <div class="o_rawasi_pillar_desc">دورة مستندية موحّدة وأدوار وصلاحيات منضبطة</div>
+                </div>
+                <div class="o_rawasi_pillar">
+                    <div class="o_rawasi_pillar_title"><bdi>WBS</bdi> والمسار الحرج</div>
+                    <div class="o_rawasi_pillar_desc">ربط النطاق بالجدول الزمني وتحديد مسار التنفيذ الحرج</div>
+                </div>
+                <div class="o_rawasi_pillar">
+                    <div class="o_rawasi_pillar_title"><bdi>EVM</bdi></div>
+                    <div class="o_rawasi_pillar_desc">قياس الأداء بالقيمة المكتسبة لضبط التكلفة والزمن</div>
+                </div>
+                <div class="o_rawasi_pillar">
+                    <div class="o_rawasi_pillar_title"><bdi>VE</bdi></div>
+                    <div class="o_rawasi_pillar_desc">الهندسة القيمية لكفاءة الإنفاق دون الإخلال بالجودة</div>
+                </div>
+            </div>
+
+            <div class="o_rawasi_footer mt-4">
+                تصميم وتنفيذ: <strong>عواد العنزي</strong> ·
+                نسعى لجعله نواة العمل التشغيلية لشركة رواسي سما للمقاولات
             </div>
         </div>
     </t>

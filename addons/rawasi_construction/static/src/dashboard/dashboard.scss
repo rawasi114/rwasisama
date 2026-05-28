@@ -1,14 +1,79 @@
 .o_rawasi_dashboard {
-    h1 {
-        color: #253747; // Navy (brand)
-        font-weight: 700;
+    text-align: start;
+
+    .o_rawasi_hero {
+        background: linear-gradient(135deg, #253747 0%, #3a526b 100%);
+        color: #ffffff;
+        border-radius: 0.75rem;
+        padding: 2rem 2rem 1.75rem;
+        border-bottom: 6px solid #BD9B5E;
+        box-shadow: 0 4px 14px rgba(37, 55, 71, 0.18);
+        text-align: start;
+
+        .o_rawasi_brand {
+            color: #BD9B5E;
+            font-size: 0.95rem;
+            letter-spacing: 1px;
+            margin-bottom: 0.25rem;
+        }
+        .o_rawasi_title {
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 1.85rem;
+            margin: 0;
+        }
+        .o_rawasi_subtitle {
+            color: #e8e2d3;
+            font-size: 0.95rem;
+            margin-top: 0.5rem;
+        }
     }
 
     .o_rawasi_card {
         background: #ffffff;
-        border-top: 4px solid #BD9B5E; // Gold (brand)
+        border-top: 4px solid #BD9B5E;
+        border-radius: 0.75rem;
+        padding: 1.75rem 2rem;
+        box-shadow: 0 1px 6px rgba(0, 0, 0, 0.08);
+        line-height: 1.9;
+        text-align: start;
+
+        p { color: #2c3e50; font-size: 1rem; }
+        .lead { font-size: 1.05rem; }
+        strong { color: #253747; }
+    }
+
+    .o_rawasi_pillars {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 1rem;
+    }
+    .o_rawasi_pillar {
+        background: #ffffff;
+        border: 1px solid #ece7da;
+        border-inline-start: 4px solid #BD9B5E;
         border-radius: 0.5rem;
-        padding: 1.5rem;
-        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+        padding: 1rem 1.25rem;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        text-align: start;
+
+        .o_rawasi_pillar_title {
+            color: #253747;
+            font-weight: 700;
+            font-size: 1.05rem;
+            margin-bottom: 0.25rem;
+        }
+        .o_rawasi_pillar_desc {
+            color: #6a7480;
+            font-size: 0.9rem;
+        }
+    }
+
+    .o_rawasi_footer {
+        text-align: center;
+        color: #6a7480;
+        font-size: 0.9rem;
+        padding: 0.75rem 0;
+        border-top: 1px dashed #d6cdb6;
     }
 }
