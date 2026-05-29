@@ -19,7 +19,7 @@
               parent="menu_rwasi_root" sequence="20"/>
     <menuitem id="menu_daily_preparation" name="التحضير اليومي"
               parent="menu_rwasi_field" action="action_daily_preparation" sequence="10"/>
-    <menuitem id="menu_daily_report" name="التقرير اليومي للورشة"
+    <menuitem id="menu_daily_report" name="تقارير الورشة اليومية"
               parent="menu_rwasi_field" action="action_daily_report" sequence="20"/>
     <menuitem id="menu_attendance_sheet" name="الحضور"
               parent="menu_rwasi_field" action="action_attendance_sheet" sequence="30"/>
@@ -31,7 +31,7 @@
               parent="menu_rwasi_root" sequence="30"/>
     <menuitem id="menu_qc_inspection" name="فحوصات الجودة"
               parent="menu_rwasi_quality" action="action_qc_inspection" sequence="10"/>
-    <menuitem id="menu_ncr" name="تقارير عدم المطابقة"
+    <menuitem id="menu_ncr" name="عدم مطابقة التصنيع"
               parent="menu_rwasi_quality" action="action_ncr" sequence="20"/>
     <menuitem id="menu_rework" name="إعادة الأعمال"
               parent="menu_rwasi_quality" action="action_rework" sequence="30"/>

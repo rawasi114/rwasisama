@@ -77,7 +77,7 @@
     </record>
 
     <record id="action_daily_report" model="ir.actions.act_window">
-        <field name="name">التقارير اليومية</field>
+        <field name="name">تقارير الموقع اليومية</field>
         <field name="res_model">rawasi.daily.report</field>
         <field name="view_mode">list,form</field>
     </record>
@@ -164,10 +164,42 @@
         </field>
     </record>
 
+    <record id="view_ncr_search" model="ir.ui.view">
+        <field name="name">rawasi.ncr.search</field>
+        <field name="model">rawasi.ncr</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="project_id"/>
+                <field name="subject"/>
+                <field name="responsible_id"/>
+                <filter name="f_open" string="مفتوحة"
+                        domain="[('state','in',('open','in_progress'))]"/>
+                <filter name="f_critical" string="حرجة"
+                        domain="[('severity','=','critical')]"/>
+                <filter name="f_my_responsibility" string="مسؤوليّتي"
+                        domain="[('responsible_id','=',uid)]"/>
+                <separator/>
+                <filter name="f_overdue" string="متأخّرة"
+                        domain="[('due_date','&lt;',context_today().strftime('%Y-%m-%d')),('state','in',('open','in_progress'))]"/>
+                <group>
+                    <filter name="g_project" string="حسب المشروع"
+                            context="{'group_by':'project_id'}"/>
+                    <filter name="g_severity" string="حسب الشدّة"
+                            context="{'group_by':'severity'}"/>
+                    <filter name="g_state" string="حسب الحالة"
+                            context="{'group_by':'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
     <record id="action_ncr" model="ir.actions.act_window">
-        <field name="name">تقارير عدم المطابقة</field>
+        <field name="name">عدم مطابقة الموقع</field>
         <field name="res_model">rawasi.ncr</field>
         <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_ncr_search"/>
+        <field name="context">{'search_default_f_open': 1}</field>
     </record>
 
     <!-- ════════ طلب المعلومات (RFI) ════════ -->
