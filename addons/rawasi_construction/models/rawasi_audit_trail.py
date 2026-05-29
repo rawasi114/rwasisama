@@ -26,12 +26,13 @@ class AuditTrail(models.Model):
     )
     match_source = fields.Selection(
         [
-            ("exact_text",   "تطابق نصي كامل"),
-            ("lcgpa_code",   "تطابق برمز LCGPA"),
-            ("spec_pattern", "تطابق بنمط المواصفات"),
-            ("pgvector",     "تطابق دلالي pgvector"),
-            ("manual",       "اختيار يدوي"),
-            ("none",         "لم يُعثَر على ترشيح"),
+            ("exact_text",    "تطابق نصي كامل"),
+            ("lcgpa_code",    "تطابق برمز LCGPA"),
+            ("spec_pattern",  "تطابق بنمط المواصفات"),
+            ("pgvector",      "تطابق دلالي pgvector"),
+            ("manual",        "اختيار يدوي"),
+            ("training_data", "بيانات تدريب (استيراد القاعدة الموحَّدة)"),
+            ("none",          "لم يُعثَر على ترشيح"),
         ],
         required=True, index=True, string="مصدر الترشيح",
     )
