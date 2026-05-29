@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <!-- ══════════════════════════════════════════════════════ -->
+    <!-- ══   شجرة فئات المنتجات لبنود المقاولات              ══ -->
+    <!-- ══   مأخوذة من نموذج C (Exact Specs) — المستوى 1     ══ -->
+    <!-- ══════════════════════════════════════════════════════ -->
+
+    <record id="cat_rawasi_root" model="product.category">
+        <field name="name">بنود المقاولات</field>
+    </record>
+
+    <record id="cat_rawasi_01" model="product.category">
+        <field name="name">01 الأعمال التحضيرية والهدم</field>
+        <field name="parent_id" ref="cat_rawasi_root"/>
+    </record>
+
+    <record id="cat_rawasi_02" model="product.category">
+        <field name="name">02 الأعمال الترابية والردميات</field>
+        <field name="parent_id" ref="cat_rawasi_root"/>
+    </record>
+
+    <record id="cat_rawasi_03" model="product.category">
+        <field name="name">03 الأعمال الخرسانية والإنشائية</field>
+        <field name="parent_id" ref="cat_rawasi_root"/>
+    </record>
+
+    <record id="cat_rawasi_04" model="product.category">
+        <field name="name">04 أعمال البناء والمباني</field>
+        <field name="parent_id" ref="cat_rawasi_root"/>
+    </record>
+
+    <record id="cat_rawasi_05" model="product.category">
+        <field name="name">05 التشطيبات الداخلية</field>
+        <field name="parent_id" ref="cat_rawasi_root"/>
+    </record>
+
+    <record id="cat_rawasi_06" model="product.category">
+        <field name="name">06 الأبواب والنوافذ والواجهات</field>
+        <field name="parent_id" ref="cat_rawasi_root"/>
+    </record>
+
+    <record id="cat_rawasi_07" model="product.category">
+        <field name="name">07 الأعمال المعدنية (الحدادة)</field>
+        <field name="parent_id" ref="cat_rawasi_root"/>
+    </record>
+
+    <record id="cat_rawasi_08" model="product.category">
+        <field name="name">08 الأعمال الصحية والسباكة</field>
+        <field name="parent_id" ref="cat_rawasi_root"/>
+    </record>
+
+    <record id="cat_rawasi_09" model="product.category">
+        <field name="name">09 الأعمال الكهربائية</field>
+        <field name="parent_id" ref="cat_rawasi_root"/>
+    </record>
+
+    <record id="cat_rawasi_10" model="product.category">
+        <field name="name">10 التكييف والتهوية HVAC</field>
+        <field name="parent_id" ref="cat_rawasi_root"/>
+    </record>
+
+    <record id="cat_rawasi_11" model="product.category">
+        <field name="name">11 مكافحة الحريق والإنذار</field>
+        <field name="parent_id" ref="cat_rawasi_root"/>
+    </record>
+
+    <record id="cat_rawasi_12" model="product.category">
+        <field name="name">12 الأنظمة منخفضة الجهد (ELV)</field>
+        <field name="parent_id" ref="cat_rawasi_root"/>
+    </record>
+
+    <record id="cat_rawasi_13" model="product.category">
+        <field name="name">13 الأعمال الخارجية والموقع العام</field>
+        <field name="parent_id" ref="cat_rawasi_root"/>
+    </record>
+
+    <record id="cat_rawasi_14" model="product.category">
+        <field name="name">14 الحدائق والتشجير</field>
+        <field name="parent_id" ref="cat_rawasi_root"/>
+    </record>
+
+    <record id="cat_rawasi_15" model="product.category">
+        <field name="name">15 الأثاث والمفروشات</field>
+        <field name="parent_id" ref="cat_rawasi_root"/>
+    </record>
+
+    <record id="cat_rawasi_16" model="product.category">
+        <field name="name">16 المصاعد والمعدات الخاصة</field>
+        <field name="parent_id" ref="cat_rawasi_root"/>
+    </record>
+
+    <!-- المجموعات المتخصّصة من ملف B -->
+    <record id="cat_rawasi_18" model="product.category">
+        <field name="name">18 إضاءة وعلامات المطارات والمدارج</field>
+        <field name="parent_id" ref="cat_rawasi_root"/>
+    </record>
+
+    <record id="cat_rawasi_19" model="product.category">
+        <field name="name">19 الأعمال المتخصصة للمساجد</field>
+        <field name="parent_id" ref="cat_rawasi_root"/>
+    </record>
+
+    <record id="cat_rawasi_20" model="product.category">
+        <field name="name">20 شبكات المياه والصرف الخارجية</field>
+        <field name="parent_id" ref="cat_rawasi_root"/>
+    </record>
+
+    <record id="cat_rawasi_21" model="product.category">
+        <field name="name">21 الأعمال البحرية والموانئ</field>
+        <field name="parent_id" ref="cat_rawasi_root"/>
+    </record>
+
+    <record id="cat_rawasi_23" model="product.category">
+        <field name="name">23 أعمال التأهيل والترميم</field>
+        <field name="parent_id" ref="cat_rawasi_root"/>
+    </record>
+
+</odoo>

@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ════════ تخصيص فورم product.template ════════ -->
+    <record id="view_product_template_form_inherit_rawasi" model="ir.ui.view">
+        <field name="name">product.template.form.inherit.rawasi</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_only_form_view"/>
+        <field name="arch" type="xml">
+
+            <!-- علم البند الإنشائي + الكود المرجعي بالعنوان -->
+            <xpath expr="//div[@class='oe_title']" position="before">
+                <div class="alert alert-info" role="alert"
+                     invisible="not is_construction_item">
+                    <i class="fa fa-hard-hat me-2"/>
+                    <strong>بند مقاولات رواسي سما</strong>
+                    <span invisible="not reference_code">
+                        — الرمز: <field name="reference_code" readonly="1" class="oe_inline"/>
+                    </span>
+                </div>
+            </xpath>
+
+            <!-- Smart Button لقوائم المواد -->
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_boms" type="object"
+                        class="oe_stat_button" icon="fa-list-alt"
+                        invisible="not is_construction_item">
+                    <field name="rawasi_bom_count" widget="statinfo" string="قوائم مواد"/>
+                </button>
+                <button name="action_create_default_bom" type="object"
+                        class="oe_stat_button" icon="fa-plus-square"
+                        invisible="not rawasi_is_in_house or rawasi_bom_count &gt; 0"
+                        string="إنشاء BoM"/>
+            </xpath>
+
+            <!-- إضافة تبويب بنود المقاولات داخل notebook -->
+            <xpath expr="//notebook" position="inside">
+                <page string="بنود المقاولات (رواسي سما)" name="rawasi_construction">
+                    <group>
+                        <group string="التصنيف">
+                            <field name="is_construction_item"/>
+                            <field name="reference_code"
+                                   placeholder="RSC.05.03.02.014"
+                                   invisible="not is_construction_item"/>
+                            <field name="rawasi_lcgpa_code_id"
+                                   invisible="not is_construction_item"/>
+                            <field name="rawasi_sbc_code_id"
+                                   invisible="not is_construction_item"/>
+                        </group>
+                        <group string="التصنيع الداخلي"
+                               invisible="not is_construction_item">
+                            <field name="rawasi_is_in_house"/>
+                            <field name="rawasi_workshop_type"
+                                   invisible="not rawasi_is_in_house"
+                                   required="rawasi_is_in_house"/>
+                        </group>
+                    </group>
+                    <group invisible="not is_construction_item">
+                        <field name="matching_keywords"
+                               placeholder="بورسلين، porcelain، 60x60، أرضيات"/>
+                    </group>
+                    <notebook invisible="not is_construction_item">
+                        <page string="الوصف الكامل من الجهة" name="gov_text">
+                            <field name="government_text" nolabel="1"
+                                   placeholder="انسخ هنا النص كاملاً كما ورد في جدول كميات الجهة الحكومية..."/>
+                        </page>
+                        <page string="صياغة عرض السعر (توريد وتركيب)" name="quotation">
+                            <field name="quotation_template" nolabel="1"
+                                   placeholder="صياغة احترافية مختصرة جاهزة للنسخ في عرض السعر..."/>
+                        </page>
+                        <page string="قواعد التسعير" name="pricing">
+                            <group>
+                                <group string="القاعدة الداخلية">
+                                    <field name="rawasi_pricing_rule" nolabel="1"/>
+                                </group>
+                                <group string="تنبيه عند التسعير">
+                                    <field name="rawasi_pricing_alert" nolabel="1"/>
+                                </group>
+                            </group>
+                            <group string="نموذج مواصفة فعلية مرجعية">
+                                <field name="rawasi_sample_specification" nolabel="1"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- ════════ List view مخصّصة لبنود المقاولات ════════ -->
+    <record id="view_product_template_list_rawasi" model="ir.ui.view">
+        <field name="name">product.template.list.rawasi</field>
+        <field name="model">product.template</field>
+        <field name="arch" type="xml">
+            <list multi_edit="1" string="بنود المقاولات">
+                <field name="reference_code"/>
+                <field name="default_code" optional="hide" string="SKU"/>
+                <field name="name"/>
+                <field name="categ_id"/>
+                <field name="uom_id"/>
+                <field name="list_price" string="سعر العرض" optional="show"/>
+                <field name="standard_price" string="التكلفة" optional="hide"/>
+                <field name="government_text" optional="hide"
+                       string="الوصف الكامل من الجهة"/>
+                <field name="matching_keywords" optional="hide"/>
+                <field name="rawasi_lcgpa_code_id" optional="hide"/>
+                <field name="rawasi_is_in_house" optional="show" widget="boolean_toggle"/>
+                <field name="rawasi_workshop_type" optional="hide" widget="badge"/>
+                <field name="rawasi_bom_count" optional="show" string="BoM"/>
+                <field name="active" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ════════ Search view مخصّصة ════════ -->
+    <record id="view_product_template_search_rawasi" model="ir.ui.view">
+        <field name="name">product.template.search.rawasi</field>
+        <field name="model">product.template</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name" string="الاسم"/>
+                <field name="reference_code"/>
+                <field name="default_code" string="SKU"/>
+                <field name="government_text" string="بحث في نص الجهة"/>
+                <field name="matching_keywords" string="بحث في كلمات المطابقة"/>
+                <field name="categ_id"/>
+                <field name="rawasi_lcgpa_code_id"/>
+                <separator/>
+                <filter name="construction_only" string="بنود مقاولات"
+                        domain="[('is_construction_item','=',True)]"/>
+                <filter name="in_house" string="تصنيع داخلي"
+                        domain="[('rawasi_is_in_house','=',True)]"/>
+                <filter name="has_gov_text" string="فيه نص الجهة"
+                        domain="[('government_text','!=',False)]"/>
+                <filter name="has_quotation" string="فيه صياغة عرض"
+                        domain="[('quotation_template','!=',False)]"/>
+                <filter name="missing_gov_text" string="ينقصه نص الجهة"
+                        domain="[('government_text','=',False),('is_construction_item','=',True)]"/>
+                <separator/>
+                <filter name="active" string="نشط" domain="[('active','=',True)]"/>
+                <group>
+                    <filter name="g_categ" string="حسب الفئة"
+                            context="{'group_by':'categ_id'}"/>
+                    <filter name="g_workshop" string="حسب الورشة"
+                            context="{'group_by':'rawasi_workshop_type'}"/>
+                    <filter name="g_lcgpa" string="حسب LCGPA"
+                            context="{'group_by':'rawasi_lcgpa_code_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- ════════ Action لقائمة «بنود المقاولات» ════════ -->
+    <record id="action_rawasi_construction_products" model="ir.actions.act_window">
+        <field name="name">بنود المقاولات (المنتجات)</field>
+        <field name="res_model">product.template</field>
+        <field name="view_mode">list,form,kanban</field>
+        <field name="domain">[('is_construction_item','=',True)]</field>
+        <field name="context">
+            {'default_is_construction_item': True,
+             'default_type': 'consu',
+             'default_categ_id': ref('rawasi_construction.cat_rawasi_root'),
+             'search_default_construction_only': 1,
+             'search_default_active': 1}
+        </field>
+        <field name="view_id" ref="view_product_template_list_rawasi"/>
+        <field name="search_view_id" ref="view_product_template_search_rawasi"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                أنشئ أول بند مقاولات
+            </p>
+            <p>
+                البنود هي منتجات أودو القياسية بإضافات رواسي سما:
+                الوصف الكامل من الجهة، صياغة عرض السعر، كلمات المطابقة،
+                قواعد التسعير، الربط بـ LCGPA و SBC، والتصنيف للورش.
+            </p>
+        </field>
+    </record>
+
+</odoo>

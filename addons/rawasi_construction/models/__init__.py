@@ -38,3 +38,6 @@ from . import rawasi_user_guide
 
 # لوحة التحكم الحيّة (KPI)
 from . import rawasi_dashboard_kpi
+
+# تخصيص product.template لبنود المقاولات (Stage A — اعتماد مخزون أودو)
+from . import product_template_construction
