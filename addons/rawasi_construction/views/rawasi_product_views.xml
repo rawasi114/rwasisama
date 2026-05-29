@@ -159,7 +159,6 @@
         <field name="context">
             {'default_is_construction_item': True,
              'default_type': 'consu',
-             'default_categ_id': ref('rawasi_construction.cat_rawasi_root'),
              'search_default_construction_only': 1,
              'search_default_active': 1}
         </field>

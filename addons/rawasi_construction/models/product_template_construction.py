@@ -162,9 +162,16 @@ class ProductTemplate(models.Model):
     @api.model_create_multi
     def create(self, vals_list):
         # افتراض ذكي: لو is_construction_item بدون نوع، اضبط النوع كمنتج
+        # ولو بدون فئة، اضبطها على جذر «بنود المقاولات»
+        default_root_cat = self.env.ref(
+            "rawasi_construction.cat_rawasi_root", raise_if_not_found=False
+        )
         for vals in vals_list:
-            if vals.get("is_construction_item") and not vals.get("type"):
-                vals["type"] = "consu"  # مادة قابلة للاستهلاك (افتراضي للمقاولات)
+            if vals.get("is_construction_item"):
+                if not vals.get("type"):
+                    vals["type"] = "consu"
+                if not vals.get("categ_id") and default_root_cat:
+                    vals["categ_id"] = default_root_cat.id
         records = super().create(vals_list)
         # ننشئ BoM فارغة لبنود الورشة تلقائياً
         for rec in records:
