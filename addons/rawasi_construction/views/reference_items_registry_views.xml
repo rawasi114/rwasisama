@@ -96,8 +96,7 @@
                                 <list editable="bottom">
                                     <field name="display_order" widget="handle"/>
                                     <field name="spec_key"/>
-                                    <field name="spec_key_custom"
-                                           column_invisible="parent.spec_key != 'other'"/>
+                                    <field name="spec_key_custom" optional="hide"/>
                                     <field name="spec_value"/>
                                     <field name="spec_unit"/>
                                     <field name="extracted_via_auto" widget="boolean_toggle"/>
