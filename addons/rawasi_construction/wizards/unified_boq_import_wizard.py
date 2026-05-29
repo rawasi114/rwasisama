@@ -328,10 +328,10 @@ class UnifiedBoqImportWizard(models.TransientModel):
             Audit.create({
                 "original_text": original_text,
                 "reference_item_id": ref.id,
-                "match_source": "training_data",
+                "match_source": "manual",
                 "confidence_score": confidence,
                 "user_action": "accepted",
-                "notes": "استيراد من ورقة 02 خريطة بنود المشاريع",
+                "notes": "[TRAINING_DATA] استيراد من ورقة 02 خريطة بنود المشاريع",
             })
 
     # ════════ Sheet 06: المواصفات الدقيقة ════════
