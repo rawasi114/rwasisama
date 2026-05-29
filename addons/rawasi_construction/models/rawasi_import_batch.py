@@ -208,6 +208,11 @@ class ImportBatch(models.Model):
                     "frequency": 1,
                 })
 
+            # تعبئة الوصف الكامل من الجهة (مرة واحدة — أول مطابقة فقط)
+            # لو الحقل فارغ ولدينا نص كامل من Excel، نحفظه كمرجع رسمي للبند.
+            if not ref.government_text and line.original_text:
+                ref.government_text = line.original_text
+
             # سجل تتبع
             Audit.create({
                 "original_text": line.original_text,

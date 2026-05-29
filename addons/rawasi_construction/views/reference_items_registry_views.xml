@@ -9,16 +9,26 @@
             <search>
                 <field name="reference_code"/>
                 <field name="approved_name"/>
+                <field name="government_text" string="بحث في نص الجهة"/>
+                <field name="matching_keywords" string="بحث في كلمات المطابقة"/>
                 <field name="main_category"/>
                 <field name="item_group"/>
                 <field name="lcgpa_code_id"/>
                 <filter name="draft" string="مسودة" domain="[('review_status','=','draft')]"/>
                 <filter name="reviewed" string="مراجَع" domain="[('review_status','=','reviewed')]"/>
                 <filter name="approved" string="معتمَد" domain="[('review_status','=','approved')]"/>
+                <separator/>
                 <filter name="inhouse" string="تصنيع داخلي" domain="[('is_in_house','=',True)]"/>
+                <filter name="has_gov_text" string="فيه نص الجهة"
+                        domain="[('government_text','!=',False)]"/>
+                <filter name="has_quotation" string="فيه صياغة عرض سعر"
+                        domain="[('quotation_template','!=',False)]"/>
+                <filter name="missing_gov_text" string="ينقصه نص الجهة"
+                        domain="[('government_text','=',False)]"/>
                 <group>
                     <filter name="g_main" string="حسب الفئة الرئيسية" context="{'group_by':'main_category'}"/>
                     <filter name="g_group" string="حسب البند" context="{'group_by':'item_group'}"/>
+                    <filter name="g_workshop" string="حسب الورشة" context="{'group_by':'workshop_type'}"/>
                     <filter name="g_review" string="حسب حالة المراجعة" context="{'group_by':'review_status'}"/>
                 </group>
             </search>
@@ -35,9 +45,15 @@
                 <field name="main_category"/>
                 <field name="item_group"/>
                 <field name="simplified_desc" optional="show"/>
+                <field name="default_uom_id" optional="show"/>
+                <field name="government_text" optional="hide"
+                       string="الوصف الكامل من الجهة"/>
+                <field name="matching_keywords" optional="hide"/>
                 <field name="lcgpa_code_id" optional="hide"/>
                 <field name="variant_count" string="صياغات"/>
                 <field name="is_in_house" optional="hide"/>
+                <field name="workshop_type" optional="hide"/>
+                <field name="product_type_odoo" optional="hide" widget="badge"/>
                 <field name="review_status" widget="badge"
                        decoration-info="review_status == 'draft'"
                        decoration-warning="review_status == 'reviewed'"
@@ -81,13 +97,37 @@
                             <field name="is_in_house"/>
                             <field name="workshop_type"
                                    invisible="not is_in_house" required="is_in_house"/>
+                            <field name="product_type_odoo"/>
                         </group>
                         <group>
                             <field name="created_via"/>
+                            <field name="matching_keywords"
+                                   placeholder="بورسلين، porcelain، 60x60، أرضيات"/>
                         </group>
                     </group>
                     <notebook>
-                        <page string="الوصف التفصيلي" name="desc">
+                        <page string="الوصف الكامل من الجهة" name="gov_text">
+                            <field name="government_text" nolabel="1"
+                                   placeholder="انسخ هنا النص كاملاً كما ورد في جدول كميات الجهة الحكومية..."/>
+                        </page>
+                        <page string="صياغة عرض السعر (توريد وتركيب)" name="quotation">
+                            <field name="quotation_template" nolabel="1"
+                                   placeholder="صياغة احترافية مختصرة جاهزة للنسخ في عرض السعر..."/>
+                        </page>
+                        <page string="قواعد التسعير" name="pricing">
+                            <group>
+                                <group string="القاعدة الداخلية">
+                                    <field name="pricing_rule" nolabel="1"/>
+                                </group>
+                                <group string="تنبيه عند التسعير">
+                                    <field name="pricing_alert" nolabel="1"/>
+                                </group>
+                            </group>
+                            <group string="نموذج مواصفة فعلية مرجعية">
+                                <field name="sample_specification" nolabel="1"/>
+                            </group>
+                        </page>
+                        <page string="الوصف التفصيلي الداخلي" name="desc">
                             <field name="description_short"/>
                             <field name="description_long"/>
                         </page>
