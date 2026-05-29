@@ -206,3 +206,6 @@ access_user_guide_read_cons,user.guide.read.cons,model_rawasi_user_guide,group_e
 access_user_guide_edit_tech,user.guide.edit.tech,model_rawasi_user_guide,group_tech_office_manager,1,1,1,0
 access_user_guide_edit_director,user.guide.edit.director,model_rawasi_user_guide,group_projects_director,1,1,1,0
 access_user_guide_admin_ceo,user.guide.admin.ceo,model_rawasi_user_guide,group_ceo,1,1,1,1
+access_unified_wiz_tech,unified.wiz.tech,model_rawasi_unified_boq_import_wizard,group_tech_office_manager,1,1,1,1
+access_unified_wiz_director,unified.wiz.director,model_rawasi_unified_boq_import_wizard,group_projects_director,1,1,1,1
+access_unified_wiz_ceo,unified.wiz.ceo,model_rawasi_unified_boq_import_wizard,group_ceo,1,1,1,1

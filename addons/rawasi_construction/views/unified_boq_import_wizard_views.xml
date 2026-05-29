@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_unified_boq_import_wizard_form" model="ir.ui.view">
+        <field name="name">rawasi.unified.boq.import.wizard.form</field>
+        <field name="model">rawasi.unified.boq.import.wizard</field>
+        <field name="arch" type="xml">
+            <form string="استيراد القاعدة الموحَّدة للبنود">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>استيراد القاعدة الموحَّدة للبنود</h1>
+                        <p class="text-muted">
+                            يستورد ~330 بند مرجعي معتمَد دفعة واحدة من ملفي
+                            <strong>C (Exact Specs)</strong> و
+                            <strong>B (مكتبة البنود الجاهزة)</strong>.
+                            عملية لمرة واحدة في حياة الشركة.
+                        </p>
+                    </div>
+
+                    <div class="alert alert-info" role="alert">
+                        <strong>هام:</strong>
+                        <ul class="mb-0 mt-2">
+                            <li>ملف C إلزامي ويحوي 7 أوراق (الذكاء + التدريب).</li>
+                            <li>ملف B اختياري ويضيف صياغة «توريد وتركيب» + بنود متخصّصة.</li>
+                            <li>الكشف ذكي: لو شغّلت الاستيراد مرتين، البنود الموجودة تُتخطّى افتراضياً.</li>
+                        </ul>
+                    </div>
+
+                    <group string="① ملف C (Exact Specs) — إلزامي">
+                        <field name="file_c" filename="filename_c" widget="binary" required="1"/>
+                        <field name="filename_c"/>
+                    </group>
+
+                    <group string="② ملف B (مكتبة البنود الجاهزة) — اختياري">
+                        <field name="file_b" filename="filename_b" widget="binary"/>
+                        <field name="filename_b"/>
+                    </group>
+
+                    <group string="خيارات الاستيراد">
+                        <field name="overwrite_existing"/>
+                        <field name="create_specifications"/>
+                        <field name="create_training_variants"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_import" type="object"
+                            string="بدء الاستيراد" class="btn-primary"
+                            confirm="ستُنشأ ~330 بند مرجعي معتمَد + 408 صياغة تدريبية + 408 مواصفة. متابعة؟"/>
+                    <button special="cancel" string="إلغاء" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_unified_boq_import_wizard" model="ir.actions.act_window">
+        <field name="name">استيراد القاعدة الموحَّدة للبنود</field>
+        <field name="res_model">rawasi.unified.boq.import.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

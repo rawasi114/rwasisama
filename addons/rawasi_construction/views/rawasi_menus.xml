@@ -42,6 +42,12 @@
                   parent="menu_rawasi_reference_registry_root"
                   action="action_reference_items_import_wizard"
                   sequence="10"/>
+        <menuitem id="menu_rawasi_unified_import_wizard"
+                  name="استيراد القاعدة الموحَّدة (C+B)"
+                  parent="menu_rawasi_reference_registry_root"
+                  action="action_unified_boq_import_wizard"
+                  sequence="15"
+                  groups="rawasi_construction.group_tech_office_manager,rawasi_construction.group_projects_director,rawasi_construction.group_ceo"/>
         <menuitem id="menu_rawasi_ref_import_batches"
                   name="دفعات الاستيراد"
                   parent="menu_rawasi_reference_registry_root"
