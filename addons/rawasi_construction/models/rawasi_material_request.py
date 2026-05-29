@@ -36,8 +36,8 @@ class RawasiMaterialRequest(models.Model):
     override_budget = fields.Boolean(
         string="تجاوز الميزانية معتمد", readonly=True, copy=False, tracking=True
     )
-    has_over_budget = fields.Boolean(compute="_compute_budget_flags")
-    has_locked_item = fields.Boolean(compute="_compute_budget_flags")
+    has_over_budget = fields.Boolean(compute="_compute_budget_flags", store=True)
+    has_locked_item = fields.Boolean(compute="_compute_budget_flags", store=True)
     company_id = fields.Many2one(
         "res.company", default=lambda self: self.env.company
     )
