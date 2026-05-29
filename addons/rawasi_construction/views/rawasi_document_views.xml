@@ -120,6 +120,30 @@
                         icon="fa-question-circle">
                     <field name="rawasi_rfi_count" widget="statinfo" string="طلبات معلومات"/>
                 </button>
+                <button name="action_open_mr" type="object" class="oe_stat_button"
+                        icon="fa-cart-plus">
+                    <field name="rawasi_mr_count" widget="statinfo" string="طلبات مواد"/>
+                </button>
+                <button name="action_open_po" type="object" class="oe_stat_button"
+                        icon="fa-shopping-cart">
+                    <field name="rawasi_po_count" widget="statinfo" string="أوامر شراء"/>
+                </button>
+                <button name="action_open_grn" type="object" class="oe_stat_button"
+                        icon="fa-truck">
+                    <field name="rawasi_grn_count" widget="statinfo" string="استلام مواد"/>
+                </button>
+                <button name="action_open_vo" type="object" class="oe_stat_button"
+                        icon="fa-file-text-o">
+                    <field name="rawasi_vo_count" widget="statinfo" string="أوامر تغيير"/>
+                </button>
+                <button name="action_open_ipc" type="object" class="oe_stat_button"
+                        icon="fa-money">
+                    <field name="rawasi_ipc_count" widget="statinfo" string="مستخلصات"/>
+                </button>
+                <button name="action_open_bg" type="object" class="oe_stat_button"
+                        icon="fa-bank">
+                    <field name="rawasi_bg_count" widget="statinfo" string="ضمانات"/>
+                </button>
             </div>
         </field>
     </record>

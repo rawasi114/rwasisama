@@ -113,6 +113,10 @@
                             class="btn-primary" invisible="state != 'open'"/>
                     <button name="action_close" type="object" string="إغلاق"
                             class="btn-primary" invisible="state not in ('open','in_progress')"/>
+                    <button name="action_escalate_to_rfi" type="object"
+                            string="تصعيد لـ RFI" class="btn-warning"
+                            invisible="not can_escalate"
+                            confirm="سيُنشأ طلب معلومات جديد مرتبط بهذا NCR وتُرسَل للاستشاري. متابعة؟"/>
                     <button name="action_print_with_attachments" type="object"
                             string="طباعة مع المرفقات" class="btn-secondary"
                             invisible="not attachment_ids"/>
@@ -126,6 +130,23 @@
                            statusbar_visible="open,in_progress,closed"/>
                 </header>
                 <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_rfis" type="object"
+                                class="oe_stat_button" icon="fa-question-circle"
+                                invisible="rfi_count == 0">
+                            <field name="rfi_count" widget="statinfo" string="RFI مرتبطة"/>
+                        </button>
+                    </div>
+                    <field name="can_escalate" invisible="1"/>
+                    <field name="is_overdue" invisible="1"/>
+                    <div class="alert alert-danger" role="alert"
+                         invisible="not is_overdue">
+                        <i class="fa fa-exclamation-triangle me-2"/>
+                        <strong>متأخّر!</strong> تجاوز تاريخ الاستحقاق ولم يُغلَق بعد.
+                        <span invisible="not can_escalate">
+                            يمكن تصعيده لـ RFI من الزر أعلاه.
+                        </span>
+                    </div>
                     <div class="oe_title">
                         <h1><field name="name" readonly="1"/></h1>
                     </div>
@@ -250,6 +271,8 @@
                         <group>
                             <field name="project_id"/>
                             <field name="boq_item_id"/>
+                            <field name="ncr_id" readonly="1"
+                                   invisible="not ncr_id"/>
                             <field name="subject"/>
                             <field name="priority"/>
                         </group>
