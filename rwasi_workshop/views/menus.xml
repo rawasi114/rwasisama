@@ -58,4 +58,43 @@
     <menuitem id="menu_project_closeout_list" name="المشاريع المغلقة"
               parent="menu_project_closeout" action="action_project_closeout" sequence="10"/>
 
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!-- ═══   دليل الاستخدام — زر رئيسي + بنهاية كل قسم      ═══ -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <menuitem id="menu_workshop_user_guide_root"
+              name="دليل الاستخدام"
+              parent="menu_rwasi_root"
+              action="action_workshop_user_guide"
+              sequence="100"/>
+
+    <menuitem id="menu_workshop_guide_operations"
+              name="دليل الاستخدام (سير العمل)"
+              parent="menu_rwasi_operations"
+              action="action_workshop_guide_operations"
+              sequence="999"/>
+
+    <menuitem id="menu_workshop_guide_field"
+              name="دليل الاستخدام (سير العمل)"
+              parent="menu_rwasi_field"
+              action="action_workshop_guide_field"
+              sequence="999"/>
+
+    <menuitem id="menu_workshop_guide_quality"
+              name="دليل الاستخدام (سير العمل)"
+              parent="menu_rwasi_quality"
+              action="action_workshop_guide_quality"
+              sequence="999"/>
+
+    <menuitem id="menu_workshop_guide_reports"
+              name="دليل الاستخدام (سير العمل)"
+              parent="menu_rwasi_reports"
+              action="action_workshop_guide_reports"
+              sequence="999"/>
+
+    <menuitem id="menu_workshop_guide_closeout"
+              name="دليل الاستخدام (سير العمل)"
+              parent="menu_project_closeout"
+              action="action_workshop_guide_closeout"
+              sequence="999"/>
+
 </odoo>

@@ -13,3 +13,4 @@ from . import maintenance
 from . import hse
 from . import closeout
 from . import performance
+from . import user_guide

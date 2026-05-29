@@ -6,6 +6,13 @@
                 <div class="o_rawasi_brand">شركة رواسي سما للمقاولات</div>
                 <h1 class="o_rawasi_title">الإطلاق الرسمي لنظام إدارة المقاولات</h1>
                 <div class="o_rawasi_subtitle">منصّة مؤسّسية موحَّدة على <bdi>Odoo</bdi> لإدارة المشاريع من الفرصة إلى الإغلاق</div>
+                <div class="mt-3">
+                    <button class="btn btn-light btn-lg o_rawasi_guide_btn"
+                            t-on-click="openUserGuide">
+                        <i class="fa fa-book me-2"/>
+                        دليل الاستخدام
+                    </button>
+                </div>
             </div>
 
             <div class="o_rawasi_card mt-4">

@@ -32,3 +32,6 @@ from . import rawasi_extracted_specification
 from . import rawasi_audit_trail
 from . import rawasi_import_batch
 from . import rawasi_import_batch_line
+
+# دليل الاستخدام
+from . import rawasi_user_guide

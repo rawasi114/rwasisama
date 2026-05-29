@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_workshop_user_guide_kanban" model="ir.ui.view">
+        <field name="name">rwasi.workshop.user.guide.kanban</field>
+        <field name="model">rwasi.workshop.user.guide</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="guide_type" class="o_kanban_dashboard">
+                <field name="name"/>
+                <field name="subtitle"/>
+                <field name="guide_type"/>
+                <field name="role_group_id"/>
+                <field name="menu_section_key"/>
+                <field name="icon"/>
+                <field name="color"/>
+                <field name="sequence"/>
+                <templates>
+                    <t t-name="card">
+                        <div t-attf-class="o_kanban_card_content o_kanban_color_#{record.color.raw_value}"
+                             style="padding:12px; min-height:140px;">
+                            <div class="d-flex align-items-center mb-2">
+                                <i t-attf-class="fa #{record.icon.raw_value or 'fa-book'} fa-2x me-3"
+                                   style="color:#3b5998;"/>
+                                <div>
+                                    <strong style="font-size:1.05em;">
+                                        <field name="name"/>
+                                    </strong>
+                                    <div class="text-muted" style="font-size:0.85em;">
+                                        <field name="subtitle"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-muted mt-2" style="font-size:0.8em;">
+                                <span t-if="record.role_group_id.raw_value">
+                                    <i class="fa fa-user-circle"/> <field name="role_group_id"/>
+                                </span>
+                                <span t-if="record.menu_section_key.raw_value">
+                                    <i class="fa fa-list"/> <field name="menu_section_key"/>
+                                </span>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="view_workshop_user_guide_form" model="ir.ui.view">
+        <field name="name">rwasi.workshop.user.guide.form</field>
+        <field name="model">rwasi.workshop.user.guide</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <i t-attf-class="fa #{record.icon.raw_value or 'fa-book'} me-2"/>
+                            <field name="name"/>
+                        </h1>
+                        <h3 class="text-muted"><field name="subtitle"/></h3>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="guide_type"/>
+                            <field name="role_group_id"
+                                   invisible="guide_type != 'role'"
+                                   required="guide_type == 'role'"/>
+                            <field name="menu_section_key"
+                                   invisible="guide_type != 'workflow'"
+                                   required="guide_type == 'workflow'"/>
+                        </group>
+                        <group>
+                            <field name="icon"/>
+                            <field name="color" widget="color_picker"/>
+                            <field name="sequence"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="المحتوى" name="content">
+                            <field name="content" nolabel="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_workshop_user_guide" model="ir.actions.act_window">
+        <field name="name">دليل الاستخدام</field>
+        <field name="res_model">rwasi.workshop.user.guide</field>
+        <field name="view_mode">kanban,form</field>
+    </record>
+
+    <record id="action_workshop_guide_operations" model="ir.actions.act_window">
+        <field name="name">دليل الاستخدام — العمليات</field>
+        <field name="res_model">rwasi.workshop.user.guide</field>
+        <field name="view_mode">kanban,form</field>
+        <field name="domain">[('menu_section_key','=','operations')]</field>
+    </record>
+
+    <record id="action_workshop_guide_field" model="ir.actions.act_window">
+        <field name="name">دليل الاستخدام — العمليات الميدانية</field>
+        <field name="res_model">rwasi.workshop.user.guide</field>
+        <field name="view_mode">kanban,form</field>
+        <field name="domain">[('menu_section_key','=','field')]</field>
+    </record>
+
+    <record id="action_workshop_guide_quality" model="ir.actions.act_window">
+        <field name="name">دليل الاستخدام — الجودة والسلامة</field>
+        <field name="res_model">rwasi.workshop.user.guide</field>
+        <field name="view_mode">kanban,form</field>
+        <field name="domain">[('menu_section_key','=','quality')]</field>
+    </record>
+
+    <record id="action_workshop_guide_reports" model="ir.actions.act_window">
+        <field name="name">دليل الاستخدام — التقارير</field>
+        <field name="res_model">rwasi.workshop.user.guide</field>
+        <field name="view_mode">kanban,form</field>
+        <field name="domain">[('menu_section_key','=','reports')]</field>
+    </record>
+
+    <record id="action_workshop_guide_closeout" model="ir.actions.act_window">
+        <field name="name">دليل الاستخدام — المشاريع المغلقة</field>
+        <field name="res_model">rwasi.workshop.user.guide</field>
+        <field name="view_mode">kanban,form</field>
+        <field name="domain">[('menu_section_key','=','closeout')]</field>
+    </record>
+
+</odoo>

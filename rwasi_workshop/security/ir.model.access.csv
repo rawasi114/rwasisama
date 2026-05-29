@@ -79,3 +79,6 @@ access_wo_assign_wizard_user,wo.assign.wizard.user,model_rwasi_wo_assign_wizard,
 access_wo_assign_wizard_manager,wo.assign.wizard.manager,model_rwasi_wo_assign_wizard,group_workshop_manager,1,1,1,1
 access_purchase_order_workshop_read,purchase.order.workshop.read,purchase.model_purchase_order,group_workshop_user,1,0,0,0
 access_purchase_order_line_workshop_read,purchase.order.line.workshop.read,purchase.model_purchase_order_line,group_workshop_user,1,0,0,0
+access_workshop_guide_read_user,workshop.guide.read.user,model_rwasi_workshop_user_guide,group_workshop_user,1,0,0,0
+access_workshop_guide_edit_manager,workshop.guide.edit.manager,model_rwasi_workshop_user_guide,group_workshop_manager,1,1,1,0
+access_workshop_guide_admin,workshop.guide.admin,model_rwasi_workshop_user_guide,base.group_system,1,1,1,1
