@@ -14,8 +14,13 @@ class AuditTrail(models.Model):
 
     original_text = fields.Text(string="النص الأصلي", required=True)
     reference_item_id = fields.Many2one(
-        "rawasi.reference.item", string="البند المرجعي",
+        "rawasi.reference.item", string="البند المرجعي (قديم)",
         ondelete="set null",
+    )
+    product_tmpl_id = fields.Many2one(
+        "product.template", string="منتج المقاولات",
+        ondelete="set null", index=True,
+        domain="[('is_construction_item', '=', True)]",
     )
     decided_by_user_id = fields.Many2one(
         "res.users", string="نفّذ القرار",

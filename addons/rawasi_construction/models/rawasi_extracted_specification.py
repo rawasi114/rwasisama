@@ -14,8 +14,13 @@ class ExtractedSpecification(models.Model):
     _order = "reference_item_id, display_order, id"
 
     reference_item_id = fields.Many2one(
-        "rawasi.reference.item", required=True,
-        ondelete="cascade", index=True, string="البند المرجعي",
+        "rawasi.reference.item",
+        ondelete="cascade", index=True, string="البند المرجعي (قديم)",
+    )
+    product_tmpl_id = fields.Many2one(
+        "product.template", string="منتج المقاولات",
+        ondelete="cascade", index=True,
+        domain="[('is_construction_item', '=', True)]",
     )
     spec_key = fields.Selection(
         [
@@ -42,6 +47,15 @@ class ExtractedSpecification(models.Model):
     )
     is_searchable = fields.Boolean(default=True, index=True)
     display_order = fields.Integer(default=10)
+
+    @api.constrains("reference_item_id", "product_tmpl_id")
+    def _check_link_target(self):
+        for rec in self:
+            if not rec.reference_item_id and not rec.product_tmpl_id:
+                raise ValidationError(_(
+                    "كل مواصفة مُستخلَصة يجب أن تربط: إما بـ«البند المرجعي» "
+                    "أو بـ«منتج المقاولات»."
+                ))
 
     @api.constrains("spec_key", "spec_key_custom")
     def _check_custom_key(self):

@@ -118,8 +118,20 @@ class ProductTemplate(models.Model):
     def _compute_rawasi_boq_line_count(self):
         BoQ = self.env["rawasi.boq.item"]
         for rec in self:
-            # رابطنا (لو موجود) — في Stage B سنضيف product_template_id
-            rec.rawasi_boq_line_count = 0
+            rec.rawasi_boq_line_count = BoQ.search_count(
+                [("product_tmpl_id", "=", rec.id)]
+            )
+
+    def action_view_boq_lines(self):
+        self.ensure_one()
+        return {
+            "type": "ir.actions.act_window",
+            "name": _("بنود جداول الكميات لـ %s") % self.name,
+            "res_model": "rawasi.boq.item",
+            "view_mode": "list,form",
+            "domain": [("product_tmpl_id", "=", self.id)],
+            "context": {"default_product_tmpl_id": self.id},
+        }
 
     # ── الإجراءات ─────────────────────────────────────────────
     def action_view_boms(self):

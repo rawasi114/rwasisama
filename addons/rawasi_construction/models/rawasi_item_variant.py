@@ -34,8 +34,14 @@ class ItemVariant(models.Model):
     _order = "frequency desc, last_seen_date desc"
 
     reference_item_id = fields.Many2one(
-        "rawasi.reference.item", string="البند المرجعي",
-        required=True, ondelete="cascade", index=True,
+        "rawasi.reference.item", string="البند المرجعي (قديم)",
+        ondelete="cascade", index=True,
+    )
+    product_tmpl_id = fields.Many2one(
+        "product.template", string="منتج المقاولات",
+        ondelete="cascade", index=True,
+        domain="[('is_construction_item', '=', True)]",
+        help="Stage B — الربط بمنتج أودو بدل rawasi.reference.item.",
     )
     original_text = fields.Char(
         string="الوصف كما ورد", required=True,
@@ -65,6 +71,17 @@ class ItemVariant(models.Model):
         "UNIQUE(reference_item_id, normalized_text)",
         "لا يمكن تكرار نفس الصياغة المُوحَّدة لنفس البند المرجعي.",
     )
+
+    @api.constrains("reference_item_id", "product_tmpl_id")
+    def _check_link_target(self):
+        for rec in self:
+            if not rec.reference_item_id and not rec.product_tmpl_id:
+                from odoo.exceptions import ValidationError
+                from odoo import _
+                raise ValidationError(_(
+                    "لكل صياغة بديلة لا بدّ من ربط: إما بـ«البند المرجعي» "
+                    "أو بـ«منتج المقاولات»."
+                ))
 
     @api.depends("original_text")
     def _compute_normalized(self):
