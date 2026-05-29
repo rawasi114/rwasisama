@@ -59,6 +59,78 @@
         strong { color: #253747; }
     }
 
+    .o_rawasi_kpi_grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 0.9rem;
+    }
+    .o_rawasi_kpi_card {
+        background: #ffffff;
+        border-radius: 0.6rem;
+        padding: 1rem 1.1rem;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+        display: flex;
+        align-items: center;
+        gap: 0.9rem;
+        cursor: pointer;
+        transition: transform 0.15s, box-shadow 0.15s;
+        border-inline-start: 5px solid #6c757d;
+
+        &:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+        }
+
+        .o_rawasi_kpi_icon {
+            font-size: 1.8rem;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(108, 117, 125, 0.12);
+            color: #6c757d;
+            flex-shrink: 0;
+        }
+        .o_rawasi_kpi_body {
+            flex: 1;
+            min-width: 0;
+        }
+        .o_rawasi_kpi_value {
+            font-size: 1.9rem;
+            font-weight: 700;
+            color: #253747;
+            line-height: 1;
+        }
+        .o_rawasi_kpi_title {
+            color: #6a7480;
+            font-size: 0.9rem;
+            margin-top: 0.3rem;
+        }
+        .o_rawasi_kpi_arrow {
+            color: #b8c1cc;
+            font-size: 1.1rem;
+        }
+
+        &.o_rawasi_kpi_info {
+            border-inline-start-color: #0d6efd;
+            .o_rawasi_kpi_icon { background: rgba(13, 110, 253, 0.12); color: #0d6efd; }
+        }
+        &.o_rawasi_kpi_success {
+            border-inline-start-color: #198754;
+            .o_rawasi_kpi_icon { background: rgba(25, 135, 84, 0.12); color: #198754; }
+        }
+        &.o_rawasi_kpi_warning {
+            border-inline-start-color: #fd7e14;
+            .o_rawasi_kpi_icon { background: rgba(253, 126, 20, 0.12); color: #fd7e14; }
+        }
+        &.o_rawasi_kpi_danger {
+            border-inline-start-color: #dc3545;
+            .o_rawasi_kpi_icon { background: rgba(220, 53, 69, 0.12); color: #dc3545; }
+        }
+    }
+
     .o_rawasi_pillars {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
