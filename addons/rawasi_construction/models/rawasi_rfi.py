@@ -20,6 +20,10 @@ class RawasiRfi(models.Model):
     )
     # رابط اختياري لبند جدول الكميات
     boq_item_id = fields.Many2one("rawasi.boq.item", string="بند جدول الكميات")
+    ncr_id = fields.Many2one(
+        "rawasi.ncr", string="NCR المصدر", ondelete="set null",
+        help="يُملأ تلقائياً عند تصعيد NCR إلى RFI.",
+    )
     subject = fields.Char(string="الموضوع", required=True, tracking=True)
     question = fields.Text(string="الاستفسار", required=True)
     answer = fields.Text(string="الرد")

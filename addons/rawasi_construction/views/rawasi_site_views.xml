@@ -77,7 +77,7 @@
     </record>
 
     <record id="action_daily_report" model="ir.actions.act_window">
-        <field name="name">التقارير اليومية</field>
+        <field name="name">تقارير الموقع اليومية</field>
         <field name="res_model">rawasi.daily.report</field>
         <field name="view_mode">list,form</field>
     </record>
@@ -113,6 +113,10 @@
                             class="btn-primary" invisible="state != 'open'"/>
                     <button name="action_close" type="object" string="إغلاق"
                             class="btn-primary" invisible="state not in ('open','in_progress')"/>
+                    <button name="action_escalate_to_rfi" type="object"
+                            string="تصعيد لـ RFI" class="btn-warning"
+                            invisible="not can_escalate"
+                            confirm="سيُنشأ طلب معلومات جديد مرتبط بهذا NCR وتُرسَل للاستشاري. متابعة؟"/>
                     <button name="action_print_with_attachments" type="object"
                             string="طباعة مع المرفقات" class="btn-secondary"
                             invisible="not attachment_ids"/>
@@ -126,6 +130,23 @@
                            statusbar_visible="open,in_progress,closed"/>
                 </header>
                 <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_rfis" type="object"
+                                class="oe_stat_button" icon="fa-question-circle"
+                                invisible="rfi_count == 0">
+                            <field name="rfi_count" widget="statinfo" string="RFI مرتبطة"/>
+                        </button>
+                    </div>
+                    <field name="can_escalate" invisible="1"/>
+                    <field name="is_overdue" invisible="1"/>
+                    <div class="alert alert-danger" role="alert"
+                         invisible="not is_overdue">
+                        <i class="fa fa-exclamation-triangle me-2"/>
+                        <strong>متأخّر!</strong> تجاوز تاريخ الاستحقاق ولم يُغلَق بعد.
+                        <span invisible="not can_escalate">
+                            يمكن تصعيده لـ RFI من الزر أعلاه.
+                        </span>
+                    </div>
                     <div class="oe_title">
                         <h1><field name="name" readonly="1"/></h1>
                     </div>
@@ -164,10 +185,42 @@
         </field>
     </record>
 
+    <record id="view_ncr_search" model="ir.ui.view">
+        <field name="name">rawasi.ncr.search</field>
+        <field name="model">rawasi.ncr</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="project_id"/>
+                <field name="subject"/>
+                <field name="responsible_id"/>
+                <filter name="f_open" string="مفتوحة"
+                        domain="[('state','in',('open','in_progress'))]"/>
+                <filter name="f_critical" string="حرجة"
+                        domain="[('severity','=','critical')]"/>
+                <filter name="f_my_responsibility" string="مسؤوليّتي"
+                        domain="[('responsible_id','=',uid)]"/>
+                <separator/>
+                <filter name="f_overdue" string="متأخّرة"
+                        domain="[('due_date','&lt;',context_today().strftime('%Y-%m-%d')),('state','in',('open','in_progress'))]"/>
+                <group>
+                    <filter name="g_project" string="حسب المشروع"
+                            context="{'group_by':'project_id'}"/>
+                    <filter name="g_severity" string="حسب الشدّة"
+                            context="{'group_by':'severity'}"/>
+                    <filter name="g_state" string="حسب الحالة"
+                            context="{'group_by':'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
     <record id="action_ncr" model="ir.actions.act_window">
-        <field name="name">تقارير عدم المطابقة</field>
+        <field name="name">عدم مطابقة الموقع</field>
         <field name="res_model">rawasi.ncr</field>
         <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_ncr_search"/>
+        <field name="context">{'search_default_f_open': 1}</field>
     </record>
 
     <!-- ════════ طلب المعلومات (RFI) ════════ -->
@@ -218,6 +271,8 @@
                         <group>
                             <field name="project_id"/>
                             <field name="boq_item_id"/>
+                            <field name="ncr_id" readonly="1"
+                                   invisible="not ncr_id"/>
                             <field name="subject"/>
                             <field name="priority"/>
                         </group>

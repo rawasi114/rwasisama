@@ -183,7 +183,7 @@
         </field>
     </record>
     <record id="action_daily_report" model="ir.actions.act_window">
-        <field name="name">التقرير اليومي للورشة</field>
+        <field name="name">تقارير الورشة اليومية</field>
         <field name="res_model">rwasi.daily.report</field>
         <field name="view_mode">list,form</field>
     </record>

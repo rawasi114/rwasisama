@@ -157,10 +157,13 @@
                 <field name="serial"/>
                 <field name="reference"/>
                 <field name="entity_name"/>
+                <filter name="f_active" string="نشطة"
+                        domain="[('state','in',('draft','pricing','submitted'))]"/>
                 <filter name="f_draft" string="مسودة" domain="[('state','=','draft')]"/>
                 <filter name="f_pricing" string="قيد التسعير" domain="[('state','=','pricing')]"/>
                 <filter name="f_submitted" string="مقدَّم" domain="[('state','=','submitted')]"/>
                 <filter name="f_won" string="فائز" domain="[('state','=','won')]"/>
+                <filter name="f_lost" string="خاسر" domain="[('state','=','lost')]"/>
                 <separator/>
                 <group>
                     <filter name="g_state" string="الحالة" context="{'group_by':'state'}"/>
@@ -174,6 +177,8 @@
         <field name="name">المنافسات</field>
         <field name="res_model">rawasi.competition</field>
         <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_rawasi_competition_search"/>
+        <field name="context">{'search_default_f_active': 1}</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">أنشئ أول منافسة</p>
             <p>سجّل المنافسة ثم استورد جدول الكميات من ملف اعتماد وابدأ التسعير.</p>

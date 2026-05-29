@@ -170,12 +170,12 @@
                   action="action_material_approval"
                   sequence="20"/>
         <menuitem id="menu_rawasi_dsr"
-                  name="التقارير اليومية (DSR)"
+                  name="تقارير الموقع اليومية (DSR)"
                   parent="menu_rawasi_field"
                   action="action_daily_report"
                   sequence="30"/>
         <menuitem id="menu_rawasi_ncr"
-                  name="عدم المطابقة (NCR)"
+                  name="عدم مطابقة الموقع (NCR)"
                   parent="menu_rawasi_field"
                   action="action_ncr"
                   sequence="40"/>
