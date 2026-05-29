@@ -23,3 +23,12 @@ from . import rawasi_bank_guarantee
 from . import rawasi_subcontractor
 from . import rawasi_subcontract
 from . import rawasi_subcontract_ipc
+
+# سجل البنود المرجعي ومنظومة المطابقة الذكية
+from . import rawasi_lcgpa_code
+from . import rawasi_reference_item
+from . import rawasi_item_variant
+from . import rawasi_extracted_specification
+from . import rawasi_audit_trail
+from . import rawasi_import_batch
+from . import rawasi_import_batch_line
