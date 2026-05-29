@@ -156,12 +156,7 @@
         <field name="res_model">product.template</field>
         <field name="view_mode">list,form,kanban</field>
         <field name="domain">[('is_construction_item','=',True)]</field>
-        <field name="context">
-            {'default_is_construction_item': True,
-             'default_type': 'consu',
-             'search_default_construction_only': 1,
-             'search_default_active': 1}
-        </field>
+        <field name="context">{"default_is_construction_item": 1, "default_type": "consu", "search_default_construction_only": 1, "search_default_active": 1}</field>
         <field name="view_id" ref="view_product_template_list_rawasi"/>
         <field name="search_view_id" ref="view_product_template_search_rawasi"/>
         <field name="help" type="html">
