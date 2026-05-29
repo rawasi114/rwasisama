@@ -34,6 +34,10 @@ _COL_ALIASES = {
     "specifications": ("المواصفات",),
     "mandatory":      ("منتج من القائمة الإلزامية", "إلزامي"),
     "lcgpa":          ("الرمز الإنشائي", "LCGPA"),
+    "unit_cost":      ("تكلفة الوحدة", "التكلفة", "Unit Cost", "Cost"),
+    "unit_price":     ("سعر الوحدة", "السعر", "Unit Price", "Price"),
+    "total_cost":     ("إجمالي التكلفة", "اجمالي التكلفة", "Total Cost"),
+    "total_price":    ("إجمالي السعر", "اجمالي السعر", "Total Price"),
 }
 
 
@@ -177,6 +181,16 @@ class ReferenceItemsImportWizard(models.TransientModel):
                     lcgpa_raw=lcgpa_raw, extracted_specs=specs,
                 )
 
+                # تحويل أعمدة التكلفة والسعر لأرقام (مع تجاهل الفواصل)
+                def _to_float(key):
+                    v = _get(key)
+                    if not v:
+                        return 0.0
+                    try:
+                        return float(v.replace(",", "").strip())
+                    except (ValueError, AttributeError):
+                        return 0.0
+
                 BatchLine.create({
                     "import_batch_id": batch.id,
                     "line_number": total_lines,
@@ -189,6 +203,8 @@ class ReferenceItemsImportWizard(models.TransientModel):
                     "original_specifications": _get("specifications") or False,
                     "original_construction_code": lcgpa_raw or False,
                     "original_mandatory_local": _get("mandatory") or False,
+                    "original_unit_cost": _to_float("unit_cost"),
+                    "original_unit_price": _to_float("unit_price"),
                     "normalized_unit_code": unit_code or False,
                     "detected_lcgpa_id": detected_lcgpa,
                     "suggested_match_id": ref.id if ref else False,

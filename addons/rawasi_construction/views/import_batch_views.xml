@@ -100,6 +100,8 @@
                                     <field name="original_unit" optional="show"/>
                                     <field name="normalized_unit_code" optional="show" widget="badge"/>
                                     <field name="original_quantity" optional="show"/>
+                                    <field name="original_unit_cost" optional="show" string="تكلفة الوحدة"/>
+                                    <field name="original_unit_price" optional="show" string="سعر الوحدة"/>
                                     <field name="suggested_match_id" optional="show"/>
                                     <field name="suggestion_confidence" optional="show" widget="progressbar"/>
                                     <field name="suggestion_source" optional="hide" widget="badge"/>
@@ -161,6 +163,14 @@
                             <field name="detected_lcgpa_id" readonly="1"/>
                             <field name="final_match_id"
                                    options="{'no_create_edit': True}"/>
+                        </group>
+                    </group>
+                    <group string="التكلفة والتسعير">
+                        <group>
+                            <field name="original_unit_cost"/>
+                        </group>
+                        <group>
+                            <field name="original_unit_price"/>
                         </group>
                     </group>
                     <group string="الوصف الكامل كما بالجدول">

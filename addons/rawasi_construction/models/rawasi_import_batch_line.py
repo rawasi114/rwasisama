@@ -25,6 +25,8 @@ class ImportBatchLine(models.Model):
     original_specifications = fields.Text(string="المواصفات كما وردت")
     original_construction_code = fields.Char(string="الرمز الإنشائي كما ورد")
     original_mandatory_local = fields.Char(string="الإلزامي محلي كما ورد")
+    original_unit_cost = fields.Float(string="تكلفة الوحدة كما وردت")
+    original_unit_price = fields.Float(string="سعر الوحدة كما ورد")
 
     # ── ناتج التوحيد التلقائي (Auto-Normalization) ──────────────
     normalized_unit_code = fields.Selection(
@@ -132,6 +134,8 @@ class ImportBatchLine(models.Model):
             "specifications": self.original_specifications or False,
             "unit_text": self.original_unit or False,
             "quantity": qty,
+            "unit_cost": self.original_unit_cost or 0.0,
+            "unit_price": self.original_unit_price or 0.0,
             "construction_code": self.original_construction_code or False,
             "mandatory_local": (
                 "yes" if (self.original_mandatory_local or "").strip().lower() in ("نعم","yes")
