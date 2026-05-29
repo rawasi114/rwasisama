@@ -32,6 +32,42 @@
                   action="action_rawasi_projects"
                   sequence="22"/>
 
+        <!-- ═══ سجل البنود المرجعي ومنظومة المطابقة الذكية ═══ -->
+        <menuitem id="menu_rawasi_reference_registry_root"
+                  name="سجل البنود المرجعي"
+                  parent="menu_rawasi_root"
+                  sequence="23"/>
+        <menuitem id="menu_rawasi_ref_import_wizard"
+                  name="استيراد جدول كميات"
+                  parent="menu_rawasi_reference_registry_root"
+                  action="action_reference_items_import_wizard"
+                  sequence="10"/>
+        <menuitem id="menu_rawasi_ref_import_batches"
+                  name="دفعات الاستيراد"
+                  parent="menu_rawasi_reference_registry_root"
+                  action="action_import_batch"
+                  sequence="20"/>
+        <menuitem id="menu_rawasi_ref_items"
+                  name="البنود المرجعية"
+                  parent="menu_rawasi_reference_registry_root"
+                  action="action_reference_item"
+                  sequence="30"/>
+        <menuitem id="menu_rawasi_ref_variants"
+                  name="الصياغات البديلة"
+                  parent="menu_rawasi_reference_registry_root"
+                  action="action_item_variant"
+                  sequence="40"/>
+        <menuitem id="menu_rawasi_ref_lcgpa"
+                  name="أكواد LCGPA"
+                  parent="menu_rawasi_reference_registry_root"
+                  action="action_lcgpa_code"
+                  sequence="50"/>
+        <menuitem id="menu_rawasi_ref_audit"
+                  name="سجل التتبع"
+                  parent="menu_rawasi_reference_registry_root"
+                  action="action_audit_trail"
+                  sequence="60"/>
+
         <menuitem id="menu_rawasi_price_intelligence"
                   name="رادار الترسية"
                   parent="menu_rawasi_root"
