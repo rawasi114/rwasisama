@@ -52,10 +52,7 @@
             <form>
                 <sheet>
                     <div class="oe_title">
-                        <h1>
-                            <i t-attf-class="fa #{record.icon.raw_value or 'fa-book'} me-2"/>
-                            <field name="name"/>
-                        </h1>
+                        <h1><field name="name"/></h1>
                         <h3 class="text-muted"><field name="subtitle"/></h3>
                     </div>
                     <group>
