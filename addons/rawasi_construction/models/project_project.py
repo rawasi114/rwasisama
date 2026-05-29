@@ -80,6 +80,14 @@ class ProjectProject(models.Model):
     rawasi_ncr_count = fields.Integer(compute="_compute_rawasi_phase4_counts")
     rawasi_rfi_count = fields.Integer(compute="_compute_rawasi_phase4_counts")
 
+    # ═══ Smart Button counters للمشتريات والعقود ═══
+    rawasi_mr_count = fields.Integer(compute="_compute_rawasi_procurement_counts")
+    rawasi_po_count = fields.Integer(compute="_compute_rawasi_procurement_counts")
+    rawasi_grn_count = fields.Integer(compute="_compute_rawasi_procurement_counts")
+    rawasi_vo_count = fields.Integer(compute="_compute_rawasi_contract_counts")
+    rawasi_ipc_count = fields.Integer(compute="_compute_rawasi_contract_counts")
+    rawasi_bg_count = fields.Integer(compute="_compute_rawasi_contract_counts")
+
     @api.model_create_multi
     def create(self, vals_list):
         for vals in vals_list:
@@ -146,6 +154,45 @@ class ProjectProject(models.Model):
 
     def action_open_rfi(self):
         return self._rawasi_open_related(_("طلبات المعلومات"), "rawasi.rfi")
+
+    # ═══ counters/actions للمشتريات والعقود ═══
+    def _compute_rawasi_procurement_counts(self):
+        MR = self.env["rawasi.material.request"]
+        PO = self.env["rawasi.purchase.order"]
+        GR = self.env["rawasi.goods.receipt"]
+        for project in self:
+            domain = [("project_id", "=", project.id)]
+            project.rawasi_mr_count = MR.search_count(domain)
+            project.rawasi_po_count = PO.search_count(domain)
+            project.rawasi_grn_count = GR.search_count(domain)
+
+    def _compute_rawasi_contract_counts(self):
+        VO = self.env["rawasi.variation.order"]
+        IPC = self.env["rawasi.payment.certificate"]
+        BG = self.env["rawasi.bank.guarantee"]
+        for project in self:
+            domain = [("project_id", "=", project.id)]
+            project.rawasi_vo_count = VO.search_count(domain)
+            project.rawasi_ipc_count = IPC.search_count(domain)
+            project.rawasi_bg_count = BG.search_count(domain)
+
+    def action_open_mr(self):
+        return self._rawasi_open_related(_("طلبات المواد"), "rawasi.material.request")
+
+    def action_open_po(self):
+        return self._rawasi_open_related(_("أوامر الشراء"), "rawasi.purchase.order")
+
+    def action_open_grn(self):
+        return self._rawasi_open_related(_("سندات الاستلام"), "rawasi.goods.receipt")
+
+    def action_open_vo(self):
+        return self._rawasi_open_related(_("أوامر التغيير"), "rawasi.variation.order")
+
+    def action_open_ipc(self):
+        return self._rawasi_open_related(_("المستخلصات"), "rawasi.payment.certificate")
+
+    def action_open_bg(self):
+        return self._rawasi_open_related(_("الضمانات البنكية"), "rawasi.bank.guarantee")
 
     def action_generate_wbs_phases(self):
         """يولّد المراحل الرئيسية الست (من القوالب) كأنشطة عليا مع مهامها الفرعية،
