@@ -27,6 +27,22 @@
             font-size: 0.95rem;
             margin-top: 0.5rem;
         }
+        .o_rawasi_guide_btn {
+            background: #BD9B5E;
+            color: #253747;
+            border: none;
+            font-weight: 700;
+            border-radius: 0.5rem;
+            padding: 0.6rem 1.5rem;
+            transition: transform 0.15s, box-shadow 0.15s;
+
+            &:hover {
+                background: #d0ae6e;
+                transform: translateY(-1px);
+                box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            }
+            i { color: #253747; }
+        }
     }
 
     .o_rawasi_card {

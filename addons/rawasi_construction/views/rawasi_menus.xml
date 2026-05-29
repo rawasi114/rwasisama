@@ -227,5 +227,53 @@
                   parent="menu_rawasi_config"
                   action="action_wbs_phase"
                   sequence="30"/>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- ═══   دليل الاستخدام — زر بالقائمة الرئيسية + بكل قسم  -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+
+        <!-- الزر الرئيسي (شامل كل الأدلة) -->
+        <menuitem id="menu_rawasi_user_guide_root"
+                  name="دليل الاستخدام"
+                  parent="menu_rawasi_root"
+                  action="action_rawasi_user_guide"
+                  sequence="100"/>
+
+        <!-- دليل خاص بنهاية كل قسم رئيسي (سير العمل) -->
+        <menuitem id="menu_user_guide_reference_registry"
+                  name="دليل الاستخدام (سير العمل)"
+                  parent="menu_rawasi_reference_registry_root"
+                  action="action_user_guide_reference_registry"
+                  sequence="999"/>
+
+        <menuitem id="menu_user_guide_analytics"
+                  name="دليل الاستخدام (سير العمل)"
+                  parent="menu_rawasi_analytics"
+                  action="action_user_guide_analytics"
+                  sequence="999"/>
+
+        <menuitem id="menu_user_guide_procurement"
+                  name="دليل الاستخدام (سير العمل)"
+                  parent="menu_rawasi_procurement"
+                  action="action_user_guide_procurement"
+                  sequence="999"/>
+
+        <menuitem id="menu_user_guide_field"
+                  name="دليل الاستخدام (سير العمل)"
+                  parent="menu_rawasi_field"
+                  action="action_user_guide_field"
+                  sequence="999"/>
+
+        <menuitem id="menu_user_guide_contracts"
+                  name="دليل الاستخدام (سير العمل)"
+                  parent="menu_rawasi_contracts"
+                  action="action_user_guide_contracts"
+                  sequence="999"/>
+
+        <menuitem id="menu_user_guide_settings"
+                  name="دليل الاستخدام (سير العمل)"
+                  parent="menu_rawasi_config"
+                  action="action_user_guide_settings"
+                  sequence="999"/>
     </data>
 </odoo>
