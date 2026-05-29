@@ -100,6 +100,10 @@
                                     <field name="total_price" optional="show"/>
                                     <field name="margin_pct" optional="hide"/>
                                     <field name="sbc_code_id" optional="hide"/>
+                                    <field name="lcgpa_code_id" optional="hide"/>
+                                    <field name="reference_item_id" optional="show"/>
+                                    <field name="reference_match_source" optional="hide" widget="badge"/>
+                                    <field name="reference_match_confidence" optional="hide" widget="progressbar"/>
                                     <field name="mandatory_local" optional="hide"/>
                                     <field name="currency_id" column_invisible="1"/>
                                     <button name="action_show_price_suggestions" type="object"

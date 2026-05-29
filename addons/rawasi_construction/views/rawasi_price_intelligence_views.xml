@@ -13,6 +13,10 @@
                 <field name="unit_price"/>
                 <field name="margin_pct" optional="show"/>
                 <field name="sbc_code_id" optional="hide"/>
+                <field name="lcgpa_code_id" optional="hide"/>
+                <field name="reference_item_id" optional="show"/>
+                <field name="reference_match_source" optional="hide" widget="badge"/>
+                <field name="reference_match_confidence" optional="hide" widget="progressbar"/>
                 <field name="competition_id" optional="show"/>
                 <field name="currency_id" column_invisible="1"/>
                 <field name="outcome" widget="badge"
@@ -36,6 +40,7 @@
                             <field name="unit_id"/>
                             <field name="quantity"/>
                             <field name="sbc_code_id"/>
+                            <field name="lcgpa_code_id"/>
                         </group>
                         <group>
                             <field name="unit_cost"/>
@@ -45,6 +50,11 @@
                             <field name="outcome"/>
                             <field name="competition_id"/>
                             <field name="currency_id" invisible="1"/>
+                        </group>
+                        <group string="ربط الكتالوج المرجعي" colspan="2">
+                            <field name="reference_item_id"/>
+                            <field name="reference_match_source" widget="badge"/>
+                            <field name="reference_match_confidence" widget="progressbar"/>
                         </group>
                     </group>
                 </sheet>

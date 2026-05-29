@@ -23,6 +23,26 @@ class RawasiPriceIntelligence(models.Model):
     unit_id = fields.Many2one("rawasi.unit", string="الوحدة")
     unit_text = fields.Char(string="الوحدة (نص)")
     sbc_code_id = fields.Many2one("rawasi.sbc.code", string="رمز SBC")
+    lcgpa_code_id = fields.Many2one(
+        "rawasi.lcgpa.code", string="رمز LCGPA",
+        help="رمز هيئة المحتوى المحلي والمشتريات الحكومية.",
+    )
+    reference_item_id = fields.Many2one(
+        "rawasi.reference.item", string="البند المرجعي",
+        index=True,
+        help="ربط بكتالوج البنود المرجعية الموحَّد.",
+    )
+    reference_match_source = fields.Selection(
+        [
+            ("exact_text",  "تطابق نصي كامل"),
+            ("lcgpa_code",  "تطابق برمز LCGPA"),
+            ("spec_pattern","تطابق بنمط المواصفات"),
+            ("pgvector",    "تطابق دلالي"),
+            ("manual",      "ربط يدوي"),
+        ],
+        string="مصدر الربط بالكتالوج",
+    )
+    reference_match_confidence = fields.Float(string="ثقة الربط %")
     quantity = fields.Float(string="الكمية")
     company_id = fields.Many2one("res.company", default=lambda self: self.env.company)
     currency_id = fields.Many2one("res.currency", string="العملة")
