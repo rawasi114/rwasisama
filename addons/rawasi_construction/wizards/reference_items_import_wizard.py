@@ -43,6 +43,7 @@ _COL_ALIASES = {
 
 def _detect_columns(header_row):
     mapping = {}
+    # ❶ المطابقة الحرفية بالـ aliases
     for idx, cell in enumerate(header_row):
         if not cell:
             continue
@@ -51,6 +52,29 @@ def _detect_columns(header_row):
             if clean in aliases:
                 mapping[key] = idx
                 break
+
+    # ❷ كشف ضبابي (contains) لأعمدة التكلفة/السعر لو ما انكشفت حرفياً
+    for idx, cell in enumerate(header_row):
+        if not cell:
+            continue
+        clean = str(cell).strip()
+        low = clean.lower()
+        has_total = ("إجمالي" in clean) or ("اجمالي" in clean) or ("total" in low)
+        has_cost = ("تكلفة" in clean) or ("التكلفة" in clean) or ("cost" in low)
+        has_price = ("سعر" in clean) or ("السعر" in clean) or ("price" in low)
+
+        if has_total and has_cost and "total_cost" not in mapping:
+            mapping["total_cost"] = idx
+            continue
+        if has_total and has_price and "total_price" not in mapping:
+            mapping["total_price"] = idx
+            continue
+        if has_cost and not has_total and "unit_cost" not in mapping:
+            mapping["unit_cost"] = idx
+            continue
+        if has_price and not has_total and "unit_price" not in mapping:
+            mapping["unit_price"] = idx
+            continue
     return mapping
 
 
