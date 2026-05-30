@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- توسعة فورم قالب المنتج: تبويب «معلومات إنشائية» -->
+    <record id="view_product_template_form_rawasi" model="ir.ui.view">
+        <field name="name">product.template.form.rawasi.construction</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_only_form_view"/>
+        <field name="arch" type="xml">
+
+            <!-- شارة «بند تشييدي» في الترويسة -->
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="is_construction" widget="boolean_toggle"
+                       string="بند تشييدي"/>
+            </xpath>
+
+            <!-- تبويب جديد بحقول البناء -->
+            <xpath expr="//notebook" position="inside">
+                <page string="معلومات إنشائية" name="rawasi_construction"
+                      invisible="not is_construction">
+                    <group>
+                        <group string="التصنيف">
+                            <field name="construction_nature"/>
+                            <field name="construction_category_text"/>
+                            <field name="work_group"/>
+                        </group>
+                        <group string="الترميز">
+                            <field name="sbc_code_id"/>
+                            <field name="lcgpa_code"/>
+                            <field name="mandatory_local"/>
+                            <field name="rawasi_unit_id"/>
+                        </group>
+                    </group>
+                    <group string="المواصفات الفنية">
+                        <field name="specifications" nolabel="1" colspan="2"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- إضافة عمود «بند تشييدي» في list المنتجات -->
+    <record id="view_product_template_list_rawasi" model="ir.ui.view">
+        <field name="name">product.template.list.rawasi.construction</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_tree_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="is_construction" optional="hide"/>
+                <field name="construction_nature" optional="hide"/>
+                <field name="sbc_code_id" optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- فلتر «المنتجات الإنشائية» في البحث -->
+    <record id="view_product_template_search_rawasi" model="ir.ui.view">
+        <field name="name">product.template.search.rawasi.construction</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_search_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='filter_to_sell']" position="after">
+                <separator/>
+                <filter string="بنود تشييدية" name="filter_construction"
+                        domain="[('is_construction', '=', True)]"/>
+                <filter string="مواد خام" name="filter_construction_material"
+                        domain="[('is_construction', '=', True),
+                                 ('construction_nature', '=', 'material')]"/>
+                <filter string="بنود تسليم" name="filter_construction_deliverable"
+                        domain="[('is_construction', '=', True),
+                                 ('construction_nature', '=', 'deliverable')]"/>
+                <separator/>
+                <filter string="حسب طبيعة البند" name="group_nature"
+                        context="{'group_by': 'construction_nature'}"/>
+                <filter string="حسب رمز SBC" name="group_sbc"
+                        context="{'group_by': 'sbc_code_id'}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- إجراء مخصّص: كتالوج المنتجات الإنشائية -->
+    <record id="action_rawasi_construction_products" model="ir.actions.act_window">
+        <field name="name">كتالوج المنتجات الإنشائية</field>
+        <field name="res_model">product.template</field>
+        <field name="view_mode">list,kanban,form</field>
+        <field name="domain">[('is_construction', '=', True)]</field>
+        <field name="context">{
+            'default_is_construction': True,
+            'default_construction_nature': 'material',
+            'search_default_filter_construction': 1,
+        }</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                ابدأ ببناء كتالوج المنتجات الإنشائية
+            </p>
+            <p>
+                كل بند يظهر في كراسات الشروط (سيراميك، خرسانة، أبواب…) يُمثَّل
+                كمنتج هنا. ربط البند بمنتج يفتح مسار الشراء والمخزون والمحاسبة.
+            </p>
+        </field>
+    </record>
+
+</odoo>

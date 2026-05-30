@@ -90,6 +90,8 @@
                                     <field name="serial" optional="show"/>
                                     <field name="category" optional="show"/>
                                     <field name="work_group" optional="hide"/>
+                                    <field name="product_id" optional="show"
+                                           context="{'default_is_construction': True}"/>
                                     <field name="name"/>
                                     <field name="unit_id" optional="show"/>
                                     <field name="unit_text" optional="hide"/>

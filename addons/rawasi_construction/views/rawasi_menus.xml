@@ -32,6 +32,12 @@
                   action="action_rawasi_projects"
                   sequence="22"/>
 
+        <menuitem id="menu_rawasi_products"
+                  name="كتالوج المنتجات الإنشائية"
+                  parent="menu_rawasi_root"
+                  action="action_rawasi_construction_products"
+                  sequence="25"/>
+
         <menuitem id="menu_rawasi_price_intelligence"
                   name="رادار الترسية"
                   parent="menu_rawasi_root"

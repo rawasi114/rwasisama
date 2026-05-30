@@ -26,6 +26,38 @@ class RawasiBoqItem(models.Model):
     unit_id = fields.Many2one("rawasi.unit", string="الوحدة")
     quantity = fields.Float(string="الكمية", default=0.0)
 
+    # ── ربط المنتج (النواة الذرية الجديدة) ──────────────────────────
+    product_id = fields.Many2one(
+        "product.product",
+        string="المنتج",
+        index=True,
+        domain="[('is_construction', '=', True)]",
+        help="المنتج الذي يمثّل هذا البند في كتالوج المنتجات الموحَّد. "
+             "عند التحديد يصبح المنتج هو النواة المرجعية للشراء/الاستلام/الاستهلاك.",
+    )
+    product_tmpl_id = fields.Many2one(
+        "product.template",
+        related="product_id.product_tmpl_id",
+        store=True,
+        string="قالب المنتج",
+    )
+
+    @api.onchange("product_id")
+    def _onchange_product_id(self):
+        for item in self:
+            product = item.product_id
+            if not product:
+                continue
+            tmpl = product.product_tmpl_id
+            if not item.name:
+                item.name = tmpl.name
+            if tmpl.rawasi_unit_id and not item.unit_id:
+                item.unit_id = tmpl.rawasi_unit_id
+            if tmpl.sbc_code_id and not item.sbc_code_id:
+                item.sbc_code_id = tmpl.sbc_code_id
+            if tmpl.specifications and not item.specifications:
+                item.specifications = tmpl.specifications
+
     mandatory_local = fields.Selection(
         [("yes", "نعم"), ("no", "لا")],
         string="منتج من القائمة الإلزامية",
