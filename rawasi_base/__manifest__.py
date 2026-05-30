@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "Rawasi Sama — Base",
-    "summary": "الأساس المشترك لنظام رواسي سما (هوية، مجموعات، شجرة حسابات، أصول)",
+    "summary": "الأساس المشترك لنظام رواسي سما (هوية، مجموعات، حسابات، أصول، إشعارات، DMS، تدقيق)",
     "category": "Rawasi",
     "version": "19.0.1.0.0",
     "author": "Rawasi Sama Contracting",
@@ -11,6 +11,7 @@
         "base",
         "web",
         "mail",
+        "sms",
         "uom",
         "product",
         "stock",
@@ -29,6 +30,8 @@
         "data/rawasi_chart_of_accounts.xml",
         # Equipment (fixed assets)
         "data/equipment_sequence.xml",
+        # Automation
+        "data/cron.xml",
         # Visual identity
         "report/paperformat.xml",
         "report/rawasi_layout.xml",
@@ -36,6 +39,11 @@
         # Menus & views
         "views/menu_root.xml",
         "views/equipment_views.xml",
+        "views/document_views.xml",
+        "views/audit_trail_views.xml",
+        "views/approval_chain_views.xml",
+        "views/res_users_views.xml",
+        "views/res_config_settings_views.xml",
     ],
     "assets": {
         "web.assets_backend": [

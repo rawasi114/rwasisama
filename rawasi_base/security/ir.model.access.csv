@@ -2,3 +2,17 @@ id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_rawasi_equipment_admin,rawasi.equipment admin,model_rawasi_equipment,rawasi_base.group_rawasi_admin,1,1,1,1
 access_rawasi_equipment_accountant,rawasi.equipment accountant,model_rawasi_equipment,rawasi_base.group_rawasi_accountant,1,1,1,0
 access_rawasi_equipment_procurement,rawasi.equipment procurement,model_rawasi_equipment,rawasi_base.group_rawasi_procurement,1,0,0,0
+access_rawasi_document_folder_admin,rawasi.document.folder admin,model_rawasi_document_folder,rawasi_base.group_rawasi_admin,1,1,1,1
+access_rawasi_document_folder_accountant,rawasi.document.folder accountant,model_rawasi_document_folder,rawasi_base.group_rawasi_accountant,1,1,1,0
+access_rawasi_document_folder_procurement,rawasi.document.folder procurement,model_rawasi_document_folder,rawasi_base.group_rawasi_procurement,1,1,1,0
+access_rawasi_document_admin,rawasi.document admin,model_rawasi_document,rawasi_base.group_rawasi_admin,1,1,1,1
+access_rawasi_document_accountant,rawasi.document accountant,model_rawasi_document,rawasi_base.group_rawasi_accountant,1,1,1,0
+access_rawasi_document_procurement,rawasi.document procurement,model_rawasi_document,rawasi_base.group_rawasi_procurement,1,1,1,0
+access_rawasi_document_tag_admin,rawasi.document.tag admin,model_rawasi_document_tag,rawasi_base.group_rawasi_admin,1,1,1,1
+access_rawasi_document_tag_user,rawasi.document.tag user,model_rawasi_document_tag,base.group_user,1,0,0,0
+access_rawasi_audit_trail_admin,rawasi.audit.trail admin,model_rawasi_audit_trail,rawasi_base.group_rawasi_admin,1,0,1,0
+access_rawasi_audit_trail_accountant,rawasi.audit.trail accountant,model_rawasi_audit_trail,rawasi_base.group_rawasi_accountant,1,0,1,0
+access_rawasi_approval_chain_admin,rawasi.approval.chain admin,model_rawasi_approval_chain,rawasi_base.group_rawasi_admin,1,1,1,1
+access_rawasi_approval_chain_user,rawasi.approval.chain user,model_rawasi_approval_chain,base.group_user,1,0,0,0
+access_rawasi_approval_step_admin,rawasi.approval.step admin,model_rawasi_approval_step,rawasi_base.group_rawasi_admin,1,1,1,1
+access_rawasi_approval_step_user,rawasi.approval.step user,model_rawasi_approval_step,base.group_user,1,0,0,0
