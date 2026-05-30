@@ -239,11 +239,12 @@ class RawasiCompetition(models.Model):
         return self.env["rawasi.boq.import.wizard"].action_download_template()
 
     def action_open_import_wizard(self):
+        """يفتح المعالج الموحَّد الذي ينشئ product.template ثم يربطها بالمنافسة."""
         self.ensure_one()
         return {
             "type": "ir.actions.act_window",
-            "name": _("استيراد جدول الكميات"),
-            "res_model": "rawasi.boq.import.wizard",
+            "name": _("استيراد جدول الكميات (إلى product.template)"),
+            "res_model": "rawasi.unified.boq.import.wizard",
             "view_mode": "form",
             "target": "new",
             "context": {"default_competition_id": self.id},

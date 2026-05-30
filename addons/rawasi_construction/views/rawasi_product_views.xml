@@ -47,6 +47,8 @@
                             <field name="reference_code"
                                    placeholder="RSC.05.03.02.014"
                                    invisible="not is_construction_item"/>
+                            <field name="rawasi_delivery_type"
+                                   invisible="not is_construction_item"/>
                             <field name="rawasi_lcgpa_code_id"
                                    invisible="not is_construction_item"/>
                             <field name="rawasi_sbc_code_id"
@@ -111,6 +113,7 @@
                 <field name="rawasi_lcgpa_code_id" optional="hide"/>
                 <field name="rawasi_is_in_house" optional="show" widget="boolean_toggle"/>
                 <field name="rawasi_workshop_type" optional="hide" widget="badge"/>
+                <field name="rawasi_delivery_type" optional="show" widget="badge"/>
                 <field name="rawasi_bom_count" optional="show" string="BoM"/>
                 <field name="active" optional="hide"/>
             </list>

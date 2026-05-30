@@ -20,9 +20,11 @@
                     <div class="alert alert-info" role="alert">
                         <strong>هام:</strong>
                         <ul class="mb-0 mt-2">
+                            <li>كل بند يدخل النظام يصبح <strong>منتج أودو حقيقي</strong> (product.template).</li>
                             <li>ملف C إلزامي ويحوي 7 أوراق (الذكاء + التدريب).</li>
                             <li>ملف B اختياري ويضيف صياغة «توريد وتركيب» + بنود متخصّصة.</li>
-                            <li>الكشف ذكي: لو شغّلت الاستيراد مرتين، البنود الموجودة تُتخطّى افتراضياً.</li>
+                            <li>إذا حُدِّدت منافسة، تُنشأ بنود BoQ على المنافسة مرتبطة بكل منتج.</li>
+                            <li>الكشف ذكي: إعادة الاستيراد تتخطّى الموجود (إلا لو فُعِّل overwrite).</li>
                         </ul>
                     </div>
 
@@ -34,6 +36,11 @@
                     <group string="② ملف B (مكتبة البنود الجاهزة) — اختياري">
                         <field name="file_b" filename="filename_b" widget="binary"/>
                         <field name="filename_b"/>
+                    </group>
+
+                    <group string="③ ربط بمنافسة (اختياري)">
+                        <field name="competition_id"
+                               options="{'no_create_edit': True}"/>
                     </group>
 
                     <group string="خيارات الاستيراد">

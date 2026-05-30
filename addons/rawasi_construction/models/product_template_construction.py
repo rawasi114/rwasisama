@@ -75,6 +75,21 @@ class ProductTemplate(models.Model):
         default="none", string="نوع الورشة",
     )
 
+    # ── نمط التسليم (بُعد مستقل عن type الأودوي) ──────────────
+    rawasi_delivery_type = fields.Selection(
+        [
+            ("supply_only",        "توريد فقط"),
+            ("install_only",       "تركيب/خدمة فقط"),
+            ("supply_and_install", "توريد وتركيب"),
+            ("consulting",         "استشارات ودراسات"),
+            ("subcontract",        "إسناد لمقاول من الباطن"),
+        ],
+        default="supply_and_install", string="نمط التسليم",
+        help="بُعد مستقل عن type الأودوي. يصف كيف يُسلَّم البند للعميل: "
+             "توريد فقط للمواد، تركيب فقط للعمالة، توريد وتركيب للحزم، "
+             "استشارات للدراسات، إسناد لما يُعطى لمقاولي الباطن.",
+    )
+
     # ── قواعد التسعير ─────────────────────────────────────────
     rawasi_pricing_rule = fields.Text(string="قاعدة التسعير الداخلية")
     rawasi_pricing_alert = fields.Text(string="تنبيه التسعير")
