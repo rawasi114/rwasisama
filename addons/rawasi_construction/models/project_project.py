@@ -67,6 +67,12 @@ class ProjectProject(models.Model):
         copy=False,
         help="موقع تخزين المواد المستلمة قبل صرفها لعهد المهندسين.",
     )
+    rawasi_wip_location_id = fields.Many2one(
+        "stock.location",
+        string="موقع التنفيذ (WIP)",
+        copy=False,
+        help="موقع إنتاج (production) تُستهلك إليه المواد عند تأكيد DSR.",
+    )
     rawasi_custody_root_location_id = fields.Many2one(
         "stock.location",
         string="جذر عُهد المهندسين",
@@ -171,7 +177,8 @@ class ProjectProject(models.Model):
                 continue
             if project.rawasi_project_location_id and \
                project.rawasi_main_stock_location_id and \
-               project.rawasi_custody_root_location_id:
+               project.rawasi_custody_root_location_id and \
+               project.rawasi_wip_location_id:
                 continue
             company_id = (project.company_id or self.env.company).id
             root = project._get_root_construction_location()
@@ -197,6 +204,14 @@ class ProjectProject(models.Model):
                 project.rawasi_custody_root_location_id = Location.create({
                     "name": "عُهد المهندسين",
                     "usage": "view",
+                    "location_id": project_loc.id,
+                    "company_id": company_id,
+                    "rawasi_project_id": project.id,
+                }).id
+            if not project.rawasi_wip_location_id:
+                project.rawasi_wip_location_id = Location.create({
+                    "name": "تنفيذ الموقع (WIP)",
+                    "usage": "production",
                     "location_id": project_loc.id,
                     "company_id": company_id,
                     "rawasi_project_id": project.id,

@@ -101,10 +101,4 @@
         </field>
     </record>
 
-    <menuitem id="menu_rawasi_custody"
-              name="عُهد المهندسين"
-              parent="menu_rawasi_root"
-              action="action_rawasi_engineer_custody"
-              sequence="27"/>
-
 </odoo>

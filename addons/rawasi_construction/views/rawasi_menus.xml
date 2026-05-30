@@ -144,6 +144,11 @@
                   parent="menu_rawasi_field"
                   action="action_daily_report"
                   sequence="30"/>
+        <menuitem id="menu_rawasi_custody"
+                  name="عُهد المهندسين"
+                  parent="menu_rawasi_field"
+                  action="action_rawasi_engineer_custody"
+                  sequence="35"/>
         <menuitem id="menu_rawasi_ncr"
                   name="عدم المطابقة (NCR)"
                   parent="menu_rawasi_field"
