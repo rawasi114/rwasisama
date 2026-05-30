@@ -180,3 +180,8 @@ access_subcon_sysadmin,subcon.sysadmin,model_rawasi_subcontract,base.group_syste
 access_subconl_sysadmin,subconl.sysadmin,model_rawasi_subcontract_line,base.group_system,1,1,1,1
 access_subipc_sysadmin,subipc.sysadmin,model_rawasi_subcontract_ipc,base.group_system,1,1,1,1
 access_subipcl_sysadmin,subipcl.sysadmin,model_rawasi_subcontract_ipc_line,base.group_system,1,1,1,1
+access_engineer_custody_site,engineer.custody.site,model_rawasi_engineer_custody,group_site_engineer,1,0,0,0
+access_engineer_custody_planning,engineer.custody.planning,model_rawasi_engineer_custody,group_planning_engineer,1,1,1,0
+access_engineer_custody_tech,engineer.custody.tech,model_rawasi_engineer_custody,group_tech_office_manager,1,1,1,1
+access_engineer_custody_director,engineer.custody.director,model_rawasi_engineer_custody,group_projects_director,1,1,1,1
+access_engineer_custody_sysadmin,engineer.custody.sysadmin,model_rawasi_engineer_custody,base.group_system,1,1,1,1

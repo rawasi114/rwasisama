@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- List view: عُهد المهندسين -->
+    <record id="view_rawasi_engineer_custody_list" model="ir.ui.view">
+        <field name="name">rawasi.engineer.custody.list</field>
+        <field name="model">rawasi.engineer.custody</field>
+        <field name="arch" type="xml">
+            <list string="عُهد المهندسين">
+                <field name="project_id"/>
+                <field name="user_id"/>
+                <field name="location_id"/>
+                <field name="active" optional="hide"/>
+                <button name="action_open_inventory" type="object"
+                        icon="fa-cubes" title="فتح جرد العهدة"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_rawasi_engineer_custody_form" model="ir.ui.view">
+        <field name="name">rawasi.engineer.custody.form</field>
+        <field name="model">rawasi.engineer.custody</field>
+        <field name="arch" type="xml">
+            <form string="عهدة مهندس">
+                <header>
+                    <button name="action_open_inventory" type="object"
+                            string="فتح الجرد" class="oe_highlight"
+                            icon="fa-cubes"/>
+                </header>
+                <sheet>
+                    <widget name="web_ribbon" title="مؤرشف"
+                            invisible="active"/>
+                    <group>
+                        <group>
+                            <field name="project_id"/>
+                            <field name="user_id"/>
+                        </group>
+                        <group>
+                            <field name="location_id"/>
+                            <field name="active" widget="boolean_toggle"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_rawasi_engineer_custody_search" model="ir.ui.view">
+        <field name="name">rawasi.engineer.custody.search</field>
+        <field name="model">rawasi.engineer.custody</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="project_id"/>
+                <field name="user_id"/>
+                <field name="location_id"/>
+                <filter string="نشطة" name="filter_active" domain="[('active','=',True)]"/>
+                <filter string="مؤرشفة" name="filter_archived" domain="[('active','=',False)]"/>
+                <separator/>
+                <filter string="حسب المشروع" name="group_project"
+                        context="{'group_by': 'project_id'}"/>
+                <filter string="حسب المهندس" name="group_user"
+                        context="{'group_by': 'user_id'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_rawasi_engineer_custody" model="ir.actions.act_window">
+        <field name="name">عُهد المهندسين</field>
+        <field name="res_model">rawasi.engineer.custody</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_filter_active': 1, 'search_default_group_project': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                لا توجد عُهد مهندسين بعد
+            </p>
+            <p>
+                تُنشأ العهدة تلقائياً لكل مهندس موقع يُضاف لمشروع مقاولات.
+            </p>
+        </field>
+    </record>
+
+    <!-- زرّ في فورم المشروع للوصول للعُهد -->
+    <record id="view_project_project_form_rawasi_custody" model="ir.ui.view">
+        <field name="name">project.project.form.rawasi.custody</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="rawasi_construction.view_project_form_rawasi_construction"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_open_boq_items']" position="after">
+                <button name="action_open_custodies" type="object"
+                        class="oe_stat_button" icon="fa-users"
+                        invisible="not rawasi_is_construction">
+                    <field name="rawasi_custody_count" widget="statinfo"
+                           string="عُهد المهندسين"/>
+                </button>
+                <button name="action_open_project_inventory" type="object"
+                        class="oe_stat_button" icon="fa-cubes"
+                        invisible="not rawasi_is_construction"
+                        string="جرد المشروع"/>
+            </xpath>
+        </field>
+    </record>
+
+    <menuitem id="menu_rawasi_custody"
+              name="عُهد المهندسين"
+              parent="menu_rawasi_root"
+              action="action_rawasi_engineer_custody"
+              sequence="27"/>
+
+</odoo>
