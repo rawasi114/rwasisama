@@ -141,7 +141,7 @@
                     <field name="is_overdue" invisible="1"/>
                     <div class="alert alert-danger" role="alert"
                          invisible="not is_overdue">
-                        <i class="fa fa-exclamation-triangle me-2"/>
+                        <i class="fa fa-exclamation-triangle me-2" title="تنبيه"/>
                         <strong>متأخّر!</strong> تجاوز تاريخ الاستحقاق ولم يُغلَق بعد.
                         <span invisible="not can_escalate">
                             يمكن تصعيده لـ RFI من الزر أعلاه.
