@@ -52,6 +52,11 @@
                   parent="menu_rawasi_reference_registry_root"
                   action="action_reference_item"
                   sequence="30"/>
+        <menuitem id="menu_rawasi_ref_products"
+                  name="منتجات المقاولات (المخزون)"
+                  parent="menu_rawasi_reference_registry_root"
+                  action="action_rawasi_construction_products"
+                  sequence="35"/>
         <menuitem id="menu_rawasi_ref_variants"
                   name="الصياغات البديلة"
                   parent="menu_rawasi_reference_registry_root"

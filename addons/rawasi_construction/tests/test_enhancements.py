@@ -158,9 +158,12 @@ class TestBoqTemplate(TransactionCase):
         self.assertIn("تكلفة الوحدة", headers, "يجب أن يحوي القالب عمود التكاليف")
         self.assertIn("الكمية", headers)
         self.assertIn("وصف البند", headers)
-        # الفئة/البند/المواصفات ليست أعمدة منفصلة في القالب الجديد
-        self.assertNotIn("الفئة", headers)
-        self.assertNotIn("المواصفات", headers)
+        # القالب الموسَّع: أعمدة هيكلية منفصلة لتعبئة مباشرة من بيانات الاعتماد
+        for required in (
+            "الفئة", "البند", "المواصفات", "الوحدة كما وردت",
+            "منتج من القائمة الإلزامية", "الرمز الإنشائي",
+        ):
+            self.assertIn(required, headers, f"العمود «{required}» مفقود")
 
     def test_import_merges_legacy_four_columns(self):
         """قالب قديم بأعمدة منفصلة: يدمج النظام الأربعة في «وصف البند» كأسطر متتابعة."""

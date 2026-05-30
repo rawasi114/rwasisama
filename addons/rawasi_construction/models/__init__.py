@@ -38,3 +38,6 @@ from . import rawasi_user_guide
 
 # لوحة التحكم الحيّة (KPI)
 from . import rawasi_dashboard_kpi
+
+# تكامل المخزون: منتج المقاولات
+from . import product_template
