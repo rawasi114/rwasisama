@@ -120,6 +120,15 @@ class ReferenceItem(models.Model):
         string="حالة المراجعة",
     )
 
+    # ── الربط بمنتج Odoo (1:1 — منتج واحد لكل بند مرجعي) ────────
+    product_tmpl_id = fields.Many2one(
+        "product.template",
+        string="منتج المخزون",
+        ondelete="restrict", copy=False, index=True,
+        help="قالب المنتج المرتبط بهذا البند في كتالوج Odoo. "
+             "يُنشأ تلقائياً عند أول حفظ ليكون متاحاً في المخزون والشراء.",
+    )
+
     _reference_code_uniq = models.Constraint(
         "UNIQUE(reference_code)",
         "الرمز المرجعي يجب أن يكون فريداً.",
@@ -129,6 +138,45 @@ class ReferenceItem(models.Model):
     def _compute_variant_count(self):
         for rec in self:
             rec.variant_count = len(rec.item_variant_ids)
+
+    # ── تزامن آلي مع كتالوج المنتجات ─────────────────────────────
+    @api.model_create_multi
+    def create(self, vals_list):
+        records = super().create(vals_list)
+        ProductTmpl = self.env["product.template"]
+        for rec in records:
+            if not rec.product_tmpl_id:
+                tmpl = ProductTmpl._create_for_reference_item(rec)
+                rec.product_tmpl_id = tmpl.id
+        return records
+
+    def write(self, vals):
+        res = super().write(vals)
+        # حقول البند المرجعي التي تؤثّر في بطاقة المنتج
+        synced_fields = {
+            "approved_name", "default_uom_id", "sbc_code_id", "lcgpa_code_id",
+            "description_short", "main_category", "item_group", "reference_code",
+        }
+        if synced_fields & set(vals.keys()):
+            self.filtered("product_tmpl_id")._sync_product_from_reference()
+        return res
+
+    def _sync_product_from_reference(self):
+        """يستدعي مزامنة المنتج المرتبط بكل بند."""
+        for rec in self:
+            rec.product_tmpl_id._sync_from_reference_item()
+
+    def action_open_product(self):
+        self.ensure_one()
+        if not self.product_tmpl_id:
+            return False
+        return {
+            "type": "ir.actions.act_window",
+            "name": _("منتج المخزون: %s") % self.approved_name,
+            "res_model": "product.template",
+            "res_id": self.product_tmpl_id.id,
+            "view_mode": "form",
+        }
 
     @api.constrains("reference_code")
     def _check_code_format(self):

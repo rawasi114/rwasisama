@@ -21,7 +21,7 @@
                              style="padding:12px; min-height:140px;">
                             <div class="d-flex align-items-center mb-2">
                                 <i t-attf-class="fa #{record.icon.raw_value or 'fa-book'} fa-2x me-3"
-                                   style="color:#3b5998;"/>
+                                   style="color:#3b5998;" title="أيقونة"/>
                                 <div>
                                     <strong style="font-size:1.05em;">
                                         <field name="name"/>
@@ -33,10 +33,10 @@
                             </div>
                             <div class="text-muted mt-2" style="font-size:0.8em;">
                                 <span t-if="record.role_group_id.raw_value">
-                                    <i class="fa fa-user-circle"/> <field name="role_group_id"/>
+                                    <i class="fa fa-user-circle" title="الدور"/> <field name="role_group_id"/>
                                 </span>
                                 <span t-if="record.menu_section_key.raw_value">
-                                    <i class="fa fa-list"/> <field name="menu_section_key"/>
+                                    <i class="fa fa-list" title="القسم"/> <field name="menu_section_key"/>
                                 </span>
                             </div>
                         </div>

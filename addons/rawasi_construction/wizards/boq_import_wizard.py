@@ -29,6 +29,7 @@ HEADER_ALIASES = {
     "الفئة": "category", "القسم": "category", "الباب": "category",
     "البند": "work_group", "المجموعة": "work_group", "البنود": "work_group",
     "وحدة القياس": "unit", "الوحدة": "unit", "وحدة": "unit",
+    "الوحدة كما وردت": "unit_text", "وحدة كما وردت": "unit_text",
     "الكمية": "quantity", "كمية": "quantity", "العدد": "quantity",
     "وصف البند": "description", "الوصف": "description", "وصف": "description",
     "البيان": "description", "بيان الأعمال": "description",
@@ -51,11 +52,16 @@ HEADER_ALIASES = {
 HEADER_SCAN_ROWS = 20  # عدد الصفوف الأولى التي نبحث فيها عن صف العناوين
 
 # أعمدة قالب جدول الكميات (بالترتيب) — تطابق المرادفات أعلاه ليرفع الملف بسلاسة.
-# «وصف البند» عمود مدمج يجمع: الفئة + البند + الوصف + المواصفات (بترويسات داخلية).
-# نتسامح مع القوالب القديمة التي تفصل الأعمدة الأربعة — يدمجها الاستيراد تلقائياً.
+# نُصدِّر الأعمدة الهيكلية منفصلة (الفئة/البند/الوصف/الوحدة كما وردت) ليتمكّن
+# المستخدم من تعبئتها واستيرادها مباشرة دون اضطرار لدمجها في خلية واحدة.
+# الاستيراد يتسامح مع كلا الشكلين: الأعمدة المنفصلة، أو خلية «وصف البند» المدمجة.
 BOQ_TEMPLATE_COLUMNS = [
     "الرقم التسلسلي",
+    "الفئة",
+    "البند",
     "وصف البند",
+    "المواصفات",
+    "الوحدة كما وردت",
     "الوحدة",
     "الكمية",
     "تكلفة الوحدة",
@@ -162,23 +168,32 @@ class BoqImportWizard(models.TransientModel):
         ws = wb.active
         ws.title = "جدول الكميات"
         ws.append(BOQ_TEMPLATE_COLUMNS)
-        # صف مثال إرشادي (يمكن حذفه قبل الاستيراد). خلية «وصف البند» متعدّدة الأسطر
-        # تجمع الفئة/البند/الوصف/المواصفات على شكل أسطر متتابعة بدون ترويسات.
-        sample_description = (
-            "أعمال الخرسانة\n"
-            "خرسانة مسلحة\n"
-            "صبّ خرسانة C30 للأساسات\n"
-            "خرسانة جاهزة مقاومتها 30 ميجاباسكال مع حديد تسليح حسب المخططات"
-        )
-        ws.append([1, sample_description, "م3", 100, 320, 380, 38000, "نعم", "BC-100"])
-        # تنسيق: عرض وحجم خلية الوصف + التفاف النص في كل سطور البيانات
+        # صف مثال إرشادي (يمكن حذفه قبل الاستيراد) — الأعمدة الهيكلية مفصولة.
+        ws.append([
+            1,                                          # الرقم التسلسلي
+            "أعمال الخرسانة",                          # الفئة
+            "خرسانة مسلحة",                            # البند
+            "صبّ خرسانة C30 للأساسات",                 # وصف البند
+            "خرسانة جاهزة مقاومتها 30 ميجاباسكال "
+            "مع حديد تسليح حسب المخططات",              # المواصفات
+            "م³",                                       # الوحدة كما وردت
+            "م3",                                       # الوحدة (الرمز القياسي)
+            100,                                        # الكمية
+            320, 380, 38000,                            # تكلفة/سعر/إجمالي
+            "نعم",                                      # منتج من القائمة الإلزامية
+            "BC-100",                                   # الرمز الإنشائي
+        ])
+        # تنسيق: عرض الأعمدة + التفاف النص في صف البيانات
         from openpyxl.styles import Alignment
+        wide_cols = {"وصف البند", "المواصفات"}
         for idx, header in enumerate(BOQ_TEMPLATE_COLUMNS, start=1):
-            ws.column_dimensions[get_column_letter(idx)].width = 50 if header == "وصف البند" else 18
+            ws.column_dimensions[get_column_letter(idx)].width = (
+                40 if header in wide_cols else 18
+            )
         for row in ws.iter_rows(min_row=2, max_row=ws.max_row):
             for cell in row:
                 cell.alignment = Alignment(wrap_text=True, vertical="top")
-        ws.row_dimensions[2].height = 70
+        ws.row_dimensions[2].height = 60
         # ورقة مرجعية: الوحدات المتاحة في النظام (لنسخها في عمود «الوحدة»)
         ws_units = wb.create_sheet("الوحدات المتاحة")
         ws_units.append(["انسخ رمز الوحدة في عمود «الوحدة»"])
@@ -260,9 +275,13 @@ class BoqImportWizard(models.TransientModel):
             if not ok:
                 warnings["qty"] += 1
 
-            unit_text = data.get("unit")
-            unit = unit_index.get(normalize_unit(unit_text)) if unit_text else None
-            if unit_text and not unit:
+            # «الوحدة كما وردت» تخزَّن خاماً (للتدقيق التاريخي)؛ «الوحدة»
+            # تُستخدم في مطابقة rawasi.unit. لو وُحِّد العمودان نقع على نفس
+            # القيمة. لو لم يُعطَ unit_text صراحةً، نستخدم قيمة «الوحدة».
+            unit_raw_text = data.get("unit_text") or data.get("unit")
+            unit_lookup = data.get("unit") or data.get("unit_text")
+            unit = unit_index.get(normalize_unit(unit_lookup)) if unit_lookup else None
+            if unit_lookup and not unit:
                 warnings["unit"] += 1
 
             mandatory = self._map_mandatory(data.get("mandatory"))
@@ -304,7 +323,7 @@ class BoqImportWizard(models.TransientModel):
                 "work_group": group or False,
                 "name": combined_name,
                 "specifications": data.get("specifications") or False,
-                "unit_text": str(unit_text) if unit_text else False,
+                "unit_text": str(unit_raw_text) if unit_raw_text else False,
                 "unit_id": unit.id if unit else False,
                 "quantity": qty,
                 "mandatory_local": mandatory,
