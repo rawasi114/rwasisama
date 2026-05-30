@@ -1,0 +1,1640 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- شجرة حسابات رواسي سما الموحَّدة — مُولَّدة آلياً من المصدر المعتمد.
+         272 حساباً · أكواد فريدة · الحساب 71031 صُحِّح نوعه إلى expense.
+         noupdate=1 للحفاظ على تخصيصات المحاسب عند الترقية. -->
+    <data noupdate="1">
+        <record id="coa_111001" model="account.account">
+            <field name="code">111001</field>
+            <field name="name">الأراضي</field>
+            <field name="account_type">asset_fixed</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_111002" model="account.account">
+            <field name="code">111002</field>
+            <field name="name">العقارات والمباني</field>
+            <field name="account_type">asset_fixed</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_111003" model="account.account">
+            <field name="code">111003</field>
+            <field name="name">السيارات</field>
+            <field name="account_type">asset_fixed</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_111004" model="account.account">
+            <field name="code">111004</field>
+            <field name="name">الأثاث والمفروشات</field>
+            <field name="account_type">asset_fixed</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_111005" model="account.account">
+            <field name="code">111005</field>
+            <field name="name">أجهزة الحاسب والطابعات</field>
+            <field name="account_type">asset_fixed</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_111006" model="account.account">
+            <field name="code">111006</field>
+            <field name="name">الآلات والمعدات</field>
+            <field name="account_type">asset_fixed</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_111007" model="account.account">
+            <field name="code">111007</field>
+            <field name="name">البيوت الجاهزة والكرفانات</field>
+            <field name="account_type">asset_fixed</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_111008" model="account.account">
+            <field name="code">111008</field>
+            <field name="name">الأدوات الكهربائية</field>
+            <field name="account_type">asset_fixed</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_111009" model="account.account">
+            <field name="code">111009</field>
+            <field name="name">الأخشاب</field>
+            <field name="account_type">asset_fixed</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_112001" model="account.account">
+            <field name="code">112001</field>
+            <field name="name">مجمع إهلاك العقارات والمباني</field>
+            <field name="account_type">asset_fixed</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_112002" model="account.account">
+            <field name="code">112002</field>
+            <field name="name">مجمع إهلاك السيارات</field>
+            <field name="account_type">asset_fixed</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_112003" model="account.account">
+            <field name="code">112003</field>
+            <field name="name">مجمع إهلاك الأثاث والمفروشات</field>
+            <field name="account_type">asset_fixed</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_112004" model="account.account">
+            <field name="code">112004</field>
+            <field name="name">مجمع إهلاك أجهزة الحاسب والطابعات</field>
+            <field name="account_type">asset_fixed</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_112005" model="account.account">
+            <field name="code">112005</field>
+            <field name="name">مجمع إهلاك الآلات والمعدات</field>
+            <field name="account_type">asset_fixed</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_112006" model="account.account">
+            <field name="code">112006</field>
+            <field name="name">مجمع إهلاك البيوت الجاهزة والكرفانات</field>
+            <field name="account_type">asset_fixed</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_112007" model="account.account">
+            <field name="code">112007</field>
+            <field name="name">مجمع إهلاك الأدوات الكهربائية</field>
+            <field name="account_type">asset_fixed</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_112008" model="account.account">
+            <field name="code">112008</field>
+            <field name="name">مجمع إهلاك الأخشاب</field>
+            <field name="account_type">asset_fixed</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_113001" model="account.account">
+            <field name="code">113001</field>
+            <field name="name">عقار استثماري 1</field>
+            <field name="account_type">asset_non_current</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_121001" model="account.account">
+            <field name="code">121001</field>
+            <field name="name">البنك الأهلي</field>
+            <field name="account_type">asset_cash</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_121002" model="account.account">
+            <field name="code">121002</field>
+            <field name="name">بنك الرياض</field>
+            <field name="account_type">asset_cash</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_121003" model="account.account">
+            <field name="code">121003</field>
+            <field name="name">البنك الراجحي</field>
+            <field name="account_type">asset_cash</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_121004" model="account.account">
+            <field name="code">121004</field>
+            <field name="name">بنوك آخــرى</field>
+            <field name="account_type">asset_cash</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_121005" model="account.account">
+            <field name="code">121005</field>
+            <field name="name">البنك السعودي البريطاني (ساب) - جاري</field>
+            <field name="account_type">asset_cash</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_121006" model="account.account">
+            <field name="code">121006</field>
+            <field name="name">بنك البلاد - حساب جاري</field>
+            <field name="account_type">asset_cash</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_121007" model="account.account">
+            <field name="code">121007</field>
+            <field name="name">البنك السعودي للاستثمار - جاري</field>
+            <field name="account_type">asset_cash</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_12101" model="account.account">
+            <field name="code">12101</field>
+            <field name="name">ضريبة القيمة المضافة على المشتريات</field>
+            <field name="account_type">asset_cash</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_1211001" model="account.account">
+            <field name="code">1211001</field>
+            <field name="name">سلفيات الموظفين</field>
+            <field name="account_type">asset_cash</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_1211002" model="account.account">
+            <field name="code">1211002</field>
+            <field name="name">مسحوبات جاري الشركاء</field>
+            <field name="account_type">asset_cash</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_1211003" model="account.account">
+            <field name="code">1211003</field>
+            <field name="name">عهدة المشاريع</field>
+            <field name="account_type">asset_cash</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_12201" model="account.account">
+            <field name="code">12201</field>
+            <field name="name">الصندوق الرئيسي</field>
+            <field name="account_type">asset_cash</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_12202" model="account.account">
+            <field name="code">12202</field>
+            <field name="name">صندوق نثرية - حفر الباطن</field>
+            <field name="account_type">asset_cash</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_12203" model="account.account">
+            <field name="code">12203</field>
+            <field name="name">صندوق نثرية - المشاريع</field>
+            <field name="account_type">asset_cash</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_122901" model="account.account">
+            <field name="code">122901</field>
+            <field name="name">الحساب البنكي المعلق</field>
+            <field name="account_type">asset_current</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_122902" model="account.account">
+            <field name="code">122902</field>
+            <field name="name">حساب تحويل وسيط بين البنوك</field>
+            <field name="account_type">asset_current</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_122903" model="account.account">
+            <field name="code">122903</field>
+            <field name="name">سلف مدراء المشاريع - مفتوحة للتسوية</field>
+            <field name="account_type">asset_current</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_123001" model="account.account">
+            <field name="code">123001</field>
+            <field name="name">عميل 1</field>
+            <field name="account_type">asset_receivable</field>
+            <field name="reconcile">True</field>
+        </record>
+        <record id="coa_123002" model="account.account">
+            <field name="code">123002</field>
+            <field name="name">عميل 2</field>
+            <field name="account_type">asset_receivable</field>
+            <field name="reconcile">True</field>
+        </record>
+        <record id="coa_123003" model="account.account">
+            <field name="code">123003</field>
+            <field name="name">عميل 3</field>
+            <field name="account_type">asset_receivable</field>
+            <field name="reconcile">True</field>
+        </record>
+        <record id="coa_124001" model="account.account">
+            <field name="code">124001</field>
+            <field name="name">إيرادات مستحقة - عميل 1</field>
+            <field name="account_type">asset_current</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_124002" model="account.account">
+            <field name="code">124002</field>
+            <field name="name">إيرادات مستحقة - عميل 2</field>
+            <field name="account_type">asset_current</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_124003" model="account.account">
+            <field name="code">124003</field>
+            <field name="name">إيرادات مستحقة - عميل 3</field>
+            <field name="account_type">asset_current</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_125001" model="account.account">
+            <field name="code">125001</field>
+            <field name="name">عميل :- 1</field>
+            <field name="account_type">asset_current</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_125002" model="account.account">
+            <field name="code">125002</field>
+            <field name="name">عميل :- 2</field>
+            <field name="account_type">asset_current</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_126001" model="account.account">
+            <field name="code">126001</field>
+            <field name="name">تأمينات مستردة لدى البلديات</field>
+            <field name="account_type">asset_prepayments</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_126002" model="account.account">
+            <field name="code">126002</field>
+            <field name="name">تأمينات مستردة لدى</field>
+            <field name="account_type">asset_prepayments</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_127001" model="account.account">
+            <field name="code">127001</field>
+            <field name="name">خطابات الضمان - البنك الأهلي</field>
+            <field name="account_type">asset_prepayments</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_127002" model="account.account">
+            <field name="code">127002</field>
+            <field name="name">خطابات الضمان - البنك الراجحي</field>
+            <field name="account_type">asset_prepayments</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_127003" model="account.account">
+            <field name="code">127003</field>
+            <field name="name">خطابات ضمان - بنك الرياض</field>
+            <field name="account_type">asset_prepayments</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_127004" model="account.account">
+            <field name="code">127004</field>
+            <field name="name">خطابات الضمان الدفعة مقدمة</field>
+            <field name="account_type">asset_prepayments</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_128001" model="account.account">
+            <field name="code">128001</field>
+            <field name="name">دفعة مقدمة - مورد 1</field>
+            <field name="account_type">asset_prepayments</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_128002" model="account.account">
+            <field name="code">128002</field>
+            <field name="name">دفعة مقدمة - مورد 2</field>
+            <field name="account_type">asset_prepayments</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_128003" model="account.account">
+            <field name="code">128003</field>
+            <field name="name">دفعة مقدمة - مورد 3</field>
+            <field name="account_type">asset_prepayments</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_128004" model="account.account">
+            <field name="code">128004</field>
+            <field name="name">دفعة مقدمة - مورد 4</field>
+            <field name="account_type">asset_prepayments</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_129001" model="account.account">
+            <field name="code">129001</field>
+            <field name="name">إيجارات سيارات مدفوعة مقدماً</field>
+            <field name="account_type">asset_prepayments</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_129002" model="account.account">
+            <field name="code">129002</field>
+            <field name="name">إيجارات مكاتب مدفوعة مقدماً</field>
+            <field name="account_type">asset_prepayments</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_129003" model="account.account">
+            <field name="code">129003</field>
+            <field name="name">تأمينات اجتماعية مدفوعة مقدماً</field>
+            <field name="account_type">asset_prepayments</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_211001" model="account.account">
+            <field name="code">211001</field>
+            <field name="name">تسهيلات البنك الراجحي</field>
+            <field name="account_type">liability_non_current</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_211002" model="account.account">
+            <field name="code">211002</field>
+            <field name="name">تسهيلات البنك الأهلي</field>
+            <field name="account_type">liability_non_current</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_211003" model="account.account">
+            <field name="code">211003</field>
+            <field name="name">تسهيلات بنك الرياض</field>
+            <field name="account_type">liability_non_current</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_221001" model="account.account">
+            <field name="code">221001</field>
+            <field name="name">الموردين</field>
+            <field name="account_type">liability_payable</field>
+            <field name="reconcile">True</field>
+        </record>
+        <record id="coa_222001" model="account.account">
+            <field name="code">222001</field>
+            <field name="name">مقاولون الباطن</field>
+            <field name="account_type">liability_payable</field>
+            <field name="reconcile">True</field>
+        </record>
+        <record id="coa_223001" model="account.account">
+            <field name="code">223001</field>
+            <field name="name">دفعات مقدمة من العملاء</field>
+            <field name="account_type">liability_current</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_224001" model="account.account">
+            <field name="code">224001</field>
+            <field name="name">تأمينات محتجزة للمقاولين</field>
+            <field name="account_type">liability_current</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_225001" model="account.account">
+            <field name="code">225001</field>
+            <field name="name">مصروفات أجور ومرتبات مستحقة</field>
+            <field name="account_type">liability_current</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_225002" model="account.account">
+            <field name="code">225002</field>
+            <field name="name">مصروفات إيجارات مستحقة</field>
+            <field name="account_type">liability_current</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_225003" model="account.account">
+            <field name="code">225003</field>
+            <field name="name">مصروفات كهرباء ومياه مستحقة</field>
+            <field name="account_type">liability_current</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_225004" model="account.account">
+            <field name="code">225004</field>
+            <field name="name">مصروفات تأمينات مستحقة</field>
+            <field name="account_type">liability_current</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_225005" model="account.account">
+            <field name="code">225005</field>
+            <field name="name">مصروفات الزكاة والدخل مستحقة</field>
+            <field name="account_type">liability_current</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_226001" model="account.account">
+            <field name="code">226001</field>
+            <field name="name">ضريبة القيمة المضافة على المبيعات</field>
+            <field name="account_type">liability_current</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_226002" model="account.account">
+            <field name="code">226002</field>
+            <field name="name">حساب تسوية ضريبة القيمة المضافة</field>
+            <field name="account_type">liability_current</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_227001" model="account.account">
+            <field name="code">227001</field>
+            <field name="name">قروض قصيرة الآجل</field>
+            <field name="account_type">liability_current</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_228001" model="account.account">
+            <field name="code">228001</field>
+            <field name="name">مكافأة نهاية الخدمة - عمالة المشاريع</field>
+            <field name="account_type">liability_non_current</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_311100" model="account.account">
+            <field name="code">311100</field>
+            <field name="name">رأس المال المدفوع</field>
+            <field name="account_type">equity</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_321100" model="account.account">
+            <field name="code">321100</field>
+            <field name="name">الإحتياطي النظامي</field>
+            <field name="account_type">equity</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_331100" model="account.account">
+            <field name="code">331100</field>
+            <field name="name">أرباح وخسائر سنوات سابقة</field>
+            <field name="account_type">equity</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_341100" model="account.account">
+            <field name="code">341100</field>
+            <field name="name">جاري الشركاء (دائن )</field>
+            <field name="account_type">equity</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_351100" model="account.account">
+            <field name="code">351100</field>
+            <field name="name">أرباح وخسائر السنة الحالية</field>
+            <field name="account_type">equity_unaffected</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_411100" model="account.account">
+            <field name="code">411100</field>
+            <field name="name">إيرادات مشاريع المقاولات</field>
+            <field name="account_type">income</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_421100" model="account.account">
+            <field name="code">421100</field>
+            <field name="name">إيرادات أعمال الحدادة</field>
+            <field name="account_type">income</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_421200" model="account.account">
+            <field name="code">421200</field>
+            <field name="name">إيرادات أعمال النجارة والموبليا</field>
+            <field name="account_type">income</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_421300" model="account.account">
+            <field name="code">421300</field>
+            <field name="name">إيرادات أعمال الديكور</field>
+            <field name="account_type">income</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_421400" model="account.account">
+            <field name="code">421400</field>
+            <field name="name">إيرادات أعمال الصيانة والتشغيل</field>
+            <field name="account_type">income</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_431100" model="account.account">
+            <field name="code">431100</field>
+            <field name="name">إيرادات آخرى</field>
+            <field name="account_type">income_other</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_521100" model="account.account">
+            <field name="code">521100</field>
+            <field name="name">مخصص الأجور والمرتبات</field>
+            <field name="account_type">liability_non_current</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_5211200" model="account.account">
+            <field name="code">5211200</field>
+            <field name="name">مخصص مكافأة نهاية الخدمة</field>
+            <field name="account_type">liability_non_current</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_5211300" model="account.account">
+            <field name="code">5211300</field>
+            <field name="name">مخصص الديون المشكوك فيها</field>
+            <field name="account_type">liability_non_current</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_61001" model="account.account">
+            <field name="code">61001</field>
+            <field name="name">أعمال الحفر</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_61002" model="account.account">
+            <field name="code">61002</field>
+            <field name="name">أعمال الدفان والتسوية</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_61003" model="account.account">
+            <field name="code">61003</field>
+            <field name="name">الخرسانة الجاهزة</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_61004" model="account.account">
+            <field name="code">61004</field>
+            <field name="name">بلوك البناء (معزول - اسمنتي)</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_61005" model="account.account">
+            <field name="code">61005</field>
+            <field name="name">البطحاء والبحص</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_61006" model="account.account">
+            <field name="code">61006</field>
+            <field name="name">حديد التسليح</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_61007" model="account.account">
+            <field name="code">61007</field>
+            <field name="name">اختبار التربة والخرسانة المسلحة</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_61008" model="account.account">
+            <field name="code">61008</field>
+            <field name="name">المياه</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_61009" model="account.account">
+            <field name="code">61009</field>
+            <field name="name">أعمال العزل المائي والحراري</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_61010" model="account.account">
+            <field name="code">61010</field>
+            <field name="name">الاسمنت</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_61011" model="account.account">
+            <field name="code">61011</field>
+            <field name="name">الترابيع والبلدورة الاسمنتية</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_61012" model="account.account">
+            <field name="code">61012</field>
+            <field name="name">الرخام الطبيعي</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_61013" model="account.account">
+            <field name="code">61013</field>
+            <field name="name">الرخام الصناعي</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_61014" model="account.account">
+            <field name="code">61014</field>
+            <field name="name">الجبس والاسمنت الأبيض</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_61015" model="account.account">
+            <field name="code">61015</field>
+            <field name="name">أعمال اللياسة ومستلزماتها</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_61016" model="account.account">
+            <field name="code">61016</field>
+            <field name="name">مستلزمات تركيب البلاط والسراميك</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_61017" model="account.account">
+            <field name="code">61017</field>
+            <field name="name">جلي السراميك والبلاط</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_61018" model="account.account">
+            <field name="code">61018</field>
+            <field name="name">أعمال الدهان ومستلزماتها</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_61019" model="account.account">
+            <field name="code">61019</field>
+            <field name="name">الأبواب المعدنية واكسسواراتها</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_61020" model="account.account">
+            <field name="code">61020</field>
+            <field name="name">أعمال الألمونيوم</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_61021" model="account.account">
+            <field name="code">61021</field>
+            <field name="name">مغاسل الاستنلس وعزلها</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_61022" model="account.account">
+            <field name="code">61022</field>
+            <field name="name">أغطية الصرف والكهرباء والألمونيوم</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_61023" model="account.account">
+            <field name="code">61023</field>
+            <field name="name">أعمال حديدية (درابزين - حواجز)</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_61024" model="account.account">
+            <field name="code">61024</field>
+            <field name="name">البوابات الحديدية الرئيسية</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_61025" model="account.account">
+            <field name="code">61025</field>
+            <field name="name">المظلات الداخلية والخارجية ساندويتش بانل</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_61026" model="account.account">
+            <field name="code">61026</field>
+            <field name="name">خزانات المياه فايبرجلاس</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_61027" model="account.account">
+            <field name="code">61027</field>
+            <field name="name">الأسقف المعلقة والبلاطات الجبسية</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_61028" model="account.account">
+            <field name="code">61028</field>
+            <field name="name">نحاس ومستلزمات المعامل</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_61029" model="account.account">
+            <field name="code">61029</field>
+            <field name="name">السبورات البورسلين الجاهزة</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_61030" model="account.account">
+            <field name="code">61030</field>
+            <field name="name">أعمال المظلات سبيس فريم</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_61031" model="account.account">
+            <field name="code">61031</field>
+            <field name="name">فواصل التمدد للأسطح</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_61032" model="account.account">
+            <field name="code">61032</field>
+            <field name="name">الأرضية المطاطية للصالات الرياضية</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_61033" model="account.account">
+            <field name="code">61033</field>
+            <field name="name">السقف المعلق ألمونيوم</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_61034" model="account.account">
+            <field name="code">61034</field>
+            <field name="name">أعمال السفلتة</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_61035" model="account.account">
+            <field name="code">61035</field>
+            <field name="name">أسفلت المدارس</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_61036" model="account.account">
+            <field name="code">61036</field>
+            <field name="name">البلاط إنترلوك والترابيع والبدورة</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_61037" model="account.account">
+            <field name="code">61037</field>
+            <field name="name">العشب الصناعي للملاعب</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_61038" model="account.account">
+            <field name="code">61038</field>
+            <field name="name">الأجهزة الرياضية للصالات والملاعب</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_61039" model="account.account">
+            <field name="code">61039</field>
+            <field name="name">الأثاث والمفروشات للمشاريع</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_61040" model="account.account">
+            <field name="code">61040</field>
+            <field name="name">المقاعد الخشبية والجاهزة من الرخام</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_61041" model="account.account">
+            <field name="code">61041</field>
+            <field name="name">أعمال كسر الرخام</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_61042" model="account.account">
+            <field name="code">61042</field>
+            <field name="name">كسوة الحوائط</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_61043" model="account.account">
+            <field name="code">61043</field>
+            <field name="name">المرايا الزجاجية</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_61044" model="account.account">
+            <field name="code">61044</field>
+            <field name="name">اللكسان والزجاج للأبواب الحديدية</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_61045" model="account.account">
+            <field name="code">61045</field>
+            <field name="name">الحلوق الخشبية للمكيفات ومراوح الشفط</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_61046" model="account.account">
+            <field name="code">61046</field>
+            <field name="name">الشبك البلاستيكي للترابيع والأرضيات</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_61047" model="account.account">
+            <field name="code">61047</field>
+            <field name="name">أعمال الشينكو للأسوار المؤقتة</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_61048" model="account.account">
+            <field name="code">61048</field>
+            <field name="name">المظلات قماش PVC</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_61049" model="account.account">
+            <field name="code">61049</field>
+            <field name="name">كريتال وأعمال الحدادة</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_61050" model="account.account">
+            <field name="code">61050</field>
+            <field name="name">مستلزمات الحدادين (سلك رباط - أسطوانات)</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_61051" model="account.account">
+            <field name="code">61051</field>
+            <field name="name">مستلزمات النجارين (مسمار - خيط)</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_61052" model="account.account">
+            <field name="code">61052</field>
+            <field name="name">لوحة بيانات المشروع الحديدية</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_61053" model="account.account">
+            <field name="code">61053</field>
+            <field name="name">صاري العلم</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_61054" model="account.account">
+            <field name="code">61054</field>
+            <field name="name">مسميات الغرف واللوحات</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_61055" model="account.account">
+            <field name="code">61055</field>
+            <field name="name">المساحة والميزانية الشبكية للمشاريع</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_62001" model="account.account">
+            <field name="code">62001</field>
+            <field name="name">تأسيس الكهرباء (علب ومواسير وقسامات)</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_62002" model="account.account">
+            <field name="code">62002</field>
+            <field name="name">لوحات الكهرباء العمومية والفرعية</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_62003" model="account.account">
+            <field name="code">62003</field>
+            <field name="name">القطب الأرضي</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_62004" model="account.account">
+            <field name="code">62004</field>
+            <field name="name">وحدات الإضاءة</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_62005" model="account.account">
+            <field name="code">62005</field>
+            <field name="name">عدة وأدوات كهربائية</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_62006" model="account.account">
+            <field name="code">62006</field>
+            <field name="name">سداد التيار الكهربي (شركة الكهرباء)</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_62007" model="account.account">
+            <field name="code">62007</field>
+            <field name="name">الكابلات والأسلاك الكهربائية</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_62008" model="account.account">
+            <field name="code">62008</field>
+            <field name="name">المفاتيح والأفياش الكهربائية</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_62009" model="account.account">
+            <field name="code">62009</field>
+            <field name="name">شبكة الصواعق الكهربائية</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_62010" model="account.account">
+            <field name="code">62010</field>
+            <field name="name">الأجراس الكهربائية</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_62011" model="account.account">
+            <field name="code">62011</field>
+            <field name="name">الإذاعة والصوتيات والسنترالات</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_62012" model="account.account">
+            <field name="code">62012</field>
+            <field name="name">صناديق الإذاعة والهواتف والإنترنت</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_62013" model="account.account">
+            <field name="code">62013</field>
+            <field name="name">الهواتف والسماعات ومكبرات الصوت</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_62014" model="account.account">
+            <field name="code">62014</field>
+            <field name="name">أعمال البروجكتر</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_62015" model="account.account">
+            <field name="code">62015</field>
+            <field name="name">علب الحاسب الآلي واكسسواراتها</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_63001" model="account.account">
+            <field name="code">63001</field>
+            <field name="name">تأسيس السباكة (مواسير وجلب)</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_63002" model="account.account">
+            <field name="code">63002</field>
+            <field name="name">الخلاطات والمحابس والفلشرات (تشطيب سباكة)</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_63003" model="account.account">
+            <field name="code">63003</field>
+            <field name="name">توصيل شبكة المياه</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_63004" model="account.account">
+            <field name="code">63004</field>
+            <field name="name">توصيل شبكة الغاز - شركة الغاز الأهلية</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_63005" model="account.account">
+            <field name="code">63005</field>
+            <field name="name">ملء أنابيب الغاز للمواقع وسكن العمال</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_63006" model="account.account">
+            <field name="code">63006</field>
+            <field name="name">المواقد (الأفران)</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_64001" model="account.account">
+            <field name="code">64001</field>
+            <field name="name">مكيفات الشباك</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_64002" model="account.account">
+            <field name="code">64002</field>
+            <field name="name">المكيفات الاسبلت</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_64003" model="account.account">
+            <field name="code">64003</field>
+            <field name="name">المكيفات الدولابي</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_64004" model="account.account">
+            <field name="code">64004</field>
+            <field name="name">المكيفات المركزية</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_64005" model="account.account">
+            <field name="code">64005</field>
+            <field name="name">داكت المكيفات المركزية</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_64006" model="account.account">
+            <field name="code">64006</field>
+            <field name="name">مراوح الطرد المركزية</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_64007" model="account.account">
+            <field name="code">64007</field>
+            <field name="name">مراوح السقف</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_64008" model="account.account">
+            <field name="code">64008</field>
+            <field name="name">مراوح الشفط</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_64009" model="account.account">
+            <field name="code">64009</field>
+            <field name="name">البرادات</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_64010" model="account.account">
+            <field name="code">64010</field>
+            <field name="name">مضخات الحريق والمياه</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_64011" model="account.account">
+            <field name="code">64011</field>
+            <field name="name">شبكة الحريق وملحقاتها</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_64012" model="account.account">
+            <field name="code">64012</field>
+            <field name="name">أنظمة الحريق وصناديق الحريق والطفايات</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_65001" model="account.account">
+            <field name="code">65001</field>
+            <field name="name">إيجار المعدات (شيول - رافعة - رصاصة)</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_65002" model="account.account">
+            <field name="code">65002</field>
+            <field name="name">إيجار السقالات والدعامات</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_65003" model="account.account">
+            <field name="code">65003</field>
+            <field name="name">صيانة المعدات</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_65004" model="account.account">
+            <field name="code">65004</field>
+            <field name="name">محروقات المعدات</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_65005" model="account.account">
+            <field name="code">65005</field>
+            <field name="name">محروقات سيارات المواقع</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_65006" model="account.account">
+            <field name="code">65006</field>
+            <field name="name">صيانة سيارات المشاريع</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_65007" model="account.account">
+            <field name="code">65007</field>
+            <field name="name">إيجار سيارات المواقع</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_65008" model="account.account">
+            <field name="code">65008</field>
+            <field name="name">نقل المستلزمات للمواقع</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_65009" model="account.account">
+            <field name="code">65009</field>
+            <field name="name">انتقالات المواقع</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_65010" model="account.account">
+            <field name="code">65010</field>
+            <field name="name">السواق - نقل مستلزمات للمشاريع</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_65011" model="account.account">
+            <field name="code">65011</field>
+            <field name="name">عدة وأدوات المواقع</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_65012" model="account.account">
+            <field name="code">65012</field>
+            <field name="name">العدات المؤقتة للمشاريع</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_67001" model="account.account">
+            <field name="code">67001</field>
+            <field name="name">إيجار سكن المهندسين والمراقبين  بالمواقع</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_67002" model="account.account">
+            <field name="code">67002</field>
+            <field name="name">إيجار سكن العمال بالمواقع</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_67003" model="account.account">
+            <field name="code">67003</field>
+            <field name="name">تجهيزات سكن المهندسين والمراقبين بالمواقع</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_67004" model="account.account">
+            <field name="code">67004</field>
+            <field name="name">تجهيزات سكن العمال بالمواقع</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_67005" model="account.account">
+            <field name="code">67005</field>
+            <field name="name">كهرباء سكن المهندسين والمراقبين بالمواقع</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_67006" model="account.account">
+            <field name="code">67006</field>
+            <field name="name">كهرباء سكن العمال بالمواقع</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_67007" model="account.account">
+            <field name="code">67007</field>
+            <field name="name">كهرباء المواقع</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_67008" model="account.account">
+            <field name="code">67008</field>
+            <field name="name">قرطاسية ومطبوعات المواقع</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_67009" model="account.account">
+            <field name="code">67009</field>
+            <field name="name">إرسال رسائل ومعاملات بريدية للمشاريع</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_67010" model="account.account">
+            <field name="code">67010</field>
+            <field name="name">إرسال بريد للمشاريع</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_67011" model="account.account">
+            <field name="code">67011</field>
+            <field name="name">نظافة المواقع</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_67012" model="account.account">
+            <field name="code">67012</field>
+            <field name="name">شفط البيارات الصرف الصحي للمواقع</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_67013" model="account.account">
+            <field name="code">67013</field>
+            <field name="name">تعقيم خزانات المواقع</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_67014" model="account.account">
+            <field name="code">67014</field>
+            <field name="name">اكراميات المواقع</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_67015" model="account.account">
+            <field name="code">67015</field>
+            <field name="name">كشف وعلاج بالمواقع</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_67016" model="account.account">
+            <field name="code">67016</field>
+            <field name="name">ضيافة الاستشاريين</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_67017" model="account.account">
+            <field name="code">67017</field>
+            <field name="name">وجبات طعام للعمال أيام الصبات الخرسانية</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_67018" model="account.account">
+            <field name="code">67018</field>
+            <field name="name">مواد ومستلزمات للمشاريع - حفر</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_67019" model="account.account">
+            <field name="code">67019</field>
+            <field name="name">الطابعات وأجهزة الحاسب بالمشاريع</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_67020" model="account.account">
+            <field name="code">67020</field>
+            <field name="name">البلوك الهوردي الأحمر</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_67021" model="account.account">
+            <field name="code">67021</field>
+            <field name="name">نقابة مهندسين - رسوم المشاريع</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_67022" model="account.account">
+            <field name="code">67022</field>
+            <field name="name">تأمين المشاريع ضد الأخطار</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_67023" model="account.account">
+            <field name="code">67023</field>
+            <field name="name">مصروفات نثرية بالمشاريع</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_67024" model="account.account">
+            <field name="code">67024</field>
+            <field name="name">متنوعة للمشاريع</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_67025" model="account.account">
+            <field name="code">67025</field>
+            <field name="name">أعمال الاستلس للمشاريع</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_68001" model="account.account">
+            <field name="code">68001</field>
+            <field name="name">أجور ومرتبات المهندسين</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_68002" model="account.account">
+            <field name="code">68002</field>
+            <field name="name">أجور ومرتبات المشرفين</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_68003" model="account.account">
+            <field name="code">68003</field>
+            <field name="name">أجور ومرتبات العمالة بالمشاريع</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_68004" model="account.account">
+            <field name="code">68004</field>
+            <field name="name">أجور قسم الكهرباء</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_68005" model="account.account">
+            <field name="code">68005</field>
+            <field name="name">أجور قسم البلاط والسراميك</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_68006" model="account.account">
+            <field name="code">68006</field>
+            <field name="name">أجور قسم الدهان</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_68007" model="account.account">
+            <field name="code">68007</field>
+            <field name="name">أجور قسم اللياسة</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_68008" model="account.account">
+            <field name="code">68008</field>
+            <field name="name">أجور قسم السباكة</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_68009" model="account.account">
+            <field name="code">68009</field>
+            <field name="name">اكراميات المهندسين والاستشاري</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_69001" model="account.account">
+            <field name="code">69001</field>
+            <field name="name">مواد خام ومستلزمات الورشة</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_69002" model="account.account">
+            <field name="code">69002</field>
+            <field name="name">أجور عمال الورشة</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_69003" model="account.account">
+            <field name="code">69003</field>
+            <field name="name">إيجار مقر الورشة ( البلديــة )</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_69004" model="account.account">
+            <field name="code">69004</field>
+            <field name="name">كهرباء الورشة</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_69005" model="account.account">
+            <field name="code">69005</field>
+            <field name="name">مياه الورشة</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_69006" model="account.account">
+            <field name="code">69006</field>
+            <field name="name">صيانة معدات وأجهزة الورشة</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_69007" model="account.account">
+            <field name="code">69007</field>
+            <field name="name">وقود ومحروقات الورشة</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_69008" model="account.account">
+            <field name="code">69008</field>
+            <field name="name">مصروفات متنوعة للورشة</field>
+            <field name="account_type">expense_direct_cost</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_71001" model="account.account">
+            <field name="code">71001</field>
+            <field name="name">مصروفات حكومية وإدارية</field>
+            <field name="account_type">expense</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_71002" model="account.account">
+            <field name="code">71002</field>
+            <field name="name">رسوم وعمولات بنكية</field>
+            <field name="account_type">expense</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_71003" model="account.account">
+            <field name="code">71003</field>
+            <field name="name">تلفون وفاكس الإدارة</field>
+            <field name="account_type">expense</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_71004" model="account.account">
+            <field name="code">71004</field>
+            <field name="name">اتصالات الإدارة</field>
+            <field name="account_type">expense</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_71005" model="account.account">
+            <field name="code">71005</field>
+            <field name="name">كهرباء الإدارة</field>
+            <field name="account_type">expense</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_71006" model="account.account">
+            <field name="code">71006</field>
+            <field name="name">مياه الإدارة</field>
+            <field name="account_type">expense</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_71007" model="account.account">
+            <field name="code">71007</field>
+            <field name="name">بريد الإدارة</field>
+            <field name="account_type">expense</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_71008" model="account.account">
+            <field name="code">71008</field>
+            <field name="name">أتعاب مكتب المراجعة والمحاسبة</field>
+            <field name="account_type">expense</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_71009" model="account.account">
+            <field name="code">71009</field>
+            <field name="name">قرطاسية ومطبوعات الإدارة</field>
+            <field name="account_type">expense</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_71010" model="account.account">
+            <field name="code">71010</field>
+            <field name="name">صيانة سيارات الإدارة</field>
+            <field name="account_type">expense</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_71011" model="account.account">
+            <field name="code">71011</field>
+            <field name="name">محروقات سيارات الإدارة</field>
+            <field name="account_type">expense</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_71012" model="account.account">
+            <field name="code">71012</field>
+            <field name="name">إيجار سيارات الإدارة</field>
+            <field name="account_type">expense</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_71013" model="account.account">
+            <field name="code">71013</field>
+            <field name="name">إيجارات موظفي الإدارة</field>
+            <field name="account_type">expense</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_71014" model="account.account">
+            <field name="code">71014</field>
+            <field name="name">سيارات النقل</field>
+            <field name="account_type">expense</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_71015" model="account.account">
+            <field name="code">71015</field>
+            <field name="name">الزكاة والدخل</field>
+            <field name="account_type">expense</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_71016" model="account.account">
+            <field name="code">71016</field>
+            <field name="name">ضيافة الإدارة</field>
+            <field name="account_type">expense</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_71017" model="account.account">
+            <field name="code">71017</field>
+            <field name="name">انتقالات الإدارة</field>
+            <field name="account_type">expense</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_71018" model="account.account">
+            <field name="code">71018</field>
+            <field name="name">اشتراكات وتصديقات الغرفة التجارية</field>
+            <field name="account_type">expense</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_71019" model="account.account">
+            <field name="code">71019</field>
+            <field name="name">مكافآت الإدارة</field>
+            <field name="account_type">expense</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_71020" model="account.account">
+            <field name="code">71020</field>
+            <field name="name">صيانة الأجهزة المكتبية</field>
+            <field name="account_type">expense</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_71021" model="account.account">
+            <field name="code">71021</field>
+            <field name="name">رسوم جوازات ومكتب العمل والتأمين</field>
+            <field name="account_type">expense</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_71022" model="account.account">
+            <field name="code">71022</field>
+            <field name="name">التأمين على السيارات</field>
+            <field name="account_type">expense</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_71023" model="account.account">
+            <field name="code">71023</field>
+            <field name="name">تجهيزات سكن الإدارة</field>
+            <field name="account_type">expense</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_71024" model="account.account">
+            <field name="code">71024</field>
+            <field name="name">الخروج والعودة والسفريات</field>
+            <field name="account_type">expense</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_71025" model="account.account">
+            <field name="code">71025</field>
+            <field name="name">تجديد وإصدار الإقامات للعمال</field>
+            <field name="account_type">expense</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_71026" model="account.account">
+            <field name="code">71026</field>
+            <field name="name">رخص المرور ونقل الملكيات للسيارات</field>
+            <field name="account_type">expense</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_71027" model="account.account">
+            <field name="code">71027</field>
+            <field name="name">تصديقات وتفويضات التأشيرات الإلكترونية</field>
+            <field name="account_type">expense</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_71028" model="account.account">
+            <field name="code">71028</field>
+            <field name="name">التأمينات الاجتماعية - الإدارة</field>
+            <field name="account_type">expense</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_71029" model="account.account">
+            <field name="code">71029</field>
+            <field name="name">إشتراكات البرنامج</field>
+            <field name="account_type">expense</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_71030" model="account.account">
+            <field name="code">71030</field>
+            <field name="name">مصروفات قانونية</field>
+            <field name="account_type">expense</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_71031" model="account.account">
+            <field name="code">71031</field>
+            <field name="name">خسائر فروقات نقدية</field>
+            <field name="account_type">expense</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_71032" model="account.account">
+            <field name="code">71032</field>
+            <field name="name">خســائر بيع أصول ثابتة</field>
+            <field name="account_type">expense</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_71033" model="account.account">
+            <field name="code">71033</field>
+            <field name="name">مصروفات الأعلانات</field>
+            <field name="account_type">expense</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_72001" model="account.account">
+            <field name="code">72001</field>
+            <field name="name">أجور ومرتبات المحاسبين</field>
+            <field name="account_type">expense</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_72002" model="account.account">
+            <field name="code">72002</field>
+            <field name="name">أجور ومرتبات المكتب الهندسي ( الفني )</field>
+            <field name="account_type">expense</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_72003" model="account.account">
+            <field name="code">72003</field>
+            <field name="name">أجور ومرتبات قسم العمالة والسواقين</field>
+            <field name="account_type">expense</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_72004" model="account.account">
+            <field name="code">72004</field>
+            <field name="name">أجور ومرتبات العمالة السعودية</field>
+            <field name="account_type">expense</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_73001" model="account.account">
+            <field name="code">73001</field>
+            <field name="name">إهلاك العقارات والمباني</field>
+            <field name="account_type">expense_depreciation</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_73002" model="account.account">
+            <field name="code">73002</field>
+            <field name="name">إهلاك السيارات</field>
+            <field name="account_type">expense_depreciation</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_73003" model="account.account">
+            <field name="code">73003</field>
+            <field name="name">إهلاك الأخشاب والمعدات الخشبية</field>
+            <field name="account_type">expense_depreciation</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_73004" model="account.account">
+            <field name="code">73004</field>
+            <field name="name">إهلاك الأثاث والمفروشات والبيوت الجاهزة</field>
+            <field name="account_type">expense_depreciation</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_73005" model="account.account">
+            <field name="code">73005</field>
+            <field name="name">إهلاك الأدوات الكهربائية</field>
+            <field name="account_type">expense_depreciation</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_73006" model="account.account">
+            <field name="code">73006</field>
+            <field name="name">إهلاك الكمبيوترات والطابعات وأجهزة الاتصال</field>
+            <field name="account_type">expense_depreciation</field>
+            <field name="reconcile">False</field>
+        </record>
+        <record id="coa_73007" model="account.account">
+            <field name="code">73007</field>
+            <field name="name">إهلاك الآلات والمعدات</field>
+            <field name="account_type">expense_depreciation</field>
+            <field name="reconcile">False</field>
+        </record>
+    </data>
+</odoo>

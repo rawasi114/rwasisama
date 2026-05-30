@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- قائمة المقاولات تحت الجذر الموحَّد «رواسي سما» -->
+        <menuitem id="menu_construction_root"
+                  name="المقاولات"
+                  parent="rawasi_base.menu_rawasi_root"
+                  sequence="10"
+                  groups="group_site_engineer,group_project_manager,group_technical_office"/>
+
+    </data>
+</odoo>

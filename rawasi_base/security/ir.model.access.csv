@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_rawasi_equipment_admin,rawasi.equipment admin,model_rawasi_equipment,rawasi_base.group_rawasi_admin,1,1,1,1
+access_rawasi_equipment_accountant,rawasi.equipment accountant,model_rawasi_equipment,rawasi_base.group_rawasi_accountant,1,1,1,0
+access_rawasi_equipment_procurement,rawasi.equipment procurement,model_rawasi_equipment,rawasi_base.group_rawasi_procurement,1,0,0,0
