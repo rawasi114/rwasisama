@@ -87,6 +87,10 @@
         <field name="name">تحليل الميزانية</field>
         <field name="res_model">rawasi.boq.item</field>
         <field name="view_mode">graph,pivot</field>
+        <!-- لا تُظهر بنود إلا من منافسات تحوّلت لمشاريع فعلية.
+             المنافسات قيد العرض/التسعير/التقديم نتائجها غير محسومة
+             ومن المضلِّل احتسابها في الميزانية المستهلَكة. -->
+        <field name="domain">[('competition_id.project_id', '!=', False)]</field>
     </record>
 
     <!-- ════════ المخاطر: عدم المطابقة ════════ -->
