@@ -77,14 +77,11 @@ class RawasiAuditTrail(models.Model):
         return label
 
     # ------------------------------------------------------------------
-    # append-only: منع التعديل والحذف
+    # append-only: منع التعديل والحذف نهائياً (حتى بصلاحية النظام)
+    # السجل يُنشأ فقط عبر log()، ولا يُعدَّل أو يُحذف أبداً — لضمان نزاهة التدقيق.
     # ------------------------------------------------------------------
     def write(self, vals):
-        if not self.env.su:
-            raise UserError("سجل التدقيق للقراءة فقط — لا يمكن تعديله.")
-        return super().write(vals)
+        raise UserError("سجل التدقيق للقراءة فقط — لا يمكن تعديله.")
 
     def unlink(self):
-        if not self.env.su:
-            raise UserError("سجل التدقيق للقراءة فقط — لا يمكن حذفه.")
-        return super().unlink()
+        raise UserError("سجل التدقيق للقراءة فقط — لا يمكن حذفه.")

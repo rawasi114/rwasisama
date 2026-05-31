@@ -86,7 +86,6 @@ class RawasiReferenceItem(models.Model):
             "type": "consu",
             "is_storable": True,
             "uom_id": self.uom_id.id,
-            "uom_po_id": self.uom_id.id,
             "standard_price": self.standard_cost,
             "default_code": self.code,
             "rawasi_reference_item_id": self.id,
@@ -101,7 +100,6 @@ class RawasiReferenceItem(models.Model):
                         "name": item.name,
                         "standard_price": item.standard_cost,
                         "uom_id": item.uom_id.id,
-                        "uom_po_id": item.uom_id.id,
                         "purchase_ok": item.procurement_type == "purchase",
                     }
                 )
