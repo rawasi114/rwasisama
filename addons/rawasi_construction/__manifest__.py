@@ -8,6 +8,7 @@
     "author": "Rawasi Sama",
     "website": "https://rawasi-sama.sa",
     "license": "LGPL-3",
+    "post_init_hook": "_rawasi_post_init_hook",
     "depends": [
         "base",
         "web",
