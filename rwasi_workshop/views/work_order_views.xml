@@ -116,7 +116,7 @@
                     <field name="scope_of_work" placeholder="وصف العمل العام..."/>
                     <notebook>
                         <page string="أوامر العمل" name="jobs">
-                            <field name="job_ids" context="{'default_work_order_id': active_id}">
+                            <field name="job_ids">
                                 <list string="أوامر العمل">
                                     <field name="sequence" widget="handle"/>
                                     <field name="name"/>
@@ -131,8 +131,7 @@
                             </field>
                         </page>
                         <page string="طلبات المواد" name="material_requests">
-                            <field name="material_request_ids"
-                                   context="{'default_work_order_id': active_id}">
+                            <field name="material_request_ids">
                                 <list string="طلبات المواد"
                                       decoration-info="state == 'to_approve'"
                                       decoration-warning="state in ('to_finance','to_revise')"
