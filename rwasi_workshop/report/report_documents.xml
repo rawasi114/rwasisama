@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <!-- ============ RS-WS-01 أمر تشغيل / تصنيع ============ -->
+    <!-- ============ RS-WS-01 أمر تصنيع ============ -->
     <template id="report_work_order_document">
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="o">
                 <t t-call="rwasi_workshop.report_workshop_layout">
-                    <t t-set="title">أمر تشغيل / تصنيع</t>
+                    <t t-set="title">أمر تصنيع</t>
                     <t t-set="code">RS-WS-01</t>
                     <table class="info">
                         <tr>
@@ -14,11 +14,7 @@
                             <td class="lbl">أمر البيع</td><td t-out="o.sale_order_id.name or ''"/>
                         </tr>
                         <tr>
-                            <td class="lbl">المنتج</td><td t-out="o.product_id.display_name or ''"/>
-                            <td class="lbl">الكمية</td><td t-out="o.product_qty"/>
-                        </tr>
-                        <tr>
-                            <td class="lbl">القسم</td><td><span t-field="o.workshop_scope"/></td>
+                            <td class="lbl">الأقسام</td><td t-out="o.workshop_scope_summary or ''"/>
                             <td class="lbl">الأولوية</td><td><span t-field="o.priority"/></td>
                         </tr>
                         <tr>
@@ -30,22 +26,48 @@
                             <td class="lbl">الحالة</td><td><span t-field="o.state"/></td>
                         </tr>
                     </table>
-                    <div class="sec-title">وصف العمل المطلوب</div>
+                    <div class="sec-title">وصف العمل العام</div>
                     <div class="notes-box" t-out="o.scope_of_work or ''"/>
-                    <div class="sec-title">المواد اللازمة</div>
+                    <div class="sec-title">أوامر العمل</div>
                     <table class="lines">
-                        <tr><th style="width:8%">م.</th><th>المادة</th><th style="width:18%">الكمية المطلوبة</th><th style="width:18%">المتوفر بالمخزون</th><th style="width:14%">الوحدة</th></tr>
-                        <tr t-foreach="o.material_line_ids" t-as="l">
-                            <td t-out="l_index + 1"/><td t-out="l.material_id.display_name or ''"/>
-                            <td t-out="l.qty_needed"/><td t-out="l.qty_available"/><td t-out="l.uom_name or ''"/>
+                        <tr>
+                            <th style="width:6%">م.</th>
+                            <th style="width:14%">رقم أمر العمل</th>
+                            <th>المنتج</th>
+                            <th style="width:10%">الكمية</th>
+                            <th style="width:12%">القسم</th>
+                            <th style="width:12%">بدء</th>
+                            <th style="width:12%">انتهاء</th>
+                            <th style="width:10%">الحالة</th>
+                        </tr>
+                        <tr t-foreach="o.job_ids" t-as="j">
+                            <td t-out="j_index + 1"/>
+                            <td t-out="j.name or ''"/>
+                            <td t-out="j.product_id.display_name or ''"/>
+                            <td t-out="j.product_qty"/>
+                            <td><span t-field="j.workshop_scope"/></td>
+                            <td><span t-field="j.start_date"/></td>
+                            <td><span t-field="j.end_date"/></td>
+                            <td><span t-field="j.status"/></td>
                         </tr>
                     </table>
-                    <div class="sec-title">بنود التنفيذ</div>
+                    <div class="sec-title">طلبات المواد</div>
                     <table class="lines">
-                        <tr><th style="width:8%">م.</th><th>الوصف</th><th style="width:12%">الكمية</th><th style="width:12%">الوحدة</th><th style="width:16%">المرجع</th><th style="width:16%">الحالة</th></tr>
-                        <tr t-foreach="o.line_ids" t-as="l">
-                            <td t-out="l_index + 1"/><td t-out="l.description or ''"/><td t-out="l.qty"/>
-                            <td t-out="l.uom or ''"/><td t-out="l.item_ref or ''"/><td t-out="l.status or ''"/>
+                        <tr>
+                            <th style="width:6%">م.</th>
+                            <th style="width:14%">رقم الطلب</th>
+                            <th>أمر العمل</th>
+                            <th style="width:12%">السبب</th>
+                            <th style="width:14%">التاريخ</th>
+                            <th style="width:18%">الحالة</th>
+                        </tr>
+                        <tr t-foreach="o.material_request_ids" t-as="r">
+                            <td t-out="r_index + 1"/>
+                            <td t-out="r.name or ''"/>
+                            <td t-out="r.work_job_id.name or ''"/>
+                            <td><span t-field="r.reason"/></td>
+                            <td><span t-field="r.request_date"/></td>
+                            <td><span t-field="r.state"/></td>
                         </tr>
                     </table>
                     <div class="sec-title">المتطلبات والاشتراطات</div>

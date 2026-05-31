@@ -4,6 +4,7 @@ from . import payment
 from . import sale_order
 from . import purchase_order
 from . import work_order
+from . import material_request
 from . import daily
 from . import labor
 from . import measurement
