@@ -40,7 +40,7 @@
             <field name="name">إعدادات رواسي</field>
             <field name="res_model">res.config.settings</field>
             <field name="view_mode">form</field>
-            <field name="target">inline</field>
+            <field name="target">current</field>
             <field name="view_id" ref="res_config_settings_view_form_rawasi"/>
             <field name="context">{'module': 'rawasi_base'}</field>
         </record>
