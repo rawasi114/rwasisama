@@ -45,6 +45,7 @@
         "views/audit_trail_views.xml",
         "views/approval_chain_views.xml",
         "views/res_users_views.xml",
+        "views/res_company_views.xml",
         "views/res_config_settings_views.xml",
     ],
     "assets": {

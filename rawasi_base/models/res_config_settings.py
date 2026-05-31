@@ -16,19 +16,9 @@ class ResConfigSettings(models.TransientModel):
         string="الكريمي", config_parameter="rawasi_base.brand_cream", default="#F0E8DA"
     )
 
-    # ------- توقيعات رقمية (على الشركة) -------
-    rawasi_signature_site_engineer = fields.Binary(
-        related="company_id.rawasi_signature_site_engineer", readonly=False
-    )
-    rawasi_signature_project_manager = fields.Binary(
-        related="company_id.rawasi_signature_project_manager", readonly=False
-    )
-    rawasi_signature_technical = fields.Binary(
-        related="company_id.rawasi_signature_technical", readonly=False
-    )
-    rawasi_signature_accountant = fields.Binary(
-        related="company_id.rawasi_signature_accountant", readonly=False
-    )
+    # ملاحظة: التوقيعات الرقمية (Binary) تُحرَّر مباشرة على نموذج الشركة
+    # عبر إجراء «التوقيعات الرقمية» (res_company_views.xml) — لأن حقول Binary
+    # المرتبطة على res.config.settings لا تُسجَّل بثبات عبر آلية الإعدادات.
 
     # ------- الإشعارات -------
     rawasi_notification_provider = fields.Selection(

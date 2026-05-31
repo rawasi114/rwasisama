@@ -3,3 +3,9 @@ from . import product_template
 from . import competition
 from . import project
 from . import bom
+from . import material_request
+from . import site_report
+from . import variation_order
+from . import ipc
+from . import bank_guarantee
+from . import notification_templates

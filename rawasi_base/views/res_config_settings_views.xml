@@ -17,12 +17,6 @@
                             <field name="rawasi_brand_gold"/>
                             <field name="rawasi_brand_cream"/>
                         </group>
-                        <group string="التوقيعات الرقمية">
-                            <field name="rawasi_signature_site_engineer" widget="image" class="oe_avatar"/>
-                            <field name="rawasi_signature_project_manager" widget="image" class="oe_avatar"/>
-                            <field name="rawasi_signature_technical" widget="image" class="oe_avatar"/>
-                            <field name="rawasi_signature_accountant" widget="image" class="oe_avatar"/>
-                        </group>
                         <group string="الإشعارات">
                             <field name="rawasi_notification_provider"/>
                             <field name="rawasi_whatsapp_endpoint"
