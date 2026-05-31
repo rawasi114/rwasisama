@@ -101,7 +101,7 @@ class TestAcceptanceScenarios(TransactionCase):
             {
                 "name": "محاسب رواسي",
                 "login": "acc_cross_test",
-                "groups_id": [(6, 0, [self.env.ref("rawasi_base.group_rawasi_accountant").id])],
+                "group_ids": [(6, 0, [self.env.ref("rawasi_base.group_rawasi_accountant").id])],
             }
         )
         # مشروع + MR مقاولات للاعتماد
