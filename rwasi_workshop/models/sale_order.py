@@ -76,39 +76,59 @@ class SaleOrder(models.Model):
         return res
 
     def _create_workshop_work_orders(self):
-        """ينشئ أمر تصنيع لكل بند منتج يُصنّع في الورشة (تلقائياً وبصلاحية النظام)."""
+        """ينشئ أمر تصنيع واحد لكل أمر بيع يحوي منتجات ورشية،
+        مع أمر عمل لكل بند منتج ورشي + طلب مواد ابتدائي (مسودة) لكل أمر عمل."""
         self.ensure_one()
         if not self.company_id.workshop_auto_mo:
             return
-        WorkOrder = self.env['rwasi.work.order'].sudo().with_context(from_sale_order=True)
-        for line in self.order_line:
+        # تحقّق من وجود منتجات ورشية في الطلب
+        workshop_lines = self.order_line.filtered(
+            lambda l: l.product_id
+            and l.product_id.product_tmpl_id.is_workshop_product
+            and not l.display_type
+        )
+        if not workshop_lines:
+            return
+        # أمر تصنيع واحد فقط لكل أمر بيع
+        wo = self.work_order_ids and self.work_order_ids[0]
+        if not wo:
+            wo = self.env['rwasi.work.order'].sudo().with_context(
+                from_sale_order=True).create({
+                    'sale_order_id': self.id,
+                    'partner_id': self.partner_id.id,
+                    'project_ref': self.name,
+                })
+        WorkJob = self.env['rwasi.work.job'].sudo()
+        Request = self.env['rwasi.material.request'].sudo()
+        for line in workshop_lines:
+            # تفادي إنشاء أمر عمل مكرر لنفس البند
+            if wo.job_ids.filtered(lambda j: j.sale_line_id.id == line.id):
+                continue
             product = line.product_id
-            if not product or not product.product_tmpl_id.is_workshop_product:
-                continue
-            if line.display_type:
-                continue
-            existing = self.work_order_ids.filtered(
-                lambda w: w.sale_line_id.id == line.id)
-            if existing:
-                continue
+            tmpl = product.product_tmpl_id
+            job = WorkJob.create({
+                'work_order_id': wo.id,
+                'sale_line_id': line.id,
+                'product_id': product.id,
+                'product_qty': line.product_uom_qty,
+                'workshop_scope': tmpl.workshop_scope,
+                'description': line.name,
+            })
+            # طلب مواد ابتدائي (مسودة) مُعبّأ من BOM المنتج
             material_vals = [
                 (0, 0, {
                     'material_id': m.material_id.id,
                     'qty_needed': m.qty * line.product_uom_qty,
                 })
-                for m in product.product_tmpl_id.workshop_material_ids
+                for m in tmpl.workshop_material_ids
             ]
-            WorkOrder.create({
-                'sale_order_id': self.id,
-                'sale_line_id': line.id,
-                'partner_id': self.partner_id.id,
-                'product_id': product.id,
-                'product_qty': line.product_uom_qty,
-                'scope_of_work': line.name,
-                'workshop_scope': product.product_tmpl_id.workshop_scope,
-                'project_ref': self.name,
-                'material_line_ids': material_vals,
-            })
+            if material_vals:
+                Request.create({
+                    'work_order_id': wo.id,
+                    'work_job_id': job.id,
+                    'reason': 'initial',
+                    'line_ids': material_vals,
+                })
 
     def action_view_work_orders(self):
         self.ensure_one()
