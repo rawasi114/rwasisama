@@ -10,9 +10,10 @@ class RawasiDocumentTag(models.Model):
     name = fields.Char(string="الوسم", required=True)
     color = fields.Integer(string="اللون")
 
-    _sql_constraints = [
-        ("name_uniq", "unique(name)", "اسم الوسم يجب أن يكون فريداً."),
-    ]
+    _name_uniq = models.Constraint(
+        "UNIQUE(name)",
+        "اسم الوسم يجب أن يكون فريداً.",
+    )
 
 
 class RawasiDocumentFolder(models.Model):
@@ -26,7 +27,7 @@ class RawasiDocumentFolder(models.Model):
     parent_id = fields.Many2one(
         "rawasi.document.folder", string="المجلد الأب", ondelete="cascade", index=True
     )
-    parent_path = fields.Char(index=True, unaccent=False)
+    parent_path = fields.Char(index=True)
     complete_name = fields.Char(
         string="المسار الكامل", compute="_compute_complete_name", recursive=True, store=True
     )

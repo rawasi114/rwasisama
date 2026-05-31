@@ -71,9 +71,10 @@ class RawasiReferenceItem(models.Model):
         "res.company", string="الشركة", default=lambda self: self.env.company.id
     )
 
-    _sql_constraints = [
-        ("code_uniq", "unique(code)", "رمز البند المرجعي يجب أن يكون فريداً."),
-    ]
+    _code_uniq = models.Constraint(
+        "UNIQUE(code)",
+        "رمز البند المرجعي يجب أن يكون فريداً.",
+    )
 
     # ------------------------------------------------------------------
     # تزامن المنتج: كل بند مرجعي ← منتج مخزون واحد

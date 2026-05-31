@@ -2,6 +2,7 @@
 {
     "name": "Rawasi Sama — Base",
     "summary": "الأساس المشترك لنظام رواسي سما (هوية، مجموعات، حسابات، أصول، إشعارات، DMS، تدقيق، اعتماد)",
+    "description": "الأساس المشترك لنظام رواسي سما الموحَّد.",
     "category": "Rawasi",
     "version": "19.0.1.0.0",
     "author": "Rawasi Sama Contracting",

@@ -63,7 +63,7 @@
                             domain="[('procurement_type','=','in_house_workshop')]"/>
                     <filter name="f_purchase" string="شراء خارجي"
                             domain="[('procurement_type','=','purchase')]"/>
-                    <group expand="0" string="تجميع حسب">
+                    <group name="group_by">
                         <filter name="g_category" string="التصنيف" context="{'group_by':'category'}"/>
                         <filter name="g_proc" string="مسار التوريد" context="{'group_by':'procurement_type'}"/>
                     </group>

@@ -110,7 +110,7 @@
                     <filter name="f_open" string="نشطة"
                             domain="[('state','in',('draft','pricing','submitted'))]"/>
                     <filter name="f_won" string="فائزة" domain="[('state','=','won')]"/>
-                    <group expand="0" string="تجميع حسب">
+                    <group name="group_by">
                         <filter name="g_state" string="الحالة" context="{'group_by':'state'}"/>
                         <filter name="g_partner" string="الجهة" context="{'group_by':'partner_id'}"/>
                     </group>

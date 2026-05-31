@@ -2,6 +2,7 @@
 {
     "name": "Rawasi Sama — Construction",
     "summary": "إدارة المقاولات: المنافسات، جداول الكميات، المشاريع، المستخلصات، الضمانات",
+    "description": "موديول إدارة المقاولات لنظام رواسي سما.",
     "category": "Rawasi/Construction",
     "version": "19.0.1.0.0",
     "author": "Rawasi Sama Contracting",

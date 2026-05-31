@@ -76,7 +76,7 @@
                     <filter name="filter_vehicle" string="سيارات" domain="[('category','=','vehicle')]"/>
                     <filter name="filter_workshop" string="آلات ورشة" domain="[('category','=','workshop_machine')]"/>
                     <filter name="filter_site_tool" string="أدوات موقع" domain="[('category','=','site_tool')]"/>
-                    <group expand="0" string="تجميع حسب">
+                    <group name="group_by">
                         <filter name="group_category" string="الفئة" context="{'group_by': 'category'}"/>
                         <filter name="group_custodian" string="العهدة" context="{'group_by': 'custodian_user_id'}"/>
                     </group>

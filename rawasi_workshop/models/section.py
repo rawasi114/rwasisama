@@ -25,9 +25,10 @@ class RawasiWorkshopSection(models.Model):
         "res.company", string="الشركة", default=lambda self: self.env.company.id
     )
 
-    _sql_constraints = [
-        ("code_uniq", "unique(code)", "رمز القسم يجب أن يكون فريداً."),
-    ]
+    _code_uniq = models.Constraint(
+        "UNIQUE(code)",
+        "رمز القسم يجب أن يكون فريداً.",
+    )
 
     @api.depends("name", "code")
     def _compute_display_name(self):

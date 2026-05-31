@@ -3,11 +3,20 @@
     <data noupdate="0">
 
         <!-- ============================================================
-             فئة الموديول الموحدة «رواسي»
+             فئة الموديول الموحدة «رواسي» + الامتياز (Odoo 19)
+             في Odoo 19 تُنظَّم المجموعات عبر res.groups.privilege الذي يرتبط
+             بـ ir.module.category، وتشير المجموعات إلى privilege_id
+             (لم يَعُد category_id موجوداً على res.groups).
              ============================================================ -->
         <record id="module_category_rawasi" model="ir.module.category">
             <field name="name">رواسي</field>
             <field name="description">صلاحيات نظام رواسي سما الموحَّد (المقاولات + الورشة)</field>
+            <field name="sequence">10</field>
+        </record>
+
+        <record id="privilege_rawasi" model="res.groups.privilege">
+            <field name="name">رواسي</field>
+            <field name="category_id" ref="module_category_rawasi"/>
             <field name="sequence">10</field>
         </record>
 
@@ -18,21 +27,21 @@
         <!-- المشتريات: تُعرَّف أولاً لأن الأدمن يرث منها -->
         <record id="group_rawasi_procurement" model="res.groups">
             <field name="name">المشتريات</field>
-            <field name="category_id" ref="module_category_rawasi"/>
+            <field name="privilege_id" ref="privilege_rawasi"/>
             <field name="implied_ids" eval="[(4, ref('purchase.group_purchase_user'))]"/>
         </record>
 
         <!-- مدير حسابات رواسي -->
         <record id="group_rawasi_accountant" model="res.groups">
             <field name="name">مدير حسابات رواسي</field>
-            <field name="category_id" ref="module_category_rawasi"/>
+            <field name="privilege_id" ref="privilege_rawasi"/>
             <field name="implied_ids" eval="[(4, ref('account.group_account_invoice'))]"/>
         </record>
 
         <!-- أدمن رواسي: أعلى صلاحية -->
         <record id="group_rawasi_admin" model="res.groups">
             <field name="name">أدمن رواسي</field>
-            <field name="category_id" ref="module_category_rawasi"/>
+            <field name="privilege_id" ref="privilege_rawasi"/>
             <field name="implied_ids" eval="[
                 (4, ref('base.group_system')),
                 (4, ref('account.group_account_manager')),

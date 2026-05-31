@@ -57,7 +57,7 @@
                     <field name="model_name"/>
                     <filter name="f_override" string="تجاوز إداري" domain="[('event','=','override')]"/>
                     <filter name="f_approve" string="اعتمادات" domain="[('event','=','approve')]"/>
-                    <group expand="0" string="تجميع حسب">
+                    <group name="group_by">
                         <filter name="g_event" string="الحدث" context="{'group_by':'event'}"/>
                         <filter name="g_user" string="المستخدم" context="{'group_by':'user_id'}"/>
                         <filter name="g_model" string="النموذج" context="{'group_by':'model_name'}"/>

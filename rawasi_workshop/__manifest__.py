@@ -2,6 +2,7 @@
 {
     "name": "Rawasi Sama — Workshop",
     "summary": "إدارة الورشة: الأقسام، أوامر التصنيع، بوابات الدفع، تكامل البيع",
+    "description": "موديول إدارة الورشة لنظام رواسي سما.",
     "category": "Rawasi/Workshop",
     "version": "19.0.1.0.0",
     "author": "Rawasi Sama Contracting",
