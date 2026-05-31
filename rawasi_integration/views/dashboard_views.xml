@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_dashboard_form" model="ir.ui.view">
+            <field name="name">rawasi.dashboard.unified.form</field>
+            <field name="model">rawasi.dashboard.unified</field>
+            <field name="arch" type="xml">
+                <form string="لوحة رواسي الموحدة" create="false" edit="false">
+                    <header>
+                        <button name="action_refresh" type="object" string="تحديث" class="btn-primary"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <group string="🏗️ المقاولات">
+                                <field name="active_projects"/>
+                                <field name="competitions_open"/>
+                                <field name="ipc_pending"/>
+                                <field name="guarantees_expiring"/>
+                            </group>
+                            <group string="🔧 الورشة">
+                                <field name="mo_in_production"/>
+                                <field name="mo_awaiting_payment"/>
+                                <field name="mo_ready_delivery"/>
+                            </group>
+                        </group>
+                        <group string="🔄 التصنيع الداخلي (Cross-Module)">
+                            <field name="internal_active"/>
+                            <field name="internal_value"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_dashboard" model="ir.actions.act_window">
+            <field name="name">لوحة رواسي الموحدة</field>
+            <field name="res_model">rawasi.dashboard.unified</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem id="menu_dashboard" name="لوحة المالك الموحدة"
+                  parent="rawasi_base.menu_rawasi_root" action="action_dashboard"
+                  sequence="1" groups="rawasi_base.group_rawasi_admin,rawasi_base.group_rawasi_accountant"/>
+
+    </data>
+</odoo>
