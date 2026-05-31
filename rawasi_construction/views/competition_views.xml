@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_competition_list" model="ir.ui.view">
+            <field name="name">rawasi.competition.list</field>
+            <field name="model">rawasi.competition</field>
+            <field name="arch" type="xml">
+                <list string="المنافسات" decoration-success="state == 'won'"
+                      decoration-muted="state in ('lost','cancelled')">
+                    <field name="name"/>
+                    <field name="title"/>
+                    <field name="partner_id"/>
+                    <field name="submission_date"/>
+                    <field name="boq_count"/>
+                    <field name="amount_total"/>
+                    <field name="state" widget="badge"
+                           decoration-success="state == 'won'"
+                           decoration-info="state == 'submitted'"/>
+                    <field name="currency_id" column_invisible="1"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_competition_form" model="ir.ui.view">
+            <field name="name">rawasi.competition.form</field>
+            <field name="model">rawasi.competition</field>
+            <field name="arch" type="xml">
+                <form string="منافسة">
+                    <header>
+                        <button name="action_set_pricing" type="object" string="بدء التسعير"
+                                class="btn-primary" invisible="state != 'draft'"/>
+                        <button name="action_submit" type="object" string="تقديم"
+                                class="btn-primary" invisible="state != 'pricing'"/>
+                        <button name="action_won" type="object" string="ترسية (فوز)"
+                                class="btn-primary" invisible="state != 'submitted'"/>
+                        <button name="action_lost" type="object" string="خسارة"
+                                invisible="state != 'submitted'"/>
+                        <button name="action_cancel" type="object" string="إلغاء"
+                                invisible="state in ('won','lost','cancelled')"/>
+                        <button name="action_reset_draft" type="object" string="إعادة لمسودة"
+                                invisible="state not in ('lost','cancelled')"/>
+                        <field name="state" widget="statusbar"
+                               statusbar_visible="draft,pricing,submitted,won"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_view_project" type="object"
+                                    class="oe_stat_button" icon="fa-building"
+                                    invisible="not project_id">
+                                <div class="o_stat_info">
+                                    <span class="o_stat_text">المشروع</span>
+                                </div>
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <label for="title"/>
+                            <h1><field name="title" placeholder="اسم المنافسة"/></h1>
+                            <field name="name" readonly="1"/>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="partner_id"/>
+                                <field name="client_reference"/>
+                            </group>
+                            <group>
+                                <field name="submission_date"/>
+                                <field name="validity_days"/>
+                                <field name="currency_id" groups="base.group_multi_currency"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="جدول الكميات (BoQ)">
+                                <field name="boq_item_ids">
+                                    <list editable="bottom">
+                                        <field name="sequence" widget="handle"/>
+                                        <field name="reference_item_id"/>
+                                        <field name="code"/>
+                                        <field name="description"/>
+                                        <field name="uom_id"/>
+                                        <field name="qty"/>
+                                        <field name="unit_price"/>
+                                        <field name="subtotal"/>
+                                        <field name="procurement_type" optional="show"/>
+                                        <field name="currency_id" column_invisible="1"/>
+                                    </list>
+                                </field>
+                                <group class="oe_subtotal_footer">
+                                    <field name="amount_total"/>
+                                </group>
+                            </page>
+                            <page string="الوصف">
+                                <field name="description"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_competition_search" model="ir.ui.view">
+            <field name="name">rawasi.competition.search</field>
+            <field name="model">rawasi.competition</field>
+            <field name="arch" type="xml">
+                <search string="بحث المنافسات">
+                    <field name="name"/>
+                    <field name="title"/>
+                    <field name="partner_id"/>
+                    <filter name="f_open" string="نشطة"
+                            domain="[('state','in',('draft','pricing','submitted'))]"/>
+                    <filter name="f_won" string="فائزة" domain="[('state','=','won')]"/>
+                    <group expand="0" string="تجميع حسب">
+                        <filter name="g_state" string="الحالة" context="{'group_by':'state'}"/>
+                        <filter name="g_partner" string="الجهة" context="{'group_by':'partner_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_competition" model="ir.actions.act_window">
+            <field name="name">المنافسات</field>
+            <field name="res_model">rawasi.competition</field>
+            <field name="view_mode">list,form</field>
+            <field name="search_view_id" ref="view_competition_search"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">سجّل أول منافسة</p>
+            </field>
+        </record>
+
+        <menuitem id="menu_competition" name="المنافسات"
+                  parent="menu_construction_root" action="action_competition" sequence="10"/>
+
+    </data>
+</odoo>

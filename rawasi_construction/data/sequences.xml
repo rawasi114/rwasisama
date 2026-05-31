@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record id="seq_rawasi_competition" model="ir.sequence">
+            <field name="name">منافسة رواسي</field>
+            <field name="code">rawasi.competition</field>
+            <field name="prefix">COMP-%(year)s-</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_rawasi_reference_item" model="ir.sequence">
+            <field name="name">بند مرجعي رواسي</field>
+            <field name="code">rawasi.reference.item</field>
+            <field name="prefix">REF-</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+    </data>
+</odoo>
