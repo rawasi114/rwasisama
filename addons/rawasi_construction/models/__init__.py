@@ -41,3 +41,6 @@ from . import rawasi_dashboard_kpi
 
 # تكامل المخزون: منتج المقاولات
 from . import product_template
+
+# تخصيصات محاسبية: ترقيم الفواتير والدفعات يبدأ من 10001
+from . import account_move
