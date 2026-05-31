@@ -25,3 +25,4 @@ from . import rawasi_bank_guarantee
 from . import rawasi_subcontractor
 from . import rawasi_subcontract
 from . import rawasi_subcontract_ipc
+from . import account_move

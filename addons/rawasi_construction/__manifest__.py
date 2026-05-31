@@ -18,6 +18,7 @@
         "uom",
         "stock",
         "purchase",
+        "sale",
         "account",
     ],
     "data": [
