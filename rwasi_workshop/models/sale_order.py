@@ -76,38 +76,72 @@ class SaleOrder(models.Model):
         return res
 
     def _create_workshop_work_orders(self):
-        """ينشئ أمر تصنيع لكل بند منتج يُصنّع في الورشة (تلقائياً وبصلاحية النظام)."""
+        """ينشئ أمر تصنيع واحد فقط لأمر البيع (1:1)، وكل بند منتج ورشي
+        يُضاف كبند تنفيذ (work job) داخل أمر التصنيع. البنود غير الورشية
+        (خدمات/توريد عادي) تُتجاهل ولا تدخل أمر التصنيع."""
         self.ensure_one()
         if not self.company_id.workshop_auto_mo:
             return
+        # اجمع البنود الورشية فقط (تجاهل display_type وغير-الورشية)
+        workshop_lines = self.order_line.filtered(
+            lambda l: not l.display_type
+            and l.product_id
+            and l.product_id.product_tmpl_id.is_workshop_product
+        )
+        if not workshop_lines:
+            return
+
+        # ابحث عن أمر تصنيع موجود لهذا أمر البيع (1:1)
         WorkOrder = self.env['rwasi.work.order'].sudo().with_context(from_sale_order=True)
-        for line in self.order_line:
+        existing_mo = self.work_order_ids[:1]
+
+        # بنود التنفيذ (work jobs) الجديدة فقط — البنود المُسجَّلة سابقاً تُحترم
+        existing_sale_line_ids = (existing_mo.line_ids.mapped('sale_line_id').ids
+                                  if existing_mo else [])
+        new_jobs = []
+        new_materials = []
+        first_product = None
+        for line in workshop_lines:
+            if line.id in existing_sale_line_ids:
+                continue
             product = line.product_id
-            if not product or not product.product_tmpl_id.is_workshop_product:
-                continue
-            if line.display_type:
-                continue
-            existing = self.work_order_ids.filtered(
-                lambda w: w.sale_line_id.id == line.id)
-            if existing:
-                continue
-            material_vals = [
-                (0, 0, {
+            if first_product is None:
+                first_product = product
+            new_jobs.append((0, 0, {
+                'sale_line_id': line.id,
+                'product_id': product.id,
+                'description': line.name or product.display_name,
+                'qty': line.product_uom_qty,
+                'uom': product.uom_id.name,
+            }))
+            for m in product.product_tmpl_id.workshop_material_ids:
+                new_materials.append((0, 0, {
                     'material_id': m.material_id.id,
                     'qty_needed': m.qty * line.product_uom_qty,
-                })
-                for m in product.product_tmpl_id.workshop_material_ids
-            ]
+                }))
+
+        if not new_jobs:
+            return  # كل البنود الورشية مُمثَّلة سلفاً
+
+        if existing_mo:
+            # توسعة أمر التصنيع القائم
+            existing_mo.write({
+                'line_ids': new_jobs,
+                'material_line_ids': new_materials,
+            })
+        else:
+            # إنشاء أمر تصنيع جديد واحد
+            primary_product = first_product or workshop_lines[0].product_id
             WorkOrder.create({
                 'sale_order_id': self.id,
-                'sale_line_id': line.id,
                 'partner_id': self.partner_id.id,
-                'product_id': product.id,
-                'product_qty': line.product_uom_qty,
-                'scope_of_work': line.name,
-                'workshop_scope': product.product_tmpl_id.workshop_scope,
+                'product_id': primary_product.id,
+                'product_qty': sum(workshop_lines.mapped('product_uom_qty')) or 1.0,
+                'scope_of_work': '\n'.join(workshop_lines.mapped('name')),
+                'workshop_scope': primary_product.product_tmpl_id.workshop_scope,
                 'project_ref': self.name,
-                'material_line_ids': material_vals,
+                'line_ids': new_jobs,
+                'material_line_ids': new_materials,
             })
 
     def action_view_work_orders(self):

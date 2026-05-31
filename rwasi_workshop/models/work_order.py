@@ -13,14 +13,20 @@ class WorkOrder(models.Model):
     _order = 'id desc'
     _sequence_code = 'rwasi.work.order'
 
-    # الربط بأمر البيع
+    # الربط بأمر البيع (1:1 — كل أمر بيع له أمر تصنيع واحد فقط؛
+    # بنود المنتجات الورشية المتعددة في SO تصبح work_jobs داخل هذا الـ MO)
     sale_order_id = fields.Many2one(
         'sale.order', string='أمر البيع', readonly=True, copy=False, index=True)
-    sale_line_id = fields.Many2one(
-        'sale.order.line', string='بند أمر البيع', readonly=True, copy=False)
     product_id = fields.Many2one(
-        'product.product', string='المنتج المراد تصنيعه')
+        'product.product', string='المنتج الرئيسي',
+        help='يُحفظ كمرجع عام؛ المنتجات الفعلية للتصنيع تظهر في بنود التنفيذ (work jobs).')
     product_qty = fields.Float(string='الكمية', default=1.0)
+
+    _uniq_sale_order = models.Constraint(
+        'unique (sale_order_id)',
+        'يوجد بالفعل أمر تصنيع لأمر البيع هذا. كل أمر بيع له أمر تصنيع واحد فقط؛ '
+        'أضف منتجات إضافية كبنود تنفيذ (work jobs) داخل أمر التصنيع القائم.',
+    )
 
     # بيانات الأمر
     workshop_scope = fields.Selection(
@@ -729,11 +735,17 @@ class WorkOrder(models.Model):
 
 class WorkOrderLine(models.Model):
     _name = 'rwasi.work.order.line'
-    _description = 'بند تنفيذ أمر التشغيل'
+    _description = 'بند تنفيذ أمر التشغيل (أمر عمل / Work Job)'
     _order = 'sequence, id'
 
     order_id = fields.Many2one(
         'rwasi.work.order', string='أمر التشغيل', required=True, ondelete='cascade')
+    # ربط الـ work job ببند أمر البيع الذي أنشأه (للتتبع 1:1 على مستوى البند)
+    sale_line_id = fields.Many2one(
+        'sale.order.line', string='بند أمر البيع', readonly=True, copy=False, index=True)
+    product_id = fields.Many2one(
+        'product.product', string='المنتج المُصنَّع',
+        help='المنتج الذي يخصّ هذا الـ work job داخل أمر التصنيع.')
     sequence = fields.Integer(string='م.', default=10)
     description = fields.Char(string='وصف البند', required=True)
     qty = fields.Float(string='الكمية', default=1.0)
