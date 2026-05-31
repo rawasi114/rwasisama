@@ -1,1 +1,22 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_ws_section_worker,ws.section worker,model_rawasi_workshop_section,group_worker,1,0,0,0
+access_ws_section_supervisor,ws.section supervisor,model_rawasi_workshop_section,group_supervisor,1,1,1,0
+access_ws_section_admin,ws.section admin,model_rawasi_workshop_section,rawasi_base.group_rawasi_admin,1,1,1,1
+access_ws_section_acc,ws.section accountant,model_rawasi_workshop_section,rawasi_base.group_rawasi_accountant,1,0,0,0
+access_ws_mo_worker,ws.mo worker,model_rawasi_workshop_mo,group_worker,1,1,0,0
+access_ws_mo_supervisor,ws.mo supervisor,model_rawasi_workshop_mo,group_supervisor,1,1,1,0
+access_ws_mo_acc,ws.mo accountant,model_rawasi_workshop_mo,rawasi_base.group_rawasi_accountant,1,1,1,0
+access_ws_mo_admin,ws.mo admin,model_rawasi_workshop_mo,rawasi_base.group_rawasi_admin,1,1,1,1
+access_ws_mo_line_worker,ws.mo.line worker,model_rawasi_workshop_mo_line,group_worker,1,1,0,0
+access_ws_mo_line_supervisor,ws.mo.line supervisor,model_rawasi_workshop_mo_line,group_supervisor,1,1,1,1
+access_ws_mo_line_acc,ws.mo.line accountant,model_rawasi_workshop_mo_line,rawasi_base.group_rawasi_accountant,1,1,1,0
+access_ws_mo_line_admin,ws.mo.line admin,model_rawasi_workshop_mo_line,rawasi_base.group_rawasi_admin,1,1,1,1
+access_ws_mr_worker,ws.mr worker,model_rawasi_workshop_material_request,group_worker,1,1,1,0
+access_ws_mr_supervisor,ws.mr supervisor,model_rawasi_workshop_material_request,group_supervisor,1,1,1,1
+access_ws_mr_acc,ws.mr accountant,model_rawasi_workshop_material_request,rawasi_base.group_rawasi_accountant,1,1,0,0
+access_ws_mr_proc,ws.mr procurement,model_rawasi_workshop_material_request,rawasi_base.group_rawasi_procurement,1,1,0,0
+access_ws_mr_admin,ws.mr admin,model_rawasi_workshop_material_request,rawasi_base.group_rawasi_admin,1,1,1,1
+access_ws_mr_line_worker,ws.mr.line worker,model_rawasi_workshop_material_request_line,group_worker,1,1,1,1
+access_ws_mr_line_supervisor,ws.mr.line supervisor,model_rawasi_workshop_material_request_line,group_supervisor,1,1,1,1
+access_ws_mr_line_acc,ws.mr.line accountant,model_rawasi_workshop_material_request_line,rawasi_base.group_rawasi_accountant,1,1,1,0
+access_ws_mr_line_admin,ws.mr.line admin,model_rawasi_workshop_material_request_line,rawasi_base.group_rawasi_admin,1,1,1,1
