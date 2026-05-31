@@ -21,6 +21,13 @@ class ProjectProject(models.Model):
         string="مهندسو الموقع",
         help="مهندسو الموقع المسؤولون عن هذا المشروع — مفتاح عزل مقاولي الباطن ومستخلصاتهم.",
     )
+    consultant_ids = fields.Many2many(
+        "res.users",
+        "rawasi_project_consultant_rel",
+        "project_id", "user_id",
+        string="الاستشاريون الخارجيون",
+        help="مفتاح عزل الاستشاريين: استشاري واحد لا يرى أو يكتب على مشاريع لم يُكلَّف بها.",
+    )
     rawasi_competition_id = fields.Many2one(
         "rawasi.competition", string="المنافسة المصدر", readonly=True
     )

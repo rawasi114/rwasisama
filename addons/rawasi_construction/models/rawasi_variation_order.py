@@ -86,11 +86,13 @@ class RawasiVariationOrder(models.Model):
             vo.state = "submitted"
 
     def action_approve(self):
+        self._ensure_tech_approver()
         for vo in self:
             vo._apply_to_boq()
             vo.state = "approved"
 
     def action_reject(self):
+        self._ensure_tech_approver()
         self.write({"state": "rejected"})
 
     def action_reset_to_draft(self):
