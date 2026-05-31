@@ -3,6 +3,7 @@ from . import notification_hook
 from . import document
 from . import audit_trail
 from . import approval_chain
+from . import material_request_base
 from . import res_company
 from . import res_users
 from . import res_config_settings

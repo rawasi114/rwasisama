@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "Rawasi Sama — Base",
-    "summary": "الأساس المشترك لنظام رواسي سما (هوية، مجموعات، حسابات، أصول، إشعارات، DMS، تدقيق)",
+    "summary": "الأساس المشترك لنظام رواسي سما (هوية، مجموعات، حسابات، أصول، إشعارات، DMS، تدقيق، اعتماد)",
     "category": "Rawasi",
     "version": "19.0.1.0.0",
     "author": "Rawasi Sama Contracting",
@@ -36,6 +36,8 @@
         "report/paperformat.xml",
         "report/rawasi_layout.xml",
         "data/rawasi_brand_defaults.xml",
+        # Wizards
+        "wizard/pin_wizard_views.xml",
         # Menus & views
         "views/menu_root.xml",
         "views/equipment_views.xml",

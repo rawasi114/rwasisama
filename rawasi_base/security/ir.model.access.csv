@@ -16,3 +16,4 @@ access_rawasi_approval_chain_admin,rawasi.approval.chain admin,model_rawasi_appr
 access_rawasi_approval_chain_user,rawasi.approval.chain user,model_rawasi_approval_chain,base.group_user,1,0,0,0
 access_rawasi_approval_step_admin,rawasi.approval.step admin,model_rawasi_approval_step,rawasi_base.group_rawasi_admin,1,1,1,1
 access_rawasi_approval_step_user,rawasi.approval.step user,model_rawasi_approval_step,base.group_user,1,0,0,0
+access_rawasi_pin_wizard_user,rawasi.pin.wizard user,model_rawasi_pin_wizard,base.group_user,1,1,1,1
