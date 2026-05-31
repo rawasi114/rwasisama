@@ -177,12 +177,15 @@ class RawasiPaymentCertificate(models.Model):
             pc.state = "submitted"
 
     def action_approve(self):
+        self._ensure_tech_approver()
         self.write({"state": "approved"})
 
     def action_mark_paid(self):
+        self._ensure_finance_user()
         self.write({"state": "paid"})
 
     def action_reject(self):
+        self._ensure_tech_approver()
         self.write({"state": "rejected"})
 
     def action_reset_to_draft(self):
