@@ -67,9 +67,10 @@ class RawasiEquipment(models.Model):
     )
     active = fields.Boolean(default=True)
 
-    _sql_constraints = [
-        ("code_uniq", "unique(code)", "رمز الأصل يجب أن يكون فريداً."),
-    ]
+    _code_uniq = models.Constraint(
+        "UNIQUE(code)",
+        "رمز الأصل يجب أن يكون فريداً.",
+    )
 
     @api.depends("name", "code")
     def _compute_display_name(self):

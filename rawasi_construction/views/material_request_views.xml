@@ -31,7 +31,7 @@
                         <button name="action_approve_supervisor" type="object"
                                 string="اعتماد المشرف" class="btn-primary"
                                 invisible="state != 'draft'"
-                                groups="group_site_engineer,group_project_manager"/>
+                                groups="rawasi_construction.group_site_engineer,rawasi_construction.group_project_manager"/>
                         <button name="action_approve_budget" type="object"
                                 string="اعتماد الحسابات" class="btn-primary"
                                 invisible="state != 'approved_supervisor'"

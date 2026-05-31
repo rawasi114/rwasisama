@@ -7,7 +7,7 @@
                   name="المقاولات"
                   parent="rawasi_base.menu_rawasi_root"
                   sequence="10"
-                  groups="group_site_engineer,group_project_manager,group_technical_office"/>
+                  groups="rawasi_construction.group_site_engineer,rawasi_construction.group_project_manager,rawasi_construction.group_technical_office"/>
 
     </data>
 </odoo>

@@ -7,7 +7,7 @@
                   name="الورشة"
                   parent="rawasi_base.menu_rawasi_root"
                   sequence="20"
-                  groups="group_worker,group_supervisor"/>
+                  groups="rawasi_workshop.group_worker,rawasi_workshop.group_supervisor"/>
 
     </data>
 </odoo>

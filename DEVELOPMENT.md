@@ -55,15 +55,18 @@ HOME=/tmp /tmp/ov/bin/python /tmp/odoo/odoo-bin \
   --test-enable --stop-after-init --log-level=test
 ```
 
-## حالة الاختبارات (متحققة)
+## حالة الاختبارات (متحققة على Odoo 19 فعلي — `odoo.tests.stats`)
 
 | الموديول | عدد الاختبارات | الحالة |
 |---|---|---|
 | `rawasi_base` | 17 | ✅ |
-| `rawasi_construction` | 21 | ✅ |
-| `rawasi_workshop` | 9 | ✅ |
-| `rawasi_integration` | 14 | ✅ |
-| **الإجمالي** | **61** | ✅ 0 فشل / 0 أخطاء |
+| `rawasi_construction` | 22 | ✅ |
+| `rawasi_workshop` | 6 | ✅ |
+| `rawasi_integration` | 9 | ✅ |
+| **الإجمالي** | **54** | ✅ 0 فشل / 0 أخطاء |
+
+> التحقق تمّ بتثبيت Odoo 19.0 + PostgreSQL 16 فعلياً (لا فحص نظري فقط):
+> `INSTALL_EXIT=0` · `Modules loaded.` · صفر تحذيرات/أخطاء من موديولاتنا.
 
 ## سيناريوهات القبول (PART F) — مغطّاة باختبارات
 - **S1 — مقاولات نقي:** منافسة → BoQ → فوز → مشروع → MR → صرف → DSR → IPC → دفع → ضمان.

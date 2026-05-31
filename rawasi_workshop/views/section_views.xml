@@ -50,7 +50,7 @@
 
         <menuitem id="menu_workshop_config" name="الإعداد"
                   parent="menu_workshop_root" sequence="90"
-                  groups="group_supervisor,rawasi_base.group_rawasi_admin"/>
+                  groups="rawasi_workshop.group_supervisor,rawasi_base.group_rawasi_admin"/>
         <menuitem id="menu_section" name="الأقسام"
                   parent="menu_workshop_config" action="action_section" sequence="10"/>
 

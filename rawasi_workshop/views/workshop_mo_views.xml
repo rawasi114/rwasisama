@@ -57,7 +57,7 @@
                     <header>
                         <button name="action_confirm" type="object" string="تأكيد"
                                 class="btn-primary" invisible="state != 'draft'"
-                                groups="group_supervisor,rawasi_base.group_rawasi_admin"/>
+                                groups="rawasi_workshop.group_supervisor,rawasi_base.group_rawasi_admin"/>
                         <button name="action_start_production" type="object" string="بدء التصنيع"
                                 class="btn-primary" invisible="state != 'confirmed'"/>
                         <button name="action_done" type="object" string="اكتمال التصنيع"
