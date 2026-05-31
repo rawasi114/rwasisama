@@ -42,7 +42,7 @@
         </record>
 
         <menuitem id="menu_dashboard" name="لوحة المالك الموحدة"
-                  parent="rawasi_base.menu_rawasi_root" action="action_dashboard"
+                  parent="menu_integration_root" action="action_dashboard"
                   sequence="1" groups="rawasi_base.group_rawasi_admin,rawasi_base.group_rawasi_accountant"/>
 
     </data>

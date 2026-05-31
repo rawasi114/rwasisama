@@ -78,7 +78,8 @@
         </record>
 
         <menuitem id="menu_integration_root" name="التصنيع الداخلي"
-                  parent="rawasi_base.menu_rawasi_root" sequence="25"
+                  sequence="26"
+                  web_icon="rawasi_integration,static/description/icon.png"
                   groups="rawasi_base.group_rawasi_admin,rawasi_construction.group_project_manager,rawasi_workshop.group_supervisor"/>
         <menuitem id="menu_iwo" name="أوامر التصنيع الداخلي"
                   parent="menu_integration_root" action="action_iwo" sequence="10"/>

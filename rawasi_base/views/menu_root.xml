@@ -3,16 +3,16 @@
     <data>
 
         <!-- ============================================================
-             القائمة الجذر الموحَّدة «رواسي سما».
-             بلا مجموعات: تظهر تلقائياً لمن يملك صلاحية على أحد عناصرها الفرعية
-             (نمط Odoo القياسي لقائمة جذر تجميعية).
+             تطبيق «رواسي سما» الأساسي (الإدارة المشتركة): الأصول، الوثائق،
+             الإعدادات، التدقيق. تطبيق مستقل بأيقونته في الشاشة الرئيسية.
              ============================================================ -->
         <menuitem id="menu_rawasi_root"
                   name="رواسي سما"
                   sequence="5"
-                  web_icon="rawasi_base,static/description/icon.png"/>
+                  web_icon="rawasi_base,static/description/icon.png"
+                  groups="group_rawasi_admin,group_rawasi_accountant,group_rawasi_procurement"/>
 
-        <!-- قسم الإعدادات والتهيئة (يُملأ في المراحل اللاحقة) -->
+        <!-- قسم الإعدادات والتهيئة -->
         <menuitem id="menu_rawasi_configuration"
                   name="الإعدادات"
                   parent="menu_rawasi_root"
