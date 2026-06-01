@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- إضافة حقول المقاولات إلى نموذج المشروع -->
+        <record id="view_project_form_rawasi" model="ir.ui.view">
+            <field name="name">project.project.form.rawasi</field>
+            <field name="model">project.project</field>
+            <field name="inherit_id" ref="project.edit_project"/>
+            <field name="arch" type="xml">
+                <xpath expr="//notebook" position="inside">
+                    <page string="المقاولات" name="rawasi_construction"
+                          invisible="not rawasi_is_construction">
+                        <group>
+                            <group>
+                                <field name="rawasi_is_construction"/>
+                                <field name="rawasi_code"/>
+                                <field name="rawasi_competition_id" readonly="1"/>
+                                <field name="rawasi_main_location_id"/>
+                            </group>
+                            <group>
+                                <field name="rawasi_contract_value"/>
+                                <field name="rawasi_currency_id" groups="base.group_multi_currency"/>
+                                <field name="rawasi_date_start"/>
+                                <field name="rawasi_date_end"/>
+                            </group>
+                        </group>
+                        <field name="rawasi_boq_item_ids" readonly="1">
+                            <list>
+                                <field name="code"/>
+                                <field name="description"/>
+                                <field name="uom_id"/>
+                                <field name="qty"/>
+                                <field name="unit_price"/>
+                                <field name="subtotal"/>
+                                <field name="currency_id" column_invisible="1"/>
+                            </list>
+                        </field>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- خانة لتفعيل علامة «مشروع مقاولات» في نموذج الإنشاء السريع -->
+        <record id="view_project_form_rawasi_flag" model="ir.ui.view">
+            <field name="name">project.project.form.rawasi.flag</field>
+            <field name="model">project.project</field>
+            <field name="inherit_id" ref="project.edit_project"/>
+            <field name="arch" type="xml">
+                <field name="user_id" position="after">
+                    <field name="rawasi_is_construction"/>
+                </field>
+            </field>
+        </record>
+
+    </data>
+</odoo>

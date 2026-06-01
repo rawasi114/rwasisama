@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_dsr_list" model="ir.ui.view">
+            <field name="name">rawasi.dsr.list</field>
+            <field name="model">rawasi.dsr</field>
+            <field name="arch" type="xml">
+                <list string="التقارير اليومية">
+                    <field name="name"/>
+                    <field name="project_id"/>
+                    <field name="report_date"/>
+                    <field name="weather"/>
+                    <field name="total_manpower"/>
+                    <field name="state" widget="badge" decoration-success="state == 'confirmed'"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_dsr_form" model="ir.ui.view">
+            <field name="name">rawasi.dsr.form</field>
+            <field name="model">rawasi.dsr</field>
+            <field name="arch" type="xml">
+                <form string="تقرير يومي">
+                    <header>
+                        <button name="action_confirm" type="object" string="اعتماد"
+                                class="btn-primary" invisible="state != 'draft'"/>
+                        <button name="action_reset_draft" type="object" string="إعادة لمسودة"
+                                invisible="state != 'confirmed'"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title"><h1><field name="name" readonly="1"/></h1></div>
+                        <group>
+                            <group>
+                                <field name="project_id"/>
+                                <field name="report_date"/>
+                            </group>
+                            <group>
+                                <field name="weather"/>
+                                <field name="total_manpower"/>
+                            </group>
+                        </group>
+                        <field name="progress_note" placeholder="ملخص الإنجاز اليومي..."/>
+                        <notebook>
+                            <page string="العمالة">
+                                <field name="manpower_line_ids">
+                                    <list editable="bottom">
+                                        <field name="trade"/>
+                                        <field name="quantity"/>
+                                        <field name="note"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="المعدات">
+                                <field name="equipment_line_ids">
+                                    <list editable="bottom">
+                                        <field name="equipment_id"/>
+                                        <field name="description"/>
+                                        <field name="hours"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="المواد المستهلكة">
+                                <field name="material_line_ids">
+                                    <list editable="bottom">
+                                        <field name="product_id"/>
+                                        <field name="description"/>
+                                        <field name="qty"/>
+                                        <field name="uom_id"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_dsr" model="ir.actions.act_window">
+            <field name="name">التقارير اليومية</field>
+            <field name="res_model">rawasi.dsr</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+        <menuitem id="menu_dsr" name="التقارير اليومية"
+                  parent="menu_construction_operations" action="action_dsr" sequence="20"/>
+
+    </data>
+</odoo>

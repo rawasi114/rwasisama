@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record id="seq_rawasi_competition" model="ir.sequence">
+            <field name="name">منافسة رواسي</field>
+            <field name="code">rawasi.competition</field>
+            <field name="prefix">COMP-%(year)s-</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_rawasi_reference_item" model="ir.sequence">
+            <field name="name">بند مرجعي رواسي</field>
+            <field name="code">rawasi.reference.item</field>
+            <field name="prefix">REF-</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_rawasi_material_request" model="ir.sequence">
+            <field name="name">طلب مواد مقاولات</field>
+            <field name="code">rawasi.material.request</field>
+            <field name="prefix">MR-%(year)s-</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_rawasi_dsr" model="ir.sequence">
+            <field name="name">تقرير يومي للموقع</field>
+            <field name="code">rawasi.dsr</field>
+            <field name="prefix">DSR-%(year)s-</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_rawasi_variation_order" model="ir.sequence">
+            <field name="name">أمر تغيير</field>
+            <field name="code">rawasi.variation.order</field>
+            <field name="prefix">VO-%(year)s-</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_rawasi_ipc" model="ir.sequence">
+            <field name="name">مستخلص دوري</field>
+            <field name="code">rawasi.ipc</field>
+            <field name="prefix">IPC-%(year)s-</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_rawasi_bank_guarantee" model="ir.sequence">
+            <field name="name">خطاب ضمان بنكي</field>
+            <field name="code">rawasi.bank.guarantee</field>
+            <field name="prefix">BG-%(year)s-</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+    </data>
+</odoo>

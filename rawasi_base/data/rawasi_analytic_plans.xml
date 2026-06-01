@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- خطة تحليلية أم متعددة الأبعاد: «رواسي» -->
+        <record id="analytic_plan_rawasi" model="account.analytic.plan">
+            <field name="name">رواسي</field>
+            <field name="default_applicability">optional</field>
+        </record>
+
+        <!-- بُعد مشاريع المقاولات -->
+        <record id="analytic_plan_construction" model="account.analytic.plan">
+            <field name="name">مشاريع المقاولات</field>
+            <field name="parent_id" ref="analytic_plan_rawasi"/>
+        </record>
+
+        <!-- بُعد أقسام الورشة -->
+        <record id="analytic_plan_workshop" model="account.analytic.plan">
+            <field name="name">أقسام الورشة</field>
+            <field name="parent_id" ref="analytic_plan_rawasi"/>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_iwo_engineer,iwo engineer,model_rawasi_internal_workshop_order,rawasi_construction.group_site_engineer,1,0,0,0
+access_iwo_pm,iwo pm,model_rawasi_internal_workshop_order,rawasi_construction.group_project_manager,1,1,1,0
+access_iwo_supervisor,iwo supervisor,model_rawasi_internal_workshop_order,rawasi_workshop.group_supervisor,1,1,0,0
+access_iwo_acc,iwo accountant,model_rawasi_internal_workshop_order,rawasi_base.group_rawasi_accountant,1,1,1,0
+access_iwo_admin,iwo admin,model_rawasi_internal_workshop_order,rawasi_base.group_rawasi_admin,1,1,1,1
+access_dashboard_admin,dashboard admin,model_rawasi_dashboard_unified,rawasi_base.group_rawasi_admin,1,1,1,1
+access_dashboard_acc,dashboard accountant,model_rawasi_dashboard_unified,rawasi_base.group_rawasi_accountant,1,1,1,1
