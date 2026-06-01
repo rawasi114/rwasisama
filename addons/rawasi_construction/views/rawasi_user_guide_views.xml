@@ -143,7 +143,7 @@
 
     <!-- ═══ أكشنات سير العمل لكل قسم ═══ -->
     <record id="action_user_guide_competitions" model="ir.actions.act_window">
-        <field name="name">دليل الاستخدام — المنافسات</field>
+        <field name="name">دليل الاستخدام — الدراسات والمنافسات</field>
         <field name="res_model">rawasi.user.guide</field>
         <field name="view_mode">kanban,form</field>
         <field name="domain">[('menu_section_key','=','competitions')]</field>
@@ -158,14 +158,14 @@
     </record>
 
     <record id="action_user_guide_reference_registry" model="ir.actions.act_window">
-        <field name="name">دليل الاستخدام — سجل البنود المرجعي</field>
+        <field name="name">دليل الاستخدام — الحصر وسجل البنود</field>
         <field name="res_model">rawasi.user.guide</field>
         <field name="view_mode">kanban,form</field>
         <field name="domain">[('menu_section_key','=','reference_registry')]</field>
     </record>
 
     <record id="action_user_guide_price_intelligence" model="ir.actions.act_window">
-        <field name="name">دليل الاستخدام — رادار الترسية</field>
+        <field name="name">دليل الاستخدام — تحليل الأسعار ورادار الترسية</field>
         <field name="res_model">rawasi.user.guide</field>
         <field name="view_mode">kanban,form</field>
         <field name="domain">[('menu_section_key','=','price_intelligence')]</field>

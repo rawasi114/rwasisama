@@ -62,7 +62,9 @@ class TestBudget(TransactionCase):
         mr.action_submit()
         mr.action_approve()
         self.assertAlmostEqual(self.item.amount_committed, 500.0, places=2)
-        # إنشاء أمر شراء ينقل الطلب إلى "تم الشراء" (يتوقف عن الاحتساب)
+        # workflow الجديد: الاعتماد المالي ضروري قبل إنشاء أمر الشراء
+        mr.action_finance_approve()
+        self.assertEqual(mr.state, "finance_approved")
         mr.action_create_po()
         self.assertEqual(mr.state, "procured")
         po = self.env["rawasi.purchase.order"].search([("mr_id", "=", mr.id)])
@@ -78,6 +80,7 @@ class TestBudget(TransactionCase):
         mr = self._mr(5, 100)
         mr.action_submit()
         mr.action_approve()
+        mr.action_finance_approve()
         mr.action_create_po()
         po = self.env["rawasi.purchase.order"].search([("mr_id", "=", mr.id)])
         po.action_confirm()
