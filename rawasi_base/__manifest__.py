@@ -4,7 +4,7 @@
     "summary": "الأساس المشترك لنظام رواسي سما (هوية، مجموعات، حسابات، أصول، إشعارات، DMS، تدقيق، اعتماد)",
     "description": "الأساس المشترك لنظام رواسي سما الموحَّد.",
     "category": "Rawasi",
-    "version": "19.0.1.0.0",
+    "version": "19.0.1.0.1",
     "author": "Rawasi Sama Contracting",
     "website": "https://www.rawasisama.com",
     "license": "LGPL-3",

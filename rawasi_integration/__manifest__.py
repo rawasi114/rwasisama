@@ -4,7 +4,7 @@
     "summary": "التكامل بين المقاولات والورشة: التصنيع الداخلي + النقل التلقائي + اللوحة الموحدة",
     "description": "موديول التكامل (التصنيع الداخلي) لنظام رواسي سما.",
     "category": "Rawasi",
-    "version": "19.0.1.0.0",
+    "version": "19.0.1.0.1",
     "author": "Rawasi Sama Contracting",
     "website": "https://www.rawasisama.com",
     "license": "LGPL-3",
