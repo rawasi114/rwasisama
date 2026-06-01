@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+*.swp
+
+# Odoo runtime
+*.log
+.odoorc
+odoo.conf
+filestore/
+sessions/
+data_dir/
+
+# local Odoo source + venv used only for testing (do not commit)
+/.odoo-src/
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+
+# stray artifacts from the previous (removed) JS stack — keep them out
+node_modules/
+.turbo/
+dist/
+.next/
+.env
+*.tsbuildinfo

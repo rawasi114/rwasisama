@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ════════ تقرير العقد الفرعي ════════ -->
+    <record id="action_report_subcontract" model="ir.actions.report">
+        <field name="name">عقد مقاول من الباطن</field>
+        <field name="model">rawasi.subcontract</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">rawasi_construction.report_subcontract</field>
+        <field name="report_file">rawasi_construction.report_subcontract</field>
+        <field name="binding_model_id" ref="model_rawasi_subcontract"/>
+        <field name="binding_type">report</field>
+    </record>
+    <template id="report_subcontract">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-set="doc" t-value="o"/>
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h2 class="text-center" style="color:#253747;border-bottom:2px solid #BD9B5E;padding-bottom:6px;">
+                            عقد مقاول من الباطن
+                        </h2>
+                        <h4 class="text-center" style="color:#BD9B5E;">
+                            <span t-out="o.name"/>
+                        </h4>
+                        <table class="table table-sm" style="margin-top:12px;">
+                            <tr><th style="width:25%;background:#253747;color:#fff;">المقاول</th>
+                                <td><span t-field="o.subcontractor_id"/></td></tr>
+                            <tr><th style="background:#253747;color:#fff;">المشروع</th>
+                                <td><span t-field="o.project_id"/></td></tr>
+                            <tr><th style="background:#253747;color:#fff;">تاريخ العقد</th>
+                                <td><span t-field="o.contract_date"/></td></tr>
+                            <tr><th style="background:#253747;color:#fff;">نسبة المحتجز</th>
+                                <td><span t-field="o.retention_percent"/>%</td></tr>
+                            <tr><th style="background:#253747;color:#fff;">الحالة</th>
+                                <td><span t-field="o.state"/></td></tr>
+                        </table>
+                        <p t-if="o.scope"><strong style="color:#253747;">نطاق العمل: </strong><span t-field="o.scope"/></p>
+                        <h5 style="color:#253747;margin-top:14px;">بنود العقد</h5>
+                        <table class="table table-sm table-bordered">
+                            <thead>
+                                <tr style="background:#253747;color:#fff;">
+                                    <th>بند BOQ</th><th>الوصف</th><th>الوحدة</th>
+                                    <th class="text-end">الكمية</th>
+                                    <th class="text-end">سعر الوحدة</th>
+                                    <th class="text-end">الإجمالي</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="o.line_ids" t-as="l">
+                                    <td><span t-field="l.boq_item_id"/></td>
+                                    <td><span t-field="l.description"/></td>
+                                    <td><span t-field="l.uom_id"/></td>
+                                    <td class="text-end"><span t-field="l.quantity"/></td>
+                                    <td class="text-end"><span t-field="l.unit_price"/></td>
+                                    <td class="text-end"><span t-field="l.subtotal"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <table class="table table-sm" style="margin-top:8px;">
+                            <tr>
+                                <th style="width:70%;text-align:end;background:#BD9B5E;color:#fff;">إجمالي قيمة العقد</th>
+                                <td class="text-end" style="background:#f5efe3;">
+                                    <strong><span t-field="o.total_amount"/></strong>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- ════════ تقرير مستخلص الباطن ════════ -->
+    <record id="action_report_subcontract_ipc" model="ir.actions.report">
+        <field name="name">مستخلص مقاول من الباطن</field>
+        <field name="model">rawasi.subcontract.ipc</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">rawasi_construction.report_subcontract_ipc</field>
+        <field name="report_file">rawasi_construction.report_subcontract_ipc</field>
+        <field name="binding_model_id" ref="model_rawasi_subcontract_ipc"/>
+        <field name="binding_type">report</field>
+    </record>
+    <template id="report_subcontract_ipc">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-set="doc" t-value="o"/>
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h2 class="text-center" style="color:#253747;border-bottom:2px solid #BD9B5E;padding-bottom:6px;">
+                            مستخلص مقاول من الباطن
+                        </h2>
+                        <h4 class="text-center" style="color:#BD9B5E;"><span t-out="o.name"/></h4>
+                        <table class="table table-sm" style="margin-top:12px;">
+                            <tr><th style="width:25%;background:#253747;color:#fff;">العقد</th>
+                                <td><span t-field="o.subcontract_id"/></td></tr>
+                            <tr><th style="background:#253747;color:#fff;">المقاول</th>
+                                <td><span t-field="o.subcontractor_id"/></td></tr>
+                            <tr><th style="background:#253747;color:#fff;">المشروع</th>
+                                <td><span t-field="o.project_id"/></td></tr>
+                            <tr><th style="background:#253747;color:#fff;">تاريخ المستخلص</th>
+                                <td><span t-field="o.ipc_date"/></td></tr>
+                            <tr><th style="background:#253747;color:#fff;">الحالة</th>
+                                <td><span t-field="o.state"/></td></tr>
+                        </table>
+                        <h5 style="color:#253747;margin-top:14px;">بنود الفترة</h5>
+                        <table class="table table-sm table-bordered">
+                            <thead>
+                                <tr style="background:#253747;color:#fff;">
+                                    <th>الوصف</th><th>الوحدة</th>
+                                    <th class="text-end">تعاقدي</th>
+                                    <th class="text-end">سابق</th>
+                                    <th class="text-end">الفترة</th>
+                                    <th class="text-end">تراكمي</th>
+                                    <th class="text-end">% الإنجاز</th>
+                                    <th class="text-end">قيمة الفترة</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="o.line_ids" t-as="l">
+                                    <td><span t-field="l.description"/></td>
+                                    <td><span t-field="l.uom_id"/></td>
+                                    <td class="text-end"><span t-field="l.contract_quantity"/></td>
+                                    <td class="text-end"><span t-field="l.previous_quantity"/></td>
+                                    <td class="text-end"><span t-field="l.period_quantity"/></td>
+                                    <td class="text-end"><span t-field="l.cumulative_quantity"/></td>
+                                    <td class="text-end"><span t-field="l.progress_percent"/></td>
+                                    <td class="text-end"><span t-field="l.period_value"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <table class="table table-sm" style="margin-top:8px;">
+                            <tr><th style="width:70%;text-align:end;background:#253747;color:#fff;">إجمالي قيمة الفترة</th>
+                                <td class="text-end"><span t-field="o.subtotal"/></td></tr>
+                            <tr><th style="text-align:end;">المحتجز</th>
+                                <td class="text-end"><span t-field="o.retention_amount"/></td></tr>
+                            <tr><th style="text-align:end;">خصومات أخرى</th>
+                                <td class="text-end"><span t-field="o.other_deductions"/></td></tr>
+                            <tr><th style="text-align:end;background:#253747;color:#fff;">الصافي قبل الضريبة</th>
+                                <td class="text-end"><span t-field="o.net_before_vat"/></td></tr>
+                            <tr><th style="text-align:end;">الضريبة (<span t-field="o.vat_rate"/>%)</th>
+                                <td class="text-end"><span t-field="o.vat_amount"/></td></tr>
+                            <tr><th style="text-align:end;background:#BD9B5E;color:#fff;">الصافي المستحق</th>
+                                <td class="text-end" style="background:#f5efe3;">
+                                    <strong><span t-field="o.net_payable"/></strong>
+                                </td></tr>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

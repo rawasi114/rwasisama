@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ============ أمر التصنيع ============ -->
+    <record id="view_work_order_list" model="ir.ui.view">
+        <field name="name">rwasi.work.order.list</field>
+        <field name="model">rwasi.work.order</field>
+        <field name="arch" type="xml">
+            <list string="أوامر التصنيع"
+                  decoration-info="state == 'confirmed'"
+                  decoration-success="state == 'done'"
+                  decoration-muted="state == 'cancel'">
+                <field name="name"/>
+                <field name="sale_order_id"/>
+                <field name="partner_id"/>
+                <field name="workshop_scope_summary"/>
+                <field name="job_count"/>
+                <field name="required_date"/>
+                <field name="payment_status" widget="badge"
+                       decoration-success="payment_status == 'paid'"
+                       decoration-warning="payment_status == 'partial'"
+                       decoration-danger="payment_status == 'not_paid'"/>
+                <field name="state" widget="badge"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_work_order_form" model="ir.ui.view">
+        <field name="name">rwasi.work.order.form</field>
+        <field name="model">rwasi.work.order</field>
+        <field name="arch" type="xml">
+            <form string="أمر تصنيع">
+                <header>
+                    <button name="action_confirm" string="تأكيد التصنيع" type="object"
+                            class="btn-primary"
+                            invisible="state != 'draft'"/>
+                    <button name="action_start_production" string="بدء التصنيع" type="object"
+                            class="btn-primary"
+                            invisible="state != 'confirmed' or paid_ratio &lt; 0.5"/>
+                    <button name="action_finish_production" string="إنهاء التصنيع" type="object"
+                            class="btn-primary" invisible="state != 'in_production'"/>
+                    <button name="action_deliver" string="التسليم للعميل" type="object"
+                            class="btn-primary"
+                            invisible="state != 'finished' or payment_status != 'paid'"/>
+                    <button name="action_close" string="إغلاق" type="object"
+                            invisible="state != 'delivered'"/>
+                    <button name="action_draft" string="إعادة لمسودة" type="object"
+                            invisible="state in ('draft', 'cancel', 'delivered', 'done')"/>
+                    <button name="action_cancel" string="إلغاء" type="object"
+                            invisible="state in ('delivered', 'done', 'cancel')"/>
+                    <field name="state" widget="statusbar" readonly="1"
+                           statusbar_visible="draft,confirmed,in_production,finished,delivered,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_jobs" type="object"
+                                class="oe_stat_button" icon="fa-cogs"
+                                invisible="job_count == 0">
+                            <field name="job_count" widget="statinfo" string="أوامر العمل"/>
+                        </button>
+                        <button name="action_view_material_requests" type="object"
+                                class="oe_stat_button" icon="fa-list-alt"
+                                invisible="material_request_count == 0">
+                            <field name="material_request_count" widget="statinfo"
+                                   string="طلبات المواد"/>
+                        </button>
+                        <button name="action_view_purchase_orders" type="object"
+                                class="oe_stat_button" icon="fa-shopping-cart"
+                                invisible="purchase_order_count == 0">
+                            <field name="purchase_order_count" widget="statinfo"
+                                   string="طلبات الشراء"/>
+                        </button>
+                        <button name="action_view_closeout" type="object"
+                                class="oe_stat_button" icon="fa-flag-checkered"
+                                invisible="closeout_count == 0">
+                            <field name="closeout_count" widget="statinfo" string="إغلاق المشروع"/>
+                        </button>
+                    </div>
+                    <field name="paid_ratio" invisible="1"/>
+                    <div class="alert alert-info" role="alert"
+                         invisible="state != 'draft' or paid_ratio &gt;= 0.5">
+                        بانتظار سداد دفعة لا تقل عن 50% من قيمة أمر البيع لبدء طلب المواد أو بدء التصنيع.
+                    </div>
+                    <div class="alert alert-warning" role="alert"
+                         invisible="state != 'confirmed' or paid_ratio &gt;= 0.5">
+                        لا يمكن بدء التصنيع قبل سداد ≥ 50% من قيمة الفاتورة.
+                    </div>
+                    <div class="alert alert-warning" role="alert"
+                         invisible="state != 'finished' or payment_status == 'paid'">
+                        بانتظار سداد كامل قيمة العمل قبل الانتقال لمرحلة التسليم.
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group string="بيانات الأمر">
+                            <field name="sale_order_id" readonly="1"/>
+                            <field name="partner_id" readonly="1"/>
+                            <field name="workshop_scope_summary" readonly="1"/>
+                            <field name="priority"/>
+                        </group>
+                        <group string="المشروع والمواعيد">
+                            <field name="project_ref"/>
+                            <field name="project_code"/>
+                            <field name="date_issued"/>
+                            <field name="start_date"/>
+                            <field name="required_date"/>
+                            <field name="est_duration"/>
+                            <field name="drawing_ref"/>
+                            <field name="payment_status" widget="badge"
+                                   decoration-success="payment_status == 'paid'"
+                                   decoration-warning="payment_status == 'partial'"
+                                   decoration-danger="payment_status == 'not_paid'"/>
+                        </group>
+                    </group>
+                    <field name="scope_of_work" placeholder="وصف العمل العام..."/>
+                    <notebook>
+                        <page string="أوامر العمل" name="jobs">
+                            <field name="job_ids">
+                                <list string="أوامر العمل">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="name"/>
+                                    <field name="product_id"/>
+                                    <field name="product_qty"/>
+                                    <field name="workshop_scope"/>
+                                    <field name="material_request_count" string="طلبات المواد"/>
+                                    <field name="start_date"/>
+                                    <field name="end_date"/>
+                                    <field name="status" widget="badge"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="طلبات المواد" name="material_requests">
+                            <field name="material_request_ids">
+                                <list string="طلبات المواد"
+                                      decoration-info="state == 'to_approve'"
+                                      decoration-warning="state in ('to_finance','to_revise')"
+                                      decoration-success="state == 'handover_done'"
+                                      decoration-muted="state in ('cancel','rejected')">
+                                    <field name="name"/>
+                                    <field name="work_job_id"/>
+                                    <field name="reason"/>
+                                    <field name="request_date"/>
+                                    <field name="material_approver_assignee_id" string="المُسنَد"/>
+                                    <field name="state" widget="badge"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="المتطلبات والاشتراطات" name="requirements">
+                            <group>
+                                <group>
+                                    <field name="req_approved_dwgs"/>
+                                    <field name="req_sample_approved"/>
+                                    <field name="req_material_approval"/>
+                                </group>
+                                <group>
+                                    <field name="req_third_party_test"/>
+                                    <field name="req_site_install"/>
+                                    <field name="req_special_packing"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="التسليم وتوقيع العميل" name="delivery">
+                            <group>
+                                <group>
+                                    <field name="customer_sign_name"/>
+                                    <field name="customer_sign_date"/>
+                                </group>
+                                <group>
+                                    <field name="customer_signature" widget="signature"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="الاعتماد" name="signoff">
+                            <group>
+                                <group string="معد النموذج">
+                                    <field name="prepared_name"/>
+                                    <field name="prepared_date"/>
+                                    <field name="prepared_phone"/>
+                                    <field name="prepared_signature" widget="signature"/>
+                                </group>
+                                <group string="مدير العمليات">
+                                    <field name="manager_name"/>
+                                    <field name="manager_date"/>
+                                    <field name="manager_signature" widget="signature"/>
+                                    <field name="manager_stamp" widget="image"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_work_order_search" model="ir.ui.view">
+        <field name="name">rwasi.work.order.search</field>
+        <field name="model">rwasi.work.order</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="sale_order_id"/>
+                <field name="partner_id"/>
+                <filter name="filter_draft" string="مسودة" domain="[('state', '=', 'draft')]"/>
+                <filter name="filter_in_production" string="قيد التصنيع" domain="[('state', '=', 'in_production')]"/>
+                <filter name="filter_delivered" string="تم التسليم" domain="[('state', '=', 'delivered')]"/>
+                <group>
+                    <filter name="group_state" string="الحالة" context="{'group_by': 'state'}"/>
+                    <filter name="group_partner" string="العميل" context="{'group_by': 'partner_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_work_order" model="ir.actions.act_window">
+        <field name="name">أوامر التصنيع</field>
+        <field name="res_model">rwasi.work.order</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_work_order_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">لا توجد أوامر تصنيع بعد</p>
+            <p>تُنشأ أوامر التصنيع تلقائياً عند تأكيد أمر بيع يحتوي منتجات ورشية.</p>
+        </field>
+    </record>
+
+    <record id="view_work_order_pivot" model="ir.ui.view">
+        <field name="name">rwasi.work.order.pivot</field>
+        <field name="model">rwasi.work.order</field>
+        <field name="arch" type="xml">
+            <pivot string="تحليل أوامر التصنيع">
+                <field name="partner_id" type="row"/>
+                <field name="state" type="col"/>
+                <field name="job_count" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="action_work_order_analysis" model="ir.actions.act_window">
+        <field name="name">تحليل أوامر التصنيع</field>
+        <field name="res_model">rwasi.work.order</field>
+        <field name="view_mode">graph,pivot,list</field>
+        <field name="search_view_id" ref="view_work_order_search"/>
+    </record>
+
+    <!-- ============ أمر العمل (Job) ============ -->
+    <record id="view_work_job_list" model="ir.ui.view">
+        <field name="name">rwasi.work.job.list</field>
+        <field name="model">rwasi.work.job</field>
+        <field name="arch" type="xml">
+            <list string="أوامر العمل" editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="name" readonly="1"/>
+                <field name="work_order_id" readonly="1"/>
+                <field name="product_id"/>
+                <field name="product_qty"/>
+                <field name="workshop_scope"/>
+                <field name="start_date"/>
+                <field name="end_date"/>
+                <field name="status" widget="badge"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_work_job_form" model="ir.ui.view">
+        <field name="name">rwasi.work.job.form</field>
+        <field name="model">rwasi.work.job</field>
+        <field name="arch" type="xml">
+            <form string="أمر عمل">
+                <header>
+                    <button name="action_start" string="بدء" type="object"
+                            class="btn-primary" invisible="status != 'draft'"/>
+                    <button name="action_finish" string="إنهاء" type="object"
+                            class="btn-primary" invisible="status != 'in_production'"/>
+                    <field name="status" widget="statusbar" readonly="1"
+                           statusbar_visible="draft,in_production,finished"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_material_requests" type="object"
+                                class="oe_stat_button" icon="fa-list-alt">
+                            <field name="material_request_count" widget="statinfo"
+                                   string="طلبات المواد"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="work_order_id" readonly="1"/>
+                            <field name="product_id"/>
+                            <field name="product_qty"/>
+                            <field name="workshop_scope"/>
+                        </group>
+                        <group>
+                            <field name="est_duration"/>
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                        </group>
+                    </group>
+                    <field name="description" placeholder="وصف العمل..."/>
+                    <notebook>
+                        <page string="بنود التنفيذ" name="lines">
+                            <field name="line_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="description"/>
+                                    <field name="qty"/>
+                                    <field name="uom"/>
+                                    <field name="item_ref"/>
+                                    <field name="status"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+</odoo>

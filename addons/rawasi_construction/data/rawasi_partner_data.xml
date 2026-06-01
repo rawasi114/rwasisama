@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- جهة افتراضية (مورّد للتحديد) — تُستخدم كقيمة مبدئية على
+             طلبات عرض الأسعار (RFQ) المُنشأة آلياً من طلبات المواد قبل
+             أن يحدّد قسم المشتريات المورّد الفعلي. -->
+        <record id="partner_tbd_vendor" model="res.partner">
+            <field name="name">مورّد للتحديد (To Be Determined)</field>
+            <field name="is_company" eval="True"/>
+            <field name="supplier_rank">1</field>
+            <field name="comment">جهة افتراضية تُستخدم على RFQ المُنشأة آلياً من طلب مواد المقاولات. يحلّ قسم المشتريات هذه الجهة بالمورّد الفعلي قبل تأكيد الـ RFQ.</field>
+        </record>
+    </data>
+</odoo>

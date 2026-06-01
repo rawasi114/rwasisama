@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem id="menu_rwasi_root" name="ورشة رواسي سما" sequence="15"
+              groups="rwasi_workshop.group_workshop_user,rwasi_workshop.group_workshop_manager"/>
+
+    <!-- 1) العمليات -->
+    <menuitem id="menu_rwasi_operations" name="العمليات"
+              parent="menu_rwasi_root" sequence="10"/>
+    <menuitem id="menu_work_order" name="أوامر التصنيع"
+              parent="menu_rwasi_operations" action="action_work_order" sequence="10"/>
+    <menuitem id="menu_material_request" name="طلبات المواد"
+              parent="menu_rwasi_operations" action="action_material_request" sequence="20"/>
+    <menuitem id="menu_measurement_sheet" name="المعاينات"
+              parent="menu_rwasi_operations" action="action_measurement_sheet" sequence="50"/>
+    <menuitem id="menu_workshop_bom" name="قوائم المواد"
+              parent="menu_rwasi_operations" action="action_workshop_bom" sequence="60"/>
+
+    <!-- 2) العمليات الميدانية -->
+    <menuitem id="menu_rwasi_field" name="العمليات الميدانية"
+              parent="menu_rwasi_root" sequence="20"/>
+    <menuitem id="menu_daily_preparation" name="التحضير اليومي"
+              parent="menu_rwasi_field" action="action_daily_preparation" sequence="10"/>
+    <menuitem id="menu_daily_report" name="تقارير الورشة اليومية"
+              parent="menu_rwasi_field" action="action_daily_report" sequence="20"/>
+    <menuitem id="menu_attendance_sheet" name="الحضور"
+              parent="menu_rwasi_field" action="action_attendance_sheet" sequence="30"/>
+    <menuitem id="menu_time_card" name="بطاقة الوقت"
+              parent="menu_rwasi_field" action="action_time_card" sequence="40"/>
+
+    <!-- 3) الجودة والسلامة -->
+    <menuitem id="menu_rwasi_quality" name="الجودة والسلامة"
+              parent="menu_rwasi_root" sequence="30"/>
+    <menuitem id="menu_qc_inspection" name="فحوصات الجودة"
+              parent="menu_rwasi_quality" action="action_qc_inspection" sequence="10"/>
+    <menuitem id="menu_ncr" name="عدم مطابقة التصنيع"
+              parent="menu_rwasi_quality" action="action_ncr" sequence="20"/>
+    <menuitem id="menu_rework" name="إعادة الأعمال"
+              parent="menu_rwasi_quality" action="action_rework" sequence="30"/>
+    <menuitem id="menu_toolbox_talk" name="اجتماعات السلامة"
+              parent="menu_rwasi_quality" action="action_toolbox_talk" sequence="40"/>
+    <menuitem id="menu_maintenance_log" name="سجلات الصيانة"
+              parent="menu_rwasi_quality" action="action_maintenance_log" sequence="50"/>
+
+    <!-- 4) التقارير وقياس الأداء -->
+    <menuitem id="menu_rwasi_reports" name="التقارير"
+              parent="menu_rwasi_root" sequence="40"/>
+    <menuitem id="menu_performance_score" name="لوحة الأداء"
+              parent="menu_rwasi_reports" action="action_performance_score" sequence="5"/>
+    <menuitem id="menu_work_order_analysis" name="تحليل أوامر التصنيع"
+              parent="menu_rwasi_reports" action="action_work_order_analysis" sequence="10"/>
+    <menuitem id="menu_daily_worker_productivity" name="إنتاجية الفنيين والعمال"
+              parent="menu_rwasi_reports" action="action_daily_worker_productivity" sequence="20"/>
+    <menuitem id="menu_labor_productivity" name="إنتاجية العمالة (نموذج)"
+              parent="menu_rwasi_reports" action="action_labor_productivity" sequence="30"/>
+
+    <!-- المشاريع المغلقة (متابعة) -->
+    <menuitem id="menu_project_closeout" name="المشاريع المغلقة"
+              parent="menu_rwasi_root" sequence="50"/>
+    <menuitem id="menu_project_closeout_list" name="المشاريع المغلقة"
+              parent="menu_project_closeout" action="action_project_closeout" sequence="10"/>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!-- ═══   دليل الاستخدام — زر رئيسي + بنهاية كل قسم      ═══ -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <menuitem id="menu_workshop_user_guide_root"
+              name="دليل الاستخدام"
+              parent="menu_rwasi_root"
+              action="action_workshop_user_guide"
+              sequence="100"/>
+
+    <menuitem id="menu_workshop_guide_operations"
+              name="دليل الاستخدام (سير العمل)"
+              parent="menu_rwasi_operations"
+              action="action_workshop_guide_operations"
+              sequence="999"/>
+
+    <menuitem id="menu_workshop_guide_field"
+              name="دليل الاستخدام (سير العمل)"
+              parent="menu_rwasi_field"
+              action="action_workshop_guide_field"
+              sequence="999"/>
+
+    <menuitem id="menu_workshop_guide_quality"
+              name="دليل الاستخدام (سير العمل)"
+              parent="menu_rwasi_quality"
+              action="action_workshop_guide_quality"
+              sequence="999"/>
+
+    <menuitem id="menu_workshop_guide_reports"
+              name="دليل الاستخدام (سير العمل)"
+              parent="menu_rwasi_reports"
+              action="action_workshop_guide_reports"
+              sequence="999"/>
+
+    <menuitem id="menu_workshop_guide_closeout"
+              name="دليل الاستخدام (سير العمل)"
+              parent="menu_project_closeout"
+              action="action_workshop_guide_closeout"
+              sequence="999"/>
+
+</odoo>

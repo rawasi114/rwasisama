@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- RS-WS-07 كشف الحضور -->
+    <record id="view_attendance_sheet_form" model="ir.ui.view">
+        <field name="name">rwasi.attendance.sheet.form</field>
+        <field name="model">rwasi.attendance.sheet</field>
+        <field name="arch" type="xml">
+            <form string="كشف حضور وانصراف العمالة">
+                <sheet>
+                    <div class="oe_title"><h1><field name="name" readonly="1"/></h1></div>
+                    <group>
+                        <group>
+                            <field name="att_date"/>
+                            <field name="workshop"/>
+                        </group>
+                        <group>
+                            <field name="shift"/>
+                            <field name="total_present"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="كشف الحضور">
+                            <field name="line_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="worker_id_no"/>
+                                    <field name="worker_name"/>
+                                    <field name="trade"/>
+                                    <field name="time_in"/>
+                                    <field name="time_out"/>
+                                    <field name="overtime"/>
+                                    <field name="total"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="الاعتماد">
+                            <group>
+                                <group string="معد الكشف">
+                                    <field name="prepared_name"/>
+                                    <field name="prepared_date"/>
+                                    <field name="prepared_signature" widget="signature"/>
+                                </group>
+                                <group string="مدير العمليات">
+                                    <field name="manager_name"/>
+                                    <field name="manager_date"/>
+                                    <field name="manager_signature" widget="signature"/>
+                                    <field name="manager_stamp" widget="image"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="view_attendance_sheet_list" model="ir.ui.view">
+        <field name="name">rwasi.attendance.sheet.list</field>
+        <field name="model">rwasi.attendance.sheet</field>
+        <field name="arch" type="xml">
+            <list string="كشف الحضور">
+                <field name="name"/>
+                <field name="att_date"/>
+                <field name="workshop"/>
+                <field name="total_present"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_attendance_sheet" model="ir.actions.act_window">
+        <field name="name">كشف حضور العمالة</field>
+        <field name="res_model">rwasi.attendance.sheet</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- RS-WS-08 بطاقة وقت العامل -->
+    <record id="view_time_card_form" model="ir.ui.view">
+        <field name="name">rwasi.time.card.form</field>
+        <field name="model">rwasi.time.card</field>
+        <field name="arch" type="xml">
+            <form string="بطاقة وقت العامل">
+                <sheet>
+                    <div class="oe_title"><h1><field name="name" readonly="1"/></h1></div>
+                    <group>
+                        <group>
+                            <field name="worker_name"/>
+                            <field name="worker_id_no"/>
+                        </group>
+                        <group>
+                            <field name="trade"/>
+                            <field name="week_ending"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="توزيع الساعات على المهام">
+                            <field name="line_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="wo"/>
+                                    <field name="task"/>
+                                    <field name="sat"/>
+                                    <field name="sun"/>
+                                    <field name="mon"/>
+                                    <field name="tue"/>
+                                    <field name="wed"/>
+                                    <field name="thu"/>
+                                    <field name="total"/>
+                                </list>
+                            </field>
+                            <group string="ملخص الأسبوع">
+                                <group>
+                                    <field name="regular_hrs"/>
+                                    <field name="overtime_hrs"/>
+                                </group>
+                                <group>
+                                    <field name="leave_hrs"/>
+                                    <field name="week_total"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="الاعتماد">
+                            <group>
+                                <group string="العامل">
+                                    <field name="prepared_name"/>
+                                    <field name="prepared_date"/>
+                                    <field name="prepared_signature" widget="signature"/>
+                                </group>
+                                <group string="مدير العمليات">
+                                    <field name="manager_name"/>
+                                    <field name="manager_date"/>
+                                    <field name="manager_signature" widget="signature"/>
+                                    <field name="manager_stamp" widget="image"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="view_time_card_list" model="ir.ui.view">
+        <field name="name">rwasi.time.card.list</field>
+        <field name="model">rwasi.time.card</field>
+        <field name="arch" type="xml">
+            <list string="بطاقات الوقت">
+                <field name="name"/>
+                <field name="worker_name"/>
+                <field name="trade"/>
+                <field name="week_ending"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_time_card" model="ir.actions.act_window">
+        <field name="name">بطاقة وقت العامل</field>
+        <field name="res_model">rwasi.time.card</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- RS-WS-09 إنتاجية العمالة -->
+    <record id="view_labor_productivity_form" model="ir.ui.view">
+        <field name="name">rwasi.labor.productivity.form</field>
+        <field name="model">rwasi.labor.productivity</field>
+        <field name="arch" type="xml">
+            <form string="إنتاجية العمالة">
+                <sheet>
+                    <div class="oe_title"><h1><field name="name" readonly="1"/></h1></div>
+                    <group>
+                        <group>
+                            <field name="project_ref"/>
+                            <field name="period_from"/>
+                            <field name="period_to"/>
+                        </group>
+                        <group>
+                            <field name="workshop"/>
+                            <field name="crew_size"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="قياس الإنتاجية حسب البند">
+                            <field name="line_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="item"/>
+                                    <field name="description"/>
+                                    <field name="uom"/>
+                                    <field name="output"/>
+                                    <field name="man_hrs"/>
+                                    <field name="std_rate"/>
+                                    <field name="actual_rate"/>
+                                </list>
+                            </field>
+                            <group string="مؤشرات الأداء">
+                                <group>
+                                    <field name="total_mh"/>
+                                    <field name="total_output"/>
+                                </group>
+                                <group>
+                                    <field name="productivity_factor"/>
+                                    <field name="variance"/>
+                                </group>
+                            </group>
+                            <field name="variance_analysis" placeholder="تحليل الانحرافات وخطة التحسين..."/>
+                        </page>
+                        <page string="الاعتماد">
+                            <group>
+                                <group string="معد التقرير">
+                                    <field name="prepared_name"/>
+                                    <field name="prepared_date"/>
+                                    <field name="prepared_signature" widget="signature"/>
+                                </group>
+                                <group string="مدير العمليات">
+                                    <field name="manager_name"/>
+                                    <field name="manager_date"/>
+                                    <field name="manager_signature" widget="signature"/>
+                                    <field name="manager_stamp" widget="image"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="view_labor_productivity_list" model="ir.ui.view">
+        <field name="name">rwasi.labor.productivity.list</field>
+        <field name="model">rwasi.labor.productivity</field>
+        <field name="arch" type="xml">
+            <list string="إنتاجية العمالة">
+                <field name="name"/>
+                <field name="project_ref"/>
+                <field name="period_from"/>
+                <field name="period_to"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_labor_productivity" model="ir.actions.act_window">
+        <field name="name">إنتاجية العمالة</field>
+        <field name="res_model">rwasi.labor.productivity</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>

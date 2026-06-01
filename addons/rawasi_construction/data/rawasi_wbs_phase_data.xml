@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- المراحل الرئيسية الست للمشروع (قوالب) + المهام القياسية لكل مرحلة.
+         تُولَّد كأنشطة (مرحلة رئيسية + مهام فرعية) عند تحويل المنافسة لمشروع،
+         وهي قابلة للتعديل/الحذف من الموظف. -->
+    <data noupdate="1">
+        <!-- INT-01 التأسيس والانطلاق -->
+        <record id="wbs_phase_initiation" model="rawasi.wbs.phase">
+            <field name="name">التأسيس والانطلاق (Initiation)</field>
+            <field name="code">INT-01</field>
+            <field name="objective">نقل المشروع من الإدارة العليا إلى فريق العمل الرسمي للبدء.</field>
+            <field name="sequence">10</field>
+            <field name="color">4</field>
+        </record>
+        <record id="wbs_task_int_1" model="rawasi.wbs.phase.task">
+            <field name="phase_id" ref="wbs_phase_initiation"/>
+            <field name="name">استلام وثائق العطاء والعقد الرسمي.</field>
+            <field name="sequence">10</field>
+        </record>
+        <record id="wbs_task_int_2" model="rawasi.wbs.phase.task">
+            <field name="phase_id" ref="wbs_phase_initiation"/>
+            <field name="name">تعيين مدير المشروع والفريق الأساسي.</field>
+            <field name="sequence">20</field>
+        </record>
+        <record id="wbs_task_int_3" model="rawasi.wbs.phase.task">
+            <field name="phase_id" ref="wbs_phase_initiation"/>
+            <field name="name">إصدار ميثاق المشروع (تصريح بدء العمل).</field>
+            <field name="sequence">30</field>
+        </record>
+
+        <!-- PLN-02 التخطيط الشامل -->
+        <record id="wbs_phase_planning" model="rawasi.wbs.phase">
+            <field name="name">التخطيط الشامل (Planning)</field>
+            <field name="code">PLN-02</field>
+            <field name="objective">وضع خطة العمل الدقيقة والمسار الواضح قبل النزول للميدان.</field>
+            <field name="sequence">20</field>
+            <field name="color">1</field>
+        </record>
+        <record id="wbs_task_pln_1" model="rawasi.wbs.phase.task">
+            <field name="phase_id" ref="wbs_phase_planning"/>
+            <field name="name">إعداد الجدول الزمني التفصيلي.</field>
+            <field name="sequence">10</field>
+        </record>
+        <record id="wbs_task_pln_2" model="rawasi.wbs.phase.task">
+            <field name="phase_id" ref="wbs_phase_planning"/>
+            <field name="name">توزيع التكاليف غير المباشرة للمشروع بدقة حسب المكان الأنسب لها ضمن الميزانية.</field>
+            <field name="sequence">20</field>
+        </record>
+        <record id="wbs_task_pln_3" model="rawasi.wbs.phase.task">
+            <field name="phase_id" ref="wbs_phase_planning"/>
+            <field name="name">تخطيط الاحتياجات من العمالة والمواد وتجهيز أنظمة إدارة المستندات.</field>
+            <field name="sequence">30</field>
+        </record>
+
+        <!-- SIT-03 استلام الموقع -->
+        <record id="wbs_phase_site_handover" model="rawasi.wbs.phase">
+            <field name="name">استلام الموقع (Site Handover)</field>
+            <field name="code">SIT-03</field>
+            <field name="objective">الحيازة الرسمية لموقع العمل وتوثيق حالته وبدء سريان مدة العقد.</field>
+            <field name="sequence">30</field>
+            <field name="color">3</field>
+        </record>
+        <record id="wbs_task_sit_1" model="rawasi.wbs.phase.task">
+            <field name="phase_id" ref="wbs_phase_site_handover"/>
+            <field name="name">توقيع محضر استلام الموقع الخالي من العوائق مع الجهة المالكة/الاستشاري.</field>
+            <field name="sequence">10</field>
+        </record>
+        <record id="wbs_task_sit_2" model="rawasi.wbs.phase.task">
+            <field name="phase_id" ref="wbs_phase_site_handover"/>
+            <field name="name">الرفع المساحي المبدئي وتوثيق حالة الموقع (طبيعة الأرض والمناسيب).</field>
+            <field name="sequence">20</field>
+        </record>
+        <record id="wbs_task_sit_3" model="rawasi.wbs.phase.task">
+            <field name="phase_id" ref="wbs_phase_site_handover"/>
+            <field name="name">التجهيز الميداني (Mobilization): المكاتب المؤقتة، المستودعات، وتأمين حدود الموقع.</field>
+            <field name="sequence">30</field>
+        </record>
+
+        <!-- EXE-04 التنفيذ والاعتمادات -->
+        <record id="wbs_phase_execution" model="rawasi.wbs.phase">
+            <field name="name">التنفيذ والاعتمادات (Execution)</field>
+            <field name="code">EXE-04</field>
+            <field name="objective">توجيه الموارد والبدء بتنفيذ الأعمال الفنية والإنشائية على أرض الواقع.</field>
+            <field name="sequence">40</field>
+            <field name="color">5</field>
+        </record>
+        <record id="wbs_task_exe_1" model="rawasi.wbs.phase.task">
+            <field name="phase_id" ref="wbs_phase_execution"/>
+            <field name="name">تقديم طلبات اعتماد المواد (طباعة التقرير المعتمد مع المرفق وتقديمه يدوياً للاستشاري أو مهندس الجهة الحكومية).</field>
+            <field name="sequence">10</field>
+        </record>
+        <record id="wbs_task_exe_2" model="rawasi.wbs.phase.task">
+            <field name="phase_id" ref="wbs_phase_execution"/>
+            <field name="name">إدارة مستندات المشروع والكتالوجات والمراسلات الرسمية.</field>
+            <field name="sequence">20</field>
+        </record>
+        <record id="wbs_task_exe_3" model="rawasi.wbs.phase.task">
+            <field name="phase_id" ref="wbs_phase_execution"/>
+            <field name="name">إدارة فرق العمل وتنفيذ المخططات.</field>
+            <field name="sequence">30</field>
+        </record>
+
+        <!-- M&C-05 المراقبة والتحكم -->
+        <record id="wbs_phase_monitoring" model="rawasi.wbs.phase">
+            <field name="name">المراقبة والتحكم (Monitoring)</field>
+            <field name="code">M&amp;C-05</field>
+            <field name="objective">التأكد من أن التنفيذ يسير تماماً كما خُطط له (زمنياً ومالياً وفنياً).</field>
+            <field name="sequence">50</field>
+            <field name="color">6</field>
+        </record>
+        <record id="wbs_task_mc_1" model="rawasi.wbs.phase.task">
+            <field name="phase_id" ref="wbs_phase_monitoring"/>
+            <field name="name">مطابقة الإنجاز الميداني الفعلي بالجدول الزمني المعتمد.</field>
+            <field name="sequence">10</field>
+        </record>
+        <record id="wbs_task_mc_2" model="rawasi.wbs.phase.task">
+            <field name="phase_id" ref="wbs_phase_monitoring"/>
+            <field name="name">الرقابة الصارمة على الجودة والسلامة.</field>
+            <field name="sequence">20</field>
+        </record>
+        <record id="wbs_task_mc_3" model="rawasi.wbs.phase.task">
+            <field name="phase_id" ref="wbs_phase_monitoring"/>
+            <field name="name">متابعة وضبط التكاليف وأوامر التغيير.</field>
+            <field name="sequence">30</field>
+        </record>
+
+        <!-- CLO-06 الإغلاق والتسليم -->
+        <record id="wbs_phase_closing" model="rawasi.wbs.phase">
+            <field name="name">الإغلاق والتسليم (Closing)</field>
+            <field name="code">CLO-06</field>
+            <field name="objective">تسليم المشروع للجهة المالكة بشكل نهائي وتصفية كافة الحسابات.</field>
+            <field name="sequence">60</field>
+            <field name="color">10</field>
+        </record>
+        <record id="wbs_task_clo_1" model="rawasi.wbs.phase.task">
+            <field name="phase_id" ref="wbs_phase_closing"/>
+            <field name="name">إصدار شهادة الاستلام الابتدائي (PAC).</field>
+            <field name="sequence">10</field>
+        </record>
+        <record id="wbs_task_clo_2" model="rawasi.wbs.phase.task">
+            <field name="phase_id" ref="wbs_phase_closing"/>
+            <field name="name">تسليم المخططات المنفذة (As-Built) وأدلة التشغيل.</field>
+            <field name="sequence">20</field>
+        </record>
+        <record id="wbs_task_clo_3" model="rawasi.wbs.phase.task">
+            <field name="phase_id" ref="wbs_phase_closing"/>
+            <field name="name">الإغلاق المالي وتصفية عهد الموردين.</field>
+            <field name="sequence">30</field>
+        </record>
+    </data>
+</odoo>

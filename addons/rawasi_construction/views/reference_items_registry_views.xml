@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ═══ سجل البنود المرجعي (Reference Items Registry) ═══ -->
+    <record id="view_reference_item_search" model="ir.ui.view">
+        <field name="name">rawasi.reference.item.search</field>
+        <field name="model">rawasi.reference.item</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="reference_code"/>
+                <field name="approved_name"/>
+                <field name="main_category"/>
+                <field name="item_group"/>
+                <field name="lcgpa_code_id"/>
+                <filter name="draft" string="مسودة" domain="[('review_status','=','draft')]"/>
+                <filter name="reviewed" string="مراجَع" domain="[('review_status','=','reviewed')]"/>
+                <filter name="approved" string="معتمَد" domain="[('review_status','=','approved')]"/>
+                <filter name="inhouse" string="تصنيع داخلي" domain="[('is_in_house','=',True)]"/>
+                <group>
+                    <filter name="g_main" string="حسب الفئة الرئيسية" context="{'group_by':'main_category'}"/>
+                    <filter name="g_group" string="حسب البند" context="{'group_by':'item_group'}"/>
+                    <filter name="g_review" string="حسب حالة المراجعة" context="{'group_by':'review_status'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_reference_item_list" model="ir.ui.view">
+        <field name="name">rawasi.reference.item.list</field>
+        <field name="model">rawasi.reference.item</field>
+        <field name="arch" type="xml">
+            <list multi_edit="1">
+                <field name="reference_code"/>
+                <field name="approved_name"/>
+                <field name="main_category"/>
+                <field name="item_group"/>
+                <field name="simplified_desc" optional="show"/>
+                <field name="lcgpa_code_id" optional="hide"/>
+                <field name="variant_count" string="صياغات"/>
+                <field name="is_in_house" optional="hide"/>
+                <field name="review_status" widget="badge"
+                       decoration-info="review_status == 'draft'"
+                       decoration-warning="review_status == 'reviewed'"
+                       decoration-success="review_status == 'approved'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_reference_item_form" model="ir.ui.view">
+        <field name="name">rawasi.reference.item.form</field>
+        <field name="model">rawasi.reference.item</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="review_status" widget="statusbar" options="{'clickable': '1'}"/>
+                </header>
+                <sheet>
+                    <field name="reference_image" widget="image" class="oe_avatar"/>
+                    <div class="oe_title">
+                        <label for="reference_code"/>
+                        <h1><field name="reference_code" placeholder="FLR-POR-6060-001"/></h1>
+                        <label for="approved_name"/>
+                        <h2><field name="approved_name"/></h2>
+                    </div>
+                    <group string="الهرمية الرباعية">
+                        <group>
+                            <field name="main_category"/>
+                            <field name="item_group"/>
+                            <field name="simplified_desc"/>
+                            <field name="name_en"/>
+                        </group>
+                        <group>
+                            <field name="default_uom_id"/>
+                            <field name="lcgpa_code_id"/>
+                            <field name="sbc_code_id"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <group string="الخصائص الاستراتيجية">
+                        <group>
+                            <field name="is_in_house"/>
+                            <field name="workshop_type"
+                                   invisible="not is_in_house" required="is_in_house"/>
+                        </group>
+                        <group>
+                            <field name="created_via"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="الوصف التفصيلي" name="desc">
+                            <field name="description_short"/>
+                            <field name="description_long"/>
+                        </page>
+                        <page string="المواصفات المُستخلَصة" name="specs">
+                            <field name="extracted_specification_ids">
+                                <list editable="bottom">
+                                    <field name="display_order" widget="handle"/>
+                                    <field name="spec_key"/>
+                                    <field name="spec_key_custom" optional="hide"/>
+                                    <field name="spec_value"/>
+                                    <field name="spec_unit"/>
+                                    <field name="extracted_via_auto" widget="boolean_toggle"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="الصياغات البديلة" name="variants">
+                            <field name="item_variant_ids">
+                                <list editable="bottom">
+                                    <field name="original_text"/>
+                                    <field name="normalized_text" readonly="1"/>
+                                    <field name="source_entity_id"/>
+                                    <field name="frequency"/>
+                                    <field name="last_seen_date"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_reference_item" model="ir.actions.act_window">
+        <field name="name">سجل البنود المرجعي</field>
+        <field name="res_model">rawasi.reference.item</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_reference_item_search"/>
+        <field name="context">{'search_default_g_main': 1}</field>
+    </record>
+
+    <!-- ═══ أكواد LCGPA ═══ -->
+    <record id="view_lcgpa_code_list" model="ir.ui.view">
+        <field name="name">rawasi.lcgpa.code.list</field>
+        <field name="model">rawasi.lcgpa.code</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="code"/>
+                <field name="name_ar"/>
+                <field name="name_en" optional="hide"/>
+                <field name="category"/>
+                <field name="reference_item_count" string="عدد البنود"/>
+                <field name="is_mandatory_local" widget="boolean_toggle"/>
+                <field name="active" widget="boolean_toggle" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lcgpa_code_form" model="ir.ui.view">
+        <field name="name">rawasi.lcgpa.code.form</field>
+        <field name="model">rawasi.lcgpa.code</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="code"/>
+                        <h1><field name="code" placeholder="2002"/></h1>
+                        <label for="name_ar"/>
+                        <h2><field name="name_ar"/></h2>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name_en"/>
+                            <field name="category"/>
+                        </group>
+                        <group>
+                            <field name="is_mandatory_local"/>
+                            <field name="active"/>
+                            <field name="reference_item_count" readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="الوصف">
+                        <field name="description" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_lcgpa_code" model="ir.actions.act_window">
+        <field name="name">أكواد LCGPA</field>
+        <field name="res_model">rawasi.lcgpa.code</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- ═══ الصياغات البديلة ═══ -->
+    <record id="view_item_variant_list" model="ir.ui.view">
+        <field name="name">rawasi.item.variant.list</field>
+        <field name="model">rawasi.item.variant</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="original_text"/>
+                <field name="normalized_text" optional="hide"/>
+                <field name="reference_item_id"/>
+                <field name="source_entity_id"/>
+                <field name="frequency"/>
+                <field name="last_seen_date"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_item_variant" model="ir.actions.act_window">
+        <field name="name">الصياغات البديلة</field>
+        <field name="res_model">rawasi.item.variant</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- ═══ سجل التتبع ═══ -->
+    <record id="view_audit_trail_search" model="ir.ui.view">
+        <field name="name">rawasi.audit.trail.search</field>
+        <field name="model">rawasi.audit.trail</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="original_text"/>
+                <field name="reference_item_id"/>
+                <field name="linked_tender_id"/>
+                <field name="import_batch_id"/>
+                <filter name="accepted" string="قُبل" domain="[('user_action','=','accepted')]"/>
+                <filter name="modified" string="عُدِّل" domain="[('user_action','=','modified')]"/>
+                <filter name="rejected" string="رُفض" domain="[('user_action','=','rejected')]"/>
+                <group>
+                    <filter name="g_action" string="حسب الإجراء" context="{'group_by':'user_action'}"/>
+                    <filter name="g_source" string="حسب المصدر" context="{'group_by':'match_source'}"/>
+                    <filter name="g_tender" string="حسب المنافسة" context="{'group_by':'linked_tender_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_audit_trail_list" model="ir.ui.view">
+        <field name="name">rawasi.audit.trail.list</field>
+        <field name="model">rawasi.audit.trail</field>
+        <field name="arch" type="xml">
+            <list create="0" edit="0">
+                <field name="decision_date"/>
+                <field name="original_text"/>
+                <field name="reference_item_id"/>
+                <field name="match_source" widget="badge"/>
+                <field name="user_action" widget="badge"
+                       decoration-success="user_action == 'accepted'"
+                       decoration-info="user_action == 'modified'"
+                       decoration-warning="user_action == 'created_new'"
+                       decoration-danger="user_action == 'rejected'"/>
+                <field name="confidence_score" optional="hide"/>
+                <field name="linked_tender_id"/>
+                <field name="decided_by_user_id"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_audit_trail" model="ir.actions.act_window">
+        <field name="name">سجل التتبع</field>
+        <field name="res_model">rawasi.audit.trail</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_audit_trail_search"/>
+    </record>
+
+</odoo>
