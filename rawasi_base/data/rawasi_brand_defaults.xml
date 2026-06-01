@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- ============================================================
+             قيم الهوية البصرية الافتراضية (من الدليل الرسمي Rawasi.pdf).
+             قابلة للتعديل لاحقاً من شاشة الإعدادات (المرحلة 2).
+             ملاحظة: اعتُمدت ألوان الدليل الرسمي:
+               Navy #253747 · Gold #BD9B5E · Cream #F0E8DA
+             ============================================================ -->
+        <record id="rawasi_param_brand_navy" model="ir.config_parameter">
+            <field name="key">rawasi_base.brand_navy</field>
+            <field name="value">#253747</field>
+        </record>
+        <record id="rawasi_param_brand_gold" model="ir.config_parameter">
+            <field name="key">rawasi_base.brand_gold</field>
+            <field name="value">#BD9B5E</field>
+        </record>
+        <record id="rawasi_param_brand_cream" model="ir.config_parameter">
+            <field name="key">rawasi_base.brand_cream</field>
+            <field name="value">#F0E8DA</field>
+        </record>
+
+    </data>
+</odoo>

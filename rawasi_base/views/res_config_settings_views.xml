@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- ============================================================
+             قسم إعدادات رواسي — يُضاف داخل شاشة الإعدادات القياسية كـ <app>.
+             (لا شاشة مستقلة: ذلك يحجب صفحة الإعدادات العامة كلها).
+             ============================================================ -->
+        <record id="res_config_settings_view_form_rawasi" model="ir.ui.view">
+            <field name="name">res.config.settings.view.form.inherit.rawasi</field>
+            <field name="model">res.config.settings</field>
+            <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form" position="inside">
+                    <app data-string="رواسي سما" string="رواسي سما" name="rawasi_base"
+                         logo="/rawasi_base/static/description/icon.png"
+                         groups="rawasi_base.group_rawasi_admin">
+
+                        <block title="الهوية البصرية" name="rawasi_brand_block">
+                            <setting string="الأزرق الداكن" help="لون الهوية الأساسي (Navy)">
+                                <field name="rawasi_brand_navy"/>
+                            </setting>
+                            <setting string="الذهبي" help="لون الهوية الثانوي (Gold)">
+                                <field name="rawasi_brand_gold"/>
+                            </setting>
+                            <setting string="الكريمي" help="لون الخلفيات الفاتحة (Cream)">
+                                <field name="rawasi_brand_cream"/>
+                            </setting>
+                        </block>
+
+                        <block title="الإشعارات" name="rawasi_notify_block">
+                            <setting string="مزوّد الإشعارات" help="قناة إرسال الإشعارات الخارجية">
+                                <field name="rawasi_notification_provider"/>
+                            </setting>
+                            <setting string="إعداد واتساب"
+                                     invisible="rawasi_notification_provider != 'whatsapp'">
+                                <field name="rawasi_whatsapp_endpoint" placeholder="رابط الـ API"/>
+                                <field name="rawasi_whatsapp_token" password="True"
+                                       placeholder="الرمز السري"/>
+                            </setting>
+                        </block>
+
+                        <block title="الأمان والاعتماد" name="rawasi_security_block">
+                            <setting string="طلب PIN عند الصرف"
+                                     help="يطلب رمزاً سرياً لتأكيد صرف المواد">
+                                <field name="rawasi_require_pin_on_issue"/>
+                            </setting>
+                            <setting string="ساعات التصعيد"
+                                     help="بعدها تُصعَّد الاعتمادات المتأخرة">
+                                <field name="rawasi_escalation_hours"/>
+                            </setting>
+                        </block>
+
+                        <block title="الضريبة" name="rawasi_tax_block">
+                            <setting string="نسبة ضريبة القيمة المضافة %">
+                                <field name="rawasi_default_vat_rate"/>
+                            </setting>
+                        </block>
+
+                        <block title="التوقيعات الرقمية" name="rawasi_sign_block">
+                            <setting string="إدارة التوقيعات"
+                                     help="التوقيعات المعتمدة التي تظهر في التقارير">
+                                <button name="%(action_rawasi_company_signatures)d"
+                                        type="action" string="فتح التوقيعات الرقمية"
+                                        icon="oi-arrow-right" class="btn-link"/>
+                            </setting>
+                        </block>
+
+                    </app>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- القائمة تفتح الإعدادات القياسية مع تمييز قسم رواسي -->
+        <record id="action_rawasi_config_settings" model="ir.actions.act_window">
+            <field name="name">إعدادات رواسي</field>
+            <field name="res_model">res.config.settings</field>
+            <field name="view_mode">form</field>
+            <field name="target">current</field>
+            <field name="context">{'module': 'rawasi_base'}</field>
+        </record>
+
+        <menuitem id="menu_rawasi_config_settings" name="الإعدادات العامة"
+                  parent="menu_rawasi_configuration" action="action_rawasi_config_settings"
+                  sequence="10" groups="group_rawasi_admin"/>
+
+    </data>
+</odoo>

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- ===================== المجلدات ===================== -->
+        <record id="view_rawasi_document_folder_list" model="ir.ui.view">
+            <field name="name">rawasi.document.folder.list</field>
+            <field name="model">rawasi.document.folder</field>
+            <field name="arch" type="xml">
+                <list string="المجلدات">
+                    <field name="complete_name"/>
+                    <field name="document_count"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_rawasi_document_folder_form" model="ir.ui.view">
+            <field name="name">rawasi.document.folder.form</field>
+            <field name="model">rawasi.document.folder</field>
+            <field name="arch" type="xml">
+                <form string="مجلد">
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="name"/>
+                            <h1><field name="name" placeholder="اسم المجلد"/></h1>
+                        </div>
+                        <group>
+                            <field name="parent_id"/>
+                            <field name="complete_name"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <notebook>
+                            <page string="الوثائق">
+                                <field name="document_ids">
+                                    <list>
+                                        <field name="name"/>
+                                        <field name="version"/>
+                                        <field name="owner_user_id"/>
+                                        <field name="is_current_version"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_rawasi_document_folder" model="ir.actions.act_window">
+            <field name="name">المجلدات</field>
+            <field name="res_model">rawasi.document.folder</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+        <!-- ===================== الوثائق ===================== -->
+        <record id="view_rawasi_document_list" model="ir.ui.view">
+            <field name="name">rawasi.document.list</field>
+            <field name="model">rawasi.document</field>
+            <field name="arch" type="xml">
+                <list string="الوثائق">
+                    <field name="name"/>
+                    <field name="folder_id"/>
+                    <field name="version"/>
+                    <field name="owner_user_id"/>
+                    <field name="is_current_version"/>
+                    <field name="tag_ids" widget="many2many_tags" optional="show"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_rawasi_document_form" model="ir.ui.view">
+            <field name="name">rawasi.document.form</field>
+            <field name="model">rawasi.document</field>
+            <field name="arch" type="xml">
+                <form string="وثيقة">
+                    <header>
+                        <button name="action_new_version" type="object"
+                                string="إصدار جديد" class="btn-primary"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="name"/>
+                            <h1><field name="name" placeholder="عنوان الوثيقة"/></h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="folder_id"/>
+                                <field name="file" filename="file_name"/>
+                                <field name="file_name" invisible="1"/>
+                                <field name="version"/>
+                            </group>
+                            <group>
+                                <field name="owner_user_id"/>
+                                <field name="is_current_version"/>
+                                <field name="parent_document_id"/>
+                                <field name="company_id" groups="base.group_multi_company"/>
+                            </group>
+                        </group>
+                        <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_rawasi_document" model="ir.actions.act_window">
+            <field name="name">الوثائق</field>
+            <field name="res_model">rawasi.document</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+        <!-- ===================== القائمة ===================== -->
+        <menuitem id="menu_rawasi_dms_root" name="الوثائق"
+                  parent="menu_rawasi_root" sequence="700"
+                  groups="group_rawasi_admin,group_rawasi_accountant"/>
+        <menuitem id="menu_rawasi_documents" name="كل الوثائق"
+                  parent="menu_rawasi_dms_root" action="action_rawasi_document" sequence="10"/>
+        <menuitem id="menu_rawasi_document_folders" name="المجلدات"
+                  parent="menu_rawasi_dms_root" action="action_rawasi_document_folder" sequence="20"/>
+
+    </data>
+</odoo>
