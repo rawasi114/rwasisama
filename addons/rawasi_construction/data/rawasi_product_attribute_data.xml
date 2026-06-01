@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- ═══════════ فئات المنتجات الإنشائية ═══════════ -->
+        <record id="product_category_construction" model="product.category">
+            <field name="name">الأعمال الإنشائية</field>
+        </record>
+
+        <record id="product_category_raw_material" model="product.category">
+            <field name="name">مواد خام</field>
+            <field name="parent_id" ref="product_category_construction"/>
+        </record>
+
+        <record id="product_category_deliverable" model="product.category">
+            <field name="name">بنود تسليم (مادة + تركيب)</field>
+            <field name="parent_id" ref="product_category_construction"/>
+        </record>
+
+        <record id="product_category_service" model="product.category">
+            <field name="name">خدمات إنشائية</field>
+            <field name="parent_id" ref="product_category_construction"/>
+        </record>
+
+        <record id="product_category_subcontract" model="product.category">
+            <field name="name">إسناد لمقاولي الباطن</field>
+            <field name="parent_id" ref="product_category_construction"/>
+        </record>
+
+        <record id="product_category_workshop" model="product.category">
+            <field name="name">تصنيع ورشة</field>
+            <field name="parent_id" ref="product_category_construction"/>
+        </record>
+
+        <!-- ═══════════ خصائص المنتجات (Attributes) ═══════════ -->
+        <record id="product_attribute_size" model="product.attribute">
+            <field name="name">المقاس</field>
+            <field name="display_type">radio</field>
+            <field name="create_variant">always</field>
+        </record>
+
+        <record id="product_attribute_grade" model="product.attribute">
+            <field name="name">الدرجة</field>
+            <field name="display_type">select</field>
+            <field name="create_variant">always</field>
+        </record>
+
+        <record id="product_attribute_thickness" model="product.attribute">
+            <field name="name">السماكة</field>
+            <field name="display_type">select</field>
+            <field name="create_variant">always</field>
+        </record>
+
+        <record id="product_attribute_color" model="product.attribute">
+            <field name="name">اللون</field>
+            <field name="display_type">color</field>
+            <field name="create_variant">always</field>
+        </record>
+
+        <record id="product_attribute_brand" model="product.attribute">
+            <field name="name">العلامة التجارية</field>
+            <field name="display_type">select</field>
+            <field name="create_variant">always</field>
+        </record>
+
+        <!-- ═══════════ قيم درجة الخرسانة الشائعة ═══════════ -->
+        <record id="attr_grade_c20" model="product.attribute.value">
+            <field name="name">C20 / 200 kg/cm²</field>
+            <field name="attribute_id" ref="product_attribute_grade"/>
+        </record>
+        <record id="attr_grade_c25" model="product.attribute.value">
+            <field name="name">C25 / 250 kg/cm²</field>
+            <field name="attribute_id" ref="product_attribute_grade"/>
+        </record>
+        <record id="attr_grade_c30" model="product.attribute.value">
+            <field name="name">C30 / 300 kg/cm²</field>
+            <field name="attribute_id" ref="product_attribute_grade"/>
+        </record>
+        <record id="attr_grade_c35" model="product.attribute.value">
+            <field name="name">C35 / 350 kg/cm²</field>
+            <field name="attribute_id" ref="product_attribute_grade"/>
+        </record>
+        <record id="attr_grade_c40" model="product.attribute.value">
+            <field name="name">C40 / 400 kg/cm²</field>
+            <field name="attribute_id" ref="product_attribute_grade"/>
+        </record>
+
+        <!-- قيم السماكة الشائعة -->
+        <record id="attr_thickness_5mm" model="product.attribute.value">
+            <field name="name">5 مم</field>
+            <field name="attribute_id" ref="product_attribute_thickness"/>
+        </record>
+        <record id="attr_thickness_8mm" model="product.attribute.value">
+            <field name="name">8 مم</field>
+            <field name="attribute_id" ref="product_attribute_thickness"/>
+        </record>
+        <record id="attr_thickness_10mm" model="product.attribute.value">
+            <field name="name">10 مم</field>
+            <field name="attribute_id" ref="product_attribute_thickness"/>
+        </record>
+        <record id="attr_thickness_12mm" model="product.attribute.value">
+            <field name="name">12 مم</field>
+            <field name="attribute_id" ref="product_attribute_thickness"/>
+        </record>
+        <record id="attr_thickness_15mm" model="product.attribute.value">
+            <field name="name">15 مم</field>
+            <field name="attribute_id" ref="product_attribute_thickness"/>
+        </record>
+        <record id="attr_thickness_20mm" model="product.attribute.value">
+            <field name="name">20 مم</field>
+            <field name="attribute_id" ref="product_attribute_thickness"/>
+        </record>
+        <record id="attr_thickness_25mm" model="product.attribute.value">
+            <field name="name">25 مم</field>
+            <field name="attribute_id" ref="product_attribute_thickness"/>
+        </record>
+
+        <!-- قيم المقاس الشائعة (بلاط/سيراميك) -->
+        <record id="attr_size_30x30" model="product.attribute.value">
+            <field name="name">30×30 سم</field>
+            <field name="attribute_id" ref="product_attribute_size"/>
+        </record>
+        <record id="attr_size_40x40" model="product.attribute.value">
+            <field name="name">40×40 سم</field>
+            <field name="attribute_id" ref="product_attribute_size"/>
+        </record>
+        <record id="attr_size_45x45" model="product.attribute.value">
+            <field name="name">45×45 سم</field>
+            <field name="attribute_id" ref="product_attribute_size"/>
+        </record>
+        <record id="attr_size_60x60" model="product.attribute.value">
+            <field name="name">60×60 سم</field>
+            <field name="attribute_id" ref="product_attribute_size"/>
+        </record>
+        <record id="attr_size_60x120" model="product.attribute.value">
+            <field name="name">60×120 سم</field>
+            <field name="attribute_id" ref="product_attribute_size"/>
+        </record>
+        <record id="attr_size_80x80" model="product.attribute.value">
+            <field name="name">80×80 سم</field>
+            <field name="attribute_id" ref="product_attribute_size"/>
+        </record>
+
+    </data>
+</odoo>
