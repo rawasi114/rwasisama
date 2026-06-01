@@ -1,37 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-        <!-- جذر التطبيق الجديد: «المنافسات والتسعير» —
-             يظهر للمكتب الفني كتطبيق مستقل عن إدارة المقاولات. -->
-        <menuitem id="menu_rawasi_competitions_root"
-                  name="المنافسات والتسعير"
-                  sequence="35"/>
+        <!--
+            النسخة السابقة من هذا الموديول أنشأت تطبيقاً واجهياً باسم
+            "المنافسات والتسعير". الفصل الجديد أصبح معرفاً داخل
+            rawasi_construction حتى يتم تحميله بترتيب ترقية آمن.
 
-        <menuitem id="menu_competitions_pricing_root_dashboard"
-                  name="تحليل المنافسات"
-                  parent="menu_rawasi_competitions_root"
-                  action="rawasi_construction.action_dash_competition"
-                  sequence="10"/>
-
-        <!-- نُعيد ربط menus المنافسات الموجودة في rawasi_construction
-             تحت التطبيق الجديد. لا تغيير في الـ actions أو الصلاحيات. -->
-        <record id="rawasi_construction.menu_rawasi_competitions" model="ir.ui.menu">
-            <field name="parent_id" ref="menu_rawasi_competitions_root"/>
-            <field name="sequence">20</field>
+            نُبقي هذين السجلين هنا فقط لإخفاء الجذر القديم عند ترقية
+            rawasi_competitions في قواعد كانت قد ثبّتت النسخة السابقة.
+        -->
+        <record id="menu_rawasi_competitions_root" model="ir.ui.menu">
+            <field name="name">المنافسات والتسعير - قديم</field>
+            <field name="active" eval="False"/>
         </record>
 
-        <record id="rawasi_construction.menu_rawasi_price_intelligence" model="ir.ui.menu">
-            <field name="parent_id" ref="menu_rawasi_competitions_root"/>
-            <field name="sequence">30</field>
-        </record>
-
-        <record id="rawasi_construction.menu_rawasi_reference_registry_root" model="ir.ui.menu">
-            <field name="parent_id" ref="menu_rawasi_competitions_root"/>
-            <field name="sequence">40</field>
-        </record>
-
-        <!-- لوحة تحليل المنافسات تنتقل أيضاً للتطبيق الجديد -->
-        <record id="rawasi_construction.menu_dash_competition" model="ir.ui.menu">
+        <record id="menu_competitions_pricing_root_dashboard" model="ir.ui.menu">
+            <field name="name">تحليل المنافسات - قديم</field>
             <field name="active" eval="False"/>
         </record>
     </data>

@@ -13,3 +13,4 @@ from . import test_phase8
 from . import test_enhancements
 from . import test_subcontractor
 from . import test_reference_items_registry
+from . import test_menu_separation
