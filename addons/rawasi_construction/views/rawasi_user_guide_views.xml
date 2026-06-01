@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ═══ Kanban — البطاقات الرئيسية ═══ -->
+    <record id="view_rawasi_user_guide_kanban" model="ir.ui.view">
+        <field name="name">rawasi.user.guide.kanban</field>
+        <field name="model">rawasi.user.guide</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="guide_type" class="o_kanban_dashboard">
+                <field name="name"/>
+                <field name="subtitle"/>
+                <field name="guide_type"/>
+                <field name="role_group_id"/>
+                <field name="menu_section_key"/>
+                <field name="icon"/>
+                <field name="color"/>
+                <field name="sequence"/>
+                <templates>
+                    <t t-name="card">
+                        <div t-attf-class="o_kanban_card_content o_kanban_color_#{record.color.raw_value}"
+                             style="padding:12px; min-height:140px;">
+                            <div class="d-flex align-items-center mb-2">
+                                <i t-attf-class="fa #{record.icon.raw_value or 'fa-book'} fa-2x me-3"
+                                   style="color:#3b5998;" title="أيقونة"/>
+                                <div>
+                                    <strong style="font-size:1.05em;">
+                                        <field name="name"/>
+                                    </strong>
+                                    <div class="text-muted" style="font-size:0.85em;">
+                                        <field name="subtitle"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-muted mt-2" style="font-size:0.8em;">
+                                <span t-if="record.role_group_id.raw_value">
+                                    <i class="fa fa-user-circle" title="الدور"/> <field name="role_group_id"/>
+                                </span>
+                                <span t-if="record.menu_section_key.raw_value">
+                                    <i class="fa fa-list" title="القسم"/> <field name="menu_section_key"/>
+                                </span>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- ═══ Form — قراءة المحتوى ═══ -->
+    <record id="view_rawasi_user_guide_form" model="ir.ui.view">
+        <field name="name">rawasi.user.guide.form</field>
+        <field name="model">rawasi.user.guide</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="عنوان الدليل"/>
+                        </h1>
+                        <h3 class="text-muted"><field name="subtitle" placeholder="عنوان فرعي"/></h3>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="guide_type"/>
+                            <field name="role_group_id"
+                                   invisible="guide_type != 'role'"
+                                   required="guide_type == 'role'"
+                                   options="{'no_create': True, 'no_open': True}"/>
+                            <field name="menu_section_key"
+                                   invisible="guide_type != 'workflow'"
+                                   required="guide_type == 'workflow'"/>
+                        </group>
+                        <group>
+                            <field name="icon"/>
+                            <field name="color" widget="color_picker"/>
+                            <field name="sequence"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="المحتوى" name="content">
+                            <field name="content" nolabel="1"
+                                   placeholder="اكتب شرحاً وافياً للدور أو سير العمل..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ═══ List ═══ -->
+    <record id="view_rawasi_user_guide_list" model="ir.ui.view">
+        <field name="name">rawasi.user.guide.list</field>
+        <field name="model">rawasi.user.guide</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="guide_type"/>
+                <field name="role_group_id" optional="show"/>
+                <field name="menu_section_key" optional="show"/>
+                <field name="active" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ═══ Search ═══ -->
+    <record id="view_rawasi_user_guide_search" model="ir.ui.view">
+        <field name="name">rawasi.user.guide.search</field>
+        <field name="model">rawasi.user.guide</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="role_group_id"/>
+                <field name="menu_section_key"/>
+                <filter name="type_role" string="حسب الدور" domain="[('guide_type','=','role')]"/>
+                <filter name="type_workflow" string="حسب سير العمل" domain="[('guide_type','=','workflow')]"/>
+                <group>
+                    <filter name="g_type" string="حسب النوع" context="{'group_by':'guide_type'}"/>
+                    <filter name="g_role" string="حسب الدور" context="{'group_by':'role_group_id'}"/>
+                    <filter name="g_section" string="حسب القسم" context="{'group_by':'menu_section_key'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- ═══ الأكشن الرئيسي (يفتح من اللوحة) ═══ -->
+    <record id="action_rawasi_user_guide" model="ir.actions.act_window">
+        <field name="name">دليل الاستخدام</field>
+        <field name="res_model">rawasi.user.guide</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="search_view_id" ref="view_rawasi_user_guide_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                دليل الاستخدام الشامل
+            </p>
+            <p>
+                أدلّة مفصّلة منظَّمة حسب الدور (مهندس موقع، محاسب، مدير مشاريع...)
+                وحسب سير العمل لكل قسم رئيسي.
+            </p>
+        </field>
+    </record>
+
+    <!-- ═══ أكشنات سير العمل لكل قسم ═══ -->
+    <record id="action_user_guide_competitions" model="ir.actions.act_window">
+        <field name="name">دليل الاستخدام — المنافسات</field>
+        <field name="res_model">rawasi.user.guide</field>
+        <field name="view_mode">kanban,form</field>
+        <field name="domain">[('menu_section_key','=','competitions')]</field>
+        <field name="context">{'search_default_type_workflow': 1}</field>
+    </record>
+
+    <record id="action_user_guide_projects" model="ir.actions.act_window">
+        <field name="name">دليل الاستخدام — المشاريع</field>
+        <field name="res_model">rawasi.user.guide</field>
+        <field name="view_mode">kanban,form</field>
+        <field name="domain">[('menu_section_key','=','projects')]</field>
+    </record>
+
+    <record id="action_user_guide_reference_registry" model="ir.actions.act_window">
+        <field name="name">دليل الاستخدام — سجل البنود المرجعي</field>
+        <field name="res_model">rawasi.user.guide</field>
+        <field name="view_mode">kanban,form</field>
+        <field name="domain">[('menu_section_key','=','reference_registry')]</field>
+    </record>
+
+    <record id="action_user_guide_price_intelligence" model="ir.actions.act_window">
+        <field name="name">دليل الاستخدام — رادار الترسية</field>
+        <field name="res_model">rawasi.user.guide</field>
+        <field name="view_mode">kanban,form</field>
+        <field name="domain">[('menu_section_key','=','price_intelligence')]</field>
+    </record>
+
+    <record id="action_user_guide_analytics" model="ir.actions.act_window">
+        <field name="name">دليل الاستخدام — لوحات وتحليلات</field>
+        <field name="res_model">rawasi.user.guide</field>
+        <field name="view_mode">kanban,form</field>
+        <field name="domain">[('menu_section_key','=','analytics')]</field>
+    </record>
+
+    <record id="action_user_guide_wbs" model="ir.actions.act_window">
+        <field name="name">دليل الاستخدام — الجداول الزمنية</field>
+        <field name="res_model">rawasi.user.guide</field>
+        <field name="view_mode">kanban,form</field>
+        <field name="domain">[('menu_section_key','=','wbs')]</field>
+    </record>
+
+    <record id="action_user_guide_procurement" model="ir.actions.act_window">
+        <field name="name">دليل الاستخدام — المشتريات والميزانية</field>
+        <field name="res_model">rawasi.user.guide</field>
+        <field name="view_mode">kanban,form</field>
+        <field name="domain">[('menu_section_key','=','procurement')]</field>
+    </record>
+
+    <record id="action_user_guide_field" model="ir.actions.act_window">
+        <field name="name">دليل الاستخدام — المستندات والموقع</field>
+        <field name="res_model">rawasi.user.guide</field>
+        <field name="view_mode">kanban,form</field>
+        <field name="domain">[('menu_section_key','=','field')]</field>
+    </record>
+
+    <record id="action_user_guide_contracts" model="ir.actions.act_window">
+        <field name="name">دليل الاستخدام — العقود والمستحقات</field>
+        <field name="res_model">rawasi.user.guide</field>
+        <field name="view_mode">kanban,form</field>
+        <field name="domain">[('menu_section_key','=','contracts')]</field>
+    </record>
+
+    <record id="action_user_guide_settings" model="ir.actions.act_window">
+        <field name="name">دليل الاستخدام — الإعدادات</field>
+        <field name="res_model">rawasi.user.guide</field>
+        <field name="view_mode">kanban,form</field>
+        <field name="domain">[('menu_section_key','=','settings')]</field>
+    </record>
+
+</odoo>

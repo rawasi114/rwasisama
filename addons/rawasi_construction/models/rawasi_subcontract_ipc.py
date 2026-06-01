@@ -122,6 +122,7 @@ class RawasiSubcontractIpc(models.Model):
         return True
 
     def action_approve(self):
+        self._ensure_tech_approver()
         for r in self:
             # تحقق إلزامي: التراكمي لا يتجاوز التعاقدي
             for ln in r.line_ids:
@@ -134,6 +135,7 @@ class RawasiSubcontractIpc(models.Model):
         self.write({"state": "approved"})
 
     def action_mark_paid(self):
+        self._ensure_finance_user()
         for r in self:
             r.state = "paid"
             if not r.payment_date:

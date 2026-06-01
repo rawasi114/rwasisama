@@ -86,11 +86,13 @@ class RawasiVariationOrder(models.Model):
             vo.state = "submitted"
 
     def action_approve(self):
+        self._ensure_tech_approver()
         for vo in self:
             vo._apply_to_boq()
             vo.state = "approved"
 
     def action_reject(self):
+        self._ensure_tech_approver()
         self.write({"state": "rejected"})
 
     def action_reset_to_draft(self):
@@ -104,18 +106,33 @@ class RawasiVariationOrder(models.Model):
             return
         competition = self._get_competition()
         for line in self.line_ids:
+            # ── snapshot «قبل» للشفافية: تُحفظ مرة واحدة عند الاعتماد
+            if line.boq_item_id:
+                line.qty_before = line.boq_item_id.quantity
+                line.unit_price_at_apply = line.boq_item_id.unit_price
+                line.amount_before = (
+                    line.boq_item_id.quantity * line.boq_item_id.unit_price
+                )
+            else:
+                line.qty_before = 0.0
+                line.unit_price_at_apply = line.unit_price
+                line.amount_before = 0.0
+
             if line.change_type == "new_item":
                 if not competition:
                     raise UserError(_(
                         "لا توجد منافسة مرتبطة بالمشروع لإضافة بند جديد."
                     ))
-                self.env["rawasi.boq.item"].create({
+                new_item = self.env["rawasi.boq.item"].create({
                     "competition_id": competition.id,
                     "name": line.description or line.name or _("بند أمر تغيير"),
                     "quantity": line.quantity,
                     "unit_cost": line.unit_cost,
                     "unit_price": line.unit_price,
                 })
+                line.boq_item_id = new_item.id
+                line.qty_after = line.quantity
+                line.amount_after = line.quantity * line.unit_price
             elif line.boq_item_id:
                 if line.change_type == "add_qty":
                     line.boq_item_id.quantity += line.quantity
@@ -123,6 +140,10 @@ class RawasiVariationOrder(models.Model):
                     line.boq_item_id.quantity = max(
                         0.0, line.boq_item_id.quantity - line.quantity
                     )
+                line.qty_after = line.boq_item_id.quantity
+                line.amount_after = (
+                    line.boq_item_id.quantity * line.unit_price_at_apply
+                )
         self.applied = True
 
 
@@ -153,6 +174,23 @@ class RawasiVariationOrderLine(models.Model):
     currency_id = fields.Many2one(related="vo_id.currency_id")
     amount_subtotal = fields.Monetary(
         string="الأثر", compute="_compute_subtotal", store=True
+    )
+
+    # ═══ Snapshot «قبل/بعد» — يُملأ عند اعتماد VO (شفافية تامة) ═══
+    qty_before = fields.Float(
+        string="الكمية قبل التغيير", readonly=True, copy=False,
+    )
+    qty_after = fields.Float(
+        string="الكمية بعد التغيير", readonly=True, copy=False,
+    )
+    amount_before = fields.Monetary(
+        string="القيمة قبل التغيير", readonly=True, copy=False,
+    )
+    amount_after = fields.Monetary(
+        string="القيمة بعد التغيير", readonly=True, copy=False,
+    )
+    unit_price_at_apply = fields.Monetary(
+        string="سعر الوحدة وقت التطبيق", readonly=True, copy=False,
     )
 
     @api.depends("change_type", "quantity", "unit_price")

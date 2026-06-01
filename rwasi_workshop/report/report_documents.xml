@@ -1,0 +1,539 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ============ RS-WS-01 أمر تصنيع ============ -->
+    <template id="report_work_order_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="rwasi_workshop.report_workshop_layout">
+                    <t t-set="title">أمر تصنيع</t>
+                    <t t-set="code">RS-WS-01</t>
+                    <table class="info">
+                        <tr>
+                            <td class="lbl">العميل</td><td t-out="o.partner_id.name or ''"/>
+                            <td class="lbl">أمر البيع</td><td t-out="o.sale_order_id.name or ''"/>
+                        </tr>
+                        <tr>
+                            <td class="lbl">الأقسام</td><td t-out="o.workshop_scope_summary or ''"/>
+                            <td class="lbl">الأولوية</td><td><span t-field="o.priority"/></td>
+                        </tr>
+                        <tr>
+                            <td class="lbl">تاريخ البدء</td><td><span t-field="o.start_date"/></td>
+                            <td class="lbl">تاريخ التسليم</td><td><span t-field="o.required_date"/></td>
+                        </tr>
+                        <tr>
+                            <td class="lbl">المرجع/المخططات</td><td t-out="o.drawing_ref or ''"/>
+                            <td class="lbl">الحالة</td><td><span t-field="o.state"/></td>
+                        </tr>
+                    </table>
+                    <div class="sec-title">وصف العمل العام</div>
+                    <div class="notes-box" t-out="o.scope_of_work or ''"/>
+                    <div class="sec-title">أوامر العمل</div>
+                    <table class="lines">
+                        <tr>
+                            <th style="width:6%">م.</th>
+                            <th style="width:14%">رقم أمر العمل</th>
+                            <th>المنتج</th>
+                            <th style="width:10%">الكمية</th>
+                            <th style="width:12%">القسم</th>
+                            <th style="width:12%">بدء</th>
+                            <th style="width:12%">انتهاء</th>
+                            <th style="width:10%">الحالة</th>
+                        </tr>
+                        <tr t-foreach="o.job_ids" t-as="j">
+                            <td t-out="j_index + 1"/>
+                            <td t-out="j.name or ''"/>
+                            <td t-out="j.product_id.display_name or ''"/>
+                            <td t-out="j.product_qty"/>
+                            <td><span t-field="j.workshop_scope"/></td>
+                            <td><span t-field="j.start_date"/></td>
+                            <td><span t-field="j.end_date"/></td>
+                            <td><span t-field="j.status"/></td>
+                        </tr>
+                    </table>
+                    <div class="sec-title">طلبات المواد</div>
+                    <table class="lines">
+                        <tr>
+                            <th style="width:6%">م.</th>
+                            <th style="width:14%">رقم الطلب</th>
+                            <th>أمر العمل</th>
+                            <th style="width:12%">السبب</th>
+                            <th style="width:14%">التاريخ</th>
+                            <th style="width:18%">الحالة</th>
+                        </tr>
+                        <tr t-foreach="o.material_request_ids" t-as="r">
+                            <td t-out="r_index + 1"/>
+                            <td t-out="r.name or ''"/>
+                            <td t-out="r.work_job_id.name or ''"/>
+                            <td><span t-field="r.reason"/></td>
+                            <td><span t-field="r.request_date"/></td>
+                            <td><span t-field="r.state"/></td>
+                        </tr>
+                    </table>
+                    <div class="sec-title">المتطلبات والاشتراطات</div>
+                    <div>
+                        <span class="chk"><t t-out="'☑' if o.req_approved_dwgs else '☐'"/> مخططات معتمدة</span>
+                        <span class="chk"><t t-out="'☑' if o.req_sample_approved else '☐'"/> عينة موافق عليها</span>
+                        <span class="chk"><t t-out="'☑' if o.req_material_approval else '☐'"/> اعتماد المواد</span>
+                        <span class="chk"><t t-out="'☑' if o.req_third_party_test else '☐'"/> فحص طرف ثالث</span>
+                        <span class="chk"><t t-out="'☑' if o.req_site_install else '☐'"/> تركيب بالموقع</span>
+                        <span class="chk"><t t-out="'☑' if o.req_special_packing else '☐'"/> تغليف خاص</span>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- ============ RS-WS-05 التحضير اليومي للورشة ============ -->
+    <template id="report_daily_preparation_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="rwasi_workshop.report_workshop_layout">
+                    <t t-set="title">التحضير اليومي للورشة</t>
+                    <t t-set="code">RS-WS-05</t>
+                    <table class="info">
+                        <tr>
+                            <td class="lbl">اليوم</td><td t-out="o.prep_day or ''"/>
+                            <td class="lbl">التاريخ</td><td><span t-field="o.prep_date"/></td>
+                        </tr>
+                        <tr>
+                            <td class="lbl">الورشة / القسم</td><td t-out="o.workshop or ''"/>
+                            <td class="lbl">مشرف الوردية</td><td t-out="o.shift_supervisor or ''"/>
+                        </tr>
+                        <tr>
+                            <td class="lbl">العمالة المتاحة</td><td t-out="o.available_crew"/>
+                            <td class="lbl">العمالة الغائبة</td><td t-out="o.absent_crew"/>
+                        </tr>
+                        <tr>
+                            <td class="lbl">معدات جاهزة</td><td t-out="o.ready_equipment"/>
+                            <td class="lbl">تحت الصيانة</td><td t-out="o.under_maint_equipment"/>
+                        </tr>
+                    </table>
+                    <div class="sec-title">الأعمال المخططة لليوم</div>
+                    <table class="lines">
+                        <tr><th style="width:6%">م.</th><th style="width:16%">أمر التشغيل</th><th>وصف العمل</th><th style="width:16%">المسؤول</th><th style="width:10%">الساعات</th><th style="width:18%">المخرج المتوقع</th></tr>
+                        <tr t-foreach="o.line_ids" t-as="l">
+                            <td t-out="l_index + 1"/><td t-out="l.wo_no or ''"/><td t-out="l.task or ''"/>
+                            <td t-out="l.assigned_to or ''"/><td t-out="l.hours"/><td t-out="l.expected_output or ''"/>
+                        </tr>
+                    </table>
+                    <div class="sec-title">قائمة الجاهزية</div>
+                    <div>
+                        <span class="chk"><t t-out="'☑' if o.chk_materials_ready else '☐'"/> مواد متوفرة</span>
+                        <span class="chk"><t t-out="'☑' if o.chk_drawings_approved else '☐'"/> مخططات معتمدة</span>
+                        <span class="chk"><t t-out="'☑' if o.chk_toolbox_talk else '☐'"/> تنبيه أمن وسلامة</span>
+                        <span class="chk"><t t-out="'☑' if o.chk_ppe_verified else '☐'"/> أدوات الحماية</span>
+                        <span class="chk"><t t-out="'☑' if o.chk_targets_reviewed else '☐'"/> مراجعة الأهداف</span>
+                    </div>
+                    <div class="sec-title">المعوقات المتوقعة</div>
+                    <div class="notes-box" t-out="o.expected_bottlenecks or ''"/>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- ============ RS-WS-06 التقرير اليومي للورشة ============ -->
+    <template id="report_daily_report_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="rwasi_workshop.report_workshop_layout">
+                    <t t-set="title">التقرير اليومي للورشة</t>
+                    <t t-set="code">RS-WS-06</t>
+                    <table class="info">
+                        <tr>
+                            <td class="lbl">التاريخ</td><td><span t-field="o.report_date"/></td>
+                            <td class="lbl">الورشة</td><td t-out="o.workshop or ''"/>
+                        </tr>
+                        <tr>
+                            <td class="lbl">الطقس</td><td t-out="o.weather or ''"/>
+                            <td class="lbl">ساعات العمل</td><td t-out="o.working_hours or ''"/>
+                        </tr>
+                        <tr>
+                            <td class="lbl">العمالة</td><td t-out="o.crew_count"/>
+                            <td class="lbl">إجمالي ساعات العمل</td><td t-out="o.man_hours"/>
+                        </tr>
+                    </table>
+                    <div class="sec-title">الإنجازات اليومية</div>
+                    <table class="lines">
+                        <tr><th style="width:6%">م.</th><th style="width:16%">أمر التشغيل</th><th>الوصف</th><th style="width:10%">المخطط</th><th style="width:10%">المُنجز</th><th style="width:10%">% الإنجاز</th><th style="width:10%">المتبقي</th></tr>
+                        <tr t-foreach="o.line_ids" t-as="l">
+                            <td t-out="l_index + 1"/><td t-out="l.wo_no or ''"/><td t-out="l.description or ''"/>
+                            <td t-out="l.planned"/><td t-out="l.done"/><td t-out="l.completion"/><td t-out="l.remaining"/>
+                        </tr>
+                    </table>
+                    <div class="sec-title">المعوقات والتأخيرات</div>
+                    <div class="notes-box" t-out="o.issues_delays or ''"/>
+                    <div class="sec-title">خطة الغد</div>
+                    <div class="notes-box" t-out="o.plan_tomorrow or ''"/>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- ============ RS-WS-07 كشف حضور وانصراف العمالة ============ -->
+    <template id="report_attendance_sheet_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="rwasi_workshop.report_workshop_layout">
+                    <t t-set="title">كشف حضور وانصراف العمالة</t>
+                    <t t-set="code">RS-WS-07</t>
+                    <table class="info">
+                        <tr>
+                            <td class="lbl">التاريخ</td><td><span t-field="o.att_date"/></td>
+                            <td class="lbl">الورشة</td><td t-out="o.workshop or ''"/>
+                        </tr>
+                        <tr>
+                            <td class="lbl">الوردية</td><td><span t-field="o.shift"/></td>
+                            <td class="lbl">إجمالي الحضور</td><td t-out="o.total_present"/>
+                        </tr>
+                    </table>
+                    <div class="sec-title">كشف الحضور</div>
+                    <table class="lines">
+                        <tr><th style="width:6%">م.</th><th style="width:14%">رقم البصمة</th><th>اسم العامل</th><th style="width:14%">المهنة</th><th style="width:10%">دخول</th><th style="width:10%">خروج</th><th style="width:10%">إضافي</th><th style="width:10%">إجمالي</th></tr>
+                        <tr t-foreach="o.line_ids" t-as="l">
+                            <td t-out="l_index + 1"/><td t-out="l.worker_id_no or ''"/><td t-out="l.worker_name or ''"/>
+                            <td t-out="l.trade or ''"/><td t-out="l.time_in or ''"/><td t-out="l.time_out or ''"/><td t-out="l.overtime"/><td t-out="l.total"/>
+                        </tr>
+                    </table>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- ============ RS-WS-08 بطاقة وقت العامل ============ -->
+    <template id="report_time_card_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="rwasi_workshop.report_workshop_layout">
+                    <t t-set="title">بطاقة وقت العامل</t>
+                    <t t-set="code">RS-WS-08</t>
+                    <table class="info">
+                        <tr>
+                            <td class="lbl">اسم العامل</td><td t-out="o.worker_name or ''"/>
+                            <td class="lbl">رقم البصمة</td><td t-out="o.worker_id_no or ''"/>
+                        </tr>
+                        <tr>
+                            <td class="lbl">المهنة</td><td t-out="o.trade or ''"/>
+                            <td class="lbl">الأسبوع المنتهي</td><td><span t-field="o.week_ending"/></td>
+                        </tr>
+                    </table>
+                    <div class="sec-title">توزيع الساعات على المهام</div>
+                    <table class="lines">
+                        <tr><th style="width:6%">م.</th><th style="width:14%">أمر التشغيل</th><th>المهمة</th><th>السبت</th><th>الأحد</th><th>الإثنين</th><th>الثلاثاء</th><th>الأربعاء</th><th>الخميس</th><th>الإجمالي</th></tr>
+                        <tr t-foreach="o.line_ids" t-as="l">
+                            <td t-out="l_index + 1"/><td t-out="l.wo or ''"/><td t-out="l.task or ''"/>
+                            <td t-out="l.sat"/><td t-out="l.sun"/><td t-out="l.mon"/><td t-out="l.tue"/><td t-out="l.wed"/><td t-out="l.thu"/><td t-out="l.total"/>
+                        </tr>
+                    </table>
+                    <table class="info">
+                        <tr>
+                            <td class="lbl">ساعات عادية</td><td t-out="o.regular_hrs"/>
+                            <td class="lbl">ساعات إضافية</td><td t-out="o.overtime_hrs"/>
+                            <td class="lbl">إجازات</td><td t-out="o.leave_hrs"/>
+                            <td class="lbl">إجمالي الأسبوع</td><td t-out="o.week_total"/>
+                        </tr>
+                    </table>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- ============ RS-WS-09 إنتاجية العمالة ============ -->
+    <template id="report_labor_productivity_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="rwasi_workshop.report_workshop_layout">
+                    <t t-set="title">إنتاجية العمالة</t>
+                    <t t-set="code">RS-WS-09</t>
+                    <table class="info">
+                        <tr>
+                            <td class="lbl">الفترة من</td><td><span t-field="o.period_from"/></td>
+                            <td class="lbl">الفترة إلى</td><td><span t-field="o.period_to"/></td>
+                        </tr>
+                        <tr>
+                            <td class="lbl">الورشة / القسم</td><td t-out="o.workshop or ''"/>
+                            <td class="lbl">إجمالي العمالة</td><td t-out="o.crew_size"/>
+                        </tr>
+                    </table>
+                    <div class="sec-title">قياس الإنتاجية حسب البند</div>
+                    <table class="lines">
+                        <tr><th style="width:6%">م.</th><th style="width:12%">رقم البند</th><th>الوصف</th><th style="width:10%">الوحدة</th><th style="width:10%">المُنجز</th><th style="width:12%">ساعات العمل</th><th style="width:12%">المعدل المعياري</th><th style="width:12%">المعدل الفعلي</th></tr>
+                        <tr t-foreach="o.line_ids" t-as="l">
+                            <td t-out="l_index + 1"/><td t-out="l.item or ''"/><td t-out="l.description or ''"/>
+                            <td t-out="l.uom or ''"/><td t-out="l.output"/><td t-out="l.man_hrs"/><td t-out="l.std_rate"/><td t-out="l.actual_rate"/>
+                        </tr>
+                    </table>
+                    <table class="info">
+                        <tr>
+                            <td class="lbl">إجمالي الساعات</td><td t-out="o.total_mh"/>
+                            <td class="lbl">إجمالي الإنتاج</td><td t-out="o.total_output"/>
+                            <td class="lbl">معدل الإنتاجية</td><td t-out="o.productivity_factor"/>
+                            <td class="lbl">الانحراف %</td><td t-out="o.variance"/>
+                        </tr>
+                    </table>
+                    <div class="sec-title">تحليل الانحرافات وخطة التحسين</div>
+                    <div class="notes-box" t-out="o.variance_analysis or ''"/>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- ============ RS-WS-10 نموذج معاينة وتفصيل ============ -->
+    <template id="report_measurement_sheet_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="rwasi_workshop.report_workshop_layout">
+                    <t t-set="title">نموذج معاينة وتفصيل</t>
+                    <t t-set="code">RS-WS-10</t>
+                    <table class="info">
+                        <tr>
+                            <td class="lbl">المشروع / الموقع</td><td t-out="o.site or ''"/>
+                            <td class="lbl">القسم المعني</td><td><span t-field="o.department"/></td>
+                        </tr>
+                        <tr>
+                            <td class="lbl">تاريخ المعاينة</td><td><span t-field="o.survey_date"/></td>
+                            <td class="lbl">القائم بالمعاينة</td><td t-out="o.surveyor_name or ''"/>
+                        </tr>
+                    </table>
+                    <div class="sec-title">القياسات</div>
+                    <table class="lines">
+                        <tr><th style="width:6%">م.</th><th style="width:16%">المرجع/الموقع</th><th>وصف العنصر</th><th>الطول</th><th>العرض</th><th>الارتفاع</th><th>العدد</th><th>الإجمالي</th><th>الوحدة</th></tr>
+                        <tr t-foreach="o.line_ids" t-as="l">
+                            <td t-out="l_index + 1"/><td t-out="l.location or ''"/><td t-out="l.element or ''"/>
+                            <td t-out="l.length"/><td t-out="l.width"/><td t-out="l.height"/><td t-out="l.qty"/><td t-out="l.total"/><td t-out="l.uom or ''"/>
+                        </tr>
+                    </table>
+                    <div t-if="o.sketch" class="sec-title">رسم تفصيلي / مخطط</div>
+                    <div t-if="o.sketch" style="text-align:center;"><img t-att-src="image_data_uri(o.sketch)" style="max-width:90%; max-height:260px;"/></div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- ============ RS-WS-15 تقرير فحص الجودة ============ -->
+    <template id="report_qc_inspection_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="rwasi_workshop.report_workshop_layout">
+                    <t t-set="title">تقرير فحص الجودة</t>
+                    <t t-set="code">RS-WS-15</t>
+                    <table class="info">
+                        <tr>
+                            <td class="lbl">العنصر المفحوص</td><td t-out="o.item_inspected or ''"/>
+                            <td class="lbl">أمر التشغيل</td><td t-out="o.work_order_id.name or ''"/>
+                        </tr>
+                        <tr>
+                            <td class="lbl">تاريخ الفحص</td><td><span t-field="o.inspection_date"/></td>
+                            <td class="lbl">القرار النهائي</td><td><span t-field="o.disposition"/></td>
+                        </tr>
+                    </table>
+                    <div class="sec-title">قائمة الفحص</div>
+                    <table class="lines">
+                        <tr><th style="width:6%">م.</th><th>بند الفحص</th><th style="width:20%">المعيار</th><th style="width:18%">القراءة الفعلية</th><th style="width:12%">النتيجة</th><th style="width:16%">ملاحظة</th></tr>
+                        <tr t-foreach="o.line_ids" t-as="l">
+                            <td t-out="l_index + 1"/><td t-out="l.check_item or ''"/><td t-out="l.acceptance or ''"/>
+                            <td t-out="l.actual or ''"/><td><span t-field="l.result"/></td><td t-out="l.remark or ''"/>
+                        </tr>
+                    </table>
+                    <div class="sec-title">تفاصيل عدم المطابقة</div>
+                    <div class="notes-box" t-out="o.non_conformity or ''"/>
+                    <table class="info">
+                        <tr>
+                            <td class="lbl">المفتش الفني</td><td t-out="o.inspector_name or ''"/>
+                            <td class="lbl">رقم الشهادة</td><td t-out="o.inspector_cert or ''"/>
+                        </tr>
+                    </table>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- ============ RS-WS-16 تقرير عدم المطابقة NCR ============ -->
+    <template id="report_ncr_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="rwasi_workshop.report_workshop_layout">
+                    <t t-set="title">تقرير عدم المطابقة (NCR)</t>
+                    <t t-set="code">RS-WS-16</t>
+                    <table class="info">
+                        <tr>
+                            <td class="lbl">العنصر / البند</td><td t-out="o.item or ''"/>
+                            <td class="lbl">تاريخ الرصد</td><td><span t-field="o.detected_on"/></td>
+                        </tr>
+                    </table>
+                    <div class="sec-title">التصنيف</div>
+                    <div>
+                        <span class="chk"><t t-out="'☑' if o.cls_major else '☐'"/> كبرى</span>
+                        <span class="chk"><t t-out="'☑' if o.cls_minor else '☐'"/> صغرى</span>
+                        <span class="chk"><t t-out="'☑' if o.cls_observation else '☐'"/> ملاحظة</span>
+                        <span class="chk"><t t-out="'☑' if o.cls_repeated else '☐'"/> متكررة</span>
+                    </div>
+                    <div class="sec-title">وصف عدم المطابقة</div>
+                    <div class="notes-box" t-out="o.description or ''"/>
+                    <div class="sec-title">تحليل السبب الجذري</div>
+                    <div class="notes-box" t-out="o.root_cause or ''"/>
+                    <div class="sec-title">الإجراء التصحيحي والوقائي</div>
+                    <table class="lines">
+                        <tr><th style="width:6%">م.</th><th>الإجراء</th><th style="width:18%">المسؤول</th><th style="width:16%">تاريخ التنفيذ</th><th style="width:14%">الحالة</th></tr>
+                        <tr t-foreach="o.action_ids" t-as="l">
+                            <td t-out="l_index + 1"/><td t-out="l.action or ''"/><td t-out="l.owner or ''"/>
+                            <td><span t-field="l.due_date"/></td><td t-out="l.status or ''"/>
+                        </tr>
+                    </table>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- ============ RS-WS-17 سجل صيانة المعدات ============ -->
+    <template id="report_maintenance_log_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="rwasi_workshop.report_workshop_layout">
+                    <t t-set="title">سجل صيانة المعدات والآلات</t>
+                    <t t-set="code">RS-WS-17</t>
+                    <table class="info">
+                        <tr>
+                            <td class="lbl">اسم المعدة</td><td t-out="o.machine or ''"/>
+                            <td class="lbl">رقم الأصل</td><td t-out="o.asset_no or ''"/>
+                        </tr>
+                        <tr>
+                            <td class="lbl">الموقع / الورشة</td><td t-out="o.location or ''"/>
+                            <td class="lbl">سنة الإنتاج</td><td t-out="o.year or ''"/>
+                        </tr>
+                    </table>
+                    <div class="sec-title">جدول الصيانة الوقائية</div>
+                    <div>
+                        <span class="chk"><t t-out="'☑' if o.pm_daily else '☐'"/> يومي</span>
+                        <span class="chk"><t t-out="'☑' if o.pm_weekly else '☐'"/> أسبوعي</span>
+                        <span class="chk"><t t-out="'☑' if o.pm_monthly else '☐'"/> شهري</span>
+                        <span class="chk"><t t-out="'☑' if o.pm_quarterly else '☐'"/> ربع سنوي</span>
+                        <span class="chk"><t t-out="'☑' if o.pm_annual else '☐'"/> سنوي</span>
+                    </div>
+                    <div class="sec-title">سجل أعمال الصيانة</div>
+                    <table class="lines">
+                        <tr><th style="width:6%">م.</th><th style="width:12%">التاريخ</th><th style="width:10%">النوع</th><th>وصف العمل / العطل</th><th style="width:16%">قطع الغيار</th><th style="width:10%">التوقف</th><th style="width:14%">الفني</th></tr>
+                        <tr t-foreach="o.line_ids" t-as="l">
+                            <td t-out="l_index + 1"/><td><span t-field="l.date"/></td><td><span t-field="l.maint_type"/></td>
+                            <td t-out="l.work_fault or ''"/><td t-out="l.spares or ''"/><td t-out="l.downtime"/><td t-out="l.technician or ''"/>
+                        </tr>
+                    </table>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- ============ RS-WS-18 اجتماع السلامة اليومي ============ -->
+    <template id="report_toolbox_talk_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="rwasi_workshop.report_workshop_layout">
+                    <t t-set="title">اجتماع السلامة اليومي (Toolbox Talk)</t>
+                    <t t-set="code">RS-WS-18</t>
+                    <table class="info">
+                        <tr>
+                            <td class="lbl">التاريخ</td><td><span t-field="o.talk_date"/></td>
+                            <td class="lbl">الورشة</td><td t-out="o.workshop or ''"/>
+                        </tr>
+                        <tr>
+                            <td class="lbl">الموضوع</td><td t-out="o.topic or ''"/>
+                            <td class="lbl">المُلقي</td><td t-out="o.presenter or ''"/>
+                        </tr>
+                    </table>
+                    <div class="sec-title">النقاط الرئيسية</div>
+                    <div class="notes-box" t-out="o.key_points or ''"/>
+                    <div class="sec-title">المخاطر المحددة</div>
+                    <div>
+                        <span class="chk"><t t-out="'☑' if o.hz_cuts else '☐'"/> القطع والجروح</span>
+                        <span class="chk"><t t-out="'☑' if o.hz_fire else '☐'"/> الحريق/اللحام</span>
+                        <span class="chk"><t t-out="'☑' if o.hz_electrical else '☐'"/> الكهرباء</span>
+                        <span class="chk"><t t-out="'☑' if o.hz_fall else '☐'"/> السقوط</span>
+                        <span class="chk"><t t-out="'☑' if o.hz_lifting else '☐'"/> الأحمال الثقيلة</span>
+                        <span class="chk"><t t-out="'☑' if o.hz_noise else '☐'"/> الضوضاء</span>
+                        <span class="chk"><t t-out="'☑' if o.hz_chemicals else '☐'"/> الكيماويات</span>
+                        <span class="chk"><t t-out="'☑' if o.hz_heat else '☐'"/> الحرارة</span>
+                    </div>
+                    <div class="sec-title">قائمة الحضور</div>
+                    <table class="lines">
+                        <tr><th style="width:8%">م.</th><th>الاسم</th><th style="width:20%">رقم البصمة</th><th style="width:20%">المهنة</th></tr>
+                        <tr t-foreach="o.attendee_ids" t-as="l">
+                            <td t-out="l_index + 1"/><td t-out="l.name or ''"/><td t-out="l.id_no or ''"/><td t-out="l.trade or ''"/>
+                        </tr>
+                    </table>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- ============ RS-WS-20 إغلاق وتسليم المشروع ============ -->
+    <template id="report_project_closeout_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="rwasi_workshop.report_workshop_layout">
+                    <t t-set="title">إغلاق وتسليم المشروع</t>
+                    <t t-set="code">RS-WS-20</t>
+                    <table class="info">
+                        <tr>
+                            <td class="lbl">العميل</td><td t-out="o.partner_id.name or ''"/>
+                            <td class="lbl">رقم العقد</td><td t-out="o.contract_no or ''"/>
+                        </tr>
+                        <tr>
+                            <td class="lbl">المشروع</td><td t-out="o.project_ref or ''"/>
+                            <td class="lbl">تاريخ التسليم</td><td><span t-field="o.handover_date"/></td>
+                        </tr>
+                    </table>
+                    <div class="sec-title">استبيان التقييم والالتزام</div>
+                    <table class="info">
+                        <tr>
+                            <td class="lbl">تقييم الفنيين</td><td><span t-field="o.technician_rating"/></td>
+                            <td class="lbl">جودة التشطيب</td><td><span t-field="o.finishing_quality"/></td>
+                            <td class="lbl">رضا العميل</td><td><span t-field="o.satisfaction"/></td>
+                        </tr>
+                        <tr>
+                            <td class="lbl">حالة الالتزام</td><td><span t-field="o.commitment_status"/></td>
+                            <td class="lbl">أيام التأخير</td><td t-out="o.delay_days"/>
+                            <td class="lbl">المدة الموعودة</td><td t-out="o.promised_days"/>
+                        </tr>
+                    </table>
+                    <div class="sec-title">قائمة التحقق من الإغلاق</div>
+                    <table class="lines">
+                        <tr><th style="width:8%">م.</th><th>البند</th><th style="width:16%">النتيجة</th><th style="width:22%">المرجع</th></tr>
+                        <tr t-foreach="o.checklist_ids" t-as="l">
+                            <td t-out="l_index + 1"/><td t-out="l.item or ''"/><td><span t-field="l.result"/></td><td t-out="l.reference or ''"/>
+                        </tr>
+                    </table>
+                    <div class="sec-title">قائمة الملاحظات المتبقية (Punch List)</div>
+                    <table class="lines">
+                        <tr><th style="width:8%">م.</th><th>الوصف</th><th style="width:20%">المسؤول</th><th style="width:18%">تاريخ الإغلاق</th></tr>
+                        <tr t-foreach="o.punch_ids" t-as="l">
+                            <td t-out="l_index + 1"/><td t-out="l.description or ''"/><td t-out="l.owner or ''"/><td><span t-field="l.close_date"/></td>
+                        </tr>
+                    </table>
+                    <div class="sec-title">إقرار التسليم النهائي</div>
+                    <div class="notes-box" t-out="o.handover_statement or ''"/>
+                    <table class="rwasi-sign">
+                        <tr>
+                            <td>
+                                <div class="sign-role">المستلم (إقرار واستبيان)</div>
+                                <div class="sign-line">الاسم: <t t-out="o.customer_sign_name or o.partner_id.name or ''"/></div>
+                                <div class="sign-line" t-if="o.receiver_is_other">صلة القرابة بالعميل: <t t-out="o.receiver_relation or ''"/></div>
+                                <div class="sign-img"><img t-if="o.customer_signature" t-att-src="image_data_uri(o.customer_signature)"/></div>
+                                <div class="sign-line">التاريخ: <span t-field="o.handover_date"/></div>
+                            </td>
+                            <td>
+                                <div class="sign-role">مدير العمليات</div>
+                                <div class="sign-line">الاسم: <t t-out="o.manager_name or ''"/></div>
+                                <div class="sign-img">
+                                    <img t-if="o.manager_signature" t-att-src="image_data_uri(o.manager_signature)"/>
+                                    <img t-if="o.manager_stamp" t-att-src="image_data_uri(o.manager_stamp)" style="max-height:32px;"/>
+                                </div>
+                                <div class="sign-line">التاريخ: <span t-field="o.manager_date"/></div>
+                            </td>
+                        </tr>
+                    </table>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>

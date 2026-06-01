@@ -34,18 +34,36 @@
                             string="اعتماد تجاوز الميزانية" class="btn-warning"
                             groups="rawasi_construction.group_projects_director"
                             invisible="not has_over_budget or override_budget or state not in ('draft','submitted')"/>
-                    <button name="action_approve" type="object" string="اعتماد"
-                            class="btn-primary" invisible="state != 'submitted'"/>
+                    <button name="action_approve" type="object" string="اعتماد فني"
+                            class="btn-primary" invisible="state != 'submitted'"
+                            groups="rawasi_construction.group_tech_office_manager,rawasi_construction.group_projects_director,rawasi_construction.group_ceo"/>
+                    <button name="action_finance_approve" type="object" string="اعتماد مالي"
+                            class="btn-primary" invisible="state != 'approved'"
+                            groups="rawasi_construction.group_accountant,rawasi_construction.group_ceo"/>
                     <button name="action_create_po" type="object" string="إنشاء أمر شراء"
-                            class="btn-primary" invisible="state != 'approved'"/>
-                    <button name="action_reject" type="object" string="رفض"
-                            invisible="state not in ('submitted',)"/>
+                            class="btn-primary" invisible="state != 'finance_approved'"/>
+                    <button name="action_reject" type="object" string="رفض فني"
+                            invisible="state != 'submitted'"
+                            groups="rawasi_construction.group_tech_office_manager,rawasi_construction.group_projects_director,rawasi_construction.group_ceo"/>
+                    <button name="action_finance_reject" type="object" string="رفض مالي"
+                            invisible="state != 'approved'"
+                            groups="rawasi_construction.group_accountant,rawasi_construction.group_ceo"/>
                     <button name="action_reset_to_draft" type="object" string="إعادة لمسودة"
                             groups="base.group_system" invisible="state in ('draft','procured')"/>
                     <field name="state" widget="statusbar"
-                           statusbar_visible="draft,submitted,approved,procured"/>
+                           statusbar_visible="draft,submitted,approved,finance_approved,procured"/>
                 </header>
                 <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_open_rfq" type="object"
+                                class="oe_stat_button" icon="fa-shopping-cart"
+                                invisible="not purchase_order_id">
+                            <div class="o_stat_info">
+                                <span class="o_stat_text">RFQ المشتريات</span>
+                                <field name="purchase_order_id" widget="statinfo" string=""/>
+                            </div>
+                        </button>
+                    </div>
                     <div class="oe_title">
                         <h1><field name="name" readonly="1"/></h1>
                     </div>
@@ -88,10 +106,40 @@
         </field>
     </record>
 
+    <record id="view_material_request_search" model="ir.ui.view">
+        <field name="name">rawasi.material.request.search</field>
+        <field name="model">rawasi.material.request</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="project_id"/>
+                <field name="requested_by_id"/>
+                <filter name="f_active" string="نشطة"
+                        domain="[('state','in',('draft','submitted','approved'))]"/>
+                <filter name="f_over_budget" string="تجاوز ميزانية"
+                        domain="[('has_over_budget','=',True)]"/>
+                <filter name="f_within_budget" string="داخل الميزانية"
+                        domain="[('has_over_budget','=',False)]"/>
+                <filter name="f_pending_approval" string="بانتظار الاعتماد"
+                        domain="[('state','=','submitted')]"/>
+                <group>
+                    <filter name="g_project" string="حسب المشروع"
+                            context="{'group_by':'project_id'}"/>
+                    <filter name="g_state" string="حسب الحالة"
+                            context="{'group_by':'state'}"/>
+                    <filter name="g_requester" string="حسب الطالب"
+                            context="{'group_by':'requested_by_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
     <record id="action_material_request" model="ir.actions.act_window">
         <field name="name">طلبات المواد</field>
         <field name="res_model">rawasi.material.request</field>
         <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_material_request_search"/>
+        <field name="context">{'search_default_f_active': 1}</field>
     </record>
 
     <!-- ════════ أمر شراء (PO) ════════ -->

@@ -23,6 +23,32 @@ class RawasiWorkflowMixin(models.AbstractModel):
             "البنود المُسجَّلة تبقى للسجل المؤسسي."
         ))
 
+    def _ensure_finance_user(self):
+        """حارس عمليات الدفع: يسمح للمحاسب أو المدير العام أو الأدمن فقط."""
+        u = self.env.user
+        if (self.env.su
+                or u.has_group("base.group_system")
+                or u.has_group("rawasi_construction.group_ceo")
+                or u.has_group("rawasi_construction.group_accountant")):
+            return
+        raise UserError(_(
+            "تسجيل الدفع متاح للمحاسب أو المدير العام فقط. "
+            "تواصل مع المحاسب لإتمام الدفع."
+        ))
+
+    def _ensure_tech_approver(self):
+        """حارس الاعتماد الفني: مدير المكتب الفني أو مدير المشاريع أو الأعلى."""
+        u = self.env.user
+        if (self.env.su
+                or u.has_group("base.group_system")
+                or u.has_group("rawasi_construction.group_ceo")
+                or u.has_group("rawasi_construction.group_projects_director")
+                or u.has_group("rawasi_construction.group_tech_office_manager")):
+            return
+        raise UserError(_(
+            "اعتماد/رفض المستند متاح لمدير المكتب الفني أو مدير المشاريع فقط."
+        ))
+
 
 class RawasiPrintableMixin(models.AbstractModel):
     """طباعة تقرير PDF لكل حقول النموذج، مع خيار دمج مرفقات الـ PDF في ملف واحد."""

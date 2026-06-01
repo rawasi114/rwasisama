@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="report_customer_payment_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page rs-doc">
+                        <t t-call="rwasi_workshop.report_workshop_style"/>
+                        <h2 class="rs-title">إيصال دفع رسمي · سند قبض</h2>
+                        <div class="rs-sub">OFFICIAL PAYMENT RECEIPT</div>
+
+                        <table class="info">
+                            <tr>
+                                <td class="lbl">رقم الإيصال</td><td t-out="o.name"/>
+                                <td class="lbl">التاريخ</td><td><span t-field="o.date"/></td>
+                            </tr>
+                            <tr>
+                                <td class="lbl">العميل</td><td t-out="o.partner_id.name or ''"/>
+                                <td class="lbl">مرجع أمر البيع</td><td t-out="o.sale_order_id.name or ''"/>
+                            </tr>
+                            <tr>
+                                <td class="lbl">طريقة الدفع</td><td><span t-field="o.method"/></td>
+                                <td class="lbl">مرجع العملية</td><td t-out="o.reference or '—'"/>
+                            </tr>
+                        </table>
+
+                        <div class="sec-title">المبلغ المستلَم</div>
+                        <table class="info">
+                            <tr>
+                                <td class="lbl" style="width:25%">المبلغ المستلَم</td>
+                                <td style="font-size:15px; font-weight:bold;">
+                                    <span t-field="o.amount"/>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <div class="sec-title">ملخّص السداد</div>
+                        <table class="info">
+                            <tr>
+                                <td class="lbl">إجمالي قيمة الطلب</td>
+                                <td><span t-field="o.sale_order_id.amount_total"/></td>
+                                <td class="lbl">إجمالي المسدَّد حتى تاريخه</td>
+                                <td><span t-field="o.sale_order_id.amount_paid"/></td>
+                            </tr>
+                            <tr>
+                                <td class="lbl">المبلغ المتبقّي</td>
+                                <td colspan="3">
+                                    <span t-out="'%.2f' % (o.sale_order_id.amount_total - o.sale_order_id.amount_paid)"/>
+                                    <span t-out="o.currency_id.symbol or o.currency_id.name"/>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <div class="rs-note">
+                            هذا إيصال دفع رسمي صادر عن شركة رواسي سما للمقاولات، يؤكّد
+                            استلام المبلغ المذكور أعلاه من العميل المُبيَّن.
+                            <br/>
+                            <b>ملاحظة:</b> تُصدر الفاتورة الضريبية عند سداد كامل قيمة العمل.
+                        </div>
+
+                        <table class="rwasi-sign">
+                            <tr>
+                                <td>
+                                    <div class="sign-role">المُستلِم (عن الشركة)</div>
+                                    <div class="sign-line">الاسم:</div>
+                                    <div class="sign-line">التوقيع:</div>
+                                </td>
+                                <td>
+                                    <div class="sign-role">ختم الشركة</div>
+                                </td>
+                                <td>
+                                    <div class="sign-role">العميل / المُسلِّم</div>
+                                    <div class="sign-line">الاسم:</div>
+                                    <div class="sign-line">التوقيع:</div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <record id="action_report_customer_payment" model="ir.actions.report">
+        <field name="name">إيصال دفع</field>
+        <field name="model">rwasi.customer.payment</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">rwasi_workshop.report_customer_payment_document</field>
+        <field name="report_file">rwasi_workshop.report_customer_payment_document</field>
+        <field name="binding_model_id" ref="model_rwasi_customer_payment"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="paperformat_rwasi_a4"/>
+    </record>
+
+</odoo>

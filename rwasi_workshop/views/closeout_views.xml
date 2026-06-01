@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- RS-WS-20 إغلاق وتسليم المشروع -->
+    <record id="view_project_closeout_form" model="ir.ui.view">
+        <field name="name">rwasi.project.closeout.form</field>
+        <field name="model">rwasi.project.closeout</field>
+        <field name="arch" type="xml">
+            <form string="إغلاق وتسليم المشروع" create="0">
+                <header>
+                    <button name="action_done" string="إغلاق المشروع" type="object" class="btn-primary"
+                            invisible="state != 'draft'"/>
+                    <button name="action_cancel" string="إلغاء" type="object"
+                            invisible="state in ('done','cancel')"/>
+                    <button name="action_draft" string="إعادة لمسودة" type="object"
+                            invisible="state == 'draft'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_title"><h1><field name="name" readonly="1"/></h1></div>
+                    <group>
+                        <group>
+                            <field name="work_order_id" readonly="1"/>
+                            <field name="project_ref"/>
+                            <field name="partner_id"/>
+                            <field name="contract_no"/>
+                            <field name="handover_date"/>
+                        </group>
+                        <group string="الالتزام بالموعد">
+                            <field name="date_started" readonly="1"/>
+                            <field name="promised_days"/>
+                            <field name="installation_done_date"/>
+                            <field name="delay_days" readonly="1"/>
+                            <field name="commitment_status" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="الإقرار والاستبيان والتسليم" name="handover">
+                            <separator string="١) إقرار التسليم النهائي (يكتبه العميل)"/>
+                            <field name="handover_statement" nolabel="1"
+                                   placeholder="أقر أنا المستلم باستلام الأعمال المنفذة كاملةً ومطابقةً للمتفق عليه..."/>
+                            <separator string="٢) استبيان تقييم العميل"/>
+                            <group>
+                                <group>
+                                    <field name="technician_rating"/>
+                                    <field name="finishing_quality"/>
+                                    <field name="satisfaction"/>
+                                </group>
+                            </group>
+                            <separator string="٣) المستلم والتوقيع (توقيع واحد للإقرار والاستبيان)"/>
+                            <group>
+                                <group>
+                                    <field name="partner_id" string="العميل (صاحب أمر البيع)" readonly="1"/>
+                                    <field name="receiver_is_other"/>
+                                    <field name="customer_sign_name"/>
+                                    <field name="receiver_relation"
+                                           invisible="not receiver_is_other"
+                                           required="receiver_is_other"/>
+                                </group>
+                                <group>
+                                    <field name="customer_signature" widget="signature"/>
+                                </group>
+                            </group>
+                            <separator string="اعتماد مدير العمليات"/>
+                            <group>
+                                <group>
+                                    <field name="manager_name"/>
+                                    <field name="manager_date"/>
+                                    <field name="manager_signature" widget="signature"/>
+                                    <field name="manager_stamp" widget="image"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="قائمة التحقق من الإغلاق">
+                            <field name="checklist_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="item"/>
+                                    <field name="result"/>
+                                    <field name="reference"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="قائمة الملاحظات المتبقية">
+                            <field name="punch_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="description"/>
+                                    <field name="owner"/>
+                                    <field name="close_date"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="view_project_closeout_list" model="ir.ui.view">
+        <field name="name">rwasi.project.closeout.list</field>
+        <field name="model">rwasi.project.closeout</field>
+        <field name="arch" type="xml">
+            <list string="المشاريع المغلقة" create="0" decoration-success="state == 'done'" decoration-muted="state == 'cancel'">
+                <field name="name"/>
+                <field name="work_order_id"/>
+                <field name="project_ref"/>
+                <field name="partner_id"/>
+                <field name="commitment_status"/>
+                <field name="handover_date"/>
+                <field name="state" widget="badge"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_project_closeout" model="ir.actions.act_window">
+        <field name="name">المشاريع المغلقة</field>
+        <field name="res_model">rwasi.project.closeout</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'create': False}</field>
+    </record>
+
+</odoo>

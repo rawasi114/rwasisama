@@ -64,6 +64,16 @@ class RawasiBoqItem(models.Model):
     )
     construction_code = fields.Char(string="الرمز الإنشائي (كما ورد)")
     sbc_code_id = fields.Many2one("rawasi.sbc.code", string="رمز SBC")
+    # ── ربط جذري ببنود المرجع (سجل البنود المرجعي) ────────────────
+    reference_item_id = fields.Many2one(
+        "rawasi.reference.item", string="البند المرجعي",
+        index=True, ondelete="set null",
+        help="الربط بكتالوج البنود المرجعي الموحَّد لشركة رواسي سما.",
+    )
+    lcgpa_code_id = fields.Many2one(
+        "rawasi.lcgpa.code", string="رمز LCGPA",
+        help="رمز هيئة المحتوى المحلي المرتبط بالبند.",
+    )
 
     currency_id = fields.Many2one(
         related="competition_id.currency_id", store=True, readonly=True
