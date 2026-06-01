@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- ============================================================ -->
+        <!-- LCGPA — رمز هيئة المحتوى المحلي                              -->
+        <!-- ============================================================ -->
+        <record id="view_lcgpa_code_list" model="ir.ui.view">
+            <field name="name">rawasi.lcgpa.code.list</field>
+            <field name="model">rawasi.lcgpa.code</field>
+            <field name="arch" type="xml">
+                <list string="رموز LCGPA">
+                    <field name="code"/>
+                    <field name="name_ar"/>
+                    <field name="category"/>
+                    <field name="is_mandatory_local"/>
+                    <field name="reference_item_count"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_lcgpa_code_form" model="ir.ui.view">
+            <field name="name">rawasi.lcgpa.code.form</field>
+            <field name="model">rawasi.lcgpa.code</field>
+            <field name="arch" type="xml">
+                <form string="رمز LCGPA">
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="name_ar"/>
+                            <h1><field name="name_ar" placeholder="الاسم العربي للتصنيف"/></h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="code"/>
+                                <field name="category"/>
+                                <field name="is_mandatory_local"/>
+                            </group>
+                            <group>
+                                <field name="name_en"/>
+                                <field name="reference_item_count"/>
+                                <field name="active" widget="boolean_toggle"/>
+                            </group>
+                        </group>
+                        <group string="الوصف">
+                            <field name="description" nolabel="1"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_lcgpa_code_search" model="ir.ui.view">
+            <field name="name">rawasi.lcgpa.code.search</field>
+            <field name="model">rawasi.lcgpa.code</field>
+            <field name="arch" type="xml">
+                <search string="بحث رموز LCGPA">
+                    <field name="code"/>
+                    <field name="name_ar"/>
+                    <field name="category"/>
+                    <filter name="f_mandatory" string="إلزامي محلي"
+                            domain="[('is_mandatory_local','=',True)]"/>
+                    <group name="group_by">
+                        <filter name="g_category" string="التصنيف العام"
+                                context="{'group_by':'category'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_lcgpa_code" model="ir.actions.act_window">
+            <field name="name">رموز LCGPA</field>
+            <field name="res_model">rawasi.lcgpa.code</field>
+            <field name="view_mode">list,form</field>
+            <field name="search_view_id" ref="view_lcgpa_code_search"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">أضف رمز LCGPA</p>
+                <p>تصنيف هيئة المحتوى المحلي — يظهر في عمود الرمز الإنشائي بملفات اعتماد.</p>
+            </field>
+        </record>
+
+        <!-- ============================================================ -->
+        <!-- SBC — رمز كود البناء السعودي                                 -->
+        <!-- ============================================================ -->
+        <record id="view_sbc_code_list" model="ir.ui.view">
+            <field name="name">rawasi.sbc.code.list</field>
+            <field name="model">rawasi.sbc.code</field>
+            <field name="arch" type="xml">
+                <list string="رموز SBC">
+                    <field name="code"/>
+                    <field name="name"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_sbc_code_form" model="ir.ui.view">
+            <field name="name">rawasi.sbc.code.form</field>
+            <field name="model">rawasi.sbc.code</field>
+            <field name="arch" type="xml">
+                <form string="رمز SBC">
+                    <sheet>
+                        <group>
+                            <field name="code"/>
+                            <field name="name"/>
+                            <field name="active" widget="boolean_toggle"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_sbc_code_search" model="ir.ui.view">
+            <field name="name">rawasi.sbc.code.search</field>
+            <field name="model">rawasi.sbc.code</field>
+            <field name="arch" type="xml">
+                <search string="بحث رموز SBC">
+                    <field name="code"/>
+                    <field name="name"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_sbc_code" model="ir.actions.act_window">
+            <field name="name">رموز SBC</field>
+            <field name="res_model">rawasi.sbc.code</field>
+            <field name="view_mode">list,form</field>
+            <field name="search_view_id" ref="view_sbc_code_search"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">أضف رمز SBC</p>
+                <p>تصنيف كود البناء السعودي.</p>
+            </field>
+        </record>
+
+        <!-- ============================================================ -->
+        <!-- القوائم                                                       -->
+        <!-- ============================================================ -->
+        <menuitem id="menu_lcgpa_code" name="رموز LCGPA"
+                  parent="menu_construction_catalog" action="action_lcgpa_code" sequence="20"/>
+        <menuitem id="menu_sbc_code" name="رموز SBC"
+                  parent="menu_construction_catalog" action="action_sbc_code" sequence="30"/>
+
+    </data>
+</odoo>

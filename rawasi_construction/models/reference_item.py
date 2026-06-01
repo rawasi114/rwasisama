@@ -63,6 +63,14 @@ class RawasiReferenceItem(models.Model):
         help="«تصنيع داخلي بالورشة» يفعّل إنشاء أمر بيع داخلي للورشة بدل الشراء.",
     )
     specification = fields.Text(string="المواصفات")
+    lcgpa_code_id = fields.Many2one(
+        "rawasi.lcgpa.code", string="رمز LCGPA", index=True,
+        help="تصنيف هيئة المحتوى المحلي — يظهر في عمود الرمز الإنشائي بملفات اعتماد.",
+    )
+    sbc_code_id = fields.Many2one(
+        "rawasi.sbc.code", string="رمز SBC", index=True,
+        help="تصنيف كود البناء السعودي.",
+    )
     product_id = fields.Many2one(
         "product.product", string="منتج المخزون", copy=False, tracking=True
     )

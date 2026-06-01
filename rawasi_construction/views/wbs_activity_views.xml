@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_wbs_activity_list" model="ir.ui.view">
+            <field name="name">rawasi.wbs.activity.list</field>
+            <field name="model">rawasi.wbs.activity</field>
+            <field name="arch" type="xml">
+                <list string="الجدول الزمني" default_order="sequence">
+                    <field name="sequence" widget="handle"/>
+                    <field name="name"/>
+                    <field name="project_id"/>
+                    <field name="date_start"/>
+                    <field name="date_end"/>
+                    <field name="duration"/>
+                    <field name="progress" widget="progressbar"/>
+                    <field name="is_milestone"/>
+                    <field name="planned_cost"/>
+                    <field name="currency_id" column_invisible="1"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_wbs_activity_form" model="ir.ui.view">
+            <field name="name">rawasi.wbs.activity.form</field>
+            <field name="model">rawasi.wbs.activity</field>
+            <field name="arch" type="xml">
+                <form string="نشاط">
+                    <sheet>
+                        <div class="oe_title">
+                            <h1><field name="name" placeholder="اسم النشاط"/></h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="project_id"/>
+                                <field name="parent_id"
+                                       domain="[('project_id', '=', project_id), ('id', '!=', id)]"/>
+                                <field name="is_milestone"/>
+                                <field name="sequence"/>
+                            </group>
+                            <group>
+                                <field name="date_start"/>
+                                <field name="date_end"/>
+                                <field name="duration"/>
+                                <field name="progress" widget="percentage"/>
+                                <field name="planned_cost"/>
+                                <field name="currency_id" invisible="1"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="الأنشطة السابقة">
+                                <field name="predecessor_ids"
+                                       domain="[('project_id', '=', project_id), ('id', '!=', id)]"/>
+                            </page>
+                            <page string="بنود جدول الكميات">
+                                <field name="boq_item_ids"/>
+                            </page>
+                            <page string="الأنشطة الفرعية">
+                                <field name="child_ids">
+                                    <list>
+                                        <field name="name"/>
+                                        <field name="date_start"/>
+                                        <field name="date_end"/>
+                                        <field name="progress" widget="progressbar"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_wbs_activity_gantt" model="ir.ui.view">
+            <field name="name">rawasi.wbs.activity.gantt</field>
+            <field name="model">rawasi.wbs.activity</field>
+            <field name="arch" type="xml">
+                <gantt date_start="date_start" date_stop="date_end"
+                       default_group_by="project_id" progress="progress"
+                       dependency_field="predecessor_ids" string="الجدول الزمني">
+                    <field name="name"/>
+                    <field name="project_id"/>
+                </gantt>
+            </field>
+        </record>
+
+        <record id="action_wbs_activity" model="ir.actions.act_window">
+            <field name="name">الجدول الزمني (WBS)</field>
+            <field name="res_model">rawasi.wbs.activity</field>
+            <field name="view_mode">list,gantt,form</field>
+        </record>
+
+        <menuitem id="menu_wbs_activity" name="الجدول الزمني"
+                  parent="menu_construction_root" action="action_wbs_activity" sequence="35"/>
+
+    </data>
+</odoo>

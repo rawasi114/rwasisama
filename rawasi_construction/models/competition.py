@@ -87,6 +87,8 @@ class RawasiCompetition(models.Model):
         self._require_state(["pricing"])
         if not self.boq_item_ids:
             raise UserError("لا يمكن تقديم منافسة بلا بنود في جدول الكميات.")
+        for comp in self:
+            comp._capture_price_intelligence()
         self.state = "submitted"
 
     def action_won(self):
@@ -94,12 +96,53 @@ class RawasiCompetition(models.Model):
         for comp in self:
             if not comp.project_id:
                 comp.project_id = comp._create_project()
+            comp._set_price_outcome("won")
             comp.state = "won"
         return True
 
     def action_lost(self):
         self._require_state(["submitted"])
+        for comp in self:
+            comp._set_price_outcome("lost")
         self.state = "lost"
+
+    # ------------------------------------------------------------------
+    # ذاكرة التسعير
+    # ------------------------------------------------------------------
+    def _capture_price_intelligence(self):
+        """يلتقط بنود جدول الكميات في ذاكرة الأسعار عند التقديم (لا تكرار)."""
+        self.ensure_one()
+        Price = self.env["rawasi.price.intelligence"]
+        Price.search([("competition_id", "=", self.id)]).unlink()
+        vals = []
+        for line in self.boq_item_ids:
+            if not line.unit_price:
+                continue
+            vals.append(
+                {
+                    "name": line.description,
+                    "competition_id": self.id,
+                    "boq_item_id": line.id,
+                    "category": line.category,
+                    "uom_id": line.uom_id.id,
+                    "lcgpa_code_id": line.reference_item_id.lcgpa_code_id.id or False,
+                    "sbc_code_id": line.reference_item_id.sbc_code_id.id or False,
+                    "quantity": line.qty,
+                    "currency_id": self.currency_id.id,
+                    "unit_cost": line.unit_cost,
+                    "unit_price": line.unit_price,
+                    "price_date": self.submission_date or fields.Date.today(),
+                    "outcome": "submitted",
+                }
+            )
+        if vals:
+            Price.create(vals)
+
+    def _set_price_outcome(self, outcome):
+        self.ensure_one()
+        self.env["rawasi.price.intelligence"].search(
+            [("competition_id", "=", self.id)]
+        ).write({"outcome": outcome})
 
     def action_cancel(self):
         self._require_state(["draft", "pricing", "submitted"])
@@ -158,17 +201,24 @@ class RawasiBoqItem(models.Model):
         "rawasi.competition", string="المنافسة", required=True, ondelete="cascade", index=True
     )
     sequence = fields.Integer(string="التسلسل", default=10)
+    serial = fields.Char(string="الرقم التسلسلي")
     reference_item_id = fields.Many2one(
         "rawasi.reference.item", string="البند المرجعي", index=True
     )
     code = fields.Char(string="الرمز")
+    category = fields.Char(string="الفئة")
     description = fields.Char(string="البند", required=True)
     specification = fields.Text(string="المواصفات")
     uom_id = fields.Many2one("uom.uom", string="الوحدة", required=True)
     qty = fields.Float(string="الكمية", default=1.0)
-    unit_price = fields.Monetary(string="سعر الوحدة", currency_field="currency_id")
+    unit_cost = fields.Monetary(string="التكلفة الإفرادي", currency_field="currency_id")
+    total_cost = fields.Monetary(
+        compute="_compute_total_cost", store=True, string="إجمالي التكلفة للبند",
+        currency_field="currency_id",
+    )
+    unit_price = fields.Monetary(string="السعر الإفرادي", currency_field="currency_id")
     subtotal = fields.Monetary(
-        compute="_compute_subtotal", store=True, string="الإجمالي", currency_field="currency_id"
+        compute="_compute_subtotal", store=True, string="إجمالي البند", currency_field="currency_id"
     )
     cost_estimate = fields.Monetary(
         related="reference_item_id.standard_cost", string="التكلفة المعيارية",
@@ -189,6 +239,11 @@ class RawasiBoqItem(models.Model):
         for line in self:
             line.subtotal = line.qty * line.unit_price
 
+    @api.depends("qty", "unit_cost")
+    def _compute_total_cost(self):
+        for line in self:
+            line.total_cost = line.qty * line.unit_cost
+
     @api.onchange("reference_item_id")
     def _onchange_reference_item(self):
         if self.reference_item_id:
@@ -197,5 +252,25 @@ class RawasiBoqItem(models.Model):
             self.description = ref.name
             self.specification = ref.specification
             self.uom_id = ref.uom_id.id
+            if not self.unit_cost:
+                self.unit_cost = ref.standard_cost
             if not self.unit_price:
                 self.unit_price = ref.standard_cost
+
+    def action_find_similar_prices(self):
+        """يفتح أسعاراً تاريخية مشابهة لهذا البند من ذاكرة الأسعار."""
+        self.ensure_one()
+        matches = self.env["rawasi.price.intelligence"].search_matches(
+            self.description,
+            uom_id=self.uom_id.id,
+            exclude_competition_id=self.competition_id.id,
+        )
+        match_ids = [rec.id for _score, rec in matches]
+        return {
+            "type": "ir.actions.act_window",
+            "name": "أسعار تاريخية مشابهة",
+            "res_model": "rawasi.price.intelligence",
+            "view_mode": "list,form",
+            "domain": [("id", "in", match_ids)],
+            "context": {"create": False},
+        }

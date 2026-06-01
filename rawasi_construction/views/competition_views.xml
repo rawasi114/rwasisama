@@ -74,14 +74,20 @@
                                 <field name="boq_item_ids">
                                     <list editable="bottom">
                                         <field name="sequence" widget="handle"/>
-                                        <field name="reference_item_id"/>
-                                        <field name="code"/>
+                                        <field name="serial"/>
+                                        <field name="category"/>
+                                        <field name="reference_item_id" optional="show"/>
                                         <field name="description"/>
-                                        <field name="uom_id"/>
+                                        <field name="specification" optional="hide"/>
                                         <field name="qty"/>
+                                        <field name="uom_id"/>
+                                        <field name="unit_cost"/>
+                                        <field name="total_cost"/>
                                         <field name="unit_price"/>
                                         <field name="subtotal"/>
-                                        <field name="procurement_type" optional="show"/>
+                                        <field name="procurement_type" optional="hide"/>
+                                        <button name="action_find_similar_prices" type="object"
+                                                icon="fa-search-dollar" title="أسعار مشابهة"/>
                                         <field name="currency_id" column_invisible="1"/>
                                     </list>
                                 </field>

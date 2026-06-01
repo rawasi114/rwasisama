@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_price_intelligence_list" model="ir.ui.view">
+            <field name="name">rawasi.price.intelligence.list</field>
+            <field name="model">rawasi.price.intelligence</field>
+            <field name="arch" type="xml">
+                <list string="ذاكرة الأسعار" create="false">
+                    <field name="price_date"/>
+                    <field name="name"/>
+                    <field name="category" optional="show"/>
+                    <field name="uom_id" optional="show"/>
+                    <field name="quantity" optional="hide"/>
+                    <field name="unit_cost"/>
+                    <field name="unit_price"/>
+                    <field name="margin_pct" optional="show"/>
+                    <field name="competition_id" optional="show"/>
+                    <field name="outcome" widget="badge"
+                           decoration-success="outcome == 'won'"
+                           decoration-danger="outcome == 'lost'"/>
+                    <field name="currency_id" column_invisible="1"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_price_intelligence_form" model="ir.ui.view">
+            <field name="name">rawasi.price.intelligence.form</field>
+            <field name="model">rawasi.price.intelligence</field>
+            <field name="arch" type="xml">
+                <form string="سجل سعر تاريخي">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="category"/>
+                                <field name="uom_id"/>
+                                <field name="quantity"/>
+                            </group>
+                            <group>
+                                <field name="unit_cost"/>
+                                <field name="unit_price"/>
+                                <field name="margin_pct"/>
+                                <field name="price_date"/>
+                                <field name="outcome"/>
+                                <field name="currency_id" groups="base.group_multi_currency"/>
+                            </group>
+                        </group>
+                        <group string="المصدر والتصنيف">
+                            <field name="competition_id"/>
+                            <field name="lcgpa_code_id"/>
+                            <field name="sbc_code_id"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_price_intelligence_search" model="ir.ui.view">
+            <field name="name">rawasi.price.intelligence.search</field>
+            <field name="model">rawasi.price.intelligence</field>
+            <field name="arch" type="xml">
+                <search string="بحث ذاكرة الأسعار">
+                    <field name="name"/>
+                    <field name="category"/>
+                    <field name="competition_id"/>
+                    <filter name="f_won" string="فائزة" domain="[('outcome','=','won')]"/>
+                    <filter name="f_submitted" string="مقدَّمة" domain="[('outcome','=','submitted')]"/>
+                    <group name="group_by">
+                        <filter name="g_category" string="الفئة" context="{'group_by':'category'}"/>
+                        <filter name="g_outcome" string="النتيجة" context="{'group_by':'outcome'}"/>
+                        <filter name="g_uom" string="الوحدة" context="{'group_by':'uom_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_price_intelligence" model="ir.actions.act_window">
+            <field name="name">ذاكرة الأسعار</field>
+            <field name="res_model">rawasi.price.intelligence</field>
+            <field name="view_mode">list,form</field>
+            <field name="search_view_id" ref="view_price_intelligence_search"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">لا توجد سجلات أسعار بعد</p>
+                <p>تُلتقط الأسعار تلقائياً عند تقديم المنافسات.</p>
+            </field>
+        </record>
+
+        <menuitem id="menu_price_intelligence" name="ذاكرة الأسعار"
+                  parent="menu_construction_catalog" action="action_price_intelligence" sequence="40"/>
+
+    </data>
+</odoo>

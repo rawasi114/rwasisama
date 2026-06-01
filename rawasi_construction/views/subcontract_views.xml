@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- ════ مقاول من الباطن ════ -->
+        <record id="view_subcontractor_list" model="ir.ui.view">
+            <field name="name">rawasi.subcontractor.list</field>
+            <field name="model">rawasi.subcontractor</field>
+            <field name="arch" type="xml">
+                <list string="مقاولو الباطن">
+                    <field name="code"/>
+                    <field name="name"/>
+                    <field name="specialization"/>
+                    <field name="phone"/>
+                    <field name="subcontract_count"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_subcontractor_form" model="ir.ui.view">
+            <field name="name">rawasi.subcontractor.form</field>
+            <field name="model">rawasi.subcontractor</field>
+            <field name="arch" type="xml">
+                <form string="مقاول من الباطن">
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_open_subcontracts" type="object"
+                                    class="oe_stat_button" icon="fa-file-text-o">
+                                <field name="subcontract_count" widget="statinfo" string="العقود"/>
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <h1><field name="name" placeholder="الاسم التجاري"/></h1>
+                            <field name="code" readonly="1"/>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="cr_number"/>
+                                <field name="vat_number"/>
+                                <field name="specialization"/>
+                            </group>
+                            <group>
+                                <field name="phone"/>
+                                <field name="email"/>
+                                <field name="active" widget="boolean_toggle"/>
+                            </group>
+                        </group>
+                        <group string="البيانات البنكية">
+                            <field name="bank_name"/>
+                            <field name="iban"/>
+                        </group>
+                        <notebook>
+                            <page string="المرفقات">
+                                <field name="attachment_ids" widget="many2many_binary"/>
+                            </page>
+                            <page string="ملاحظات">
+                                <field name="notes"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_subcontractor" model="ir.actions.act_window">
+            <field name="name">مقاولو الباطن</field>
+            <field name="res_model">rawasi.subcontractor</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+        <!-- ════ عقد مقاول من الباطن ════ -->
+        <record id="view_subcontract_list" model="ir.ui.view">
+            <field name="name">rawasi.subcontract.list</field>
+            <field name="model">rawasi.subcontract</field>
+            <field name="arch" type="xml">
+                <list string="العقود الفرعية"
+                      decoration-muted="state == 'closed'"
+                      decoration-success="state == 'active'">
+                    <field name="name"/>
+                    <field name="subcontractor_id"/>
+                    <field name="project_id"/>
+                    <field name="contract_date"/>
+                    <field name="contract_amount"/>
+                    <field name="state" widget="badge"/>
+                    <field name="currency_id" column_invisible="1"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_subcontract_form" model="ir.ui.view">
+            <field name="name">rawasi.subcontract.form</field>
+            <field name="model">rawasi.subcontract</field>
+            <field name="arch" type="xml">
+                <form string="عقد مقاول من الباطن">
+                    <header>
+                        <button name="action_activate" type="object" string="تفعيل"
+                                class="btn-primary" invisible="state != 'draft'"/>
+                        <button name="action_close" type="object" string="إغلاق"
+                                invisible="state != 'active'"/>
+                        <button name="action_reset_to_draft" type="object" string="إعادة لمسودة"
+                                invisible="state == 'draft'"
+                                groups="rawasi_construction.group_project_manager,rawasi_base.group_rawasi_admin"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_open_ipcs" type="object"
+                                    class="oe_stat_button" icon="fa-money">
+                                <field name="ipc_count" widget="statinfo" string="المستخلصات"/>
+                            </button>
+                        </div>
+                        <div class="oe_title"><h1><field name="name" readonly="1"/></h1></div>
+                        <group>
+                            <group>
+                                <field name="subcontractor_id"/>
+                                <field name="project_id"/>
+                                <field name="contract_date"/>
+                            </group>
+                            <group>
+                                <field name="retention_percent"/>
+                                <field name="contract_amount"/>
+                                <field name="currency_id" groups="base.group_multi_currency"/>
+                            </group>
+                        </group>
+                        <field name="scope" placeholder="نطاق العمل..."/>
+                        <notebook>
+                            <page string="بنود العقد">
+                                <field name="line_ids">
+                                    <list editable="bottom">
+                                        <field name="boq_item_id"/>
+                                        <field name="description"/>
+                                        <field name="uom_id"/>
+                                        <field name="quantity"/>
+                                        <field name="unit_price"/>
+                                        <field name="subtotal"/>
+                                        <field name="currency_id" column_invisible="1"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="المرفقات">
+                                <field name="attachment_ids" widget="many2many_binary"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_subcontract" model="ir.actions.act_window">
+            <field name="name">العقود الفرعية</field>
+            <field name="res_model">rawasi.subcontract</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+        <!-- ════ مستخلص مقاول من الباطن ════ -->
+        <record id="view_subcontract_ipc_list" model="ir.ui.view">
+            <field name="name">rawasi.subcontract.ipc.list</field>
+            <field name="model">rawasi.subcontract.ipc</field>
+            <field name="arch" type="xml">
+                <list string="مستخلصات الباطن"
+                      decoration-success="state == 'approved'"
+                      decoration-muted="state == 'paid'">
+                    <field name="name"/>
+                    <field name="subcontract_id"/>
+                    <field name="subcontractor_id"/>
+                    <field name="ipc_date"/>
+                    <field name="net_payable"/>
+                    <field name="state" widget="badge"/>
+                    <field name="currency_id" column_invisible="1"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_subcontract_ipc_form" model="ir.ui.view">
+            <field name="name">rawasi.subcontract.ipc.form</field>
+            <field name="model">rawasi.subcontract.ipc</field>
+            <field name="arch" type="xml">
+                <form string="مستخلص مقاول من الباطن">
+                    <header>
+                        <button name="action_generate_lines" type="object" string="توليد البنود"
+                                invisible="state != 'draft'"/>
+                        <button name="action_approve" type="object" string="اعتماد"
+                                class="btn-primary" invisible="state != 'draft'"
+                                groups="rawasi_construction.group_project_manager,rawasi_base.group_rawasi_admin"/>
+                        <button name="action_mark_paid" type="object" string="تسجيل الدفع"
+                                class="btn-primary" invisible="state != 'approved'"
+                                groups="rawasi_base.group_rawasi_accountant,rawasi_base.group_rawasi_admin"/>
+                        <button name="action_reset_to_draft" type="object" string="إعادة لمسودة"
+                                invisible="state == 'draft'"
+                                groups="rawasi_base.group_rawasi_admin"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title"><h1><field name="name" readonly="1"/></h1></div>
+                        <group>
+                            <group>
+                                <field name="subcontract_id"/>
+                                <field name="project_id" readonly="1"/>
+                                <field name="ipc_date"/>
+                            </group>
+                            <group>
+                                <field name="payment_date" invisible="state != 'paid'"/>
+                                <field name="payment_reference" invisible="state != 'paid'"/>
+                            </group>
+                        </group>
+                        <field name="line_ids">
+                            <list editable="bottom">
+                                <field name="description"/>
+                                <field name="uom_id"/>
+                                <field name="contract_quantity"/>
+                                <field name="previous_quantity"/>
+                                <field name="period_quantity"/>
+                                <field name="cumulative_quantity"/>
+                                <field name="progress_percent" widget="percentage"/>
+                                <field name="unit_price"/>
+                                <field name="period_value"/>
+                                <field name="currency_id" column_invisible="1"/>
+                            </list>
+                        </field>
+                        <group class="oe_subtotal_footer">
+                            <field name="subtotal"/>
+                            <field name="retention_amount"/>
+                            <field name="other_deductions"/>
+                            <field name="net_before_vat"/>
+                            <field name="vat_rate"/>
+                            <field name="vat_amount"/>
+                            <field name="net_payable" class="oe_subtotal_footer_separator"/>
+                        </group>
+                        <notebook>
+                            <page string="المرفقات">
+                                <field name="attachment_ids" widget="many2many_binary"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_subcontract_ipc" model="ir.actions.act_window">
+            <field name="name">مستخلصات الباطن</field>
+            <field name="res_model">rawasi.subcontract.ipc</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+        <!-- ════ القوائم ════ -->
+        <menuitem id="menu_subcontracting" name="مقاولو الباطن"
+                  parent="menu_construction_root" sequence="40"/>
+        <menuitem id="menu_subcontractor" name="مقاولو الباطن"
+                  parent="menu_subcontracting" action="action_subcontractor" sequence="10"/>
+        <menuitem id="menu_subcontract" name="العقود الفرعية"
+                  parent="menu_subcontracting" action="action_subcontract" sequence="20"/>
+        <menuitem id="menu_subcontract_ipc" name="مستخلصات الباطن"
+                  parent="menu_subcontracting" action="action_subcontract_ipc" sequence="30"/>
+
+    </data>
+</odoo>

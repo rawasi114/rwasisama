@@ -43,6 +43,14 @@
                                 <field name="active" widget="boolean_toggle"/>
                             </group>
                         </group>
+                        <group string="التصنيفات">
+                            <group>
+                                <field name="lcgpa_code_id"/>
+                            </group>
+                            <group>
+                                <field name="sbc_code_id"/>
+                            </group>
+                        </group>
                         <group string="المواصفات">
                             <field name="specification" nolabel="1"/>
                         </group>

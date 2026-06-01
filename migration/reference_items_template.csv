@@ -1,0 +1,5 @@
+name,category,uom_id,standard_cost,lcgpa_code_id/id,sbc_code_id/id
+خرسانة مسلحة جاهزة C30,civil,uom.product_uom_cubic_meter,250.00,,
+حديد تسليح قطر 16مم,civil,uom.product_uom_ton,2700.00,,
+بلاط بورسلان 60×60,finishing,uom.product_uom_square_meter,45.00,,
+كابل نحاس 4مم,electrical,uom.product_uom_meter,8.50,,

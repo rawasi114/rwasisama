@@ -1,0 +1,6 @@
+name,login,email,company_id,groups_id/id
+أحمد المهندس,ahmed@rawasisama.com,ahmed@rawasisama.com,شركة رواسي سما للمقاولات,rawasi_construction.group_site_engineer
+سارة المكتب الفني,sara@rawasisama.com,sara@rawasisama.com,شركة رواسي سما للمقاولات,rawasi_construction.group_technical_office
+خالد مدير المشاريع,khalid@rawasisama.com,khalid@rawasisama.com,شركة رواسي سما للمقاولات,rawasi_construction.group_project_manager
+فهد المحاسب,fahad@rawasisama.com,fahad@rawasisama.com,شركة رواسي سما للمقاولات,rawasi_base.group_rawasi_accountant
+نورة المشتريات,noura@rawasisama.com,noura@rawasisama.com,شركة رواسي سما للمقاولات,rawasi_base.group_rawasi_procurement
