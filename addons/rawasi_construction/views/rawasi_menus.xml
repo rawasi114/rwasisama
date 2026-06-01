@@ -39,6 +39,9 @@
                   action="action_rawasi_projects"
                   sequence="22"/>
 
+        <menuitem id="menu_rawasi_products"
+                  name="كتالوج المنتجات الإنشائية"
+                  parent="menu_rawasi_root"
         <!-- ═══ سجل البنود المرجعي ومنظومة المطابقة الذكية ═══ -->
         <menuitem id="menu_rawasi_reference_registry_root"
                   name="الحصر وسجل البنود"
@@ -63,22 +66,7 @@
                   name="منتجات المقاولات المرجعية"
                   parent="menu_rawasi_reference_registry_root"
                   action="action_rawasi_construction_products"
-                  sequence="35"/>
-        <menuitem id="menu_rawasi_ref_variants"
-                  name="الصياغات البديلة"
-                  parent="menu_rawasi_reference_registry_root"
-                  action="action_item_variant"
-                  sequence="40"/>
-        <menuitem id="menu_rawasi_ref_lcgpa"
-                  name="أكواد LCGPA"
-                  parent="menu_rawasi_reference_registry_root"
-                  action="action_lcgpa_code"
-                  sequence="50"/>
-        <menuitem id="menu_rawasi_ref_audit"
-                  name="سجل التتبع"
-                  parent="menu_rawasi_reference_registry_root"
-                  action="action_audit_trail"
-                  sequence="60"/>
+                  sequence="25"/>
 
         <menuitem id="menu_rawasi_pricing_analysis"
                   name="تحليل الأسعار"
@@ -196,6 +184,11 @@
                   parent="menu_rawasi_field"
                   action="action_daily_report"
                   sequence="30"/>
+        <menuitem id="menu_rawasi_custody"
+                  name="عُهد المهندسين"
+                  parent="menu_rawasi_field"
+                  action="action_rawasi_engineer_custody"
+                  sequence="35"/>
         <menuitem id="menu_rawasi_ncr"
                   name="عدم مطابقة الموقع (NCR)"
                   parent="menu_rawasi_field"

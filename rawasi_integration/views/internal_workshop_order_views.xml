@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_iwo_list" model="ir.ui.view">
+            <field name="name">rawasi.internal.workshop.order.list</field>
+            <field name="model">rawasi.internal.workshop.order</field>
+            <field name="arch" type="xml">
+                <list string="أوامر التصنيع الداخلي"
+                      decoration-success="state == 'delivered_to_project'"
+                      decoration-info="state == 'in_production'"
+                      decoration-muted="state == 'cancelled'">
+                    <field name="name"/>
+                    <field name="project_id"/>
+                    <field name="reference_item_id"/>
+                    <field name="section_id"/>
+                    <field name="qty"/>
+                    <field name="cost_estimate"/>
+                    <field name="final_price"/>
+                    <field name="state" widget="badge"/>
+                    <field name="currency_id" column_invisible="1"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_iwo_form" model="ir.ui.view">
+            <field name="name">rawasi.internal.workshop.order.form</field>
+            <field name="model">rawasi.internal.workshop.order</field>
+            <field name="arch" type="xml">
+                <form string="أمر تصنيع داخلي">
+                    <header>
+                        <button name="action_create_sale_order" type="object"
+                                string="إنشاء أمر بيع داخلي" class="btn-primary"
+                                invisible="state != 'draft'"/>
+                        <field name="state" widget="statusbar"
+                               statusbar_visible="draft,sale_pending,confirmed,in_production,delivered_to_project"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_view_sale_order" type="object"
+                                    class="oe_stat_button" icon="fa-shopping-cart"
+                                    invisible="not sale_order_id">
+                                <div class="o_stat_info"><span class="o_stat_text">أمر البيع</span></div>
+                            </button>
+                            <button name="action_view_workshop_mo" type="object"
+                                    class="oe_stat_button" icon="fa-wrench"
+                                    invisible="not workshop_mo_id">
+                                <div class="o_stat_info"><span class="o_stat_text">أمر التصنيع</span></div>
+                            </button>
+                        </div>
+                        <div class="oe_title"><h1><field name="name" readonly="1"/></h1></div>
+                        <group>
+                            <group>
+                                <field name="construction_mr_id"/>
+                                <field name="project_id"/>
+                                <field name="reference_item_id"/>
+                                <field name="product_id"/>
+                                <field name="section_id"/>
+                            </group>
+                            <group>
+                                <field name="qty"/>
+                                <field name="cost_estimate"/>
+                                <field name="margin_pct" widget="radio"/>
+                                <field name="final_price"/>
+                                <field name="currency_id" invisible="1"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_iwo" model="ir.actions.act_window">
+            <field name="name">أوامر التصنيع الداخلي</field>
+            <field name="res_model">rawasi.internal.workshop.order</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+        <menuitem id="menu_integration_root" name="التصنيع الداخلي"
+                  sequence="26"
+                  web_icon="rawasi_integration,static/description/icon.png"
+                  groups="rawasi_base.group_rawasi_admin,rawasi_construction.group_project_manager,rawasi_workshop.group_supervisor"/>
+        <menuitem id="menu_iwo" name="أوامر التصنيع الداخلي"
+                  parent="menu_integration_root" action="action_iwo" sequence="10"/>
+
+    </data>
+</odoo>

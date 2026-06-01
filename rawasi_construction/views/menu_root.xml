@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- ============================================================
+             قائمة المقاولات الجذرية (تطبيق مستقل في الشاشة الرئيسية).
+             بلا parent + web_icon ⇒ تظهر كأيقونة تطبيق منفصلة.
+             ============================================================ -->
+        <menuitem id="menu_construction_root"
+                  name="مقاولات رواسي"
+                  sequence="11"
+                  web_icon="rawasi_construction,static/description/icon.png"
+                  groups="rawasi_construction.group_site_engineer,rawasi_construction.group_project_manager,rawasi_construction.group_technical_office,rawasi_base.group_rawasi_admin"/>
+
+    </data>
+</odoo>

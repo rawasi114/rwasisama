@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_rawasi_approval_chain_list" model="ir.ui.view">
+            <field name="name">rawasi.approval.chain.list</field>
+            <field name="model">rawasi.approval.chain</field>
+            <field name="arch" type="xml">
+                <list string="سلاسل الاعتماد">
+                    <field name="name"/>
+                    <field name="model"/>
+                    <field name="escalation_hours"/>
+                    <field name="escalation_user_id"/>
+                    <field name="active" widget="boolean_toggle"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_rawasi_approval_chain_form" model="ir.ui.view">
+            <field name="name">rawasi.approval.chain.form</field>
+            <field name="model">rawasi.approval.chain</field>
+            <field name="arch" type="xml">
+                <form string="سلسلة اعتماد">
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="name"/>
+                            <h1><field name="name" placeholder="مثال: اعتماد طلب مواد المقاولات"/></h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="model"/>
+                                <field name="active" widget="boolean_toggle"/>
+                            </group>
+                            <group>
+                                <field name="escalation_hours"/>
+                                <field name="escalation_user_id"/>
+                                <field name="company_id" groups="base.group_multi_company"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="الخطوات">
+                                <field name="step_ids">
+                                    <list editable="bottom">
+                                        <field name="sequence" widget="handle"/>
+                                        <field name="name"/>
+                                        <field name="group_id"/>
+                                        <field name="is_optional"/>
+                                        <field name="allow_admin_shortcut"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_rawasi_approval_chain" model="ir.actions.act_window">
+            <field name="name">سلاسل الاعتماد</field>
+            <field name="res_model">rawasi.approval.chain</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+        <menuitem id="menu_rawasi_approval_chain" name="سلاسل الاعتماد"
+                  parent="menu_rawasi_configuration" action="action_rawasi_approval_chain"
+                  sequence="40" groups="group_rawasi_admin"/>
+
+    </data>
+</odoo>
