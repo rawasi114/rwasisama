@@ -1,38 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-        <!-- جذر التطبيق الجديد: «المنافسات والتسعير» —
-             يظهر للمكتب الفني كتطبيق مستقل عن إدارة المقاولات. -->
-        <menuitem id="menu_rawasi_competitions_root"
-                  name="المنافسات والتسعير"
-                  sequence="35"/>
+        <!--
+            هذا الموديول يثبت فصل واجهة المكتب الفني.
+            القوائم الأساسية تُعرّف في rawasi_construction حتى يظهر الفصل بمجرد
+            تحديث موديول المقاولات، وهنا نعيد التأكيد ونخفي جذور النسخة القديمة.
+        -->
 
-        <menuitem id="menu_competitions_pricing_root_dashboard"
-                  name="تحليل المنافسات"
-                  parent="menu_rawasi_competitions_root"
-                  action="rawasi_construction.action_dash_competition"
-                  sequence="10"/>
-
-        <!-- نُعيد ربط menus المنافسات الموجودة في rawasi_construction
-             تحت التطبيق الجديد. لا تغيير في الـ actions أو الصلاحيات. -->
-        <record id="rawasi_construction.menu_rawasi_competitions" model="ir.ui.menu">
-            <field name="parent_id" ref="menu_rawasi_competitions_root"/>
-            <field name="sequence">20</field>
+        <!-- إخفاء الجذر القديم الذي أنشأته النسخة الأولى من موديول المنافسات. -->
+        <record id="menu_rawasi_competitions_root" model="ir.ui.menu">
+            <field name="name">المنافسات والتسعير - قديم</field>
+            <field name="active" eval="False"/>
         </record>
 
-        <record id="rawasi_construction.menu_rawasi_price_intelligence" model="ir.ui.menu">
-            <field name="parent_id" ref="menu_rawasi_competitions_root"/>
-            <field name="sequence">30</field>
+        <record id="menu_competitions_pricing_root_dashboard" model="ir.ui.menu">
+            <field name="name">تحليل المنافسات - قديم</field>
+            <field name="active" eval="False"/>
+        </record>
+
+        <!-- تطبيق المكتب الفني الجديد. -->
+        <record id="rawasi_construction.menu_rawasi_technical_office_root" model="ir.ui.menu">
+            <field name="name">المكتب الفني - التسعير والحصر</field>
+            <field name="sequence">8</field>
+        </record>
+
+        <record id="rawasi_construction.menu_rawasi_competitions" model="ir.ui.menu">
+            <field name="name">الدراسات والمنافسات</field>
+            <field name="parent_id" ref="rawasi_construction.menu_rawasi_technical_office_root"/>
+            <field name="sequence">10</field>
+            <field name="active" eval="True"/>
         </record>
 
         <record id="rawasi_construction.menu_rawasi_reference_registry_root" model="ir.ui.menu">
-            <field name="parent_id" ref="menu_rawasi_competitions_root"/>
-            <field name="sequence">40</field>
+            <field name="name">الحصر وسجل البنود</field>
+            <field name="parent_id" ref="rawasi_construction.menu_rawasi_technical_office_root"/>
+            <field name="sequence">20</field>
+            <field name="active" eval="True"/>
         </record>
 
-        <!-- لوحة تحليل المنافسات تنتقل أيضاً للتطبيق الجديد -->
+        <record id="rawasi_construction.menu_rawasi_ref_import_wizard" model="ir.ui.menu">
+            <field name="name">استيراد حصر / جدول كميات</field>
+            <field name="sequence">10</field>
+        </record>
+
+        <record id="rawasi_construction.menu_rawasi_ref_import_batches" model="ir.ui.menu">
+            <field name="name">دفعات الحصر والاستيراد</field>
+            <field name="sequence">20</field>
+        </record>
+
+        <record id="rawasi_construction.menu_rawasi_ref_products" model="ir.ui.menu">
+            <field name="name">منتجات المقاولات المرجعية</field>
+            <field name="sequence">35</field>
+        </record>
+
+        <record id="rawasi_construction.menu_rawasi_pricing_analysis" model="ir.ui.menu">
+            <field name="name">تحليل الأسعار</field>
+            <field name="parent_id" ref="rawasi_construction.menu_rawasi_technical_office_root"/>
+            <field name="sequence">30</field>
+            <field name="active" eval="True"/>
+        </record>
+
+        <record id="rawasi_construction.menu_rawasi_technical_office_config" model="ir.ui.menu">
+            <field name="name">إعدادات المكتب الفني</field>
+            <field name="parent_id" ref="rawasi_construction.menu_rawasi_technical_office_root"/>
+            <field name="sequence">90</field>
+            <field name="active" eval="True"/>
+        </record>
+
         <record id="rawasi_construction.menu_dash_competition" model="ir.ui.menu">
-            <field name="active" eval="False"/>
+            <field name="name">تحليل المنافسات</field>
+            <field name="parent_id" ref="rawasi_construction.menu_rawasi_pricing_analysis"/>
+            <field name="sequence">10</field>
+            <field name="active" eval="True"/>
+        </record>
+
+        <record id="rawasi_construction.menu_rawasi_price_intelligence" model="ir.ui.menu">
+            <field name="name">ذاكرة الأسعار / رادار الترسية</field>
+            <field name="parent_id" ref="rawasi_construction.menu_rawasi_pricing_analysis"/>
+            <field name="sequence">20</field>
+            <field name="active" eval="True"/>
+        </record>
+
+        <record id="rawasi_construction.menu_rawasi_units" model="ir.ui.menu">
+            <field name="parent_id" ref="rawasi_construction.menu_rawasi_technical_office_config"/>
+            <field name="sequence">10</field>
+            <field name="active" eval="True"/>
+        </record>
+
+        <record id="rawasi_construction.menu_rawasi_sbc" model="ir.ui.menu">
+            <field name="parent_id" ref="rawasi_construction.menu_rawasi_technical_office_config"/>
+            <field name="sequence">20</field>
+            <field name="active" eval="True"/>
         </record>
     </data>
 </odoo>
