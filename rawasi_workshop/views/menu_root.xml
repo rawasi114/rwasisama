@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- ============================================================
+             قائمة الورشة الجذرية (تطبيق مستقل في الشاشة الرئيسية).
+             بلا parent + web_icon ⇒ تظهر كأيقونة تطبيق منفصلة.
+             ============================================================ -->
+        <menuitem id="menu_workshop_root"
+                  name="ورشة رواسي"
+                  sequence="21"
+                  web_icon="rawasi_workshop,static/description/icon.png"
+                  groups="rawasi_workshop.group_worker,rawasi_workshop.group_supervisor,rawasi_base.group_rawasi_admin"/>
+
+    </data>
+</odoo>

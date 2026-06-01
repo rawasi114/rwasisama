@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_vo_list" model="ir.ui.view">
+            <field name="name">rawasi.variation.order.list</field>
+            <field name="model">rawasi.variation.order</field>
+            <field name="arch" type="xml">
+                <list string="أوامر التغيير" decoration-success="state == 'approved'"
+                      decoration-danger="state == 'rejected'">
+                    <field name="name"/>
+                    <field name="project_id"/>
+                    <field name="vo_type"/>
+                    <field name="signed_amount"/>
+                    <field name="state" widget="badge"/>
+                    <field name="currency_id" column_invisible="1"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_vo_form" model="ir.ui.view">
+            <field name="name">rawasi.variation.order.form</field>
+            <field name="model">rawasi.variation.order</field>
+            <field name="arch" type="xml">
+                <form string="أمر تغيير">
+                    <header>
+                        <button name="action_submit" type="object" string="تقديم"
+                                class="btn-primary" invisible="state != 'draft'"/>
+                        <button name="action_approve" type="object" string="اعتماد"
+                                class="btn-primary" invisible="state != 'submitted'"
+                                groups="rawasi_construction.group_project_manager,rawasi_base.group_rawasi_admin"/>
+                        <button name="action_reject" type="object" string="رفض"
+                                invisible="state != 'submitted'"
+                                groups="rawasi_construction.group_project_manager,rawasi_base.group_rawasi_admin"/>
+                        <button name="action_reset_draft" type="object" string="إعادة لمسودة"
+                                invisible="state != 'rejected'"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title"><h1><field name="name" readonly="1"/></h1></div>
+                        <group>
+                            <group>
+                                <field name="project_id"/>
+                                <field name="vo_type"/>
+                                <field name="request_date"/>
+                            </group>
+                            <group>
+                                <field name="amount"/>
+                                <field name="signed_amount"/>
+                                <field name="currency_id" groups="base.group_multi_currency"/>
+                            </group>
+                        </group>
+                        <field name="description" placeholder="وصف التغيير..."/>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_vo" model="ir.actions.act_window">
+            <field name="name">أوامر التغيير</field>
+            <field name="res_model">rawasi.variation.order</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+        <menuitem id="menu_construction_contracts" name="العقود والمستحقات"
+                  parent="menu_construction_root" sequence="30"/>
+        <menuitem id="menu_vo" name="أوامر التغيير"
+                  parent="menu_construction_contracts" action="action_vo" sequence="10"/>
+
+    </data>
+</odoo>

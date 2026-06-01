@@ -26,6 +26,38 @@ class RawasiBoqItem(models.Model):
     unit_id = fields.Many2one("rawasi.unit", string="الوحدة")
     quantity = fields.Float(string="الكمية", default=0.0)
 
+    # ── ربط المنتج (النواة الذرية الجديدة) ──────────────────────────
+    product_id = fields.Many2one(
+        "product.product",
+        string="المنتج",
+        index=True,
+        domain="[('is_construction', '=', True)]",
+        help="المنتج الذي يمثّل هذا البند في كتالوج المنتجات الموحَّد. "
+             "عند التحديد يصبح المنتج هو النواة المرجعية للشراء/الاستلام/الاستهلاك.",
+    )
+    product_tmpl_id = fields.Many2one(
+        "product.template",
+        related="product_id.product_tmpl_id",
+        store=True,
+        string="قالب المنتج",
+    )
+
+    @api.onchange("product_id")
+    def _onchange_product_id(self):
+        for item in self:
+            product = item.product_id
+            if not product:
+                continue
+            tmpl = product.product_tmpl_id
+            if not item.name:
+                item.name = tmpl.name
+            if tmpl.rawasi_unit_id and not item.unit_id:
+                item.unit_id = tmpl.rawasi_unit_id
+            if tmpl.sbc_code_id and not item.sbc_code_id:
+                item.sbc_code_id = tmpl.sbc_code_id
+            if tmpl.specifications and not item.specifications:
+                item.specifications = tmpl.specifications
+
     mandatory_local = fields.Selection(
         [("yes", "نعم"), ("no", "لا")],
         string="منتج من القائمة الإلزامية",
@@ -83,6 +115,40 @@ class RawasiBoqItem(models.Model):
     po_line_ids = fields.One2many(
         "rawasi.purchase.order.line", "boq_item_id", string="سطور أوامر الشراء"
     )
+    dsr_progress_line_ids = fields.One2many(
+        "rawasi.dsr.progress.line", "boq_item_id",
+        string="سطور إنجاز DSR",
+    )
+    qty_executed = fields.Float(
+        string="الكمية المنفّذة",
+        compute="_compute_qty_executed", store=True,
+        help="مجموع الكميات المنفّذة من هذا البند عبر التقارير اليومية المعتمدة.",
+    )
+    qty_remaining = fields.Float(
+        string="الكمية المتبقية",
+        compute="_compute_qty_executed", store=True,
+    )
+    qty_executed_pct = fields.Float(
+        string="نسبة الإنجاز %",
+        compute="_compute_qty_executed", store=True,
+    )
+
+    @api.depends(
+        "quantity",
+        "dsr_progress_line_ids.qty_today",
+        "dsr_progress_line_ids.report_state",
+    )
+    def _compute_qty_executed(self):
+        for item in self:
+            done = sum(
+                ln.qty_today for ln in item.dsr_progress_line_ids
+                if ln.report_state == "confirmed"
+            )
+            item.qty_executed = done
+            item.qty_remaining = max((item.quantity or 0.0) - done, 0.0)
+            item.qty_executed_pct = (
+                (done / item.quantity * 100.0) if item.quantity else 0.0
+            )
     amount_committed = fields.Monetary(
         string="المرتبط (Committed)", compute="_compute_budget", store=True
     )

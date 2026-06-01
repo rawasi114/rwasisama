@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-        <!-- مجموعة المكتب الفني للتسعير: تُسلسل صلاحيات الموديول الموجودة
+        <!-- مجموعة المكتب الفني للتسعير والحصر: تُسلسل صلاحيات الموديول الموجودة
              (group_tech_office_manager) لكي يصير لمستخدمي التسعير في هذا
              الموديول كل صلاحيات المكتب الفني على المنافسات/BoQ. -->
         <record id="group_tech_office_pricing" model="res.groups">
-            <field name="name">مكتب فني — تسعير المنافسات</field>
+            <field name="name">مكتب فني — التسعير والحصر</field>
             <field name="privilege_id" ref="rawasi_construction.privilege_rawasi_role"/>
             <field name="implied_ids" eval="[Command.link(ref('rawasi_construction.group_tech_office_manager'))]"/>
-            <field name="comment">مجموعة المكتب الفني التي تدخل تطبيق "المنافسات والتسعير" — ترث صلاحيات المكتب الفني الكاملة على BoQ والمنافسات.</field>
+            <field name="comment">مجموعة المكتب الفني التي تدخل تطبيق "المكتب الفني - التسعير والحصر" — ترث صلاحيات المكتب الفني الكاملة على المنافسات، الحصر، وجدول الكميات.</field>
         </record>
     </data>
 </odoo>

@@ -2,6 +2,7 @@
 from datetime import timedelta
 
 from odoo import api, _, fields, models
+from odoo.exceptions import UserError
 
 
 class ProjectProject(models.Model):
@@ -60,6 +61,43 @@ class ProjectProject(models.Model):
     )
     wbs_count = fields.Integer(string="عدد الأنشطة", compute="_compute_wbs_count")
 
+    # ── المخزون: مواقع هرمية للعهدة ───────────────────────────────
+    rawasi_project_location_id = fields.Many2one(
+        "stock.location",
+        string="مخزن المشروع",
+        copy=False,
+        help="موقع جذر يحتوي مواد المشروع. يُنشأ تلقائياً عند تفعيل «مشروع مقاولات».",
+    )
+    rawasi_main_stock_location_id = fields.Many2one(
+        "stock.location",
+        string="المخزن الرئيسي للمشروع",
+        copy=False,
+        help="موقع تخزين المواد المستلمة قبل صرفها لعهد المهندسين.",
+    )
+    rawasi_wip_location_id = fields.Many2one(
+        "stock.location",
+        string="موقع التنفيذ (WIP)",
+        copy=False,
+        help="موقع إنتاج (production) تُستهلك إليه المواد عند تأكيد DSR.",
+    )
+    rawasi_custody_root_location_id = fields.Many2one(
+        "stock.location",
+        string="جذر عُهد المهندسين",
+        copy=False,
+        help="الموقع الأبوي لكل عُهد المهندسين في هذا المشروع.",
+    )
+    rawasi_custody_ids = fields.One2many(
+        "rawasi.engineer.custody", "project_id", string="عُهد المهندسين"
+    )
+    rawasi_custody_count = fields.Integer(
+        compute="_compute_rawasi_custody_count", string="عدد العُهد",
+    )
+
+    @api.depends("rawasi_custody_ids")
+    def _compute_rawasi_custody_count(self):
+        for project in self:
+            project.rawasi_custody_count = len(project.rawasi_custody_ids)
+
     @api.depends(
         "rawasi_competition_id.boq_item_ids.total_cost",
         "rawasi_competition_id.boq_item_ids.amount_consumed",
@@ -102,7 +140,129 @@ class ProjectProject(models.Model):
                 vals["rawasi_serial"] = self.env["ir.sequence"].next_by_code(
                     "rawasi.project.serial"
                 ) or False
-        return super().create(vals_list)
+        projects = super().create(vals_list)
+        for project in projects.filtered("rawasi_is_construction"):
+            project._ensure_rawasi_project_location()
+            project._sync_engineer_custodies()
+        return projects
+
+    def write(self, vals):
+        res = super().write(vals)
+        if vals.get("rawasi_is_construction"):
+            for project in self.filtered("rawasi_is_construction"):
+                project._ensure_rawasi_project_location()
+        if "site_engineer_ids" in vals or "rawasi_is_construction" in vals:
+            for project in self.filtered("rawasi_is_construction"):
+                project._sync_engineer_custodies()
+        return res
+
+    # ── إنشاء/مزامنة مواقع المخزون ─────────────────────────────────
+    def _get_root_construction_location(self):
+        """يعيد جذر «مشاريع المقاولات» داخل المخزن الافتراضي، ينشئه عند اللزوم."""
+        self.ensure_one()
+        Location = self.env["stock.location"]
+        company = self.company_id or self.env.company
+        warehouse = self.env["stock.warehouse"].search(
+            [("company_id", "=", company.id)], limit=1,
+        )
+        if not warehouse:
+            raise UserError(_(
+                "لا يوجد مخزن (Warehouse) مهيأ لشركة %s. أنشئ مخزناً من Inventory أولاً."
+            ) % (company.name,))
+        stock_loc = warehouse.lot_stock_id
+        root = Location.search([
+            ("name", "=", "مشاريع المقاولات"),
+            ("location_id", "=", stock_loc.id),
+            ("company_id", "=", company.id),
+        ], limit=1)
+        if not root:
+            root = Location.create({
+                "name": "مشاريع المقاولات",
+                "usage": "internal",
+                "location_id": stock_loc.id,
+                "company_id": company.id,
+            })
+        return root
+
+    def _ensure_rawasi_project_location(self):
+        """يضمن إنشاء البنية الهرمية: مشروع → مخزن رئيسي + جذر العُهد."""
+        Location = self.env["stock.location"]
+        for project in self:
+            if not project.rawasi_is_construction:
+                continue
+            if project.rawasi_project_location_id and \
+               project.rawasi_main_stock_location_id and \
+               project.rawasi_custody_root_location_id and \
+               project.rawasi_wip_location_id:
+                continue
+            company_id = (project.company_id or self.env.company).id
+            root = project._get_root_construction_location()
+            if not project.rawasi_project_location_id:
+                project.rawasi_project_location_id = Location.create({
+                    "name": project.name or "Project %d" % project.id,
+                    "usage": "internal",
+                    "location_id": root.id,
+                    "company_id": company_id,
+                    "is_rawasi_project": True,
+                    "rawasi_project_id": project.id,
+                }).id
+            project_loc = project.rawasi_project_location_id
+            if not project.rawasi_main_stock_location_id:
+                project.rawasi_main_stock_location_id = Location.create({
+                    "name": "المخزن الرئيسي",
+                    "usage": "internal",
+                    "location_id": project_loc.id,
+                    "company_id": company_id,
+                    "rawasi_project_id": project.id,
+                }).id
+            if not project.rawasi_custody_root_location_id:
+                project.rawasi_custody_root_location_id = Location.create({
+                    "name": "عُهد المهندسين",
+                    "usage": "view",
+                    "location_id": project_loc.id,
+                    "company_id": company_id,
+                    "rawasi_project_id": project.id,
+                }).id
+            if not project.rawasi_wip_location_id:
+                project.rawasi_wip_location_id = Location.create({
+                    "name": "تنفيذ الموقع (WIP)",
+                    "usage": "production",
+                    "location_id": project_loc.id,
+                    "company_id": company_id,
+                    "rawasi_project_id": project.id,
+                }).id
+
+    def _sync_engineer_custodies(self):
+        """يُنشئ عهدة لكل مهندس موقع غير ممثَّل بعد."""
+        Custody = self.env["rawasi.engineer.custody"]
+        for project in self:
+            if not project.rawasi_is_construction:
+                continue
+            for user in project.site_engineer_ids:
+                Custody._ensure_for(project, user)
+
+    def action_open_custodies(self):
+        self.ensure_one()
+        return {
+            "type": "ir.actions.act_window",
+            "name": _("عُهد المهندسين"),
+            "res_model": "rawasi.engineer.custody",
+            "view_mode": "list,form",
+            "domain": [("project_id", "=", self.id)],
+            "context": {"default_project_id": self.id},
+        }
+
+    def action_open_project_inventory(self):
+        self.ensure_one()
+        if not self.rawasi_project_location_id:
+            self._ensure_rawasi_project_location()
+        return {
+            "type": "ir.actions.act_window",
+            "name": _("جرد المشروع"),
+            "res_model": "stock.quant",
+            "view_mode": "list",
+            "domain": [("location_id", "child_of", self.rawasi_project_location_id.id)],
+        }
 
     def _compute_wbs_count(self):
         for project in self:

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- نموذج التوقيعات الرقمية على الشركة (Binary يُحرَّر هنا مباشرة) -->
+        <record id="view_company_form_rawasi_signatures" model="ir.ui.view">
+            <field name="name">res.company.form.rawasi.signatures</field>
+            <field name="model">res.company</field>
+            <field name="arch" type="xml">
+                <form string="التوقيعات الرقمية">
+                    <sheet>
+                        <div class="oe_title">
+                            <h1><field name="name" readonly="1"/></h1>
+                            <span>التوقيعات الرقمية المعتمدة (تظهر في التقارير)</span>
+                        </div>
+                        <group>
+                            <group string="مهندس الموقع">
+                                <field name="rawasi_signature_site_engineer" widget="image"
+                                       class="oe_avatar" nolabel="1"/>
+                            </group>
+                            <group string="مدير المشروع">
+                                <field name="rawasi_signature_project_manager" widget="image"
+                                       class="oe_avatar" nolabel="1"/>
+                            </group>
+                            <group string="المكتب الفني">
+                                <field name="rawasi_signature_technical" widget="image"
+                                       class="oe_avatar" nolabel="1"/>
+                            </group>
+                            <group string="المحاسب">
+                                <field name="rawasi_signature_accountant" widget="image"
+                                       class="oe_avatar" nolabel="1"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_rawasi_company_signatures" model="ir.actions.act_window">
+            <field name="name">التوقيعات الرقمية</field>
+            <field name="res_model">res.company</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_company_form_rawasi_signatures"/>
+            <field name="res_id" eval="ref('base.main_company')"/>
+            <field name="target">current</field>
+        </record>
+
+        <menuitem id="menu_rawasi_company_signatures" name="التوقيعات الرقمية"
+                  parent="menu_rawasi_configuration" action="action_rawasi_company_signatures"
+                  sequence="20" groups="group_rawasi_admin"/>
+
+    </data>
+</odoo>

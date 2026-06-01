@@ -2,11 +2,11 @@
 """لوحة تحكم حيّة — KPI Cards حسب دور المستخدم.
 
 يكشف Method `get_dashboard_data()` بطاقات قابلة للضغط لكل دور:
-  • CEO: محفظة المنافسات، NCR حرج، VO معلَّق، IPC بانتظار
+  • CEO: NCR حرج، VO معلَّق، IPC بانتظار
   • Projects Director: مشاريع، NCR، VO، MR
   • Site Engineer: DSR اليوم، MAS بانتظار، NCR، MR مرفوض
   • Accountant: IPC، ضمانات قريبة الانتهاء، VO للفوترة
-  • Tech Office Manager: منافسات للتسعير، دفعات استيراد
+  • Tech Office Manager: اعتماد فني وطلبات مرتبطة بالتنفيذ
   • Planning Engineer: مشاريع نشطة
   • External Consultant: MAS/RFI/IPC بانتظاره
 
@@ -44,14 +44,6 @@ class RawasiDashboardKpi(models.AbstractModel):
 
         # ── بطاقات تنفيذية (CEO + Director) ─────────────────────
         if groups["ceo"] or groups["director"]:
-            comp_active = self.env["rawasi.competition"].search_count(
-                [("state", "in", ("draft", "pricing", "submitted"))]
-            )
-            add("comp_active", title="منافسات نشطة", value=comp_active,
-                icon="fa-trophy", color="info",
-                action="rawasi_construction.action_rawasi_competition",
-                context={"search_default_f_active": 1})
-
             vo_pending = self.env["rawasi.variation.order"].search_count(
                 [("state", "=", "submitted")]
             )
@@ -90,30 +82,8 @@ class RawasiDashboardKpi(models.AbstractModel):
                 action="rawasi_construction.action_bank_guarantee",
                 domain=[("expiry_state", "=", "soon"), ("state", "=", "active")])
 
-        # ── المكتب الفني ─────────────────────────────────────────
-        if groups["ceo"] or groups["tech"]:
-            comp_pricing = self.env["rawasi.competition"].search_count(
-                [("state", "=", "pricing")]
-            )
-            add("comp_pricing", title="منافسات قيد التسعير", value=comp_pricing,
-                icon="fa-calculator", color="info",
-                action="rawasi_construction.action_rawasi_competition",
-                domain=[("state", "=", "pricing")])
-
-            try:
-                batch_reviewing = self.env["rawasi.import.batch"].search_count(
-                    [("state", "=", "reviewing")]
-                )
-                add("batch_reviewing", title="دفعات استيراد للمراجعة",
-                    value=batch_reviewing,
-                    icon="fa-file-import", color="warning",
-                    action="rawasi_construction.action_import_batch",
-                    domain=[("state", "=", "reviewing")])
-            except KeyError:
-                pass  # موديل سجل البنود غير منصَّب
-
         # ── المشتريات (Director + Site + Accountant) ────────────
-        if groups["ceo"] or groups["director"] or groups["accountant"]:
+        if groups["ceo"] or groups["director"] or groups["tech"] or groups["accountant"]:
             mr_pending = self.env["rawasi.material.request"].search_count(
                 [("state", "=", "submitted")]
             )

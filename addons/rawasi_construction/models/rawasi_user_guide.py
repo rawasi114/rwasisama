@@ -14,10 +14,10 @@ from odoo import api, fields, models
 
 MENU_SECTIONS = [
     ("overview", "نظرة عامة على النظام"),
-    ("competitions", "المنافسات"),
+    ("competitions", "الدراسات والمنافسات"),
     ("projects", "المشاريع"),
-    ("reference_registry", "سجل البنود المرجعي"),
-    ("price_intelligence", "رادار الترسية"),
+    ("reference_registry", "الحصر وسجل البنود"),
+    ("price_intelligence", "تحليل الأسعار ورادار الترسية"),
     ("analytics", "لوحات وتحليلات"),
     ("wbs", "الجداول الزمنية (WBS)"),
     ("procurement", "المشتريات والميزانية"),
