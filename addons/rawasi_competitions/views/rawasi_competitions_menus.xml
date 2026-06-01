@@ -5,7 +5,6 @@
              يظهر للمكتب الفني كتطبيق مستقل عن إدارة المقاولات. -->
         <menuitem id="menu_rawasi_competitions_root"
                   name="المنافسات والتسعير"
-                  web_icon="rawasi_competitions,static/description/icon.png"
                   sequence="35"/>
 
         <menuitem id="menu_competitions_pricing_root_dashboard"
