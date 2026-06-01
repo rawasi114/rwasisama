@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="sbc_2002" model="rawasi.sbc.code">
+            <field name="code">2002</field><field name="name">الخرسانة</field>
+        </record>
+        <record id="sbc_2003" model="rawasi.sbc.code">
+            <field name="code">2003</field><field name="name">الخرسانة مسبقة الصب</field>
+        </record>
+        <record id="sbc_2007" model="rawasi.sbc.code">
+            <field name="code">2007</field><field name="name">أعمال البناء والطوب</field>
+        </record>
+        <record id="sbc_2011" model="rawasi.sbc.code">
+            <field name="code">2011</field><field name="name">المعادن</field>
+        </record>
+        <record id="sbc_2026" model="rawasi.sbc.code">
+            <field name="code">2026</field><field name="name">الأبواب والمداخل</field>
+        </record>
+        <record id="sbc_2031" model="rawasi.sbc.code">
+            <field name="code">2031</field><field name="name">الفتحات والنوافذ</field>
+        </record>
+        <record id="sbc_2035" model="rawasi.sbc.code">
+            <field name="code">2035</field><field name="name">مواد التشطيب</field>
+        </record>
+        <record id="sbc_2063" model="rawasi.sbc.code">
+            <field name="code">2063</field><field name="name">السباكة والتركيبات الصحية</field>
+        </record>
+        <record id="sbc_2083" model="rawasi.sbc.code">
+            <field name="code">2083</field><field name="name">التدفئة والتهوية والتكييف</field>
+        </record>
+        <record id="sbc_2094" model="rawasi.sbc.code">
+            <field name="code">2094</field><field name="name">شبكات المواسير ومكافحة الحرائق</field>
+        </record>
+        <record id="sbc_2153" model="rawasi.sbc.code">
+            <field name="code">2153</field><field name="name">الأعمال الكهربائية</field>
+        </record>
+        <record id="sbc_2183" model="rawasi.sbc.code">
+            <field name="code">2183</field><field name="name">أعمال التشجير والموقع العام</field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="0">
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- ═══   أدلّة الأدوار — موظف ومدير الورشة         ═══ -->
+    <!-- ═══════════════════════════════════════════════════ -->
+
+    <record id="guide_role_workshop_user" model="rwasi.workshop.user.guide">
+        <field name="name">دليل موظف/مشرف الورشة</field>
+        <field name="subtitle">التنفيذ اليومي للأوامر وتعبئة الحضور والإنتاجية</field>
+        <field name="guide_type">role</field>
+        <field name="role_group_id" ref="group_workshop_user"/>
+        <field name="icon">fa-user-hard-hat</field>
+        <field name="color">3</field>
+        <field name="sequence">10</field>
+        <field name="content"><![CDATA[
+<h3>دورك في النظام</h3>
+<p>
+أنت من ينفّذ ويوثّق العمل اليومي في الورشة. مسؤوليتك متابعة أوامر
+التصنيع، تسجيل التحضير اليومي، تعبئة بطاقات الوقت، توثيق المعاينات،
+ورفع تقارير الجودة والسلامة الميدانية.
+</p>
+
+<h3>الشاشات الأساسية</h3>
+<ul>
+  <li><strong>أوامر التصنيع</strong> — قائمة الأوامر المسندة لك، حالتها،
+      مراحلها.</li>
+  <li><strong>التحضير اليومي</strong> — تسجيل تحضير الورشة قبل البدء.</li>
+  <li><strong>التقرير اليومي للورشة</strong> — توثيق ما أُنجز اليوم.</li>
+  <li><strong>الحضور وبطاقات الوقت</strong> — ساعات العمل الفعلية للفنيين.</li>
+  <li><strong>المعاينات</strong> — قياسات الموقع قبل بدء التصنيع.</li>
+  <li><strong>قوائم المواد (BOM)</strong> — قائمة المواد المطلوبة للأمر.</li>
+  <li><strong>فحوصات الجودة</strong> — تسجيل نتائج الفحص.</li>
+  <li><strong>اجتماعات السلامة (Toolbox Talk)</strong> — توثيق الاجتماع اليومي.</li>
+</ul>
+
+<h3>سير عملك اليومي</h3>
+<ol>
+  <li><strong>بداية اليوم:</strong>
+    <ul>
+      <li>افتح «التحضير اليومي» وسجّل: الفريق الحاضر، المعدات، المواد، السلامة.</li>
+      <li>راجع أوامر التصنيع المسندة لك واختر الأولوية.</li>
+      <li>اعقد اجتماع السلامة اليومي وسجّله.</li>
+    </ul>
+  </li>
+  <li><strong>أثناء العمل:</strong>
+    <ul>
+      <li>سجّل بطاقات الوقت لكل فنّي على الأمر المحدّد.</li>
+      <li>عند انتهاء مرحلة → سجّل النسبة + اطلب فحص جودة.</li>
+      <li>أي عدم مطابقة → افتح تقرير NCR فوراً.</li>
+    </ul>
+  </li>
+  <li><strong>نهاية اليوم:</strong>
+    <ul>
+      <li>أكمل التقرير اليومي للورشة.</li>
+      <li>سجّل ما تبقّى من بطاقات الوقت.</li>
+      <li>راجع جدول الغد.</li>
+    </ul>
+  </li>
+</ol>
+
+<h3>نصائح ذهبية</h3>
+<ul>
+  <li>بطاقة الوقت غير المسجَّلة = إنتاجية ضائعة وحسابات مرتّب خاطئة.</li>
+  <li>التحضير اليومي يكشف نقص المواد قبل أن يعطّل التنفيذ.</li>
+  <li>صور دائماً ما تنجزه — هي دليل الاستلام ومستند الفوترة.</li>
+</ul>
+]]></field>
+    </record>
+
+    <record id="guide_role_workshop_manager" model="rwasi.workshop.user.guide">
+        <field name="name">دليل مدير العمليات</field>
+        <field name="subtitle">إدارة الأوامر، الجودة، الأداء، إغلاق المشاريع</field>
+        <field name="guide_type">role</field>
+        <field name="role_group_id" ref="group_workshop_manager"/>
+        <field name="icon">fa-user-tie</field>
+        <field name="color">9</field>
+        <field name="sequence">20</field>
+        <field name="content"><![CDATA[
+<h3>دورك في النظام</h3>
+<p>
+أنت قائد الورشة. مسؤوليتك التخطيط، الإسناد، اعتماد القرارات، مراقبة
+الإنتاجية والجودة، وضمان تسليم الأعمال في موعدها.
+</p>
+
+<h3>الشاشات الأساسية</h3>
+<ul>
+  <li><strong>أوامر التصنيع</strong> — إنشاء/إسناد/متابعة كل الأوامر.</li>
+  <li><strong>قوائم المواد (BOM)</strong> — مراجعة واعتماد BOM.</li>
+  <li><strong>التقرير اليومي للورشة</strong> — قراءة تقارير المشرفين.</li>
+  <li><strong>سجلات الصيانة</strong> — صيانة المعدات الدورية والطارئة.</li>
+  <li><strong>تقارير عدم المطابقة + إعادة الأعمال</strong> — مراقبة الجودة.</li>
+  <li><strong>لوحة الأداء</strong> — مؤشرات الإنتاجية والجودة.</li>
+  <li><strong>تحليل أوامر التصنيع</strong> — اتجاهات حسب النوع والحجم.</li>
+  <li><strong>إنتاجية الفنيين</strong> — مقارنة الفعلي بالمعياري.</li>
+  <li><strong>المشاريع المغلقة</strong> — أرشيف بعد التسليم النهائي.</li>
+</ul>
+
+<h3>إيقاع متابعتك</h3>
+<ol>
+  <li><strong>يومياً (15 دقيقة):</strong>
+    <ul>
+      <li>راجع التقارير اليومية للمشرفين.</li>
+      <li>راجع NCR المفتوحة الحرجة.</li>
+      <li>تحقّق من الحضور غير المعتاد.</li>
+    </ul>
+  </li>
+  <li><strong>أسبوعياً:</strong>
+    <ul>
+      <li>افتح لوحة الأداء — مؤشرات حمراء؟ تدخّل.</li>
+      <li>راجع جدول أوامر التصنيع القادمة.</li>
+      <li>اعقد اجتماع سلامة أسبوعي مع المشرفين.</li>
+    </ul>
+  </li>
+  <li><strong>شهرياً:</strong>
+    <ul>
+      <li>تحليل إنتاجية الفنيين مقابل المعدّل المعياري.</li>
+      <li>مراجعة سجلات الصيانة الوقائية.</li>
+      <li>إغلاق المشاريع المنتهية رسمياً.</li>
+    </ul>
+  </li>
+</ol>
+
+<h3>المؤشرات الحرجة</h3>
+<ul>
+  <li><strong>OTD (On-Time Delivery)</strong> — أوامر تصنيع مسلَّمة في موعدها ÷ الإجمالي.</li>
+  <li><strong>First Pass Yield</strong> — أوامر بدون إعادة عمل ÷ الإجمالي.</li>
+  <li><strong>Utilization</strong> — ساعات العمل الفعلية ÷ المتاحة.</li>
+  <li><strong>NCR Rate</strong> — عدد NCR ÷ عدد أوامر التصنيع.</li>
+</ul>
+
+<h3>قرارات لا تفوّضها</h3>
+<ul>
+  <li>اعتماد أوامر التصنيع الكبيرة.</li>
+  <li>اعتماد BOM للأوامر الجديدة.</li>
+  <li>قرارات إعادة العمل الكبرى.</li>
+  <li>إغلاق المشروع نهائياً.</li>
+</ul>
+]]></field>
+    </record>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- ═══   أدلّة سير العمل — 5 أقسام                 ═══ -->
+    <!-- ═══════════════════════════════════════════════════ -->
+
+    <record id="guide_wf_workshop_operations" model="rwasi.workshop.user.guide">
+        <field name="name">سير عمل العمليات</field>
+        <field name="subtitle">أوامر التصنيع، المعاينات، قوائم المواد</field>
+        <field name="guide_type">workflow</field>
+        <field name="menu_section_key">operations</field>
+        <field name="icon">fa-industry</field>
+        <field name="color">3</field>
+        <field name="sequence">10</field>
+        <field name="content"><![CDATA[
+<h3>دورة حياة أمر التصنيع</h3>
+<ol>
+  <li><strong>الإنشاء</strong> — يدوياً أو تلقائياً من أمر بيع.</li>
+  <li><strong>تأكيد العميل</strong> — اعتماد المواصفات والكميات.</li>
+  <li><strong>المعاينة</strong> — قياسات الموقع لتحديد الأبعاد الفعلية.</li>
+  <li><strong>قائمة المواد (BOM)</strong> — تحديد الخامات المطلوبة.</li>
+  <li><strong>طلب وتوريد المواد</strong> — تكامل مع المشتريات.</li>
+  <li><strong>بدء التصنيع</strong> — تخصيص الفنيين والوقت.</li>
+  <li><strong>فحص الجودة</strong> — على المراحل وفي النهاية.</li>
+  <li><strong>إنهاء التصنيع</strong> — جاهز للتسليم.</li>
+  <li><strong>التسليم وتوقيع العميل</strong> — يُغلق الأمر.</li>
+</ol>
+
+<h3>الشاشات</h3>
+<ul>
+  <li><strong>أوامر التصنيع</strong> — اللوحة الرئيسية.</li>
+  <li><strong>المعاينات</strong> — جداول القياسات.</li>
+  <li><strong>قوائم المواد</strong> — BOM لكل أمر.</li>
+</ul>
+
+<h3>نقاط حرجة</h3>
+<ul>
+  <li>لا تبدأ التصنيع قبل اكتمال المعاينة واعتماد BOM.</li>
+  <li>كل أمر يجب أن يكون مرتبطاً بأمر بيع أو طلب داخلي.</li>
+  <li>تأكد من توفّر المواد قبل بدء التصنيع.</li>
+</ul>
+]]></field>
+    </record>
+
+    <record id="guide_wf_workshop_field" model="rwasi.workshop.user.guide">
+        <field name="name">سير عمل العمليات الميدانية</field>
+        <field name="subtitle">التحضير اليومي، التقارير، الحضور، بطاقات الوقت</field>
+        <field name="guide_type">workflow</field>
+        <field name="menu_section_key">field</field>
+        <field name="icon">fa-clipboard-check</field>
+        <field name="color">2</field>
+        <field name="sequence">10</field>
+        <field name="content"><![CDATA[
+<h3>الإيقاع اليومي</h3>
+<ol>
+  <li><strong>06:30–07:00 — التحضير اليومي:</strong>
+    <ul>
+      <li>قائمة الحضور.</li>
+      <li>الفحص الصباحي للمعدات.</li>
+      <li>اجتماع السلامة (Toolbox Talk).</li>
+      <li>توزيع الفنيين على الأوامر.</li>
+    </ul>
+  </li>
+  <li><strong>أثناء اليوم — بطاقات الوقت:</strong>
+    <ul>
+      <li>كل فنّي على أمر تصنيع محدّد بوقت محدّد.</li>
+      <li>التوقّفات والانتقالات تُسجَّل.</li>
+    </ul>
+  </li>
+  <li><strong>16:00 — التقرير اليومي:</strong>
+    <ul>
+      <li>ما أُنجز في كل أمر تصنيع.</li>
+      <li>المواد المستهلكة.</li>
+      <li>الأحداث (إصابات، أعطال، تأخيرات).</li>
+      <li>خطة الغد.</li>
+    </ul>
+  </li>
+</ol>
+
+<h3>الشاشات</h3>
+<ul>
+  <li>التحضير اليومي.</li>
+  <li>التقرير اليومي للورشة.</li>
+  <li>الحضور.</li>
+  <li>بطاقة الوقت.</li>
+</ul>
+
+<h3>قواعد ذهبية</h3>
+<ul>
+  <li>لا تبدأ يوماً بدون تحضير يومي مسجَّل.</li>
+  <li>كل ساعة عمل يجب أن تُسجَّل على أمر تصنيع.</li>
+  <li>التقرير اليومي يُغلق قبل مغادرة المشرف.</li>
+</ul>
+]]></field>
+    </record>
+
+    <record id="guide_wf_workshop_quality" model="rwasi.workshop.user.guide">
+        <field name="name">سير عمل الجودة والسلامة</field>
+        <field name="subtitle">QC، NCR، إعادة الأعمال، اجتماعات السلامة، الصيانة</field>
+        <field name="guide_type">workflow</field>
+        <field name="menu_section_key">quality</field>
+        <field name="icon">fa-shield-alt</field>
+        <field name="color">6</field>
+        <field name="sequence">10</field>
+        <field name="content"><![CDATA[
+<h3>منظومة الجودة</h3>
+<ol>
+  <li><strong>فحوصات الجودة (QC):</strong>
+    <ul>
+      <li>فحص المواد الواردة.</li>
+      <li>فحص المراحل (بداية، منتصف، نهاية).</li>
+      <li>فحص قبل التسليم.</li>
+      <li>قراءات + صور + توقيع المسؤول.</li>
+    </ul>
+  </li>
+  <li><strong>تقارير عدم المطابقة (NCR):</strong>
+    <ul>
+      <li>وصف عدم المطابقة + سببها الجذري.</li>
+      <li>الإجراء التصحيحي.</li>
+      <li>التحقّق والإغلاق.</li>
+    </ul>
+  </li>
+  <li><strong>إعادة الأعمال (Rework):</strong>
+    <ul>
+      <li>تتبّع تكلفة إعادة العمل (مواد + ساعات).</li>
+      <li>التحقّق بعد الإعادة.</li>
+      <li>تحليل لمنع التكرار.</li>
+    </ul>
+  </li>
+</ol>
+
+<h3>منظومة السلامة</h3>
+<ul>
+  <li><strong>اجتماعات السلامة (Toolbox Talk):</strong>
+      موضوع يومي + توقيع الحاضرين.</li>
+  <li><strong>سجلات الصيانة:</strong> صيانة وقائية (دورية) + علاجية (طارئة).</li>
+</ul>
+
+<h3>قواعد ذهبية</h3>
+<ul>
+  <li>لا تسليم بدون فحص جودة معتمَد.</li>
+  <li>NCR مفتوح أكثر من 7 أيام = خلل تنظيمي.</li>
+  <li>صيانة وقائية رخيصة، علاجية مكلفة — احرص على الجدول.</li>
+</ul>
+]]></field>
+    </record>
+
+    <record id="guide_wf_workshop_reports" model="rwasi.workshop.user.guide">
+        <field name="name">سير عمل التقارير وقياس الأداء</field>
+        <field name="subtitle">لوحة الأداء، تحليل الأوامر، إنتاجية الفنيين</field>
+        <field name="guide_type">workflow</field>
+        <field name="menu_section_key">reports</field>
+        <field name="icon">fa-chart-bar</field>
+        <field name="color">5</field>
+        <field name="sequence">10</field>
+        <field name="content"><![CDATA[
+<h3>التقارير المتاحة</h3>
+<ol>
+  <li><strong>لوحة الأداء:</strong> KPI الورشة الشاملة.</li>
+  <li><strong>تحليل أوامر التصنيع:</strong> اتجاهات حسب النوع، العميل، المدة.</li>
+  <li><strong>إنتاجية الفنيين والعمال:</strong> ساعات فعلية مقابل معيارية.</li>
+  <li><strong>إنتاجية العمالة (نموذج):</strong> نموذج تحليلي تفصيلي.</li>
+</ol>
+
+<h3>المؤشرات</h3>
+<ul>
+  <li><strong>OTD%</strong> — On-Time Delivery.</li>
+  <li><strong>FPY%</strong> — First Pass Yield.</li>
+  <li><strong>Utilization%</strong> — استغلال ساعات العمل المتاحة.</li>
+  <li><strong>Rework%</strong> — نسبة إعادة العمل.</li>
+  <li><strong>OEE</strong> — Overall Equipment Effectiveness.</li>
+</ul>
+
+<h3>كيف تستخدمها؟</h3>
+<ol>
+  <li>افتح لوحة الأداء أسبوعياً.</li>
+  <li>أي مؤشر أحمر → افتح تفاصيله.</li>
+  <li>قارن بين المشرفين/الفرَق لتحديد أفضل الممارسات.</li>
+  <li>اعمل خطة تحسين شهرية مبنية على البيانات.</li>
+</ol>
+
+<h3>منع الفهم الخاطئ</h3>
+<ul>
+  <li>المؤشر ليس أداة عقاب — أداة تحسين.</li>
+  <li>عدد قليل من القياسات الدقيقة أفضل من عدد كبير غير مكتمل.</li>
+</ul>
+]]></field>
+    </record>
+
+    <record id="guide_wf_workshop_closeout" model="rwasi.workshop.user.guide">
+        <field name="name">سير عمل المشاريع المغلقة</field>
+        <field name="subtitle">إجراءات الإغلاق والأرشفة</field>
+        <field name="guide_type">workflow</field>
+        <field name="menu_section_key">closeout</field>
+        <field name="icon">fa-archive</field>
+        <field name="color">1</field>
+        <field name="sequence">10</field>
+        <field name="content"><![CDATA[
+<h3>متى يُغلَق المشروع؟</h3>
+<p>بعد تسليم آخر أمر تصنيع، اعتماد العميل، وانتهاء فترة الضمان.</p>
+
+<h3>قائمة فحص الإغلاق</h3>
+<ol>
+  <li>كل أوامر التصنيع في حالة «مسلَّم وموقَّع».</li>
+  <li>كل NCR مغلق ومُحقَّق منه.</li>
+  <li>كل إعادات العمل موثَّقة وتكلفتها مرصودة.</li>
+  <li>المواد المتبقّية مرتجعة للمستودع أو موزَّعة.</li>
+  <li>وثائق التسليم الأصلية أُرشِفت في DMS.</li>
+  <li>تقرير إغلاق رسمي مع دروس مستفادة.</li>
+</ol>
+
+<h3>التقرير النهائي</h3>
+<ul>
+  <li>الإيراد الفعلي مقابل العقد.</li>
+  <li>التكلفة الفعلية (مواد + عمالة + إعادة + إهلاك).</li>
+  <li>الربح الصافي.</li>
+  <li>المدة الفعلية مقابل المخطَّطة.</li>
+  <li>عدد NCR وحجم إعادة العمل.</li>
+  <li>دروس مستفادة للمشاريع القادمة.</li>
+</ul>
+
+<h3>الأرشفة</h3>
+<ul>
+  <li>المشروع يُنقَل لحالة «مغلق» لكن البيانات تبقى للقراءة والتحليل.</li>
+  <li>لا تحذف بيانات مشروع مغلق — هي مرجعك للمستقبل.</li>
+</ul>
+]]></field>
+    </record>
+
+</odoo>

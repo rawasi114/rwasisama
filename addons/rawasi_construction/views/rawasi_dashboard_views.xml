@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ════════ تنفيذية: تحليل المنافسات ════════ -->
+    <record id="view_competition_graph" model="ir.ui.view">
+        <field name="name">rawasi.competition.graph</field>
+        <field name="model">rawasi.competition</field>
+        <field name="arch" type="xml">
+            <graph string="تحليل المنافسات" type="bar" sample="1">
+                <field name="state"/>
+                <field name="amount_total_price" type="measure"/>
+            </graph>
+        </field>
+    </record>
+    <record id="view_competition_pivot" model="ir.ui.view">
+        <field name="name">rawasi.competition.pivot</field>
+        <field name="model">rawasi.competition</field>
+        <field name="arch" type="xml">
+            <pivot string="تحليل المنافسات">
+                <field name="state" type="row"/>
+                <field name="amount_total_price" type="measure"/>
+                <field name="amount_total_cost" type="measure"/>
+                <field name="margin_amount" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+    <record id="action_dash_competition" model="ir.actions.act_window">
+        <field name="name">تحليل المنافسات</field>
+        <field name="res_model">rawasi.competition</field>
+        <field name="view_mode">graph,pivot,list</field>
+    </record>
+
+    <!-- ════════ تنفيذية: تحليل المستخلصات (الإيرادات) ════════ -->
+    <record id="view_pc_graph" model="ir.ui.view">
+        <field name="name">rawasi.payment.certificate.graph</field>
+        <field name="model">rawasi.payment.certificate</field>
+        <field name="arch" type="xml">
+            <graph string="المستخلصات" type="line" sample="1">
+                <field name="period_to" interval="month"/>
+                <field name="amount_total" type="measure"/>
+            </graph>
+        </field>
+    </record>
+    <record id="view_pc_pivot" model="ir.ui.view">
+        <field name="name">rawasi.payment.certificate.pivot</field>
+        <field name="model">rawasi.payment.certificate</field>
+        <field name="arch" type="xml">
+            <pivot string="المستخلصات">
+                <field name="project_id" type="row"/>
+                <field name="period_to" interval="month" type="col"/>
+                <field name="amount_work_period" type="measure"/>
+                <field name="amount_net" type="measure"/>
+                <field name="amount_total" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+    <record id="action_dash_ipc" model="ir.actions.act_window">
+        <field name="name">تحليل المستخلصات</field>
+        <field name="res_model">rawasi.payment.certificate</field>
+        <field name="view_mode">graph,pivot,list</field>
+    </record>
+
+    <!-- ════════ المشاريع: تحليل الميزانية ════════ -->
+    <record id="view_budget_graph" model="ir.ui.view">
+        <field name="name">rawasi.boq.item.graph</field>
+        <field name="model">rawasi.boq.item</field>
+        <field name="arch" type="xml">
+            <graph string="استهلاك الميزانية" type="bar" sample="1">
+                <field name="competition_id"/>
+                <field name="amount_consumed" type="measure"/>
+            </graph>
+        </field>
+    </record>
+    <record id="view_budget_pivot" model="ir.ui.view">
+        <field name="name">rawasi.boq.item.pivot</field>
+        <field name="model">rawasi.boq.item</field>
+        <field name="arch" type="xml">
+            <pivot string="الميزانية">
+                <field name="competition_id" type="row"/>
+                <field name="total_cost" type="measure"/>
+                <field name="amount_committed" type="measure"/>
+                <field name="amount_spent" type="measure"/>
+                <field name="amount_remaining" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+    <record id="action_dash_budget" model="ir.actions.act_window">
+        <field name="name">تحليل الميزانية</field>
+        <field name="res_model">rawasi.boq.item</field>
+        <field name="view_mode">graph,pivot</field>
+        <!-- لا تُظهر بنود إلا من منافسات تحوّلت لمشاريع فعلية.
+             المنافسات قيد العرض/التسعير/التقديم نتائجها غير محسومة
+             ومن المضلِّل احتسابها في الميزانية المستهلَكة. -->
+        <field name="domain">[('competition_id.project_id', '!=', False)]</field>
+    </record>
+
+    <!-- ════════ المخاطر: عدم المطابقة ════════ -->
+    <record id="view_ncr_graph" model="ir.ui.view">
+        <field name="name">rawasi.ncr.graph</field>
+        <field name="model">rawasi.ncr</field>
+        <field name="arch" type="xml">
+            <graph string="عدم المطابقة" type="bar" sample="1">
+                <field name="severity"/>
+                <field name="state"/>
+            </graph>
+        </field>
+    </record>
+    <record id="view_ncr_pivot" model="ir.ui.view">
+        <field name="name">rawasi.ncr.pivot</field>
+        <field name="model">rawasi.ncr</field>
+        <field name="arch" type="xml">
+            <pivot string="عدم المطابقة">
+                <field name="severity" type="row"/>
+                <field name="state" type="col"/>
+            </pivot>
+        </field>
+    </record>
+    <record id="action_dash_ncr" model="ir.actions.act_window">
+        <field name="name">تحليل عدم المطابقة</field>
+        <field name="res_model">rawasi.ncr</field>
+        <field name="view_mode">graph,pivot,list</field>
+    </record>
+
+    <!-- ════════ المخاطر: طلبات المعلومات ════════ -->
+    <record id="view_rfi_graph" model="ir.ui.view">
+        <field name="name">rawasi.rfi.graph</field>
+        <field name="model">rawasi.rfi</field>
+        <field name="arch" type="xml">
+            <graph string="طلبات المعلومات" type="bar" sample="1">
+                <field name="state"/>
+                <field name="priority"/>
+            </graph>
+        </field>
+    </record>
+    <record id="action_dash_rfi" model="ir.actions.act_window">
+        <field name="name">تحليل طلبات المعلومات</field>
+        <field name="res_model">rawasi.rfi</field>
+        <field name="view_mode">graph,pivot,list</field>
+    </record>
+
+    <!-- ════════ المخاطر: الضمانات البنكية ════════ -->
+    <record id="view_bg_graph" model="ir.ui.view">
+        <field name="name">rawasi.bank.guarantee.graph</field>
+        <field name="model">rawasi.bank.guarantee</field>
+        <field name="arch" type="xml">
+            <graph string="الضمانات البنكية" type="bar" sample="1">
+                <field name="guarantee_type"/>
+                <field name="amount" type="measure"/>
+            </graph>
+        </field>
+    </record>
+    <record id="view_bg_pivot" model="ir.ui.view">
+        <field name="name">rawasi.bank.guarantee.pivot</field>
+        <field name="model">rawasi.bank.guarantee</field>
+        <field name="arch" type="xml">
+            <pivot string="الضمانات البنكية">
+                <field name="guarantee_type" type="row"/>
+                <field name="expiry_state" type="col"/>
+                <field name="amount" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+    <record id="action_dash_bg" model="ir.actions.act_window">
+        <field name="name">تحليل الضمانات البنكية</field>
+        <field name="res_model">rawasi.bank.guarantee</field>
+        <field name="view_mode">graph,pivot,list</field>
+    </record>
+</odoo>

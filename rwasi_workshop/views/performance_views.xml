@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_performance_score_form" model="ir.ui.view">
+        <field name="name">rwasi.performance.score.form</field>
+        <field name="model">rwasi.performance.score</field>
+        <field name="arch" type="xml">
+            <form string="بطاقة أداء الورشة">
+                <header>
+                    <button name="action_compute" string="احتساب الأداء" type="object"
+                            class="btn-primary"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group string="الفترة">
+                            <field name="date_from"/>
+                            <field name="date_to"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group string="الأوزان (المجموع 100)">
+                            <field name="w_ontime"/>
+                            <field name="w_satisfaction"/>
+                            <field name="w_attendance"/>
+                            <field name="w_productivity"/>
+                        </group>
+                    </group>
+                    <separator string="النتائج"/>
+                    <group>
+                        <group>
+                            <field name="kpi_ontime" widget="progressbar"/>
+                            <field name="kpi_satisfaction" widget="progressbar"/>
+                            <field name="kpi_attendance" widget="progressbar"/>
+                        </group>
+                        <group>
+                            <field name="kpi_productivity"/>
+                            <field name="kpi_productivity_growth"/>
+                            <field name="closeouts_total"/>
+                            <field name="total_work_hours"/>
+                            <field name="total_output"/>
+                        </group>
+                    </group>
+                    <separator string="الدرجة الإجمالية"/>
+                    <group>
+                        <group>
+                            <field name="overall_score" widget="progressbar"/>
+                        </group>
+                        <group>
+                            <field name="rating" widget="badge"
+                                   decoration-success="rating in ('excellent','very_good')"
+                                   decoration-warning="rating in ('good','fair')"
+                                   decoration-danger="rating == 'weak'"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_performance_score_list" model="ir.ui.view">
+        <field name="name">rwasi.performance.score.list</field>
+        <field name="model">rwasi.performance.score</field>
+        <field name="arch" type="xml">
+            <list string="بطاقات الأداء" decoration-success="rating in ('excellent','very_good')"
+                  decoration-warning="rating in ('good','fair')" decoration-danger="rating == 'weak'">
+                <field name="name"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <field name="kpi_ontime"/>
+                <field name="kpi_satisfaction"/>
+                <field name="kpi_attendance"/>
+                <field name="kpi_productivity_growth"/>
+                <field name="overall_score"/>
+                <field name="rating" widget="badge"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_performance_score_graph" model="ir.ui.view">
+        <field name="name">rwasi.performance.score.graph</field>
+        <field name="model">rwasi.performance.score</field>
+        <field name="arch" type="xml">
+            <graph string="اتجاه الأداء" type="line">
+                <field name="name"/>
+                <field name="overall_score" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="action_performance_score" model="ir.actions.act_window">
+        <field name="name">لوحة الأداء</field>
+        <field name="res_model">rwasi.performance.score</field>
+        <field name="view_mode">list,form,graph</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">أنشئ بطاقة أداء جديدة</p>
+            <p>حدّد الفترة والأوزان ثم اضغط «احتساب الأداء» لقياس: التسليم بالموعد،
+               رضا العميل، الحضور، ونمو الإنتاجية — ودرجة إجمالية وتقييم.</p>
+        </field>
+    </record>
+
+</odoo>

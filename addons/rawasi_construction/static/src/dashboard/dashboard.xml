@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="rawasi_construction.Dashboard">
+        <div class="o_rawasi_dashboard p-4">
+            <div class="o_rawasi_hero">
+                <div class="o_rawasi_brand">شركة رواسي سما للمقاولات</div>
+                <h1 class="o_rawasi_title">
+                    أهلاً <t t-esc="state.data.user_name"/>
+                </h1>
+                <div class="o_rawasi_subtitle">
+                    نظام إدارة المقاولات — لوحة عملك اليوم
+                </div>
+                <div class="mt-3">
+                    <button class="btn btn-light btn-lg o_rawasi_guide_btn"
+                            t-on-click="openUserGuide">
+                        <i class="fa fa-book me-2"/>
+                        دليل الاستخدام
+                    </button>
+                </div>
+            </div>
+
+            <!-- البطاقات الحيّة (KPI) -->
+            <div t-if="state.loaded" class="o_rawasi_kpi_grid mt-4">
+                <div t-foreach="state.data.cards" t-as="card" t-key="card.key"
+                     t-attf-class="o_rawasi_kpi_card o_rawasi_kpi_#{card.color}"
+                     t-on-click="() => this.openCard(card)">
+                    <div class="o_rawasi_kpi_icon">
+                        <i t-attf-class="fa #{card.icon}"/>
+                    </div>
+                    <div class="o_rawasi_kpi_body">
+                        <div class="o_rawasi_kpi_value" t-esc="card.value"/>
+                        <div class="o_rawasi_kpi_title" t-esc="card.title"/>
+                    </div>
+                    <div class="o_rawasi_kpi_arrow">
+                        <i class="fa fa-angle-left"/>
+                    </div>
+                </div>
+            </div>
+
+            <div t-if="state.loaded and state.data.cards.length === 0"
+                 class="o_rawasi_card mt-4 text-center">
+                <p class="mb-0 text-muted">
+                    لا توجد مهام عاجلة الآن. تابع العمل من القائمة الجانبية.
+                </p>
+            </div>
+
+            <div t-if="!state.loaded" class="o_rawasi_card mt-4 text-center">
+                <i class="fa fa-spinner fa-spin fa-2x text-muted"/>
+                <p class="mt-2 text-muted">جاري تحميل البيانات...</p>
+            </div>
+
+            <!-- الركائز الأربع (مرجع نظري دائم) -->
+            <div class="o_rawasi_pillars mt-4">
+                <div class="o_rawasi_pillar">
+                    <div class="o_rawasi_pillar_title">الحوكمة</div>
+                    <div class="o_rawasi_pillar_desc">دورة مستندية موحّدة وأدوار وصلاحيات منضبطة</div>
+                </div>
+                <div class="o_rawasi_pillar">
+                    <div class="o_rawasi_pillar_title"><bdi>WBS</bdi> والمسار الحرج</div>
+                    <div class="o_rawasi_pillar_desc">ربط النطاق بالجدول الزمني وتحديد مسار التنفيذ الحرج</div>
+                </div>
+                <div class="o_rawasi_pillar">
+                    <div class="o_rawasi_pillar_title"><bdi>EVM</bdi></div>
+                    <div class="o_rawasi_pillar_desc">قياس الأداء بالقيمة المكتسبة لضبط التكلفة والزمن</div>
+                </div>
+                <div class="o_rawasi_pillar">
+                    <div class="o_rawasi_pillar_title"><bdi>VE</bdi></div>
+                    <div class="o_rawasi_pillar_desc">الهندسة القيمية لكفاءة الإنفاق دون الإخلال بالجودة</div>
+                </div>
+            </div>
+
+            <div class="o_rawasi_footer mt-4">
+                تصميم وتنفيذ: <strong>عواد العنزي</strong> ·
+                نواة العمل التشغيلية لشركة رواسي سما للمقاولات
+            </div>
+        </div>
+    </t>
+</templates>

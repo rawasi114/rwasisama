@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- توسعة فورم المنتج: قسم «بيانات المقاولات» -->
+    <record id="view_product_template_form_rawasi" model="ir.ui.view">
+        <field name="name">product.template.form.rawasi</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="بيانات المقاولات"
+                      name="rawasi_construction"
+                      invisible="not is_construction">
+                    <group>
+                        <group string="التصنيف">
+                            <field name="is_construction"/>
+                            <field name="rawasi_reference_item_id" readonly="1"/>
+                            <field name="rawasi_main_category"/>
+                            <field name="rawasi_item_group"/>
+                        </group>
+                        <group string="الوحدات والرموز">
+                            <field name="rawasi_unit_id"/>
+                            <field name="rawasi_sbc_code_id"/>
+                            <field name="rawasi_lcgpa_code_id"/>
+                        </group>
+                    </group>
+                    <group string="المواصفات الفنية">
+                        <field name="rawasi_specifications" nolabel="1"/>
+                    </group>
+                </page>
+            </xpath>
+            <!-- زر فتح البند المرجعي في الـ stat-buttons (لو متاحاً) -->
+        </field>
+    </record>
+
+    <!-- شارة «مقاولات» في List View للمنتج -->
+    <record id="view_product_template_list_rawasi" model="ir.ui.view">
+        <field name="name">product.template.list.rawasi</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_tree_view"/>
+        <field name="arch" type="xml">
+            <field name="default_code" position="after">
+                <field name="is_construction" optional="show"
+                       string="مقاولات"/>
+            </field>
+        </field>
+    </record>
+
+    <!-- بحث: فلتر «منتجات المقاولات» -->
+    <record id="view_product_template_search_rawasi" model="ir.ui.view">
+        <field name="name">product.template.search.rawasi</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_search_view"/>
+        <field name="arch" type="xml">
+            <search position="inside">
+                <separator/>
+                <filter string="منتجات المقاولات"
+                        name="filter_rawasi_construction"
+                        domain="[('is_construction','=',True)]"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- أكشن مخصّص لمنتجات المقاولات (يفتح من قائمة رواسي) -->
+    <record id="action_rawasi_construction_products" model="ir.actions.act_window">
+        <field name="name">منتجات المقاولات</field>
+        <field name="res_model">product.template</field>
+        <field name="view_mode">list,kanban,form</field>
+        <field name="domain">[('is_construction','=',True)]</field>
+        <field name="context">
+            {'default_is_construction': True, 'default_type': 'consu',
+             'search_default_filter_rawasi_construction': 1}
+        </field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">لا توجد منتجات مقاولات بعد</p>
+            <p>
+                المنتجات تُنشأ تلقائياً عند إضافة بنود مرجعية (Reference Items)
+                أو اعتماد دفعات الاستيراد.
+            </p>
+        </field>
+    </record>
+
+    <!-- زرّ «منتج المخزون» في فورم البند المرجعي -->
+    <record id="view_rawasi_reference_item_form_product" model="ir.ui.view">
+        <field name="name">rawasi.reference.item.form.product</field>
+        <field name="model">rawasi.reference.item</field>
+        <field name="inherit_id" ref="rawasi_construction.view_reference_item_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_open_product" type="object"
+                        string="فتح منتج المخزون"
+                        class="btn-secondary" icon="fa-cube"
+                        invisible="not product_tmpl_id"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

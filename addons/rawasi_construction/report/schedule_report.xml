@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- صيغة ورق أفقية (Landscape) للجدول الزمني -->
+    <record id="paperformat_rawasi_schedule" model="report.paperformat">
+        <field name="name">رواسي — جدول زمني أفقي A4</field>
+        <field name="format">A4</field>
+        <field name="orientation">Landscape</field>
+        <field name="margin_top">14</field>
+        <field name="margin_bottom">12</field>
+        <field name="margin_left">6</field>
+        <field name="margin_right">6</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">8</field>
+        <field name="dpi">90</field>
+    </record>
+
+    <record id="action_report_schedule" model="ir.actions.report">
+        <field name="name">الجدول الزمني (Gantt)</field>
+        <field name="model">project.project</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">rawasi_construction.report_schedule</field>
+        <field name="report_file">rawasi_construction.report_schedule</field>
+        <field name="paperformat_id" ref="paperformat_rawasi_schedule"/>
+    </record>
+
+    <template id="report_schedule">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-set="doc" t-value="o"/>
+                <t t-set="d" t-value="o._schedule_report_lines()"/>
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h3 class="text-center" style="margin-bottom:4px;">
+                            الجدول الزمني للمشروع — <span t-out="o.name"/>
+                        </h3>
+                        <div class="text-center" style="margin-bottom:8px;font-size:10px;">
+                            <span style="background:#d9534f;color:#fff;padding:1px 8px;border-radius:3px;margin:0 3px;">المسار الحرج</span>
+                            <span style="background:#4a90d2;color:#fff;padding:1px 8px;border-radius:3px;margin:0 3px;">نشاط</span>
+                            <span style="background:#6f42c1;color:#fff;padding:1px 8px;border-radius:3px;margin:0 3px;">معلَم</span>
+                        </div>
+                        <p t-if="not d['lines']" class="text-muted text-center">
+                            لا توجد أنشطة ذات تواريخ في هذا المشروع.
+                        </p>
+                        <table t-if="d['lines']" class="table table-sm table-bordered"
+                               style="font-size:9px;table-layout:fixed;width:100%;">
+                            <colgroup>
+                                <col style="width:22%;"/>
+                                <col style="width:8%;"/>
+                                <col style="width:8%;"/>
+                                <col style="width:5%;"/>
+                                <col style="width:5%;"/>
+                                <col style="width:52%;"/>
+                            </colgroup>
+                            <thead>
+                                <tr style="background:#1f3a93;color:#fff;">
+                                    <th>النشاط / المرحلة</th>
+                                    <th class="text-center">البداية</th>
+                                    <th class="text-center">النهاية</th>
+                                    <th class="text-center">مدة</th>
+                                    <th class="text-center">طفو</th>
+                                    <th>
+                                        <div style="position:relative;direction:ltr;height:12px;">
+                                            <t t-foreach="d['periods']" t-as="p">
+                                                <span t-att-style="p['style']" t-out="p['label']"/>
+                                            </t>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="d['lines']" t-as="ln">
+                                    <td t-att-style="('padding-right:14px;' if ln['level'] else 'font-weight:bold;')">
+                                        <span t-out="ln['name']"/>
+                                    </td>
+                                    <td class="text-center"><span t-out="ln['date_start']"/></td>
+                                    <td class="text-center"><span t-out="ln['date_end']"/></td>
+                                    <td class="text-center"><span t-out="ln['duration']"/></td>
+                                    <td class="text-center"><span t-out="ln['total_float']"/></td>
+                                    <td>
+                                        <div style="position:relative;direction:ltr;background:#f2f2f2;height:11px;border-radius:2px;">
+                                            <div t-att-style="ln['bar_style']"/>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div style="font-size:8px;color:#888;margin-top:6px;">
+                            * المسار الحرج محسوب بطريقة CPM اعتماداً على علاقات الأسبقية (الأنشطة السابقة) والمدد.
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>
