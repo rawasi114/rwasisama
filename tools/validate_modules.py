@@ -34,19 +34,45 @@ ACCESS_HEADER = [
     "perm_read", "perm_write", "perm_create", "perm_unlink",
 ]
 
-errors, warnings = [], []
+errors, warnings, notices = [], [], []
 def err(m): errors.append(m)
 def warn(m): warnings.append(m)
+def note(m): notices.append(m)
+
+
+def _is_module(p):
+    return os.path.isdir(p) and os.path.isfile(os.path.join(p, "__manifest__.py"))
+
+
+def _discover_roots():
+    """Directories that may directly contain Odoo modules: the repo root and any
+    top-level ``addons``-style folder (so modules under ``addons/`` are not missed)."""
+    roots = [ROOT]
+    for name in sorted(os.listdir(ROOT)):
+        p = os.path.join(ROOT, name)
+        if os.path.isdir(p) and not _is_module(p) and name not in (".git", "docs", "tools"):
+            roots.append(p)
+    return roots
 
 
 def find_modules(argv):
     if argv:
-        return [os.path.join(ROOT, m) for m in argv]
+        out = []
+        for m in argv:
+            for base in _discover_roots():
+                cand = os.path.join(base, m)
+                if _is_module(cand):
+                    out.append(cand)
+                    break
+            else:
+                out.append(os.path.join(ROOT, m))  # report-as-missing downstream
+        return out
     mods = []
-    for name in sorted(os.listdir(ROOT)):
-        p = os.path.join(ROOT, name)
-        if os.path.isdir(p) and os.path.isfile(os.path.join(p, "__manifest__.py")):
-            mods.append(p)
+    for base in _discover_roots():
+        for name in sorted(os.listdir(base)):
+            p = os.path.join(base, name)
+            if _is_module(p):
+                mods.append(p)
     return mods
 
 
@@ -148,6 +174,23 @@ def main():
         print("No Odoo modules found.")
         return 1
     print(f"Validating {len(mods)} module(s); lxml={'yes' if HAVE_LXML else 'no'}\n")
+    # A module's technical name is its directory name. Two modules sharing it
+    # under the SAME addons-path root cannot coexist (only the first loads) -> error.
+    # The same name under DIFFERENT roots is allowed on purpose: it marks two
+    # mutually-exclusive deployments that must never share one addons_path -> notice.
+    by_root, by_name = {}, {}
+    for mod in mods:
+        by_root.setdefault(os.path.dirname(mod), {}).setdefault(os.path.basename(mod), []).append(mod)
+        by_name.setdefault(os.path.basename(mod), []).append(mod)
+    for _root, names in sorted(by_root.items()):
+        for tech_name, paths in sorted(names.items()):
+            if len(paths) > 1:
+                locs = ", ".join(os.path.relpath(p, ROOT) for p in paths)
+                err(f"duplicate module technical name {tech_name!r} within one addons root: {locs}")
+    for tech_name, paths in sorted(by_name.items()):
+        if len({os.path.dirname(p) for p in paths}) > 1:
+            locs = ", ".join(os.path.relpath(p, ROOT) for p in paths)
+            note(f"module {tech_name!r} exists in separate deployments (never load together): {locs}")
     for mod in mods:
         m = load_manifest(mod)
         if m:
@@ -155,8 +198,13 @@ def main():
         check_python(mod)
         check_xml(mod)
         check_access_csv(mod)
-        print(f"  - {os.path.basename(mod)}: checked")
+        print(f"  - {os.path.relpath(mod, ROOT)}: checked")
     print()
+    if notices:
+        print(f"NOTICES ({len(notices)}):")
+        for n in notices:
+            print("  i " + n)
+        print()
     if warnings:
         print(f"WARNINGS ({len(warnings)}):")
         for w in warnings:
