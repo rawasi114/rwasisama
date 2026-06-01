@@ -34,16 +34,24 @@
                             string="اعتماد تجاوز الميزانية" class="btn-warning"
                             groups="rawasi_construction.group_projects_director"
                             invisible="not has_over_budget or override_budget or state not in ('draft','submitted')"/>
-                    <button name="action_approve" type="object" string="اعتماد"
-                            class="btn-primary" invisible="state != 'submitted'"/>
+                    <button name="action_approve" type="object" string="اعتماد فني"
+                            class="btn-primary" invisible="state != 'submitted'"
+                            groups="rawasi_construction.group_tech_office_manager,rawasi_construction.group_projects_director,rawasi_construction.group_ceo"/>
+                    <button name="action_finance_approve" type="object" string="اعتماد مالي"
+                            class="btn-primary" invisible="state != 'approved'"
+                            groups="rawasi_construction.group_accountant,rawasi_construction.group_ceo"/>
                     <button name="action_create_po" type="object" string="إنشاء أمر شراء"
-                            class="btn-primary" invisible="state != 'approved'"/>
-                    <button name="action_reject" type="object" string="رفض"
-                            invisible="state not in ('submitted',)"/>
+                            class="btn-primary" invisible="state != 'finance_approved'"/>
+                    <button name="action_reject" type="object" string="رفض فني"
+                            invisible="state != 'submitted'"
+                            groups="rawasi_construction.group_tech_office_manager,rawasi_construction.group_projects_director,rawasi_construction.group_ceo"/>
+                    <button name="action_finance_reject" type="object" string="رفض مالي"
+                            invisible="state != 'approved'"
+                            groups="rawasi_construction.group_accountant,rawasi_construction.group_ceo"/>
                     <button name="action_reset_to_draft" type="object" string="إعادة لمسودة"
                             groups="base.group_system" invisible="state in ('draft','procured')"/>
                     <field name="state" widget="statusbar"
-                           statusbar_visible="draft,submitted,approved,procured"/>
+                           statusbar_visible="draft,submitted,approved,finance_approved,procured"/>
                 </header>
                 <sheet>
                     <div class="oe_button_box" name="button_box">

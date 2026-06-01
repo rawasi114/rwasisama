@@ -20,8 +20,9 @@ class RawasiMaterialRequest(models.Model):
     state = fields.Selection(
         [
             ("draft", "مسودة"),
-            ("submitted", "مقدَّم"),
-            ("approved", "معتمد"),
+            ("submitted", "مقدَّم — بانتظار اعتماد فني"),
+            ("approved", "معتمد فنيًا — بانتظار اعتماد مالي"),
+            ("finance_approved", "معتمد مالياً — أُحيل للمشتريات"),
             ("procured", "تم الشراء"),
             ("rejected", "مرفوض"),
         ],
@@ -71,14 +72,14 @@ class RawasiMaterialRequest(models.Model):
             mr.has_locked_item = any(mr.line_ids.mapped("boq_item_id.is_locked"))
 
     # ── سير العمل + فحص الميزانية ────────────────────────────────
+    # مسار الاعتماد: مسودة → تقديم (مهندس الموقع) → اعتماد فني (المكتب الفني)
+    # → اعتماد مالي (المحاسب، يُنشئ الـ RFQ تلقائياً) → تم الشراء.
     def action_submit(self):
-        """يرفع الطلب لاعتماد المكتب الفني + ينشئ RFQ مسودة في المشتريات
-        تلقائياً ليبدأ قسم المشتريات جمع عروض الأسعار بالتوازي."""
+        """مهندس الموقع يرفع الطلب لاعتماد المكتب الفني."""
         for mr in self:
             if not mr.line_ids:
                 raise UserError(_("لا يمكن تقديم طلب بلا سطور."))
             mr.state = "submitted"
-            mr._ensure_rfq_draft()
 
     def _ensure_rfq_draft(self):
         """ينشئ RFQ مسودة في purchase.order إن لم يوجد، أو يعيد فتح
@@ -157,7 +158,9 @@ class RawasiMaterialRequest(models.Model):
                 )
 
     def action_approve(self):
+        """اعتماد فني من المكتب الفني — يفحص الميزانية ويحيل للمحاسب."""
         for mr in self:
+            mr._ensure_tech_approver()
             mr._check_budget()
             mr.state = "approved"
             if mr.override_budget:
@@ -165,6 +168,35 @@ class RawasiMaterialRequest(models.Model):
                     body=_("تمت الموافقة مع تجاوز الميزانية (BUDGET OVERRIDE)."),
                     subtype_xmlid="mail.mt_note",
                 )
+            mr.message_post(body=_(
+                "اعتمد المكتب الفني الطلب. بانتظار اعتماد المحاسب لإحالته للمشتريات."
+            ))
+
+    def action_finance_approve(self):
+        """اعتماد مالي من المحاسب — ينشئ الـ RFQ تلقائياً في المشتريات."""
+        for mr in self:
+            mr._ensure_finance_user()
+            if mr.state != "approved":
+                raise UserError(_(
+                    "الاعتماد المالي يستلزم اعتماداً فنياً مُسبَقاً من المكتب الفني."
+                ))
+            mr._check_budget()
+            mr.state = "finance_approved"
+            po = mr._ensure_rfq_draft()
+            mr.message_post(body=_(
+                "اعتمد المحاسب الطلب مالياً. أُنشئ RFQ في المشتريات: %s"
+            ) % (po.name if po else "-"))
+
+    def action_finance_reject(self):
+        """رفض الاعتماد المالي من المحاسب."""
+        for mr in self:
+            mr._ensure_finance_user()
+            if mr.state != "approved":
+                raise UserError(_(
+                    "الرفض المالي يستلزم اعتماداً فنياً مُسبَقاً."
+                ))
+            mr.state = "rejected"
+            mr.message_post(body=_("رفض المحاسب الطلب مالياً."))
 
     def action_override_budget(self):
         """اعتماد تجاوز الميزانية — لمدير المشاريع/المدير العام فقط."""
@@ -189,10 +221,12 @@ class RawasiMaterialRequest(models.Model):
         self.write({"state": "draft"})
 
     def action_create_po(self):
-        """ينشئ أمر شراء من طلب معتمد، ويضع الطلب في حالة «تم الشراء»."""
+        """ينشئ أمر شراء داخلي (rawasi.purchase.order) بعد الاعتماد المالي."""
         self.ensure_one()
-        if self.state != "approved":
-            raise UserError(_("لا يمكن إنشاء أمر شراء إلا من طلب معتمد."))
+        if self.state != "finance_approved":
+            raise UserError(_(
+                "إنشاء أمر الشراء يستلزم اعتماداً مالياً من المحاسب أولاً."
+            ))
         po = self.env["rawasi.purchase.order"].create({
             "project_id": self.project_id.id,
             "mr_id": self.id,

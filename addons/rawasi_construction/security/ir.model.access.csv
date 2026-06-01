@@ -45,7 +45,7 @@ access_mr_site,mr.site,model_rawasi_material_request,group_site_engineer,1,1,1,0
 access_mr_planning,mr.planning,model_rawasi_material_request,group_planning_engineer,1,1,1,0
 access_mr_tech,mr.tech,model_rawasi_material_request,group_tech_office_manager,1,1,1,0
 access_mr_director,mr.director,model_rawasi_material_request,group_projects_director,1,1,1,0
-access_mr_accountant,mr.accountant,model_rawasi_material_request,group_accountant,1,0,0,0
+access_mr_accountant,mr.accountant,model_rawasi_material_request,group_accountant,1,1,0,0
 access_mrl_site,mrl.site,model_rawasi_material_request_line,group_site_engineer,1,1,1,0
 access_mrl_planning,mrl.planning,model_rawasi_material_request_line,group_planning_engineer,1,1,1,0
 access_mrl_tech,mrl.tech,model_rawasi_material_request_line,group_tech_office_manager,1,1,1,0
