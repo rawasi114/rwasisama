@@ -42,6 +42,9 @@
         <menuitem id="menu_rawasi_products"
                   name="كتالوج المنتجات الإنشائية"
                   parent="menu_rawasi_root"
+                  action="action_rawasi_construction_products"
+                  sequence="25"/>
+
         <!-- ═══ سجل البنود المرجعي ومنظومة المطابقة الذكية ═══ -->
         <menuitem id="menu_rawasi_reference_registry_root"
                   name="الحصر وسجل البنود"
