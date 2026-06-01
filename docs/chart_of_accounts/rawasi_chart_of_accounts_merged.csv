@@ -1,0 +1,273 @@
+﻿id,code,name,account_type,reconcile
+__import__.rawasi_coa_111001,111001,الأراضي,asset_fixed,False
+__import__.rawasi_coa_111002,111002,العقارات والمباني,asset_fixed,False
+__import__.rawasi_coa_111003,111003,السيارات,asset_fixed,False
+__import__.rawasi_coa_111004,111004,الأثاث والمفروشات,asset_fixed,False
+__import__.rawasi_coa_111005,111005,أجهزة الحاسب والطابعات,asset_fixed,False
+__import__.rawasi_coa_111006,111006,الآلات والمعدات,asset_fixed,False
+__import__.rawasi_coa_111007,111007,البيوت الجاهزة والكرفانات,asset_fixed,False
+__import__.rawasi_coa_111008,111008,الأدوات الكهربائية,asset_fixed,False
+__import__.rawasi_coa_111009,111009,الأخشاب,asset_fixed,False
+__import__.rawasi_coa_112001,112001,مجمع إهلاك العقارات والمباني,asset_fixed,False
+__import__.rawasi_coa_112002,112002,مجمع إهلاك السيارات,asset_fixed,False
+__import__.rawasi_coa_112003,112003,مجمع إهلاك الأثاث والمفروشات,asset_fixed,False
+__import__.rawasi_coa_112004,112004,مجمع إهلاك أجهزة الحاسب والطابعات,asset_fixed,False
+__import__.rawasi_coa_112005,112005,مجمع إهلاك الآلات والمعدات,asset_fixed,False
+__import__.rawasi_coa_112006,112006,مجمع إهلاك البيوت الجاهزة والكرفانات,asset_fixed,False
+__import__.rawasi_coa_112007,112007,مجمع إهلاك الأدوات الكهربائية,asset_fixed,False
+__import__.rawasi_coa_112008,112008,مجمع إهلاك الأخشاب,asset_fixed,False
+__import__.rawasi_coa_113001,113001,عقار استثماري 1,asset_non_current,False
+__import__.rawasi_coa_121001,121001,البنك الأهلي,asset_cash,False
+__import__.rawasi_coa_121002,121002,بنك الرياض,asset_cash,False
+__import__.rawasi_coa_121003,121003,البنك الراجحي,asset_cash,False
+__import__.rawasi_coa_121004,121004,بنوك آخــرى,asset_cash,False
+__import__.rawasi_coa_121005,121005,البنك السعودي البريطاني (ساب) - جاري,asset_cash,False
+__import__.rawasi_coa_121006,121006,بنك البلاد - حساب جاري,asset_cash,False
+__import__.rawasi_coa_121007,121007,البنك السعودي للاستثمار - جاري,asset_cash,False
+__import__.rawasi_coa_12101,12101,ضريبة القيمة المضافة على المشتريات,asset_cash,False
+__import__.rawasi_coa_1211001,1211001,سلفيات الموظفين,asset_cash,False
+__import__.rawasi_coa_1211002,1211002,مسحوبات جاري الشركاء,asset_cash,False
+__import__.rawasi_coa_1211003,1211003,عهدة المشاريع,asset_cash,False
+__import__.rawasi_coa_12201,12201,الصندوق الرئيسي,asset_cash,False
+__import__.rawasi_coa_12202,12202,صندوق نثرية - حفر الباطن,asset_cash,False
+__import__.rawasi_coa_12203,12203,صندوق نثرية - المشاريع,asset_cash,False
+__import__.rawasi_coa_122901,122901,الحساب البنكي المعلق,asset_current,False
+__import__.rawasi_coa_122902,122902,حساب تحويل وسيط بين البنوك,asset_current,False
+__import__.rawasi_coa_122903,122903,سلف مدراء المشاريع - مفتوحة للتسوية,asset_current,False
+__import__.rawasi_coa_123001,123001,عميل 1,asset_receivable,True
+__import__.rawasi_coa_123002,123002,عميل 2,asset_receivable,True
+__import__.rawasi_coa_123003,123003,عميل 3,asset_receivable,True
+__import__.rawasi_coa_124001,124001,إيرادات مستحقة - عميل 1,asset_current,False
+__import__.rawasi_coa_124002,124002,إيرادات مستحقة - عميل 2,asset_current,False
+__import__.rawasi_coa_124003,124003,إيرادات مستحقة - عميل 3,asset_current,False
+__import__.rawasi_coa_125001,125001,عميل :- 1,asset_current,False
+__import__.rawasi_coa_125002,125002,عميل :- 2,asset_current,False
+__import__.rawasi_coa_126001,126001,تأمينات مستردة لدى البلديات,asset_prepayments,False
+__import__.rawasi_coa_126002,126002,تأمينات مستردة لدى,asset_prepayments,False
+__import__.rawasi_coa_127001,127001,خطابات الضمان - البنك الأهلي,asset_prepayments,False
+__import__.rawasi_coa_127002,127002,خطابات الضمان - البنك الراجحي,asset_prepayments,False
+__import__.rawasi_coa_127003,127003,خطابات ضمان - بنك الرياض,asset_prepayments,False
+__import__.rawasi_coa_127004,127004,خطابات الضمان الدفعة مقدمة,asset_prepayments,False
+__import__.rawasi_coa_128001,128001,دفعة مقدمة - مورد 1,asset_prepayments,False
+__import__.rawasi_coa_128002,128002,دفعة مقدمة - مورد 2,asset_prepayments,False
+__import__.rawasi_coa_128003,128003,دفعة مقدمة - مورد 3,asset_prepayments,False
+__import__.rawasi_coa_128004,128004,دفعة مقدمة - مورد 4,asset_prepayments,False
+__import__.rawasi_coa_129001,129001,إيجارات سيارات مدفوعة مقدماً,asset_prepayments,False
+__import__.rawasi_coa_129002,129002,إيجارات مكاتب مدفوعة مقدماً,asset_prepayments,False
+__import__.rawasi_coa_129003,129003,تأمينات اجتماعية مدفوعة مقدماً,asset_prepayments,False
+__import__.rawasi_coa_211001,211001,تسهيلات البنك الراجحي,liability_non_current,False
+__import__.rawasi_coa_211002,211002,تسهيلات البنك الأهلي,liability_non_current,False
+__import__.rawasi_coa_211003,211003,تسهيلات بنك الرياض,liability_non_current,False
+__import__.rawasi_coa_221001,221001,الموردين,liability_payable,True
+__import__.rawasi_coa_222001,222001,مقاولون الباطن,liability_payable,True
+__import__.rawasi_coa_223001,223001,دفعات مقدمة من العملاء,liability_current,False
+__import__.rawasi_coa_224001,224001,تأمينات محتجزة للمقاولين,liability_current,False
+__import__.rawasi_coa_225001,225001,مصروفات أجور ومرتبات مستحقة,liability_current,False
+__import__.rawasi_coa_225002,225002,مصروفات إيجارات مستحقة,liability_current,False
+__import__.rawasi_coa_225003,225003,مصروفات كهرباء ومياه مستحقة,liability_current,False
+__import__.rawasi_coa_225004,225004,مصروفات تأمينات مستحقة,liability_current,False
+__import__.rawasi_coa_225005,225005,مصروفات الزكاة والدخل مستحقة,liability_current,False
+__import__.rawasi_coa_226001,226001,ضريبة القيمة المضافة على المبيعات,liability_current,False
+__import__.rawasi_coa_226002,226002,حساب تسوية ضريبة القيمة المضافة,liability_current,False
+__import__.rawasi_coa_227001,227001,قروض قصيرة الآجل,liability_current,False
+__import__.rawasi_coa_228001,228001,مكافأة نهاية الخدمة - عمالة المشاريع,liability_non_current,False
+__import__.rawasi_coa_311100,311100,رأس المال المدفوع,equity,False
+__import__.rawasi_coa_321100,321100,الإحتياطي النظامي,equity,False
+__import__.rawasi_coa_331100,331100,أرباح وخسائر سنوات سابقة,equity,False
+__import__.rawasi_coa_341100,341100,جاري الشركاء (دائن ),equity,False
+__import__.rawasi_coa_351100,351100,أرباح وخسائر السنة الحالية,equity_unaffected,False
+__import__.rawasi_coa_411100,411100,إيرادات مشاريع المقاولات,income,False
+__import__.rawasi_coa_421100,421100,إيرادات أعمال الحدادة,income,False
+__import__.rawasi_coa_421200,421200,إيرادات أعمال النجارة والموبليا,income,False
+__import__.rawasi_coa_421300,421300,إيرادات أعمال الديكور,income,False
+__import__.rawasi_coa_421400,421400,إيرادات أعمال الصيانة والتشغيل,income,False
+__import__.rawasi_coa_431100,431100,إيرادات آخرى,income_other,False
+__import__.rawasi_coa_521100,521100,مخصص الأجور والمرتبات,liability_non_current,False
+__import__.rawasi_coa_5211200,5211200,مخصص مكافأة نهاية الخدمة,liability_non_current,False
+__import__.rawasi_coa_5211300,5211300,مخصص الديون المشكوك فيها,liability_non_current,False
+__import__.rawasi_coa_61001,61001,أعمال الحفر,expense_direct_cost,False
+__import__.rawasi_coa_61002,61002,أعمال الدفان والتسوية,expense_direct_cost,False
+__import__.rawasi_coa_61003,61003,الخرسانة الجاهزة,expense_direct_cost,False
+__import__.rawasi_coa_61004,61004,بلوك البناء (معزول - اسمنتي),expense_direct_cost,False
+__import__.rawasi_coa_61005,61005,البطحاء والبحص,expense_direct_cost,False
+__import__.rawasi_coa_61006,61006,حديد التسليح,expense_direct_cost,False
+__import__.rawasi_coa_61007,61007,اختبار التربة والخرسانة المسلحة,expense_direct_cost,False
+__import__.rawasi_coa_61008,61008,المياه,expense_direct_cost,False
+__import__.rawasi_coa_61009,61009,أعمال العزل المائي والحراري,expense_direct_cost,False
+__import__.rawasi_coa_61010,61010,الاسمنت,expense_direct_cost,False
+__import__.rawasi_coa_61011,61011,الترابيع والبلدورة الاسمنتية,expense_direct_cost,False
+__import__.rawasi_coa_61012,61012,الرخام الطبيعي,expense_direct_cost,False
+__import__.rawasi_coa_61013,61013,الرخام الصناعي,expense_direct_cost,False
+__import__.rawasi_coa_61014,61014,الجبس والاسمنت الأبيض,expense_direct_cost,False
+__import__.rawasi_coa_61015,61015,أعمال اللياسة ومستلزماتها,expense_direct_cost,False
+__import__.rawasi_coa_61016,61016,مستلزمات تركيب البلاط والسراميك,expense_direct_cost,False
+__import__.rawasi_coa_61017,61017,جلي السراميك والبلاط,expense_direct_cost,False
+__import__.rawasi_coa_61018,61018,أعمال الدهان ومستلزماتها,expense_direct_cost,False
+__import__.rawasi_coa_61019,61019,الأبواب المعدنية واكسسواراتها,expense_direct_cost,False
+__import__.rawasi_coa_61020,61020,أعمال الألمونيوم,expense_direct_cost,False
+__import__.rawasi_coa_61021,61021,مغاسل الاستنلس وعزلها,expense_direct_cost,False
+__import__.rawasi_coa_61022,61022,أغطية الصرف والكهرباء والألمونيوم,expense_direct_cost,False
+__import__.rawasi_coa_61023,61023,أعمال حديدية (درابزين - حواجز),expense_direct_cost,False
+__import__.rawasi_coa_61024,61024,البوابات الحديدية الرئيسية,expense_direct_cost,False
+__import__.rawasi_coa_61025,61025,المظلات الداخلية والخارجية ساندويتش بانل,expense_direct_cost,False
+__import__.rawasi_coa_61026,61026,خزانات المياه فايبرجلاس,expense_direct_cost,False
+__import__.rawasi_coa_61027,61027,الأسقف المعلقة والبلاطات الجبسية,expense_direct_cost,False
+__import__.rawasi_coa_61028,61028,نحاس ومستلزمات المعامل,expense_direct_cost,False
+__import__.rawasi_coa_61029,61029,السبورات البورسلين الجاهزة,expense_direct_cost,False
+__import__.rawasi_coa_61030,61030,أعمال المظلات سبيس فريم,expense_direct_cost,False
+__import__.rawasi_coa_61031,61031,فواصل التمدد للأسطح,expense_direct_cost,False
+__import__.rawasi_coa_61032,61032,الأرضية المطاطية للصالات الرياضية,expense_direct_cost,False
+__import__.rawasi_coa_61033,61033,السقف المعلق ألمونيوم,expense_direct_cost,False
+__import__.rawasi_coa_61034,61034,أعمال السفلتة,expense_direct_cost,False
+__import__.rawasi_coa_61035,61035,أسفلت المدارس,expense_direct_cost,False
+__import__.rawasi_coa_61036,61036,البلاط إنترلوك والترابيع والبدورة,expense_direct_cost,False
+__import__.rawasi_coa_61037,61037,العشب الصناعي للملاعب,expense_direct_cost,False
+__import__.rawasi_coa_61038,61038,الأجهزة الرياضية للصالات والملاعب,expense_direct_cost,False
+__import__.rawasi_coa_61039,61039,الأثاث والمفروشات للمشاريع,expense_direct_cost,False
+__import__.rawasi_coa_61040,61040,المقاعد الخشبية والجاهزة من الرخام,expense_direct_cost,False
+__import__.rawasi_coa_61041,61041,أعمال كسر الرخام,expense_direct_cost,False
+__import__.rawasi_coa_61042,61042,كسوة الحوائط,expense_direct_cost,False
+__import__.rawasi_coa_61043,61043,المرايا الزجاجية,expense_direct_cost,False
+__import__.rawasi_coa_61044,61044,اللكسان والزجاج للأبواب الحديدية,expense_direct_cost,False
+__import__.rawasi_coa_61045,61045,الحلوق الخشبية للمكيفات ومراوح الشفط,expense_direct_cost,False
+__import__.rawasi_coa_61046,61046,الشبك البلاستيكي للترابيع والأرضيات,expense_direct_cost,False
+__import__.rawasi_coa_61047,61047,أعمال الشينكو للأسوار المؤقتة,expense_direct_cost,False
+__import__.rawasi_coa_61048,61048,المظلات قماش PVC,expense_direct_cost,False
+__import__.rawasi_coa_61049,61049,كريتال وأعمال الحدادة,expense_direct_cost,False
+__import__.rawasi_coa_61050,61050,مستلزمات الحدادين (سلك رباط - أسطوانات),expense_direct_cost,False
+__import__.rawasi_coa_61051,61051,مستلزمات النجارين (مسمار - خيط),expense_direct_cost,False
+__import__.rawasi_coa_61052,61052,لوحة بيانات المشروع الحديدية,expense_direct_cost,False
+__import__.rawasi_coa_61053,61053,صاري العلم,expense_direct_cost,False
+__import__.rawasi_coa_61054,61054,مسميات الغرف واللوحات,expense_direct_cost,False
+__import__.rawasi_coa_61055,61055,المساحة والميزانية الشبكية للمشاريع,expense_direct_cost,False
+__import__.rawasi_coa_62001,62001,تأسيس الكهرباء (علب ومواسير وقسامات),expense_direct_cost,False
+__import__.rawasi_coa_62002,62002,لوحات الكهرباء العمومية والفرعية,expense_direct_cost,False
+__import__.rawasi_coa_62003,62003,القطب الأرضي,expense_direct_cost,False
+__import__.rawasi_coa_62004,62004,وحدات الإضاءة,expense_direct_cost,False
+__import__.rawasi_coa_62005,62005,عدة وأدوات كهربائية,expense_direct_cost,False
+__import__.rawasi_coa_62006,62006,سداد التيار الكهربي (شركة الكهرباء),expense_direct_cost,False
+__import__.rawasi_coa_62007,62007,الكابلات والأسلاك الكهربائية,expense_direct_cost,False
+__import__.rawasi_coa_62008,62008,المفاتيح والأفياش الكهربائية,expense_direct_cost,False
+__import__.rawasi_coa_62009,62009,شبكة الصواعق الكهربائية,expense_direct_cost,False
+__import__.rawasi_coa_62010,62010,الأجراس الكهربائية,expense_direct_cost,False
+__import__.rawasi_coa_62011,62011,الإذاعة والصوتيات والسنترالات,expense_direct_cost,False
+__import__.rawasi_coa_62012,62012,صناديق الإذاعة والهواتف والإنترنت,expense_direct_cost,False
+__import__.rawasi_coa_62013,62013,الهواتف والسماعات ومكبرات الصوت,expense_direct_cost,False
+__import__.rawasi_coa_62014,62014,أعمال البروجكتر,expense_direct_cost,False
+__import__.rawasi_coa_62015,62015,علب الحاسب الآلي واكسسواراتها,expense_direct_cost,False
+__import__.rawasi_coa_63001,63001,تأسيس السباكة (مواسير وجلب),expense_direct_cost,False
+__import__.rawasi_coa_63002,63002,الخلاطات والمحابس والفلشرات (تشطيب سباكة),expense_direct_cost,False
+__import__.rawasi_coa_63003,63003,توصيل شبكة المياه,expense_direct_cost,False
+__import__.rawasi_coa_63004,63004,توصيل شبكة الغاز - شركة الغاز الأهلية,expense_direct_cost,False
+__import__.rawasi_coa_63005,63005,ملء أنابيب الغاز للمواقع وسكن العمال,expense_direct_cost,False
+__import__.rawasi_coa_63006,63006,المواقد (الأفران),expense_direct_cost,False
+__import__.rawasi_coa_64001,64001,مكيفات الشباك,expense_direct_cost,False
+__import__.rawasi_coa_64002,64002,المكيفات الاسبلت,expense_direct_cost,False
+__import__.rawasi_coa_64003,64003,المكيفات الدولابي,expense_direct_cost,False
+__import__.rawasi_coa_64004,64004,المكيفات المركزية,expense_direct_cost,False
+__import__.rawasi_coa_64005,64005,داكت المكيفات المركزية,expense_direct_cost,False
+__import__.rawasi_coa_64006,64006,مراوح الطرد المركزية,expense_direct_cost,False
+__import__.rawasi_coa_64007,64007,مراوح السقف,expense_direct_cost,False
+__import__.rawasi_coa_64008,64008,مراوح الشفط,expense_direct_cost,False
+__import__.rawasi_coa_64009,64009,البرادات,expense_direct_cost,False
+__import__.rawasi_coa_64010,64010,مضخات الحريق والمياه,expense_direct_cost,False
+__import__.rawasi_coa_64011,64011,شبكة الحريق وملحقاتها,expense_direct_cost,False
+__import__.rawasi_coa_64012,64012,أنظمة الحريق وصناديق الحريق والطفايات,expense_direct_cost,False
+__import__.rawasi_coa_65001,65001,إيجار المعدات (شيول - رافعة - رصاصة),expense_direct_cost,False
+__import__.rawasi_coa_65002,65002,إيجار السقالات والدعامات,expense_direct_cost,False
+__import__.rawasi_coa_65003,65003,صيانة المعدات,expense_direct_cost,False
+__import__.rawasi_coa_65004,65004,محروقات المعدات,expense_direct_cost,False
+__import__.rawasi_coa_65005,65005,محروقات سيارات المواقع,expense_direct_cost,False
+__import__.rawasi_coa_65006,65006,صيانة سيارات المشاريع,expense_direct_cost,False
+__import__.rawasi_coa_65007,65007,إيجار سيارات المواقع,expense_direct_cost,False
+__import__.rawasi_coa_65008,65008,نقل المستلزمات للمواقع,expense_direct_cost,False
+__import__.rawasi_coa_65009,65009,انتقالات المواقع,expense_direct_cost,False
+__import__.rawasi_coa_65010,65010,السواق - نقل مستلزمات للمشاريع,expense_direct_cost,False
+__import__.rawasi_coa_65011,65011,عدة وأدوات المواقع,expense_direct_cost,False
+__import__.rawasi_coa_65012,65012,العدات المؤقتة للمشاريع,expense_direct_cost,False
+__import__.rawasi_coa_67001,67001,إيجار سكن المهندسين والمراقبين  بالمواقع,expense_direct_cost,False
+__import__.rawasi_coa_67002,67002,إيجار سكن العمال بالمواقع,expense_direct_cost,False
+__import__.rawasi_coa_67003,67003,تجهيزات سكن المهندسين والمراقبين بالمواقع,expense_direct_cost,False
+__import__.rawasi_coa_67004,67004,تجهيزات سكن العمال بالمواقع,expense_direct_cost,False
+__import__.rawasi_coa_67005,67005,كهرباء سكن المهندسين والمراقبين بالمواقع,expense_direct_cost,False
+__import__.rawasi_coa_67006,67006,كهرباء سكن العمال بالمواقع,expense_direct_cost,False
+__import__.rawasi_coa_67007,67007,كهرباء المواقع,expense_direct_cost,False
+__import__.rawasi_coa_67008,67008,قرطاسية ومطبوعات المواقع,expense_direct_cost,False
+__import__.rawasi_coa_67009,67009,إرسال رسائل ومعاملات بريدية للمشاريع,expense_direct_cost,False
+__import__.rawasi_coa_67010,67010,إرسال بريد للمشاريع,expense_direct_cost,False
+__import__.rawasi_coa_67011,67011,نظافة المواقع,expense_direct_cost,False
+__import__.rawasi_coa_67012,67012,شفط البيارات الصرف الصحي للمواقع,expense_direct_cost,False
+__import__.rawasi_coa_67013,67013,تعقيم خزانات المواقع,expense_direct_cost,False
+__import__.rawasi_coa_67014,67014,اكراميات المواقع,expense_direct_cost,False
+__import__.rawasi_coa_67015,67015,كشف وعلاج بالمواقع,expense_direct_cost,False
+__import__.rawasi_coa_67016,67016,ضيافة الاستشاريين,expense_direct_cost,False
+__import__.rawasi_coa_67017,67017,وجبات طعام للعمال أيام الصبات الخرسانية,expense_direct_cost,False
+__import__.rawasi_coa_67018,67018,مواد ومستلزمات للمشاريع - حفر,expense_direct_cost,False
+__import__.rawasi_coa_67019,67019,الطابعات وأجهزة الحاسب بالمشاريع,expense_direct_cost,False
+__import__.rawasi_coa_67020,67020,البلوك الهوردي الأحمر,expense_direct_cost,False
+__import__.rawasi_coa_67021,67021,نقابة مهندسين - رسوم المشاريع,expense_direct_cost,False
+__import__.rawasi_coa_67022,67022,تأمين المشاريع ضد الأخطار,expense_direct_cost,False
+__import__.rawasi_coa_67023,67023,مصروفات نثرية بالمشاريع,expense_direct_cost,False
+__import__.rawasi_coa_67024,67024,متنوعة للمشاريع,expense_direct_cost,False
+__import__.rawasi_coa_67025,67025,أعمال الاستلس للمشاريع,expense_direct_cost,False
+__import__.rawasi_coa_68001,68001,أجور ومرتبات المهندسين,expense_direct_cost,False
+__import__.rawasi_coa_68002,68002,أجور ومرتبات المشرفين,expense_direct_cost,False
+__import__.rawasi_coa_68003,68003,أجور ومرتبات العمالة بالمشاريع,expense_direct_cost,False
+__import__.rawasi_coa_68004,68004,أجور قسم الكهرباء,expense_direct_cost,False
+__import__.rawasi_coa_68005,68005,أجور قسم البلاط والسراميك,expense_direct_cost,False
+__import__.rawasi_coa_68006,68006,أجور قسم الدهان,expense_direct_cost,False
+__import__.rawasi_coa_68007,68007,أجور قسم اللياسة,expense_direct_cost,False
+__import__.rawasi_coa_68008,68008,أجور قسم السباكة,expense_direct_cost,False
+__import__.rawasi_coa_68009,68009,اكراميات المهندسين والاستشاري,expense_direct_cost,False
+__import__.rawasi_coa_69001,69001,مواد خام ومستلزمات الورشة,expense_direct_cost,False
+__import__.rawasi_coa_69002,69002,أجور عمال الورشة,expense_direct_cost,False
+__import__.rawasi_coa_69003,69003,إيجار مقر الورشة ( البلديــة ),expense_direct_cost,False
+__import__.rawasi_coa_69004,69004,كهرباء الورشة,expense_direct_cost,False
+__import__.rawasi_coa_69005,69005,مياه الورشة,expense_direct_cost,False
+__import__.rawasi_coa_69006,69006,صيانة معدات وأجهزة الورشة,expense_direct_cost,False
+__import__.rawasi_coa_69007,69007,وقود ومحروقات الورشة,expense_direct_cost,False
+__import__.rawasi_coa_69008,69008,مصروفات متنوعة للورشة,expense_direct_cost,False
+__import__.rawasi_coa_71001,71001,مصروفات حكومية وإدارية,expense,False
+__import__.rawasi_coa_71002,71002,رسوم وعمولات بنكية,expense,False
+__import__.rawasi_coa_71003,71003,تلفون وفاكس الإدارة,expense,False
+__import__.rawasi_coa_71004,71004,اتصالات الإدارة,expense,False
+__import__.rawasi_coa_71005,71005,كهرباء الإدارة,expense,False
+__import__.rawasi_coa_71006,71006,مياه الإدارة,expense,False
+__import__.rawasi_coa_71007,71007,بريد الإدارة,expense,False
+__import__.rawasi_coa_71008,71008,أتعاب مكتب المراجعة والمحاسبة,expense,False
+__import__.rawasi_coa_71009,71009,قرطاسية ومطبوعات الإدارة,expense,False
+__import__.rawasi_coa_71010,71010,صيانة سيارات الإدارة,expense,False
+__import__.rawasi_coa_71011,71011,محروقات سيارات الإدارة,expense,False
+__import__.rawasi_coa_71012,71012,إيجار سيارات الإدارة,expense,False
+__import__.rawasi_coa_71013,71013,إيجارات موظفي الإدارة,expense,False
+__import__.rawasi_coa_71014,71014,سيارات النقل,expense,False
+__import__.rawasi_coa_71015,71015,الزكاة والدخل,expense,False
+__import__.rawasi_coa_71016,71016,ضيافة الإدارة,expense,False
+__import__.rawasi_coa_71017,71017,انتقالات الإدارة,expense,False
+__import__.rawasi_coa_71018,71018,اشتراكات وتصديقات الغرفة التجارية,expense,False
+__import__.rawasi_coa_71019,71019,مكافآت الإدارة,expense,False
+__import__.rawasi_coa_71020,71020,صيانة الأجهزة المكتبية,expense,False
+__import__.rawasi_coa_71021,71021,رسوم جوازات ومكتب العمل والتأمين,expense,False
+__import__.rawasi_coa_71022,71022,التأمين على السيارات,expense,False
+__import__.rawasi_coa_71023,71023,تجهيزات سكن الإدارة,expense,False
+__import__.rawasi_coa_71024,71024,الخروج والعودة والسفريات,expense,False
+__import__.rawasi_coa_71025,71025,تجديد وإصدار الإقامات للعمال,expense,False
+__import__.rawasi_coa_71026,71026,رخص المرور ونقل الملكيات للسيارات,expense,False
+__import__.rawasi_coa_71027,71027,تصديقات وتفويضات التأشيرات الإلكترونية,expense,False
+__import__.rawasi_coa_71028,71028,التأمينات الاجتماعية - الإدارة,expense,False
+__import__.rawasi_coa_71029,71029,إشتراكات البرنامج,expense,False
+__import__.rawasi_coa_71030,71030,مصروفات قانونية,expense,False
+__import__.rawasi_coa_71031,71031,خسائر فروقات نقدية,expense_other,False
+__import__.rawasi_coa_71032,71032,خســائر بيع أصول ثابتة,expense,False
+__import__.rawasi_coa_71033,71033,مصروفات الأعلانات,expense,False
+__import__.rawasi_coa_72001,72001,أجور ومرتبات المحاسبين,expense,False
+__import__.rawasi_coa_72002,72002,أجور ومرتبات المكتب الهندسي ( الفني ),expense,False
+__import__.rawasi_coa_72003,72003,أجور ومرتبات قسم العمالة والسواقين,expense,False
+__import__.rawasi_coa_72004,72004,أجور ومرتبات العمالة السعودية,expense,False
+__import__.rawasi_coa_73001,73001,إهلاك العقارات والمباني,expense_depreciation,False
+__import__.rawasi_coa_73002,73002,إهلاك السيارات,expense_depreciation,False
+__import__.rawasi_coa_73003,73003,إهلاك الأخشاب والمعدات الخشبية,expense_depreciation,False
+__import__.rawasi_coa_73004,73004,إهلاك الأثاث والمفروشات والبيوت الجاهزة,expense_depreciation,False
+__import__.rawasi_coa_73005,73005,إهلاك الأدوات الكهربائية,expense_depreciation,False
+__import__.rawasi_coa_73006,73006,إهلاك الكمبيوترات والطابعات وأجهزة الاتصال,expense_depreciation,False
+__import__.rawasi_coa_73007,73007,إهلاك الآلات والمعدات,expense_depreciation,False

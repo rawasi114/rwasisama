@@ -2,6 +2,8 @@
 from . import rawasi_mixins
 from . import rawasi_unit
 from . import rawasi_sbc_code
+from . import product_template
+from . import stock_location
 from . import rawasi_price_intelligence
 from . import rawasi_competition
 from . import rawasi_indirect_cost
@@ -24,24 +26,4 @@ from . import rawasi_bank_guarantee
 from . import rawasi_subcontractor
 from . import rawasi_subcontract
 from . import rawasi_subcontract_ipc
-
-# سجل البنود المرجعي ومنظومة المطابقة الذكية
-from . import rawasi_lcgpa_code
-from . import rawasi_reference_item
-from . import rawasi_item_variant
-from . import rawasi_extracted_specification
-from . import rawasi_audit_trail
-from . import rawasi_import_batch
-from . import rawasi_import_batch_line
-
-# دليل الاستخدام
-from . import rawasi_user_guide
-
-# لوحة التحكم الحيّة (KPI)
-from . import rawasi_dashboard_kpi
-
-# تكامل المخزون: منتج المقاولات
-from . import product_template
-
-# تخصيصات محاسبية: ترقيم الفواتير والدفعات يبدأ من 10001
 from . import account_move

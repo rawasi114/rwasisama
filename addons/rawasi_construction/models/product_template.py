@@ -19,65 +19,63 @@ class ProductTemplate(models.Model):
     _inherit = "product.template"
 
     is_construction = fields.Boolean(
-        string="منتج مقاولات", default=False, index=True,
-        help="عند التفعيل يظهر المنتج ضمن كتالوج منتجات المقاولات "
-             "ويُربط ببند مرجعي في سجل البنود الموحَّد.",
+        string="بند تشييدي",
+        index=True,
+        help="يميِّز المنتجات الخاصة بالموديول الإنشائي ضمن كتالوج المنتجات العام.",
     )
-    rawasi_reference_item_id = fields.Many2one(
-        "rawasi.reference.item",
-        string="البند المرجعي",
-        ondelete="set null", index=True, copy=False,
-        help="البند المرجعي الذي يمثّله هذا المنتج في سجل البنود الموحَّد.",
+    construction_nature = fields.Selection(
+        CONSTRUCTION_NATURE,
+        string="طبيعة البند",
+        help="تحدد كيف يُعامَل البند في الشراء/المخزون/المحاسبة:\n"
+             "- مادة خام: يُخزَّن ويُستهلك.\n"
+             "- بند تسليم: مكوّن من مواد عبر BoM.\n"
+             "- خدمة: لا مخزون.\n"
+             "- باطن: يُحرّك مسار subcontract.\n"
+             "- ورشة: يُصنَّع داخلياً.",
+    )
+    sbc_code_id = fields.Many2one(
+        "rawasi.sbc.code",
+        string="رمز SBC",
+        index=True,
     )
     rawasi_unit_id = fields.Many2one(
-        "rawasi.unit", string="وحدة المقاولات",
-        help="الوحدة كما عُرِّفت في نظام رواسي (م³، م²، م.ط، …).",
+        "rawasi.unit",
+        string="الوحدة الإنشائية",
+        help="الوحدة كما تُكتب في كراسات الشروط. تنعكس على uom_id (وحدة Odoo القياسية).",
     )
-    rawasi_sbc_code_id = fields.Many2one(
-        "rawasi.sbc.code", string="رمز SBC",
-        help="كود البناء السعودي المرتبط بهذا المنتج.",
+    lcgpa_code = fields.Char(string="رمز LCGPA / القائمة الإلزامية", index=True)
+    mandatory_local = fields.Selection(
+        [("yes", "نعم"), ("no", "لا")],
+        string="منتج من القائمة الإلزامية",
+        default="no",
     )
-    rawasi_lcgpa_code_id = fields.Many2one(
-        "rawasi.lcgpa.code", string="رمز LCGPA",
-        help="رمز هيئة المحتوى المحلي.",
+    construction_category_text = fields.Char(
+        string="الفئة (كما وردت)",
+        help="الفئة الأصلية كما ظهرت في كراسة الشروط (لتوثيق المصدر).",
     )
-    rawasi_specifications = fields.Text(
-        string="المواصفات الفنية",
-        help="المواصفات الفنية كما وردت في البند المرجعي.",
-    )
-    rawasi_main_category = fields.Char(string="الفئة الرئيسية", index=True)
-    rawasi_item_group = fields.Char(string="البند (المستوى الثاني)", index=True)
+    work_group = fields.Char(string="البند/المجموعة")
+    specifications = fields.Text(string="المواصفات الفنية")
 
-    @api.model
-    def _create_for_reference_item(self, ref):
-        """ينشئ قالب منتج مقاولات من بند مرجعي. مُسمَّى بحقول مفيدة جاهزة."""
-        return self.create({
-            "name": ref.approved_name,
-            "is_construction": True,
-            "type": "consu",
-            "rawasi_reference_item_id": ref.id,
-            "rawasi_unit_id": ref.default_uom_id.id if ref.default_uom_id else False,
-            "rawasi_sbc_code_id": ref.sbc_code_id.id if ref.sbc_code_id else False,
-            "rawasi_lcgpa_code_id": ref.lcgpa_code_id.id if ref.lcgpa_code_id else False,
-            "rawasi_specifications": ref.description_short or False,
-            "rawasi_main_category": ref.main_category or False,
-            "rawasi_item_group": ref.item_group or False,
-            "default_code": ref.reference_code,
-        })
-
-    def _sync_from_reference_item(self):
-        """يُزامن بيانات المنتج مع البند المرجعي المرتبط."""
+    @api.onchange("rawasi_unit_id")
+    def _onchange_rawasi_unit_id(self):
         for tmpl in self:
-            ref = tmpl.rawasi_reference_item_id
-            if not ref:
-                continue
-            tmpl.write({
-                "name": ref.approved_name,
-                "rawasi_unit_id": ref.default_uom_id.id if ref.default_uom_id else False,
-                "rawasi_sbc_code_id": ref.sbc_code_id.id if ref.sbc_code_id else False,
-                "rawasi_lcgpa_code_id": ref.lcgpa_code_id.id if ref.lcgpa_code_id else False,
-                "rawasi_specifications": ref.description_short or False,
-                "rawasi_main_category": ref.main_category or False,
-                "rawasi_item_group": ref.item_group or False,
-                "default_code": ref.reference_code,
-            })
+            uom = tmpl.rawasi_unit_id and tmpl.rawasi_unit_id.uom_id
+            if uom:
+                tmpl.uom_id = uom
+                tmpl.uom_po_id = uom
+
+    @api.onchange("is_construction")
+    def _onchange_is_construction(self):
+        for tmpl in self:
+            if tmpl.is_construction and not tmpl.construction_nature:
+                tmpl.construction_nature = "material"
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            if vals.get("is_construction") and vals.get("rawasi_unit_id") and not vals.get("uom_id"):
+                unit = self.env["rawasi.unit"].browse(vals["rawasi_unit_id"])
+                if unit.uom_id:
+                    vals["uom_id"] = unit.uom_id.id
+                    vals.setdefault("uom_po_id", unit.uom_id.id)
+        return super().create(vals_list)
