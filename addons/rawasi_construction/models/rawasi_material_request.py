@@ -43,6 +43,12 @@ class RawasiMaterialRequest(models.Model):
     )
     currency_id = fields.Many2one(related="company_id.currency_id")
     amount_total = fields.Monetary(string="الإجمالي", compute="_compute_amount_total", store=True)
+    # ربط بـ RFQ القياسي (purchase.order) المُنشأ تلقائياً عند الـ submit
+    purchase_order_id = fields.Many2one(
+        "purchase.order", string="RFQ المشتريات",
+        readonly=True, copy=False, tracking=True,
+        help="طلب عرض الأسعار في موديول المشتريات؛ يُنشأ تلقائياً عند رفع الطلب.",
+    )
 
     @api.model_create_multi
     def create(self, vals_list):
@@ -66,10 +72,72 @@ class RawasiMaterialRequest(models.Model):
 
     # ── سير العمل + فحص الميزانية ────────────────────────────────
     def action_submit(self):
+        """يرفع الطلب لاعتماد المكتب الفني + ينشئ RFQ مسودة في المشتريات
+        تلقائياً ليبدأ قسم المشتريات جمع عروض الأسعار بالتوازي."""
         for mr in self:
             if not mr.line_ids:
                 raise UserError(_("لا يمكن تقديم طلب بلا سطور."))
             mr.state = "submitted"
+            mr._ensure_rfq_draft()
+
+    def _ensure_rfq_draft(self):
+        """ينشئ RFQ مسودة في purchase.order إن لم يوجد، أو يعيد فتح
+        أحدث RFQ ملغى من نفس MR (للتدفقات إعادة الرفع بعد الرفض)."""
+        self.ensure_one()
+        PO = self.env["purchase.order"].sudo()
+
+        # إن وُجد RFQ مرتبط ولا يزال draft/sent → استخدمه (idempotent)
+        if self.purchase_order_id and self.purchase_order_id.state in ("draft", "sent"):
+            return self.purchase_order_id
+
+        partner = self.env.ref(
+            "rawasi_construction.partner_tbd_vendor", raise_if_not_found=False
+        )
+        if not partner:
+            raise UserError(_(
+                "لم يُعثر على جهة المورّد الافتراضية (rawasi_construction."
+                "partner_tbd_vendor). تواصل مع الأدمن."
+            ))
+
+        po_lines = []
+        for line in self.line_ids:
+            desc = (line.description or
+                    (line.boq_item_id.name if line.boq_item_id else _("بند مواد")))
+            project_ref = self.project_id.name or ""
+            full_name = "[%s] %s" % (self.name, desc) if project_ref else desc
+            po_lines.append((0, 0, {
+                "name": full_name,
+                "product_qty": line.quantity or 1.0,
+                "price_unit": line.unit_cost or 0.0,
+                "date_planned": fields.Datetime.now(),
+            }))
+
+        po = PO.create({
+            "partner_id": partner.id,
+            "origin": "%s / %s" % (self.name, self.project_id.name or ""),
+            "rawasi_mr_id": self.id,
+            "order_line": po_lines,
+        })
+        self.purchase_order_id = po.id
+        po.message_post(body=_(
+            "أُنشئ هذا الـ RFQ تلقائياً من طلب المواد %s (مشروع: %s). "
+            "حدّد المورّد الفعلي بدلاً من «مورّد للتحديد» قبل التأكيد."
+        ) % (self.name, self.project_id.name or "-"))
+        self.message_post(body=_("تم إنشاء RFQ مسودة في المشتريات: %s") % po.name)
+        return po
+
+    def action_open_rfq(self):
+        """يفتح الـ RFQ المرتبط في موديول المشتريات."""
+        self.ensure_one()
+        if not self.purchase_order_id:
+            raise UserError(_("لا يوجد RFQ مرتبط بهذا الطلب بعد."))
+        return {
+            "type": "ir.actions.act_window",
+            "name": _("طلب عرض الأسعار"),
+            "res_model": "purchase.order",
+            "res_id": self.purchase_order_id.id,
+            "view_mode": "form",
+        }
 
     def _check_budget(self):
         """فحص الميزانية الآلي: يرفض التجاوز إلا إذا اعتُمد تجاوزٌ صريح."""
@@ -107,7 +175,14 @@ class RawasiMaterialRequest(models.Model):
             mr.message_post(body=_("تم اعتماد تجاوز الميزانية بواسطة %s") % self.env.user.name)
 
     def action_reject(self):
-        self.write({"state": "rejected"})
+        """يرفض الطلب + يلغي RFQ المسودة المرتبطة (إن وُجدت ولم تُؤكَّد)."""
+        for mr in self:
+            mr.state = "rejected"
+            po = mr.purchase_order_id
+            if po and po.state in ("draft", "sent"):
+                po.sudo().button_cancel()
+                mr.message_post(body=_("أُلغي الـ RFQ المرتبط (%s) لرفض الطلب.")
+                                % po.name)
 
     def action_reset_to_draft(self):
         self._ensure_admin()

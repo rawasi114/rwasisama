@@ -206,3 +206,7 @@ access_user_guide_read_cons,user.guide.read.cons,model_rawasi_user_guide,group_e
 access_user_guide_edit_tech,user.guide.edit.tech,model_rawasi_user_guide,group_tech_office_manager,1,1,1,0
 access_user_guide_edit_director,user.guide.edit.director,model_rawasi_user_guide,group_projects_director,1,1,1,0
 access_user_guide_admin_ceo,user.guide.admin.ceo,model_rawasi_user_guide,group_ceo,1,1,1,1
+access_po_site_read,po.site.read,purchase.model_purchase_order,group_site_engineer,1,0,0,0
+access_pol_site_read,pol.site.read,purchase.model_purchase_order_line,group_site_engineer,1,0,0,0
+access_po_tom_read,po.tom.read,purchase.model_purchase_order,group_tech_office_manager,1,0,0,0
+access_pol_tom_read,pol.tom.read,purchase.model_purchase_order_line,group_tech_office_manager,1,0,0,0
