@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <!-- ============================================================
+             مجموعة الموارد البشرية — رواسي
+             تنتمي لفئة/امتياز «رواسي» المُعرَّف في rawasi_base.
+             ============================================================ -->
+        <record id="group_rawasi_hr" model="res.groups">
+            <field name="name">الموارد البشرية</field>
+            <field name="privilege_id" ref="rawasi_base.privilege_rawasi"/>
+            <field name="implied_ids" eval="[(4, ref('hr.group_hr_user'))]"/>
+        </record>
+
+        <!-- منح أدمن رواسي صلاحية الموارد البشرية تلقائياً -->
+        <record id="rawasi_base.group_rawasi_admin" model="res.groups">
+            <field name="implied_ids" eval="[(4, ref('group_rawasi_hr'))]"/>
+        </record>
+
+    </data>
+</odoo>

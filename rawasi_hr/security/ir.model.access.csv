@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_rawasi_eos_settlement_hr,rawasi.eos.settlement hr,model_rawasi_eos_settlement,rawasi_hr.group_rawasi_hr,1,1,1,1
+access_rawasi_eos_settlement_accountant,rawasi.eos.settlement accountant,model_rawasi_eos_settlement,rawasi_base.group_rawasi_accountant,1,1,0,0
+access_rawasi_wps_batch_hr,rawasi.wps.batch hr,model_rawasi_wps_batch,rawasi_hr.group_rawasi_hr,1,1,1,1
+access_rawasi_wps_batch_accountant,rawasi.wps.batch accountant,model_rawasi_wps_batch,rawasi_base.group_rawasi_accountant,1,1,0,0
+access_rawasi_wps_line_hr,rawasi.wps.line hr,model_rawasi_wps_line,rawasi_hr.group_rawasi_hr,1,1,1,1
+access_rawasi_wps_line_accountant,rawasi.wps.line accountant,model_rawasi_wps_line,rawasi_base.group_rawasi_accountant,1,1,0,0

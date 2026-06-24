@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_rawasi_eos_settlement_list" model="ir.ui.view">
+        <field name="name">rawasi.eos.settlement.list</field>
+        <field name="model">rawasi.eos.settlement</field>
+        <field name="arch" type="xml">
+            <list string="تسويات نهاية الخدمة">
+                <field name="currency_id" column_invisible="1"/>
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="end_date"/>
+                <field name="reason"/>
+                <field name="service_years" digits="[16, 2]"/>
+                <field name="gratuity_amount"/>
+                <field name="net_amount"/>
+                <field name="state" widget="badge"
+                       decoration-success="state in ('posted','paid')"
+                       decoration-info="state == 'confirmed'"
+                       decoration-muted="state == 'cancel'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_rawasi_eos_settlement_form" model="ir.ui.view">
+        <field name="name">rawasi.eos.settlement.form</field>
+        <field name="model">rawasi.eos.settlement</field>
+        <field name="arch" type="xml">
+            <form string="تسوية نهاية الخدمة">
+                <header>
+                    <button name="action_confirm" type="object" string="اعتماد"
+                            class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_post_entry" type="object" string="ترحيل القيد"
+                            class="btn-primary" invisible="state != 'confirmed'"/>
+                    <button name="action_mark_paid" type="object" string="تسجيل الدفع"
+                            invisible="state not in ('confirmed','posted')"/>
+                    <button name="action_cancel" type="object" string="إلغاء"
+                            invisible="state in ('cancel','paid')"/>
+                    <button name="action_reset_draft" type="object" string="إعادة لمسودة"
+                            invisible="state not in ('confirmed','cancel')"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,confirmed,posted,paid"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_move" type="object" class="oe_stat_button"
+                                icon="fa-book" invisible="not move_id">
+                            <div class="o_stat_info">
+                                <span class="o_stat_text">القيد المحاسبي</span>
+                            </div>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group string="الموظف والمدة">
+                            <field name="employee_id"
+                                   readonly="state not in ('draft',)"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="start_date" readonly="state not in ('draft',)"/>
+                            <field name="end_date" readonly="state not in ('draft',)"/>
+                            <field name="reason" readonly="state not in ('draft',)"/>
+                            <field name="service_days"/>
+                            <field name="service_years" digits="[16, 2]"/>
+                        </group>
+                        <group string="الاحتساب">
+                            <field name="currency_id" invisible="1"/>
+                            <field name="wage_base" readonly="state not in ('draft',)"/>
+                            <field name="gratuity_full"/>
+                            <field name="entitlement_ratio" digits="[16, 4]"/>
+                            <field name="gratuity_amount"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="مستحقات واستقطاعات">
+                            <field name="leave_balance_amount"
+                                   readonly="state not in ('draft','confirmed')"/>
+                            <field name="other_dues"
+                                   readonly="state not in ('draft','confirmed')"/>
+                            <field name="deductions"
+                                   readonly="state not in ('draft','confirmed')"/>
+                        </group>
+                        <group string="الصافي">
+                            <field name="net_amount" class="oe_subtotal_footer_separator"/>
+                            <field name="move_id" readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="ملاحظات">
+                        <field name="notes" nolabel="1" placeholder="ملاحظات على التسوية..."/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_rawasi_eos_settlement" model="ir.actions.act_window">
+        <field name="name">تسويات نهاية الخدمة</field>
+        <field name="res_model">rawasi.eos.settlement</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">أنشئ تسوية نهاية خدمة جديدة</p>
+            <p>يُحتسب المستحق آلياً وفق نظام العمل السعودي (المواد 84 و85 و87).</p>
+        </field>
+    </record>
+
+</odoo>
