@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- قسم الموارد البشرية تحت جذر «رواسي سما» -->
+        <menuitem id="menu_rawasi_hr_root"
+                  name="الموارد البشرية"
+                  parent="rawasi_base.menu_rawasi_root"
+                  sequence="600"
+                  groups="rawasi_hr.group_rawasi_hr"/>
+
+        <menuitem id="menu_rawasi_eos_settlement"
+                  name="نهاية الخدمة"
+                  parent="menu_rawasi_hr_root"
+                  action="action_rawasi_eos_settlement"
+                  sequence="10"/>
+
+        <menuitem id="menu_rawasi_wps_batch"
+                  name="حماية الأجور"
+                  parent="menu_rawasi_hr_root"
+                  action="action_rawasi_wps_batch"
+                  sequence="20"/>
+
+    </data>
+</odoo>
