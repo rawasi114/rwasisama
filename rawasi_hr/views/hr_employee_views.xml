@@ -21,6 +21,10 @@
                             <field name="rawasi_bank_iban"/>
                             <field name="rawasi_bank_code"/>
                         </group>
+                        <group string="نهاية الخدمة">
+                            <field name="rawasi_join_date"/>
+                            <field name="rawasi_eos_accrued"/>
+                        </group>
                     </group>
                 </page>
             </xpath>

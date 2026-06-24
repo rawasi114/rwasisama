@@ -118,28 +118,47 @@ class RawasiWpsBatch(models.Model):
             raise UserError(
                 _("يرجى تعيين «رقم المنشأة في مكتب العمل» في إعدادات الشركة.")
             )
-        bank = company.rawasi_wps_bank_id
+        # تحقّق مسبق: كل موظف يجب أن يملك آيباناً
+        for line in self.line_ids:
+            if not line.employee_id.rawasi_bank_iban:
+                raise UserError(
+                    _("الموظف %s ليس له آيبان (IBAN) مُعرَّف.") % line.employee_id.name
+                )
 
+        fmt = company.rawasi_wps_format or "generic"
+        if fmt == "mudad":
+            content = self._build_sif_mudad()
+        else:
+            content = self._build_sif_generic()
+
+        self.sif_file = base64.b64encode(content.encode("utf-8-sig"))
+        self.sif_filename = "WPS_%s_%s%s.csv" % (
+            company.rawasi_mol_establishment_id, self.year, str(self.month).zfill(2)
+        )
+        self.state = "generated"
+
+    def _period_label(self):
+        return "%s-%s" % (self.year, str(self.month).zfill(2))
+
+    def _build_sif_generic(self):
+        """الصيغة العامة: سجل منشأة (EMPLOYER) يتبعه سجلات رواتب (SALARY)."""
+        self.ensure_one()
+        company = self.company_id
+        bank = company.rawasi_wps_bank_id
         buffer = io.StringIO()
         writer = csv.writer(buffer)
-        # سجل المنشأة (Header / Employer Record)
         writer.writerow([
             "EMPLOYER",
             company.rawasi_mol_establishment_id,
             company.name or "",
             bank.acc_number if bank else "",
-            "%s-%s" % (self.year, str(self.month).zfill(2)),
+            self._period_label(),
             len(self.line_ids),
             "%.2f" % self.total_net,
             self.currency_id.name or "SAR",
         ])
-        # سجلات الموظفين (Salary Detail Records)
         for line in self.line_ids:
             emp = line.employee_id
-            if not emp.rawasi_bank_iban:
-                raise UserError(
-                    _("الموظف %s ليس له آيبان (IBAN) مُعرَّف.") % emp.name
-                )
             writer.writerow([
                 "SALARY",
                 emp.rawasi_mol_number or "",
@@ -152,13 +171,35 @@ class RawasiWpsBatch(models.Model):
                 "%.2f" % line.deductions,
                 "%.2f" % line.net_salary,
             ])
+        return buffer.getvalue()
 
-        content = buffer.getvalue().encode("utf-8-sig")
-        self.sif_file = base64.b64encode(content)
-        self.sif_filename = "WPS_%s_%s%s.csv" % (
-            company.rawasi_mol_establishment_id, self.year, str(self.month).zfill(2)
-        )
-        self.state = "generated"
+    def _build_sif_mudad(self):
+        """صيغة مدد: ملف CSV مسطّح بصفّ عناوين أعمدة وصفّ لكل موظف."""
+        self.ensure_one()
+        buffer = io.StringIO()
+        writer = csv.writer(buffer)
+        writer.writerow([
+            "MOL Establishment ID", "Employee MOL ID", "Employee Name", "IBAN",
+            "Bank Code", "Basic Salary", "Housing Allowance", "Other Allowance",
+            "Deductions", "Net Salary", "Pay Month",
+        ])
+        est = self.company_id.rawasi_mol_establishment_id
+        for line in self.line_ids:
+            emp = line.employee_id
+            writer.writerow([
+                est,
+                emp.rawasi_mol_number or "",
+                emp.name or "",
+                emp.rawasi_bank_iban,
+                emp.rawasi_bank_code or "",
+                "%.2f" % line.basic_salary,
+                "%.2f" % line.housing_allowance,
+                "%.2f" % line.other_allowance,
+                "%.2f" % line.deductions,
+                "%.2f" % line.net_salary,
+                self._period_label(),
+            ])
+        return buffer.getvalue()
 
     def action_mark_sent(self):
         for batch in self:
