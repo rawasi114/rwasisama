@@ -69,11 +69,20 @@ class RawasiEosSettlement(models.Model):
     )
 
     # ------- وعاء الأجر -------
+    wage_base_policy = fields.Selection(
+        selection=[
+            ("full", "الأجر الشامل"),
+            ("basic_housing", "الأساسي + السكن"),
+            ("basic", "الأساسي فقط"),
+        ],
+        string="سياسة الوعاء",
+        help="أساس استخراج الأجر من بيانات الموظف. تغييرها يُعيد حساب الوعاء.",
+    )
     wage_base = fields.Monetary(
         string="الأجر الشهري (الوعاء)",
         currency_field="currency_id",
         tracking=True,
-        help="الأجر الأخير الذي تُحسب عليه المكافأة (أساسي + بدلات ثابتة).",
+        help="الأجر الأخير الذي تُحسب عليه المكافأة (قابل للتعديل يدوياً).",
     )
 
     # ------- المخرجات المحسوبة -------
@@ -217,9 +226,20 @@ class RawasiEosSettlement(models.Model):
         for rec in self:
             emp = rec.employee_id
             if emp:
-                rec.wage_base = emp.rawasi_total_wage
                 if emp.company_id:
                     rec.company_id = emp.company_id
+                rec.wage_base_policy = (
+                    emp.company_id.rawasi_eos_wage_base_policy or "full"
+                )
+                rec.wage_base = emp._rawasi_eos_wage_base(rec.wage_base_policy)
+                if emp.rawasi_join_date and not rec.start_date:
+                    rec.start_date = emp.rawasi_join_date
+
+    @api.onchange("wage_base_policy")
+    def _onchange_wage_base_policy(self):
+        for rec in self:
+            if rec.employee_id and rec.wage_base_policy:
+                rec.wage_base = rec.employee_id._rawasi_eos_wage_base(rec.wage_base_policy)
 
     # ============================================================
     # الإنشاء — التسلسل
@@ -297,6 +317,9 @@ class RawasiEosSettlement(models.Model):
         for rec in self:
             if rec.state not in ("confirmed", "posted"):
                 raise UserError(_("لا يمكن تسجيل الدفع إلا بعد الاعتماد."))
+            # انتهت الخدمة: نُصفِّر المخصص المتراكم للموظف (سُوِّي بالكامل)
+            if rec.employee_id.rawasi_eos_accrued:
+                rec.employee_id.rawasi_eos_accrued = 0.0
             rec.state = "paid"
 
     def action_cancel(self):

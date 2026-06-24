@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_rawasi_eos_provision_run_list" model="ir.ui.view">
+        <field name="name">rawasi.eos.provision.run.list</field>
+        <field name="model">rawasi.eos.provision.run</field>
+        <field name="arch" type="xml">
+            <list string="دفعات مخصص نهاية الخدمة">
+                <field name="currency_id" column_invisible="1"/>
+                <field name="name"/>
+                <field name="provision_date"/>
+                <field name="total_provision"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'posted'"
+                       decoration-muted="state == 'cancel'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_rawasi_eos_provision_run_form" model="ir.ui.view">
+        <field name="name">rawasi.eos.provision.run.form</field>
+        <field name="model">rawasi.eos.provision.run</field>
+        <field name="arch" type="xml">
+            <form string="دفعة مخصص نهاية الخدمة">
+                <header>
+                    <button name="action_compute_lines" type="object"
+                            string="حساب السطور" invisible="state != 'draft'"/>
+                    <button name="action_post" type="object" string="ترحيل"
+                            class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_cancel" type="object" string="إلغاء"
+                            invisible="state == 'cancel'"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,posted"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_move" type="object" class="oe_stat_button"
+                                icon="fa-book" invisible="not move_id">
+                            <div class="o_stat_info">
+                                <span class="o_stat_text">القيد المحاسبي</span>
+                            </div>
+                        </button>
+                    </div>
+                    <div class="oe_title"><h1><field name="name" readonly="1"/></h1></div>
+                    <group>
+                        <group>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="provision_date" readonly="state != 'draft'"/>
+                        </group>
+                        <group>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="total_provision"/>
+                            <field name="move_id" readonly="1"/>
+                        </group>
+                    </group>
+                    <field name="line_ids">
+                        <list>
+                            <field name="currency_id" column_invisible="1"/>
+                            <field name="employee_id"/>
+                            <field name="service_years"/>
+                            <field name="wage_base"/>
+                            <field name="previously_accrued"/>
+                            <field name="target_liability"/>
+                            <field name="provision_amount"/>
+                        </list>
+                    </field>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_rawasi_eos_provision_run" model="ir.actions.act_window">
+        <field name="name">مخصص نهاية الخدمة</field>
+        <field name="res_model">rawasi.eos.provision.run</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">أنشئ دفعة مخصص شهري</p>
+            <p>تُحسب آلياً قيمة الالتزام المتراكم لكل موظف ويُرحَّل الفرق كمصروف الشهر.</p>
+        </field>
+    </record>
+
+</odoo>

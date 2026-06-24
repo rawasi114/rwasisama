@@ -66,6 +66,7 @@
                         </group>
                         <group string="الاحتساب">
                             <field name="currency_id" invisible="1"/>
+                            <field name="wage_base_policy" readonly="state not in ('draft',)"/>
                             <field name="wage_base" readonly="state not in ('draft',)"/>
                             <field name="gratuity_full"/>
                             <field name="entitlement_ratio" digits="[16, 4]"/>

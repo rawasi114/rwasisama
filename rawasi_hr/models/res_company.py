@@ -21,17 +21,45 @@ class ResCompany(models.Model):
         string="حساب البنك للرواتب",
         help="حساب الشركة البنكي الذي تُصرف منه الرواتب في نظام حماية الأجور.",
     )
+    rawasi_wps_format = fields.Selection(
+        selection=[
+            ("generic", "عام (سجل منشأة + سجلات رواتب)"),
+            ("mudad", "مدد (CSV مسطّح بعناوين أعمدة)"),
+        ],
+        string="صيغة ملف حماية الأجور",
+        default="generic",
+        help="صيغة ملف SIF المُولَّد. اختر ما يقبله البنك/منصة مدد لديك.",
+    )
+
+    # ------- سياسة احتساب نهاية الخدمة -------
+    rawasi_eos_wage_base_policy = fields.Selection(
+        selection=[
+            ("full", "الأجر الشامل (أساسي + سكن + بدلات)"),
+            ("basic_housing", "الأساسي + بدل السكن"),
+            ("basic", "الأجر الأساسي فقط"),
+        ],
+        string="وعاء أجر نهاية الخدمة",
+        default="full",
+        help="الأجر الذي تُحسب عليه مكافأة نهاية الخدمة افتراضياً عند إنشاء تسوية.",
+    )
 
     # ------- حسابات نهاية الخدمة الافتراضية -------
     rawasi_eos_provision_account_id = fields.Many2one(
         "account.account",
         string="حساب مخصص نهاية الخدمة",
-        help="الحساب المدين عند صرف المكافأة (مخصص مكافأة نهاية الخدمة).",
+        help="الحساب الدائن للمخصص الشهري والمدين عند صرف المكافأة "
+        "(مخصص مكافأة نهاية الخدمة — التزام).",
     )
     rawasi_eos_payable_account_id = fields.Many2one(
         "account.account",
         string="حساب مستحقات الموظفين",
         help="الحساب الدائن عند تكوين تسوية نهاية الخدمة (مستحق للموظف).",
+    )
+    rawasi_eos_expense_account_id = fields.Many2one(
+        "account.account",
+        string="حساب مصروف نهاية الخدمة",
+        domain="[('account_type', '=', 'expense')]",
+        help="الحساب المدين للمخصص الشهري (مصروف مكافأة نهاية الخدمة).",
     )
     rawasi_eos_journal_id = fields.Many2one(
         "account.journal",
