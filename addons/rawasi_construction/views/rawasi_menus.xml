@@ -19,7 +19,7 @@
                   name="المكتب الفني - التسعير والحصر"
                   web_icon="rawasi_construction,static/description/icon.png"
                   sequence="8"
-                  groups="group_tech_office_manager,group_projects_director,group_ceo"/>
+                  groups="group_tech_office_manager,group_planning_engineer,group_projects_director,group_ceo"/>
 
         <menuitem id="menu_rawasi_dashboard"
                   name="لوحة التحكم"
