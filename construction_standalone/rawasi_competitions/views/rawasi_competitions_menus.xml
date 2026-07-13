@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
+<<<<<<< HEAD
+        <!--
+            النسخة السابقة من هذا الموديول أنشأت تطبيقاً واجهياً باسم
+            "المنافسات والتسعير". الفصل الجديد أصبح معرفاً داخل
+            rawasi_construction حتى يتم تحميله بترتيب ترقية آمن.
+
+            نُبقي هذين السجلين هنا فقط لإخفاء الجذر القديم عند ترقية
+            rawasi_competitions في قواعد كانت قد ثبّتت النسخة السابقة.
+        -->
+        <record id="menu_rawasi_competitions_root" model="ir.ui.menu">
+            <field name="name">المنافسات والتسعير - قديم</field>
+            <field name="active" eval="False"/>
+        </record>
+
+        <record id="menu_competitions_pricing_root_dashboard" model="ir.ui.menu">
+            <field name="name">تحليل المنافسات - قديم</field>
+=======
         <!-- جذر التطبيق الجديد: «المنافسات والتسعير» —
              يظهر للمكتب الفني كتطبيق مستقل عن إدارة المقاولات. -->
         <menuitem id="menu_rawasi_competitions_root"
@@ -32,6 +49,7 @@
 
         <!-- لوحة تحليل المنافسات تنتقل أيضاً للتطبيق الجديد -->
         <record id="rawasi_construction.menu_dash_competition" model="ir.ui.menu">
+>>>>>>> origin/Test2
             <field name="active" eval="False"/>
         </record>
     </data>

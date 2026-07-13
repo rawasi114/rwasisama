@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- إضافة كتلة إعدادات الموارد البشرية داخل تطبيق «رواسي سما» -->
+        <record id="res_config_settings_view_form_rawasi_hr" model="ir.ui.view">
+            <field name="name">res.config.settings.view.form.inherit.rawasi.hr</field>
+            <field name="model">res.config.settings</field>
+            <field name="inherit_id" ref="rawasi_base.res_config_settings_view_form_rawasi"/>
+            <field name="arch" type="xml">
+                <xpath expr="//app[@name='rawasi_base']" position="inside">
+                    <block title="حماية الأجور (WPS)" name="rawasi_hr_wps_block">
+                        <setting string="رقم المنشأة في مكتب العمل"
+                                 help="يظهر في ملف حماية الأجور (SIF)">
+                            <field name="rawasi_mol_establishment_id"/>
+                        </setting>
+                        <setting string="حساب البنك للرواتب">
+                            <field name="rawasi_wps_bank_id"/>
+                        </setting>
+                        <setting string="صيغة ملف حماية الأجور"
+                                 help="اختر الصيغة التي يقبلها بنكك / منصة مدد">
+                            <field name="rawasi_wps_format"/>
+                        </setting>
+                    </block>
+                    <block title="نهاية الخدمة" name="rawasi_hr_eos_block">
+                        <setting string="وعاء أجر نهاية الخدمة"
+                                 help="الأجر الذي تُحسب عليه المكافأة افتراضياً">
+                            <field name="rawasi_eos_wage_base_policy"/>
+                        </setting>
+                        <setting string="يومية نهاية الخدمة"
+                                 help="اليومية المحاسبية لقيود نهاية الخدمة والمخصص">
+                            <field name="rawasi_eos_journal_id"/>
+                        </setting>
+                        <setting string="حساب مخصص نهاية الخدمة (التزام)">
+                            <field name="rawasi_eos_provision_account_id"/>
+                        </setting>
+                        <setting string="حساب مصروف نهاية الخدمة (مدين للمخصص)">
+                            <field name="rawasi_eos_expense_account_id"/>
+                        </setting>
+                        <setting string="حساب مستحقات الموظفين (دائن للتسوية)">
+                            <field name="rawasi_eos_payable_account_id"/>
+                        </setting>
+                    </block>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

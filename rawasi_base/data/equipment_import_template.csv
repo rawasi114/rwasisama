@@ -1,5 +1,0 @@
-name,category,custodian_user_id,location_text,purchase_date,purchase_price,plate_number,model,serial_number,notes
-مثال: مكتب مدير,office_furniture,,المكتب الرئيسي,2024-01-15,1500,,,,استبدل هذه الصفوف ببيانات قوائم الأصول الفعلية
-مثال: سيارة هايلكس,vehicle,,حفر الباطن,2023-06-01,95000,أ ب ج 1234,Hilux 2023,,
-مثال: منشار ورشة,workshop_machine,,الورشة - النجارة,2022-03-10,8500,,,,
-مثال: مثقاب كهربائي,site_tool,,مخزن العدد,2024-02-20,350,,,,
