@@ -15,6 +15,12 @@
                   action="action_rawasi_eos_settlement"
                   sequence="10"/>
 
+        <menuitem id="menu_rawasi_eos_provision"
+                  name="مخصص نهاية الخدمة"
+                  parent="menu_rawasi_hr_root"
+                  action="action_rawasi_eos_provision_run"
+                  sequence="15"/>
+
         <menuitem id="menu_rawasi_wps_batch"
                   name="حماية الأجور"
                   parent="menu_rawasi_hr_root"

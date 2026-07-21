@@ -166,3 +166,104 @@ class TestWpsBatch(TransactionCase):
         batch.action_populate_lines()
         with self.assertRaises(UserError):
             batch.action_generate_file()
+
+    def test_mudad_format(self):
+        self.company.rawasi_wps_format = "mudad"
+        batch = self.env["rawasi.wps.batch"].create({"month": "6", "year": 2026})
+        batch.action_populate_lines()
+        batch.action_generate_file()
+        content = base64.b64decode(batch.sif_file).decode("utf-8-sig")
+        # صف العناوين الخاص بصيغة مدد
+        self.assertIn("Employee MOL ID", content)
+        self.assertIn("Pay Month", content)
+        self.assertIn("2026-06", content)
+
+
+class TestWageBasePolicy(TransactionCase):
+    """اختبار سياسة وعاء أجر نهاية الخدمة."""
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.emp = cls.env["hr.employee"].create({
+            "name": "موظف",
+            "rawasi_basic_wage": 6000.0,
+            "rawasi_housing_allowance": 1500.0,
+            "rawasi_other_allowance": 500.0,
+        })
+
+    def test_policy_full(self):
+        self.assertEqual(self.emp._rawasi_eos_wage_base("full"), 8000.0)
+
+    def test_policy_basic_housing(self):
+        self.assertEqual(self.emp._rawasi_eos_wage_base("basic_housing"), 7500.0)
+
+    def test_policy_basic(self):
+        self.assertEqual(self.emp._rawasi_eos_wage_base("basic"), 6000.0)
+
+    def test_settlement_uses_company_policy(self):
+        self.env.company.rawasi_eos_wage_base_policy = "basic"
+        self.emp.company_id = self.env.company
+        s = self.env["rawasi.eos.settlement"].new({"employee_id": self.emp.id})
+        s._onchange_employee_id()
+        self.assertEqual(s.wage_base_policy, "basic")
+        self.assertEqual(s.wage_base, 6000.0)
+
+
+class TestEosProvision(TransactionCase):
+    """اختبار المخصص الشهري لنهاية الخدمة."""
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.company = cls.env.company
+        cls.emp = cls.env["hr.employee"].create({
+            "name": "موظف مخصص",
+            "rawasi_basic_wage": 10000.0,
+            "rawasi_join_date": date(2020, 1, 1),
+            "company_id": cls.company.id,
+        })
+
+    def test_provision_compute_first_period(self):
+        run = self.env["rawasi.eos.provision.run"].create({
+            "provision_date": date(2024, 1, 1),
+        })
+        run.action_compute_lines()
+        line = run.line_ids.filtered(lambda l: l.employee_id == self.emp)
+        self.assertTrue(line)
+        # 4 سنوات × نصف شهر × 10000 (وعاء = الأساسي افتراضاً؟ السياسة الافتراضية full)
+        # هنا الأجر الأساسي فقط معرّف، فالإجمالي = 10000
+        self.assertAlmostEqual(line.service_years, 1461 / 365.0, places=2)
+        self.assertGreater(line.provision_amount, 0.0)
+        self.assertAlmostEqual(
+            line.target_liability, 10000.0 * 0.5 * line.service_years, places=2
+        )
+
+    def test_provision_incremental(self):
+        # تشغيل أول يراكم، تشغيل ثانٍ لاحق يرحّل الفرق فقط
+        run1 = self.env["rawasi.eos.provision.run"].create({
+            "provision_date": date(2024, 1, 1),
+        })
+        run1.action_compute_lines()
+        first_target = run1.line_ids.filtered(
+            lambda l: l.employee_id == self.emp
+        ).target_liability
+        # حاكِ ترحيلاً سابقاً بتحديث المتراكم يدوياً
+        self.emp.rawasi_eos_accrued = first_target
+        run2 = self.env["rawasi.eos.provision.run"].create({
+            "provision_date": date(2025, 1, 1),
+        })
+        run2.action_compute_lines()
+        line2 = run2.line_ids.filtered(lambda l: l.employee_id == self.emp)
+        # الفرق يجب أن يكون موجباً وأصغر من الالتزام الكلي الجديد
+        self.assertGreater(line2.provision_amount, 0.0)
+        self.assertLess(line2.provision_amount, line2.target_liability)
+        self.assertAlmostEqual(line2.previously_accrued, first_target, places=2)
+
+    def test_provision_skips_future_join(self):
+        self.emp.rawasi_join_date = date(2030, 1, 1)
+        run = self.env["rawasi.eos.provision.run"].create({
+            "provision_date": date(2024, 1, 1),
+        })
+        with self.assertRaises(UserError):
+            run.action_compute_lines()

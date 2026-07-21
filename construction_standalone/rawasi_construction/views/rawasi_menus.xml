@@ -19,7 +19,7 @@
                   name="المكتب الفني - التسعير والحصر"
                   web_icon="rawasi_construction,static/description/icon.png"
                   sequence="8"
-                  groups="group_tech_office_manager,group_projects_director,group_ceo"/>
+                  groups="group_tech_office_manager,group_planning_engineer,group_projects_director,group_ceo"/>
 
         <menuitem id="menu_rawasi_dashboard"
                   name="لوحة التحكم"
@@ -38,12 +38,6 @@
                   parent="menu_rawasi_root"
                   action="action_rawasi_projects"
                   sequence="22"/>
-
-        <menuitem id="menu_rawasi_products"
-                  name="كتالوج المنتجات الإنشائية"
-                  parent="menu_rawasi_root"
-                  action="action_rawasi_construction_products"
-                  sequence="25"/>
 
         <!-- ═══ سجل البنود المرجعي ومنظومة المطابقة الذكية ═══ -->
         <menuitem id="menu_rawasi_reference_registry_root"
@@ -68,6 +62,12 @@
         <menuitem id="menu_rawasi_ref_products"
                   name="منتجات المقاولات المرجعية"
                   parent="menu_rawasi_reference_registry_root"
+                  action="action_rawasi_construction_products"
+                  sequence="40"/>
+
+        <menuitem id="menu_rawasi_products"
+                  name="كتالوج المنتجات الإنشائية"
+                  parent="menu_rawasi_root"
                   action="action_rawasi_construction_products"
                   sequence="25"/>
 

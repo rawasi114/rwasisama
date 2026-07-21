@@ -34,6 +34,18 @@ class HrEmployee(models.Model):
         default=lambda self: self.env.company.currency_id.id,
     )
 
+    # ------- بيانات نهاية الخدمة -------
+    rawasi_join_date = fields.Date(
+        string="تاريخ الالتحاق",
+        help="تاريخ بداية الخدمة؛ أساس احتساب مدة الخدمة والمخصص الشهري.",
+    )
+    rawasi_eos_accrued = fields.Monetary(
+        string="مخصص نهاية الخدمة المتراكم",
+        currency_field="currency_id",
+        readonly=True,
+        help="إجمالي ما رُحِّل من مخصص شهري لنهاية الخدمة لهذا الموظف حتى الآن.",
+    )
+
     # ------- بيانات حماية الأجور (مدد/WPS) -------
     rawasi_mol_number = fields.Char(
         string="رقم العامل في مكتب العمل",
@@ -52,3 +64,13 @@ class HrEmployee(models.Model):
                 + (emp.rawasi_housing_allowance or 0.0)
                 + (emp.rawasi_other_allowance or 0.0)
             )
+
+    def _rawasi_eos_wage_base(self, policy=None):
+        """وعاء أجر نهاية الخدمة وفق السياسة المعطاة (أو سياسة الشركة)."""
+        self.ensure_one()
+        policy = policy or self.company_id.rawasi_eos_wage_base_policy or "full"
+        if policy == "basic":
+            return self.rawasi_basic_wage or 0.0
+        if policy == "basic_housing":
+            return (self.rawasi_basic_wage or 0.0) + (self.rawasi_housing_allowance or 0.0)
+        return self.rawasi_total_wage or 0.0
